@@ -1,0 +1,27 @@
+<div class="site-header">
+    <app-header-topbar></app-header-topbar>
+
+    <div *ngIf="layout === 'classic'" class="site-header__middle container">
+        <div class="site-header__logo">
+            <a routerLink="/">
+                <img src="https://firebasestorage.googleapis.com/v0/b/codi-abako.appspot.com/o/CarroComprasSandBox%2FNegocio%2FLOGOABAKO.png?alt=media&token=aed39c47-3d1b-49d7-b5be-90a24825984c" style="width: 196px; height: 80px">
+            </a>
+        </div>
+        <div class="site-header__search">
+            <app-search location="header"></app-search>
+        </div>
+        <div class="site-header__phone">
+            <div class="site-header__phone-title">Servicio al cliente</div>
+            <div class="site-header__phone-number">{{ store.primaryPhone }}</div>
+        </div>
+    </div>
+
+    <div class="site-header__nav-panel">
+        <app-header-nav
+            [departments]="layout === 'classic'"
+            [logo]="layout === 'compact'"
+            [search]="layout === 'compact'"
+            stickyMode="pullToShow"
+        ></app-header-nav>
+    </div>
+</div>
