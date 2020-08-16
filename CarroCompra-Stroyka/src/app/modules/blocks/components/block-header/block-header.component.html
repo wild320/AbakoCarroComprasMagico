@@ -9,10 +9,10 @@
     </ul>
 
     <div *ngIf="arrows" class="block-header__arrows-list">
-        <button class="block-header__arrow block-header__arrow--left" type="button" (click)="prev.emit()">
+        <button class="block-header__arrow block-header__arrow--left" type="button" aria-label="Desplazarse a la izquierda" (click)="prev.emit()">
             <app-icon name="arrow-rounded-left-7x11" size="7x11"></app-icon>
         </button>
-        <button class="block-header__arrow block-header__arrow--right" type="button" (click)="next.emit()">
+        <button class="block-header__arrow block-header__arrow--right" type="button" aria-label="Desplazarse a la derecha" (click)="next.emit()">
             <app-icon name="arrow-rounded-right-7x11" size="7x11"></app-icon>
         </button>
     </div>

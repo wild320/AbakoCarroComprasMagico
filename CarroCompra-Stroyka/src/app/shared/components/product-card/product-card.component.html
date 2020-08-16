@@ -5,7 +5,7 @@
     'product-card--layout--list':                        layout === 'list',
     'product-card--layout--horizontal':                  layout === 'horizontal'
 }">
-    <button class="product-card__quickview" type="button" appClick (click)="showQuickview()" [ngClass]="{'product-card__quickview--preload': showingQuickview}">
+    <button class="product-card__quickview" type="button" aria-label="Vista rápida" appClick (click)="showQuickview()" [ngClass]="{'product-card__quickview--preload': showingQuickview}">
         <app-icon name="quickview-16" size="16"></app-icon>
         <span class="fake-svg-icon"></span>
     </button>
@@ -55,11 +55,11 @@
         <div class="product-card__buttons">
             <button class="btn btn-primary product-card__addtocart" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Add To Cart</button>
             <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Add To Cart</button>
-            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist}">
+            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" aria-label="Agregar a la Lista de Deseos" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist}">
                 <app-icon name="wishlist-16" size="16"></app-icon>
                 <span class="fake-svg-icon fake-svg-icon--wishlist-16"></span>
             </button>
-            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button" appClick (click)="addToCompare()" [ngClass]="{'btn-loading': addingToCompare}">
+            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button" aria-label="Agregar a la Lista para Comparar" appClick (click)="addToCompare()" [ngClass]="{'btn-loading': addingToCompare}">
                 <app-icon name="compare-16" size="16"></app-icon>
                 <span class="fake-svg-icon fake-svg-icon--compare-16"></span>
             </button>

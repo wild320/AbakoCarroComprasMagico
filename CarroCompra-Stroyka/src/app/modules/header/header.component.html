@@ -4,7 +4,7 @@
     <div *ngIf="layout === 'classic'" class="site-header__middle container">
         <div class="site-header__logo">
             <a routerLink="/">
-                <img src=  {{logo}} style="width: 196px; height: 80px">
+                <img [src]="logo" alt="Logo - Carro de Compras" style="width: 196px; height: 80px">
             </a>
         </div>
         <div class="site-header__search">
