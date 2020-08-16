@@ -1,4 +1,4 @@
-import { /*LOCALE_ID, */NgModule } from '@angular/core';
+import { /*LOCALE_ID, */NgModule, APP_INITIALIZER } from '@angular/core';
 // import { registerLocaleData } from '@angular/common';
 // import localeIt from '@angular/common/locales/it';
 //
@@ -6,7 +6,7 @@ import { /*LOCALE_ID, */NgModule } from '@angular/core';
 
 // modules (angular)
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // modules (third-party)
@@ -32,6 +32,13 @@ import { PageHomeTwoComponent } from './pages/page-home-two/page-home-two.compon
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PageOffcanvasCartComponent } from './pages/page-offcanvas-cart/page-offcanvas-cart.component';
 
+// servicios
+import { NegocioService } from './shared/services/negocio.service';
+import { StoreService } from './shared/services/store.service';
+
+// Confoguracion inicial
+export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService) {
+    return () => configLocal.cargarConfiguracionLocal().then(() => configGeneral.cargarConfiguracionGeneral()); }
 
 @NgModule({
     declarations: [
@@ -63,8 +70,15 @@ import { PageOffcanvasCartComponent } from './pages/page-offcanvas-cart/page-off
         WidgetsModule
     ],
     providers: [
-        // { provide: LOCALE_ID, useValue: 'it' }
-    ],
+          NegocioService,
+          StoreService,
+            {
+            provide: APP_INITIALIZER,
+            useFactory: CargarConfiguracion,
+            multi: true,
+            deps: [NegocioService, StoreService]
+            },
+        ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -87,6 +87,7 @@
               "stylePreprocessorOptions": {
                 "includePaths": [
                   "src/scss/themes/theme-blue"
+
                 ]
               }
             },

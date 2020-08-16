@@ -1,7 +1,7 @@
 export const theme = {
-    name: 'Stroyka',
+    name: 'Dito S.A.S',
     author: {
-        name: 'Kos',
-        profile_url: 'https://themeforest.net/user/kos9'
+        name: 'Dito S.A.S',
+        profile_url: 'www.ditosas.com'
     }
 };

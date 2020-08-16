@@ -1,12 +1,17 @@
 import { Component, Inject, NgZone, OnInit, PLATFORM_ID } from '@angular/core';
+import {Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { CartService } from './shared/services/cart.service';
 import { CompareService } from './shared/services/compare.service';
 import { WishlistService } from './shared/services/wishlist.service';
+
+
 import { NavigationEnd, Router } from '@angular/router';
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { CurrencyService } from './shared/services/currency.service';
 import { filter, first } from 'rxjs/operators';
+
+import { NegocioService } from './shared/services/negocio.service';
 
 @Component({
     selector: 'app-root',
@@ -23,8 +28,13 @@ export class AppComponent implements OnInit {
         private wishlist: WishlistService,
         private zone: NgZone,
         private scroller: ViewportScroller,
-        private currency: CurrencyService
+        private currency: CurrencyService,
+        private negocio: NegocioService,
+        private titleService: Title,
     ) {
+
+        this.titleService.setTitle( this.negocio.configuracion.NombreCliente);
+
         if (isPlatformBrowser(this.platformId)) {
             this.zone.runOutsideAngular(() => {
                 this.router.events.pipe(filter(event => event instanceof NavigationEnd), first()).subscribe(() => {
@@ -39,6 +49,7 @@ export class AppComponent implements OnInit {
                 });
             });
         }
+
     }
 
     ngOnInit(): void {
