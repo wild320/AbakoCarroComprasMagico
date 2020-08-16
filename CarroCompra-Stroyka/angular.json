@@ -87,7 +87,6 @@
               "stylePreprocessorOptions": {
                 "includePaths": [
                   "src/scss/themes/theme-blue"
-
                 ]
               }
             },
@@ -395,6 +394,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "stroyka"
+    }
+  },
+  "defaultProject": "stroyka",
+  "cli": {
+    "analytics": "49a93dde-465d-41f4-8b94-e35b38910461"
+  }
 }
