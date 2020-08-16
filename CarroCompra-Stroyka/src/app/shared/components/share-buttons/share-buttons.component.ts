@@ -1,4 +1,12 @@
-import { Component, HostBinding, Inject, Input, OnChanges, PLATFORM_ID, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    HostBinding,
+    Inject,
+    Input,
+    OnChanges,
+    PLATFORM_ID,
+    SimpleChanges,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export interface ShareButtonDef {
@@ -34,7 +42,8 @@ const shareButtonsDef: Record<string, ShareButtonDef> = {
         label: 'Tweet',
     },
     pinterest: {
-        url: 'https://pinterest.com/pin/create/button/?url=%URL%&media=%IMAGE%&description=%TITLE%',
+        url:
+            'https://pinterest.com/pin/create/button/?url=%URL%&media=%IMAGE%&description=%TITLE%',
         icon: 'fab fa-pinterest',
         label: 'Pin It',
     },
@@ -49,7 +58,8 @@ const shareButtonsDef: Record<string, ShareButtonDef> = {
         label: 'Share',
     },
     ok: {
-        url: 'https://connect.ok.ru/offer?url=%URL%&title=%TITLE%&imageUrl=%IMAGE%',
+        url:
+            'https://connect.ok.ru/offer?url=%URL%&title=%TITLE%&imageUrl=%IMAGE%',
         icon: 'fab fa-odnoklassniki',
         label: 'Share',
     },
@@ -73,7 +83,7 @@ const shareButtonsDef: Record<string, ShareButtonDef> = {
 @Component({
     selector: 'app-share-buttons',
     templateUrl: './share-buttons.component.html',
-    styleUrls: ['./share-buttons.component.scss']
+    styleUrls: ['./share-buttons.component.scss'],
 })
 export class ShareButtonsComponent implements OnChanges {
     items: ShareButton[] = [];
@@ -92,12 +102,15 @@ export class ShareButtonsComponent implements OnChanges {
 
     @HostBinding('class.share-buttons') classShareLinks = true;
 
-    constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
-    ) { }
+    constructor(@Inject(PLATFORM_ID) private platformId: any) {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.buttons || changes.pageUrl || changes.pageTitle || changes.pageImage) {
+        if (
+            changes.buttons ||
+            changes.pageUrl ||
+            changes.pageTitle ||
+            changes.pageImage
+        ) {
             this.makeItems();
         }
     }
@@ -109,22 +122,31 @@ export class ShareButtonsComponent implements OnChanges {
             value = value.split(',');
         }
 
-        this.items = value.map(x => {
-            const userDef: ShareButtonUserDef = typeof x === 'string' ? {type: x} : x;
-            const type = userDef.type;
-            const def = shareButtonsDef[type];
+        this.items = value
+            .map((x) => {
+                const userDef: ShareButtonUserDef =
+                    typeof x === 'string' ? { type: x } : x;
+                const type = userDef.type;
+                const def = shareButtonsDef[type];
 
-            if (!def) {
-                return null;
-            }
+                if (!def) {
+                    return null;
+                }
 
-            return {
-                type,
-                url: this.makeShareUrl(def.url),
-                label: typeof userDef.label === 'string' ? userDef.label : def.label,
-                icon: typeof userDef.icon === 'string'? userDef.icon : def.icon,
-            } as ShareButton;
-        }).filter(x => x !== null);
+                return {
+                    type,
+                    url: this.makeShareUrl(def.url),
+                    label:
+                        typeof userDef.label === 'string'
+                            ? userDef.label
+                            : def.label,
+                    icon:
+                        typeof userDef.icon === 'string'
+                            ? userDef.icon
+                            : def.icon,
+                } as ShareButton;
+            })
+            .filter((x) => x !== null);
     }
 
     private makeShareUrl(baseUrl: string): string {
