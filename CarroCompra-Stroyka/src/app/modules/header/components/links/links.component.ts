@@ -1,10 +1,10 @@
 import { AfterViewChecked, Component, ElementRef, NgZone, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { navigation } from '../../../../../data/header-navigation';
 import { NavigationLink } from '../../../../shared/interfaces/navigation-link';
 import { DirectionService } from '../../../../shared/services/direction.service';
 import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HeaderService } from '../../../../shared/services/header.service';
+import {StoreService } from '../../../../shared/services/store.service';
 
 @Component({
     selector: 'app-header-links',
@@ -17,7 +17,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     destroy$: Subject<void> = new Subject<void>();
 
-    items: NavigationLink[] = navigation;
+    items: NavigationLink[] = this.storaservice.navigation;
     hoveredItem: NavigationLink = null;
 
     reCalcSubmenuPosition = false;
@@ -26,6 +26,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
         private direction: DirectionService,
         private header: HeaderService,
         private zone: NgZone,
+        public storaservice: StoreService,
     ) {}
 
     onItemMouseEnter(item: NavigationLink): void {
