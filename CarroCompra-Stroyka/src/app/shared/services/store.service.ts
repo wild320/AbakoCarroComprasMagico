@@ -20,6 +20,7 @@ export class StoreService {
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService) {  }
 
+
     cargarConfiguracionGeneral() {
 
         this.UrlServicioCarroCompras = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
@@ -37,7 +38,6 @@ export class StoreService {
       }
 
       private SetiarInformacion(configuracion: any){
-        console.log (configuracion);
 
         configuracion.forEach(element => {
 
