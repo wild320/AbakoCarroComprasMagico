@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {NavigationLink} from '../interfaces/navigation-link';
 
-
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
+
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +18,7 @@ export class StoreService {
     email = '';
     phone = '';
     hours = '';
+    verArticulos = '';
     public navigation: NavigationLink[];
 
     constructor(private httpClient: HttpClient,
@@ -49,6 +50,11 @@ export class StoreService {
                 this.hours =  element.valor;
             }
 
+            // Como ver la lista de articulos
+            if (element.id === 'A2'){
+                this.verArticulos =   this.VerArticulos(element.valor);
+            }
+
             // Direccion
             if (element.id === 'B1'){
                 this.address =  element.valor;
@@ -64,9 +70,9 @@ export class StoreService {
                 this.email =  element.valor;
             }
 
-            this.CargarMenu();
-
         });
+
+        this.CargarMenu();
     }
 
     private CargarMenu() {
@@ -76,13 +82,7 @@ export class StoreService {
             {label: 'Comprar', url: '/shop/catalog/power-tools', menu: {
                 type: 'menu',
                 items: [
-                    {label: 'Artículos', url: '/shop/catalog/power-tools' , items: [
-                        {label: '3 Columns Sidebar', url: '/shop/catalog/power-tools'},
-                        {label: '4 Columns Full',    url: '/shop/category-grid-4-columns-full'},
-                        {label: '5 Columns Full',    url: '/shop/category-grid-5-columns-full'}
-                    ]},
-                    {label: 'Shop List', url: '/shop/category-list'},
-                    {label: 'Shop Right Sidebar', url: '/shop/category-right-sidebar'},
+                    {label: 'Artículos', url: this.verArticulos},
                     {label: 'Product', url: '/shop/product-standard', items: [
                         {label: 'Product', url: '/shop/product-standard'},
                         {label: 'Product Alt', url: '/shop/product-columnar'},
@@ -116,5 +116,40 @@ export class StoreService {
                 ]
             }}
         ];
+    }
+
+    private VerArticulos(ver: string): string {
+
+        let tipoVer = '';
+
+        switch (ver) {
+            case 'En Cuadricula 3 Columnas con Slider':
+                tipoVer = '/shop/catalog/power-tools';
+                break;
+
+            case 'En Cuadricula 4 Columnas Full':
+                tipoVer = '/shop/category-grid-4-columns-full';
+                break;
+
+            case 'En Cuadricula 5 Columnas Full':
+                tipoVer = '/shop/category-grid-5-columns-full';
+                break;
+
+             case 'En Lista':
+                tipoVer = '/shop/category-list';
+                break;
+
+            case 'En Cuadricula Slider A la Derecha':
+                tipoVer = '/shop/category-right-sidebar';
+                break;
+
+            default:
+                tipoVer = '/shop/catalog/power-tools';
+                break;
+
+        }
+        console.log(tipoVer);
+
+        return tipoVer;
     }
 }

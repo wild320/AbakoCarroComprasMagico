@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { NestedLink } from '../../../../shared/interfaces/nested-link';
 import { DirectionService } from '../../../../shared/services/direction.service';
-import { NavigationLink } from '../../../../shared/interfaces/navigation-link';
 
 @Component({
     selector: 'app-header-menu',
