@@ -4,10 +4,10 @@ import {NavigationLink} from '../interfaces/navigation-link';
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
+import { SesionesService } from '../../shared/services/sesiones.service';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
-
 
 @Injectable({
     providedIn: 'root'
@@ -19,11 +19,12 @@ export class StoreService {
     phone = '';
     hours = '';
     verArticulos = '';
+    verDetalleArticulo = '';
     public navigation: NavigationLink[];
 
     constructor(private httpClient: HttpClient,
-                private negocio: NegocioService) {  }
-
+                private negocio: NegocioService,
+                private sesion: SesionesService) {  }
 
     cargarConfiguracionGeneral() {
 
@@ -43,6 +44,9 @@ export class StoreService {
 
     private SetiarInformacion(configuracion: any){
 
+        // las sesiones siempre inician apagagas, la configuracion trae cuales quedan activas
+        this.sesion.iniciarSesiones();
+
         configuracion.forEach(element => {
 
             // Hora de servicio
@@ -53,6 +57,11 @@ export class StoreService {
             // Como ver la lista de articulos
             if (element.id === 'A2'){
                 this.verArticulos =   this.VerArticulos(element.valor);
+            }
+
+            // Como ver la detalle de articulo
+            if (element.id === 'A3'){
+                this.verDetalleArticulo =   this.VerDetalleArticulos(element.valor);
             }
 
             // Direccion
@@ -70,6 +79,11 @@ export class StoreService {
                 this.email =  element.valor;
             }
 
+            // activar o desactivar sesiones
+            if (element.id[0]   === 'S'){
+                this.ActicarSesiones(element.valor);
+            }
+
         });
 
         this.CargarMenu();
@@ -83,11 +97,6 @@ export class StoreService {
                 type: 'menu',
                 items: [
                     {label: 'Artículos', url: this.verArticulos},
-                    {label: 'Product', url: '/shop/product-standard', items: [
-                        {label: 'Product', url: '/shop/product-standard'},
-                        {label: 'Product Alt', url: '/shop/product-columnar'},
-                        {label: 'Product Sidebar', url: '/shop/product-sidebar'}
-                    ]},
                     {label: 'Lista de Deseos', url: '/shop/wishlist'},
                     {label: 'Comparar', url: '/shop/compare'},
                 ]
@@ -148,8 +157,42 @@ export class StoreService {
                 break;
 
         }
-        console.log(tipoVer);
 
         return tipoVer;
+    }
+
+    private VerDetalleArticulos(ver: string): string {
+
+        let tipoDetalleVer = '';
+
+        switch (ver) {
+            case 'Estandar':
+                tipoDetalleVer = '/shop/product-standard';
+                break;
+
+            case 'Columna':
+                tipoDetalleVer = '/shop/product-columnar';
+                break;
+
+            case 'SliBar':
+                tipoDetalleVer = '/shop/product-sidebar';
+                break;
+
+            default:
+                tipoDetalleVer = '/shop/product-standard';
+                break;
+
+        }
+
+        return tipoDetalleVer;
+    }
+
+    private ActicarSesiones(ses: string){
+
+        const index = this.sesion.sesiones.findIndex(x => x.Id === parseInt(ses, 10));
+
+        // activar la sesion que se encuentre
+        this.sesion.sesiones[index].Activo = true;
+
     }
 }
