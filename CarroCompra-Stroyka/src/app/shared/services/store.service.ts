@@ -4,7 +4,7 @@ import {NavigationLink} from '../interfaces/navigation-link';
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
-import { SesionesService } from '../../shared/services/sesiones.service';
+import { PaginasService } from './paginas.service';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
@@ -24,7 +24,7 @@ export class StoreService {
 
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService,
-                private sesion: SesionesService) {  }
+                private pagina: PaginasService) {  }
 
     cargarConfiguracionGeneral() {
 
@@ -45,7 +45,7 @@ export class StoreService {
     private SetiarInformacion(configuracion: any){
 
         // las sesiones siempre inician apagagas, la configuracion trae cuales quedan activas
-        this.sesion.iniciarSesiones();
+        this.pagina.iniciarPaginas();
 
         configuracion.forEach(element => {
 
@@ -81,7 +81,7 @@ export class StoreService {
 
             // activar o desactivar sesiones
             if (element.id[0]   === 'S'){
-                this.ActicarSesiones(element.valor);
+                this.ActicarPaginas(element.valor);
             }
 
         });
@@ -187,12 +187,12 @@ export class StoreService {
         return tipoDetalleVer;
     }
 
-    private ActicarSesiones(ses: string){
+    private ActicarPaginas(ses: string){
 
-        const index = this.sesion.sesiones.findIndex(x => x.Id === parseInt(ses, 10));
+        const index = this.pagina.paginas.findIndex(x => x.Id === parseInt(ses, 10));
 
         // activar la sesion que se encuentre
-        this.sesion.sesiones[index].Activo = true;
+        this.pagina.paginas[index].Activo = true;
 
     }
 }

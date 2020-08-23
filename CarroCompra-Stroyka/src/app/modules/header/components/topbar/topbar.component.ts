@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CurrencyService } from '../../../../shared/services/currency.service';
-import { SesionesService } from '../../../../shared/services/sesiones.service';
+import { PaginasService } from '../../../../shared/services/paginas.service';
 
 @Component({
     selector: 'app-header-topbar',
@@ -27,7 +27,7 @@ export class TopbarComponent {
 
     constructor(
         public currencyService: CurrencyService,
-        public sesion: SesionesService
+        public pagina: PaginasService
     ) {
     }
 
