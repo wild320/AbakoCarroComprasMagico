@@ -19,6 +19,8 @@ import { PageContactUsComponent } from './pages/page-contact-us/page-contact-us.
 import { PageFaqComponent } from './pages/page-faq/page-faq.component';
 import { PageTermsComponent } from './pages/page-terms/page-terms.component';
 import { PageTypographyComponent } from './pages/page-typography/page-typography.component';
+import { PageInfoSendComponent } from './pages/page-info-send/page-info-send.component';
+import { PagePrivateComponent } from './pages/page-private/page-private.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import { PageTypographyComponent } from './pages/page-typography/page-typography
         PageContactUsComponent,
         PageFaqComponent,
         PageTermsComponent,
-        PageTypographyComponent
+        PageTypographyComponent,
+        PageInfoSendComponent,
+        PagePrivateComponent
     ],
     imports: [
         // modules (angular)

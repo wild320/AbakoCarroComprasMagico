@@ -8,6 +8,7 @@ import { PaginasService } from './paginas.service';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
+import { Cpaginas } from '../../../data/contantes/cPaginas';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class StoreService {
     email = '';
     phone = '';
     hours = '';
+    scrmapa = '';
     verArticulos = '';
     verDetalleArticulo = '';
     public navigation: NavigationLink[];
@@ -64,6 +66,11 @@ export class StoreService {
                 this.verDetalleArticulo =   this.VerDetalleArticulos(element.valor);
             }
 
+            // src mapa google
+            if (element.id === 'A4'){
+                this.scrmapa =   element.valor;
+            }
+
             // Direccion
             if (element.id === 'B1'){
                 this.address =  element.valor;
@@ -79,7 +86,7 @@ export class StoreService {
                 this.email =  element.valor;
             }
 
-            // activar o desactivar sesiones
+            // activar o desactivar paginas
             if (element.id[0]   === 'S'){
                 this.ActicarPaginas(element.valor);
             }
@@ -114,17 +121,65 @@ export class StoreService {
                     {label: 'Change Password', url: '/account/password'}
                 ]
             }},
-            {label: 'Blog', url: '/blog/category-grid'},
             {label: 'Sitios', url: '/site', menu: {
                 type: 'menu',
-                items: [
-                    {label: 'Acerca de Nosotros',             url: '/site/about-us'},
-                    {label: 'Contactanos',           url: '/site/contact-us'},
-                    {label: 'Terminos', url: '/site/terms'},
-                    {label: 'FAQ',                  url: '/site/faq'},
-                ]
+                items: [ ]
             }}
         ];
+
+        this.IngresarMenuDinamico();
+    }
+
+    private IngresarMenuDinamico() {
+
+        // asignar los menus de pagisnas dinamicamente
+        const index = this.navigation.findIndex(x => x.label === 'Sitios');
+        const item = 'items';
+
+        if (index > 0) {
+
+            // acerca de nosotros
+            let indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.acercaNosotros);
+
+            if (this.pagina.paginas[indexId].Activo){
+                this.navigation[index].menu[item].push({label: 'Acerca de Nosotros',  url: '/site/about-us'});
+            }
+
+            // informacvion de envio
+            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.informacionEnvio);
+
+            if (this.pagina.paginas[indexId].Activo ){
+                this.navigation[index].menu[item].push({label: 'Información de Envio', url: '/site/envio'});
+            }
+
+            // contactenos
+            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.contactenos);
+
+            if (this.pagina.paginas[indexId].Activo){
+                this.navigation[index].menu[item].push({label: 'Contactanos', url: '/site/contact-us'});
+            }
+
+            // Térm. y Condiciones
+            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.terminosCondiciones);
+
+            if (this.pagina.paginas[indexId].Activo){
+                this.navigation[index].menu[item].push({label: 'Térm. y Condiciones', url: '/site/terms'});
+            }
+
+            // Políticas de Privacidad
+            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.politicasPrivacidad);
+
+            if (this.pagina.paginas[indexId].Activo ){
+                this.navigation[index].menu[item].push({label: 'Políticas de Privacidad', url: '/site/privacidad'});
+            }
+
+            // FAQ
+            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.politicasPrivacidad);
+
+            if (this.pagina.paginas[indexId].Activo ){
+                this.navigation[index].menu[item].push({label: 'FAQ', url: '/site/faq'});
+            }
+        }
     }
 
     private VerArticulos(ver: string): string {

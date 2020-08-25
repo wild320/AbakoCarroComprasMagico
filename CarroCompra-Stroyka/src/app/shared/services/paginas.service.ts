@@ -9,6 +9,7 @@ import { Paginas } from '../../../data/modelos/negocio/paginas';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
+import { Cpaginas } from '../../../data/contantes/cPaginas';
 
 
 @Injectable({
@@ -18,7 +19,12 @@ export class PaginasService {
 
   UrlServicioPaginas: string;
   paginas: Paginas[];
-  AcecaNosotros: string;
+  public AcercaNosotros: string;
+  public Contatenos: string;
+  public TerminosCondiciones: string;
+  public InformacionEnvio: string;
+  public PoliticasPrivacidad: string;
+  public faqs: string;
 
   constructor(
       private httpClient: HttpClient,
@@ -32,37 +38,37 @@ export class PaginasService {
       // ojo no cambiar el orden, con este se recupera en el html
       this.paginas = [
         {
-          Id: 1,
+          Id: Cpaginas.acercaNosotros,
           Pagina: 'Nosotros',
           Activo: false
         },
         {
-          Id: 2,
+          Id: Cpaginas.informacionEnvio,
           Pagina: 'Envio',
           Activo: false
         },
         {
-          Id: 3,
+          Id: Cpaginas.terminosCondiciones,
           Pagina: 'Terminos',
           Activo: false
         },
         {
-          Id: 4,
+          Id: Cpaginas.politicasPrivacidad,
           Pagina: 'Politicas',
           Activo: false
         },
         {
-          Id: 5,
+          Id: Cpaginas.blog,
           Pagina: 'Blog',
           Activo: false
         },
         {
-          Id: 6,
+          Id: Cpaginas.fag,
           Pagina: 'FAQ',
           Activo: false
         },
         {
-          Id: 7,
+          Id: Cpaginas.contactenos,
           Pagina: 'Contactenos',
           Activo: false
         },

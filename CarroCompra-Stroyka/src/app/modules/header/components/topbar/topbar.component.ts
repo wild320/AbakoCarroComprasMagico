@@ -29,6 +29,7 @@ export class TopbarComponent {
         public currencyService: CurrencyService,
         public pagina: PaginasService
     ) {
+
     }
 
     setCurrency(currency): void {

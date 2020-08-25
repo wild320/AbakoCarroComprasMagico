@@ -8,6 +8,9 @@ import { PageFaqComponent } from './pages/page-faq/page-faq.component';
 import { PageComponentsComponent } from './pages/page-components/page-components.component';
 import { PageTypographyComponent } from './pages/page-typography/page-typography.component';
 
+import { PageInfoSendComponent } from './pages/page-info-send/page-info-send.component';
+import { PagePrivateComponent } from './pages/page-private/page-private.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -41,6 +44,14 @@ const routes: Routes = [
     {
         path: 'typography',
         component: PageTypographyComponent
+    },
+    {
+        path: 'envio',
+        component: PageInfoSendComponent
+    },
+    {
+        path: 'privacidad',
+        component: PagePrivateComponent
     }
 ];
 

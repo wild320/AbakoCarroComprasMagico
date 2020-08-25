@@ -4,13 +4,15 @@ import { DirectionService } from '../../../../shared/services/direction.service'
 // servicio
 import { PaginasService } from '../../../../shared/services/paginas.service';
 
+// Constantes
+import { Cpaginas } from '../../../../../data/contantes/cPaginas';
+
 @Component({
     selector: 'app-about-us',
     templateUrl: './page-about-us.component.html',
     styleUrls: ['./page-about-us.component.scss']
 })
 export class PageAboutUsComponent {
-    AcecaNosotros: string;
     carouselOptions = {
         nav: false,
         dots: true,
@@ -27,11 +29,14 @@ export class PageAboutUsComponent {
         public pagina: PaginasService
     ) {
 
-        this.pagina.cargarPagina(1).then((resp: any) => {
-            this.AcecaNosotros = resp;
-            console.log (this.AcecaNosotros);
+        if (this.pagina.AcercaNosotros === '' ||  this.pagina.AcercaNosotros === null
+            || this.pagina.AcercaNosotros === undefined ){
 
-        })  ;
+            this.pagina.cargarPagina(Cpaginas.acercaNosotros).then((resp: any) => {
+                this.pagina.AcercaNosotros = resp;
 
+            }) ;
+
+        }
     }
 }

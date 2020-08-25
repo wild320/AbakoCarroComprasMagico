@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { theme } from '../../../data/theme';
 
+import {StoreService } from '../../shared/services/store.service';
+
 @Component({
     selector: 'app-footer',
     templateUrl: './footer.component.html',
@@ -9,5 +11,8 @@ import { theme } from '../../../data/theme';
 export class FooterComponent {
     theme = theme;
 
-    constructor() { }
+    constructor(public store: StoreService) {
+
+
+     }
 }
