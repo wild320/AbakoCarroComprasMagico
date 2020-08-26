@@ -26,7 +26,7 @@ export class StoreService {
 
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService,
-                private pagina: PaginasService) {  }
+                private paginaService: PaginasService) {  }
 
     cargarConfiguracionGeneral() {
 
@@ -47,7 +47,7 @@ export class StoreService {
     private SetiarInformacion(configuracion: any){
 
         // las sesiones siempre inician apagagas, la configuracion trae cuales quedan activas
-        this.pagina.iniciarPaginas();
+        this.paginaService.iniciarPaginas();
 
         configuracion.forEach(element => {
 
@@ -136,50 +136,13 @@ export class StoreService {
         const index = this.navigation.findIndex(x => x.label === 'Sitios');
         const item = 'items';
 
-        if (index > 0) {
+        this.paginaService.paginas.forEach((element,  array) => {
 
-            // acerca de nosotros
-            let indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.acercaNosotros);
-
-            if (this.pagina.paginas[indexId].Activo){
-                this.navigation[index].menu[item].push({label: 'Acerca de Nosotros',  url: '/site/about-us'});
+            if (element.Activo){
+                this.navigation[index].menu[item].push({label: element.label,  url:  element.url});
             }
+        });
 
-            // informacvion de envio
-            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.informacionEnvio);
-
-            if (this.pagina.paginas[indexId].Activo ){
-                this.navigation[index].menu[item].push({label: 'Información de Envio', url: '/site/envio'});
-            }
-
-            // contactenos
-            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.contactenos);
-
-            if (this.pagina.paginas[indexId].Activo){
-                this.navigation[index].menu[item].push({label: 'Contactanos', url: '/site/contact-us'});
-            }
-
-            // Térm. y Condiciones
-            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.terminosCondiciones);
-
-            if (this.pagina.paginas[indexId].Activo){
-                this.navigation[index].menu[item].push({label: 'Térm. y Condiciones', url: '/site/terms'});
-            }
-
-            // Políticas de Privacidad
-            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.politicasPrivacidad);
-
-            if (this.pagina.paginas[indexId].Activo ){
-                this.navigation[index].menu[item].push({label: 'Políticas de Privacidad', url: '/site/privacidad'});
-            }
-
-            // FAQ
-            indexId = this.pagina.paginas.findIndex(x => x.Id === Cpaginas.politicasPrivacidad);
-
-            if (this.pagina.paginas[indexId].Activo ){
-                this.navigation[index].menu[item].push({label: 'FAQ', url: '/site/faq'});
-            }
-        }
     }
 
     private VerArticulos(ver: string): string {
@@ -244,10 +207,10 @@ export class StoreService {
 
     private ActicarPaginas(ses: string){
 
-        const index = this.pagina.paginas.findIndex(x => x.Id === parseInt(ses, 10));
+        const index = this.paginaService.paginas.findIndex(x => x.Id === parseInt(ses, 10));
 
         // activar la sesion que se encuentre
-        this.pagina.paginas[index].Activo = true;
+        this.paginaService.paginas[index].Activo = true;
 
     }
 }
