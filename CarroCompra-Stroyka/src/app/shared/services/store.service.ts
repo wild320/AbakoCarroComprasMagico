@@ -8,7 +8,6 @@ import { PaginasService } from './paginas.service';
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
-import { Cpaginas } from '../../../data/contantes/cPaginas';
 
 @Injectable({
     providedIn: 'root'
