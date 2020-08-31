@@ -26,7 +26,7 @@
                                 <div class="form-check">
                                     <span class="form-check-input input-check">
                                         <span class="input-check__body">
-                                            <input class="input-check__input" type="checkbox" id="login-remember">
+                                            <input formControlName= "recordar" class="input-check__input" type="checkbox" id="login-remember">
                                             <span class="input-check__box"></span>
                                             <app-icon class="input-check__icon" name="check-9x7" size="9x7"></app-icon>
                                         </span>
@@ -40,7 +40,6 @@
                                 class="btn btn-primary mt-2 mt-md-3 mt-lg-4">
                                 <i *ngIf="!loading"> Ingresar </i>
                                 <i *ngIf="loading"> Cargando.... </i>
-
                             </button>
                             
                         </form>

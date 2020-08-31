@@ -35,10 +35,20 @@ import { PageOffcanvasCartComponent } from './pages/page-offcanvas-cart/page-off
 // servicios
 import { NegocioService } from './shared/services/negocio.service';
 import { StoreService } from './shared/services/store.service';
+import {ServiceHelper} from './shared/services/ServiceHelper';
+import { UsuarioService } from './shared/services/usuario.service';
 
-// Confoguracion inicial
-export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService) {
-    return () => configLocal.cargarConfiguracionLocal().then(() => configGeneral.cargarConfiguracionGeneral()); }
+// utils
+import {UtilsTexto} from './shared/utils/UtilsTexto';
+
+// Configuracion inicial
+export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService) {
+    return () => configLocal.cargarConfiguracionLocal()
+        .then(() => configGeneral.cargarConfiguracionGeneral()
+            .then(() => usuario.cargarUsuarioStorage())
+                .then()
+        );
+}
 
 @NgModule({
     declarations: [
@@ -70,15 +80,23 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
         WidgetsModule
     ],
     providers: [
+          ServiceHelper,
+          UtilsTexto,
           NegocioService,
+          UsuarioService,
           StoreService,
             {
             provide: APP_INITIALIZER,
             useFactory: CargarConfiguracion,
             multi: true,
-            deps: [NegocioService, StoreService]
+            deps: [NegocioService, StoreService, UsuarioService]
             },
+            { provide: 'BASE_URL', useFactory: getBaseUrl },
         ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function getBaseUrl() {
+    return document.getElementsByTagName('base')[0].href;
+}

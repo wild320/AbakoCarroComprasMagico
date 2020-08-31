@@ -14,7 +14,7 @@
             <div class="topbar__spring"></div>
             <div class="topbar__item">
                 <div class="topbar-dropdown" appDropdown="topbar-dropdown--opened" #accountDropdown="appDropdown">
-                    <button class="topbar-dropdown__btn" type="button" (click)="accountDropdown.toggle()">
+                    <button *ngIf="usuariologueado" class="topbar-dropdown__btn" type="button" (click)="accountDropdown.toggle()">
                         Mi Cuenta
                         <app-icon name="arrow-rounded-down-7x5" size="7x5"></app-icon>
                     </button>

@@ -16,7 +16,7 @@ export class NegocioService {
 
 
   constructor(
-    private httpClient: HttpClient ) {
+    private httpClient: HttpClient) {
 
         this.UrlJsonConfguracion = './' + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
 

@@ -10,6 +10,7 @@ import { Paginas } from '../../../data/modelos/negocio/paginas';
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
 import { Cpaginas } from '../../../data/contantes/cPaginas';
+import { Crutas, ClabelRutas } from '../../../data/contantes/cRutas';
 
 
 @Injectable({
@@ -40,29 +41,29 @@ export class PaginasService {
         {
           Id: Cpaginas.acercaNosotros,
           Pagina: 'Nosotros',
-          label: 'Acerca de Nosotros',
-          url: '/site/about-us',
+          label: ClabelRutas.acecaNosotros,
+          url: Crutas.acecaNosotros,
           Activo: false
         },
         {
           Id: Cpaginas.informacionEnvio,
           Pagina: 'Envio',
-          label: 'Información de Envio',
-          url: '/site/envio',
+          label: ClabelRutas.informacionEvio ,
+          url: Crutas.informacionEvio,
           Activo: false
         },
         {
           Id: Cpaginas.terminosCondiciones,
           Pagina: 'Terminos',
-          label: 'Térm. y Condiciones',
-          url: '/site/terms',
+          label: ClabelRutas.terminosCondiciones ,
+          url: Crutas.terminosCondiciones,
           Activo: false
         },
         {
           Id: Cpaginas.politicasPrivacidad,
           Pagina: 'Politicas',
-          label: 'Políticas de Privacidad',
-          url: '/site/privacidad',
+          label: ClabelRutas.politicasPrivacidad ,
+          url: Crutas.politicasPrivacidad,
           Activo: false
         },
         {
@@ -75,15 +76,15 @@ export class PaginasService {
         {
           Id: Cpaginas.fag,
           Pagina: 'FAQ',
-          label: 'FAQ',
-          url: '/site/faq',
+          label: ClabelRutas.faq,
+          url:  Crutas.faq,
           Activo: false
         },
         {
           Id: Cpaginas.contactenos,
           Pagina: 'Contactenos',
-          label: 'Contactanos',
-          url: '/site/contact-us',
+          label: ClabelRutas.contactenos,
+          url: Crutas.contactenos,
           Activo: false
         },
       ];

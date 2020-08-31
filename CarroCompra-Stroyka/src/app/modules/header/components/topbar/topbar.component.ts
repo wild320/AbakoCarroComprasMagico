@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { CurrencyService } from '../../../../shared/services/currency.service';
+
+// servicios
 import { PaginasService } from '../../../../shared/services/paginas.service';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 @Component({
     selector: 'app-header-topbar',
@@ -8,6 +11,7 @@ import { PaginasService } from '../../../../shared/services/paginas.service';
     styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent {
+    usuariologueado = false;
     languages = [
         {name: 'Español', image: 'language-6'},
   //      {name: 'English', image: 'language-1'},
@@ -27,8 +31,11 @@ export class TopbarComponent {
 
     constructor(
         public currencyService: CurrencyService,
-        public pagina: PaginasService
+        public pagina: PaginasService,
+        public usuariosvc: UsuarioService
     ) {
+
+        this.EstaLogueadoUsuario();
 
     }
 
@@ -37,6 +44,16 @@ export class TopbarComponent {
             code: currency.code,
             display: currency.symbol,
         };
+
+    }
+
+    EstaLogueadoUsuario(){
+
+        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+
+            this.usuariologueado = value;
+
+        });
 
     }
 }

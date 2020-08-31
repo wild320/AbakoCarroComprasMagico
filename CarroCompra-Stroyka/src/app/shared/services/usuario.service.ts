@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
+import { ServiceHelper } from '../services/ServiceHelper';
+import { LocalService } from '../services/local-service.service';
+
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
@@ -11,6 +15,8 @@ import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
 // modelos
 import {LoguinRequest} from '../../../data/modelos/seguridad/LoguinRequest';
 import {LoginClienteResponse} from '../../../data/modelos/seguridad/LoginClienteResponse';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,80 +24,118 @@ import {LoginClienteResponse} from '../../../data/modelos/seguridad/LoginCliente
 export class UsuarioService {
 
   UrlServicioLoguin: string;
-  UsrLogin: LoginClienteResponse;
+  private UsrLogin$ = new Subject<LoginClienteResponse>();
   httpOptions: any;
-  EsUsuarioLogueado = false;
+  private UsuarioLogueado: BehaviorSubject<boolean>;
   MensajeError = '';
+  recordar = false;
   private token = 'token';
 
+
   constructor(
-        private httpClient: HttpClient,
+        private servicehelper: ServiceHelper<any, any>,
         private negocio: NegocioService,
+        private localService: LocalService
         ) {
 
-        // Http Headers
-        this.httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json'
-          })};
+         this.UsuarioLogueado = new BehaviorSubject<boolean>(false);
 
   }
 
+  setEstadoLogueo(newValue): void {
+    this.UsuarioLogueado.next(newValue);
+  }
+
+  getEstadoLogueo(): Observable<boolean> {
+    return this.UsuarioLogueado.asObservable();
+  }
+
+  setUsrLoguin(usuario: LoginClienteResponse) {
+    this.UsrLogin$.next(usuario);
+  }
+
+  getUsrLoguin(): Observable<LoginClienteResponse> {
+    return this.UsrLogin$.asObservable();
+  }
+
   Loguin(usrrq: LoguinRequest) {
+    this.UrlServicioLoguin =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiNegocio +
+        CServicios.ServivioLoguinCLiente;
 
-    this.UrlServicioLoguin = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiNegocio +
-    CServicios.ServivioLoguinCLiente;
+    this.recordar = usrrq.recordar;
 
-    return this.httpClient.post(this.UrlServicioLoguin, usrrq , this.httpOptions)
+    return this.servicehelper
+        .PostData(this.UrlServicioLoguin, usrrq)
         .toPromise()
         .then((config: any) => {
-
-          this.cargarRespuesta(config);
+            this.cargarRespuesta(config, usrrq);
 
         })
         .catch((err: any) => {
             console.error(err);
         });
-  }
-
-  loguout(){
-
-    // quitar logueo
-    this.EsUsuarioLogueado = false;
-
-    // borrar registro storage
-    this.guardarStorage(true);
 
   }
 
-  private cargarRespuesta(config: any){
+  cargarUsuarioStorage(){
 
-    this.UsrLogin = config;
+    // validar que tenga usuario en el stora y lo logueamos
+    const usrlogueado = this.localService.getJsonValue(this.token);
 
-    // validar mensaje
-    if (this.UsrLogin.estado[0].msgId === EstadoRespuestaMensaje.Error) {
+    if (usrlogueado)   {
 
-      this.EsUsuarioLogueado = false;
-      this.MensajeError = this.UsrLogin.estado[0].msgStr;
+      const RestaurarSesion: LoguinRequest = usrlogueado;
 
-    }else{
-
-      // cambiar estado de logueado
-      this.EsUsuarioLogueado = true;
-
-      // guardar storage
-      this.guardarStorage(true);
+      this.Loguin(RestaurarSesion);
 
     }
 
   }
 
-  private guardarStorage(guardar: boolean){
+  loguout(){
 
-    if (guardar) {
-      localStorage.setItem(this.token, JSON.stringify(this.UsrLogin));
+    // quitar logueo
+    this.setEstadoLogueo(false);
+
+    this.recordar = false;
+
+    // borrar registro storage
+    const usr = new LoguinRequest();
+
+    this.guardarStorage(usr);
+
+  }
+
+  private cargarRespuesta(config: any, usrrq: LoguinRequest){
+
+    // validar mensaje
+    if (config.estado[0].msgId === EstadoRespuestaMensaje.Error) {
+
+      this.setEstadoLogueo(false);
+      this.MensajeError = config.estado[0].msgStr;
+
     }else{
-      localStorage.removeItem(this.token);
+
+      // cambiar estado de logueado
+      this.setEstadoLogueo(true);
+
+      // guardar storage
+      this.guardarStorage(usrrq);
+
+      this.setUsrLoguin (config);
+
+    }
+
+  }
+
+  private guardarStorage(usrrq: LoguinRequest){
+
+    if (this.recordar) {
+      this.localService.setJsonValue(this.token, usrrq);
+    }else{
+      this.localService.clearToken();
     }
   }
 

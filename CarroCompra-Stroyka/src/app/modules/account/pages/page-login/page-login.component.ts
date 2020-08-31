@@ -1,5 +1,5 @@
 import { Component, OnInit  } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router } from '@angular/router';
 import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
 
 // servicios
@@ -28,7 +28,8 @@ export class PageLoginComponent implements OnInit{
 
         this.ingresoForm = this.fb.group({
           usuario: new FormControl('', Validators.compose([Validators.required])),
-          contrasena: new FormControl('', Validators.compose([Validators.required]))
+          contrasena: new FormControl('', Validators.compose([Validators.required])),
+          recordar: new FormControl(false, [])
         });
 
         this.ingresoForm.valueChanges.subscribe(query => {
@@ -46,7 +47,7 @@ export class PageLoginComponent implements OnInit{
         this.usuariossvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
           // si no llega logueado validar mensaje
-          if  (!this.usuariossvc.EsUsuarioLogueado){
+          if  (!this.usuariossvc.getEstadoLogueo()){
             this.mensajeerror = this.usuariossvc.MensajeError;
             this.error = true;
            }else{
@@ -58,16 +59,16 @@ export class PageLoginComponent implements OnInit{
 
           this.loading = false;
 
-         }) ;
+        });
       }else{
 
         // validar que tenga contraseña
-        if (this.ingresoForm.controls.contrasena.invalid){
+        if (this.contrasena.invalid){
           this.mensajeerror = 'Debe ingresar información valida en contraseña';
         }
 
         // validar que tenga usuario
-        if (this.ingresoForm.controls.usuario.invalid){
+        if (this.usuario.invalid){
           this.mensajeerror = 'Debe ingresar información valida en usuario';
         }
 
