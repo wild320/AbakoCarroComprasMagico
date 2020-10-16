@@ -10,7 +10,7 @@
                 <div class="account-nav flex-grow-1">
                     <h4 class="account-nav__title">Navegación</h4>
                     <ul>
-                        <li *ngFor="let link of links" class="account-nav__item" routerLinkActive="account-nav__item--active" [routerLinkActiveOptions]="{exact: true}">
+                        <li *ngFor="let link of links" class="account-nav__item" (click)="onClick($event)" routerLinkActive="account-nav__item--active" [routerLinkActiveOptions]="{exact: true}">
                             <a [routerLink]="link.url">{{ link.label }}</a>
                         </li>
                     </ul>

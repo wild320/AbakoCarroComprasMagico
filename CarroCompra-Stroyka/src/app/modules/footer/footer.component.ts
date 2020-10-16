@@ -40,7 +40,7 @@ export class FooterComponent {
 
             if (value){
 
-                this.linksMicuenta.push({label: 'Historial de Ordenes',  url: ''});
+                this.linksMicuenta.push({label: 'Historial de Pedidos',  url: ''});
                 this.linksMicuenta.push( {label: ClabelRutas.listaDeseo,      url: Crutas.listaDeseo});
             }
 

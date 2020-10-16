@@ -3,6 +3,12 @@ import { fromEvent, Subject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntil } from 'rxjs/operators';
 
+// servicios
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+
+// constantes
+import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+
 @Directive({
     selector: '[appDropdown]',
     exportAs: 'appDropdown'
@@ -23,7 +29,8 @@ export class DropdownDirective implements OnDestroy {
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private el: ElementRef,
-        private zone: NgZone
+        private zone: NgZone,
+        public usuariosvc: UsuarioService
     ) {
         if (isPlatformBrowser(this.platformId)) {
             this.zone.runOutsideAngular(() => {
@@ -31,7 +38,7 @@ export class DropdownDirective implements OnDestroy {
                     takeUntil(this.destroy$)
                 ).subscribe((event) => {
                     if (!el.nativeElement.contains(event.target)) {
-                        this.close();
+                        this.close(event);
                     }
                 });
             });
@@ -42,8 +49,15 @@ export class DropdownDirective implements OnDestroy {
         this.element.classList.toggle(this.appDropdown, force);
     }
 
-    close(): void {
+    close(item): void {
         this.toggle(false);
+
+        // cerrar sesión
+        if (item.label === ClabelRutas.CerrarSesion){
+
+            this.usuariosvc.loguout();
+
+        }
     }
 
     open(): void {

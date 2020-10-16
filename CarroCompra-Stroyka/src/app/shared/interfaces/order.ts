@@ -1,30 +1,31 @@
 import { Address } from './address';
 
 export interface Order {
-    id: number;
-    date: string;
-    status: string;
+    idPedido: number;
+    fecha: string;
+    pedido: number ;
+    estado: string;
     items: Array<{
         id: number,
-        slug: string,
-        name: string,
-        image: string,
+        codigo: string,
+        nombre: string,
+        imagen: string,
         options?: Array<{
             label: string;
             value: string;
         }>;
-        price: number,
-        quantity: number,
+        precio: number,
+        cantidad: number,
         total: number,
     }>;
-    additionalLines: Array<{
-        label: string,
-        total: number,
+    lineasAdicionales: Array<{
+        clave: string,
+        valor: number,
     }>;
-    quantity: number;
+    cantidadArticulos: number;
     subtotal: number;
     total: number;
-    paymentMethod: string;
-    shippingAddress: Address;
-    billingAddress: Address;
+    metodoPago: string;
+    direccionEnvio: Address;
+    direccionPrincipal: Address;
 }

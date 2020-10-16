@@ -14,4 +14,9 @@ export class UsuarioCliente {
      Assr: string;
      IdAgc: string;
      Agc: string;
+     Nmb: string;
+     Apll: string;
+     Ciu: string;
+     Dep: string;
+     Pai: string;
 }

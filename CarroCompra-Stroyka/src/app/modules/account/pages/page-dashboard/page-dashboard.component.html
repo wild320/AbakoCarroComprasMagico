@@ -4,38 +4,38 @@
             <div class="profile-card__avatar">
                 <img src="./assets/images/avatars/avatar-3.jpg" alt="">
             </div>
-            <div class="profile-card__name">Helena Garcia</div>
-            <div class="profile-card__email">stroyka@example.com</div>
+            <div class="profile-card__name">{{usuariosvc.razonsocial| titlecase}}</div>
+            <div class="profile-card__email">{{usuariosvc.correo}}</div>
             <div class="profile-card__edit">
-                <a routerLink="../profile" class="btn btn-secondary btn-sm">Edit Profile</a>
-            </div>
+                <a routerLink="../profile" class="btn btn-secondary btn-sm">Editar Perfil</a>
+            </div> 
         </div>
     </div>
     <div class="dashboard__address card address-card address-card--featured">
-        <div class="address-card__badge" *ngIf="address.default">Default Address</div>
+        <div class="address-card__badge" *ngIf="usuariosvc.addresses[0].default">Dirección Predeterminada</div>
         <div class="address-card__body">
-            <div class="address-card__name">{{ address.firstName + ' ' + address.lastName}}</div>
+            <div class="address-card__name">{{ usuariosvc.addresses[0].nombres + ' ' + usuariosvc.addresses[0].apellidos | titlecase}}</div>
             <div class="address-card__row">
-                {{ address.country }}<br>
-                {{ address.postcode }}, {{ address.city }}<br>
-                {{ address.address }}
+                {{ usuariosvc.addresses[0].pais | titlecase }}<br>
+                {{ usuariosvc.addresses[0].estado | titlecase}},  {{ usuariosvc.addresses[0].ciudad | titlecase}}<br>
+                {{ usuariosvc.addresses[0].direccion | titlecase}}
             </div>
             <div class="address-card__row">
-                <div class="address-card__row-title">Phone Number</div>
-                <div class="address-card__row-content">{{ address.phone }}</div>
+                <div class="address-card__row-title">Telefono</div>
+                <div class="address-card__row-content">{{ usuariosvc.addresses[0].telefono }}</div>
             </div>
             <div class="address-card__row">
-                <div class="address-card__row-title">Email Address</div>
-                <div class="address-card__row-content">{{ address.email }}</div>
+                <div class="address-card__row-title">Correo Electrónico</div>
+                <div class="address-card__row-content">{{ usuariosvc.addresses[0].correo }}</div>
             </div>
             <div class="address-card__footer">
-                <a routerLink="/account/addresses/5">Edit Address</a>
+                <a routerLink="/account/addresses/5">Editar Dirección</a>
             </div>
         </div>
     </div>
     <div class="dashboard__orders card">
         <div class="card-header">
-            <h5>Recent Orders</h5>
+            <h5>Pedidos Recientes</h5>
         </div>
         <div class="card-divider"></div>
         <div class="card-table">
@@ -43,18 +43,18 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>Order</th>
-                        <th>Date</th>
-                        <th>Status</th>
+                        <th>Pedido</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
                         <th>Total</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let order of orders">
-                        <td><a href="">#{{ order.id }}</a></td>
-                        <td>{{ order.date }}</td>
-                        <td>{{ order.status }}</td>
-                        <td>{{ order.total|currencyFormat }} for {{ order.quantity }} item(s)</td>
+                    <tr *ngFor="let order of pedidosvc.orders">
+                        <td><a [routerLink]="'/account/orders/' + order.pedido">#{{ order.pedido }}</a></td>
+                        <td>{{ order.fecha }}</td>
+                        <td>{{ order.estado | titlecase }}</td>
+                        <td>{{ order.total|currencyFormat }} por {{ order.cantidadArticulos }} Item(s)</td>
                     </tr>
                     </tbody>
                 </table>

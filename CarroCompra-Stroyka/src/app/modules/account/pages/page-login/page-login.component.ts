@@ -1,9 +1,10 @@
 import { Component, OnInit  } from '@angular/core';
 import { Router } from '@angular/router';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
 
 // servicios
 import {UsuarioService} from '../../../../shared/services/usuario.service';
+
 
 @Component({
     selector: 'app-login',
@@ -47,10 +48,11 @@ export class PageLoginComponent implements OnInit{
         this.usuariossvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
           // si no llega logueado validar mensaje
-          if  (!this.usuariossvc.getEstadoLogueo()){
+          if  (!this.usuariossvc.logueo){
             this.mensajeerror = this.usuariossvc.MensajeError;
             this.error = true;
            }else{
+
             this.error = false;
 
             // direccionar al home

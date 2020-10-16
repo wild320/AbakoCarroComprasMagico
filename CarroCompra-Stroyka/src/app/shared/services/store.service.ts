@@ -7,6 +7,7 @@ import { NegocioService } from '../../shared/services/negocio.service';
 import { PaginasService } from './paginas.service';
 
 // Contantes
+import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
 import { CServicios } from '../../../data/contantes/cServicios';
 
 @Injectable({
@@ -25,7 +26,9 @@ export class StoreService {
 
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService,
-                private paginaService: PaginasService) {  }
+                private paginaService: PaginasService) {
+
+    }
 
     cargarConfiguracionGeneral() {
 
@@ -92,10 +95,12 @@ export class StoreService {
 
         });
 
-        this.CargarMenu();
+        this.CargarMenu(false);
     }
 
-    private CargarMenu() {
+    public CargarMenu(CargarUsuario: boolean) {
+
+        this.navigation = [];
 
         this.navigation = [
             {label: 'Inicio', url: '/'},
@@ -107,24 +112,29 @@ export class StoreService {
                     {label: 'Comparar', url: '/shop/compare'},
                 ]
             }},
-            {label: 'Cuenta', url: '/account', menu: {
-                type: 'menu',
-                items: [
-                    {label: 'Login',           url: '/account/login'},
-                    {label: 'Dashboard',       url: '/account/dashboard'},
-                    {label: 'Edit Profile',    url: '/account/profile'},
-                    {label: 'Order History',   url: '/account/orders'},
-                    {label: 'Order Details',   url: '/account/orders/5'},
-                    {label: 'Address Book',    url: '/account/addresses'},
-                    {label: 'Edit Address',    url: '/account/addresses/5'},
-                    {label: 'Change Password', url: '/account/password'}
-                ]
-            }},
             {label: 'Sitios', url: '/site', menu: {
                 type: 'menu',
                 items: [ ]
-            }}
+            }},
+
         ];
+
+        if (CargarUsuario) {
+
+            this.navigation.push(
+            {label: 'Cuenta', url: '/account', menu: {
+                type: 'menu',
+                items: [
+                    {label: ClabelRutas.Dashboard, url: Crutas.Dashboard},
+                    {label: ClabelRutas.EditarCuenta,    url: Crutas.EditarCuenta},
+                    {label: ClabelRutas.MiHistorial,   url: Crutas.MiHistorial},
+                    {label: ClabelRutas.MisDirecciones,    url: Crutas.MisDirecciones},
+                    {label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena},
+                    {label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion}
+                ]
+            }});
+
+        }
 
         this.IngresarMenuDinamico();
     }

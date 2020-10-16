@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { order } from '../../../../../data/account-order-details';
 import { Order } from '../../../../shared/interfaces/order';
 import { RootService } from '../../../../shared/services/root.service';
 
@@ -9,7 +8,7 @@ import { RootService } from '../../../../shared/services/root.service';
     styleUrls: ['./page-order-success.component.scss']
 })
 export class PageOrderSuccessComponent {
-    order: Order = order;
+    order: Order ;
 
     constructor(
         public root: RootService,

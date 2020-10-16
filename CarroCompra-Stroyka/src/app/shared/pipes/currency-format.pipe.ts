@@ -14,14 +14,14 @@ export class CurrencyFormatPipe implements PipeTransform {
         private service: CurrencyService
     ) { }
 
-    transform(
+     transform(
         value: any,
         currencyCode?: string,
         display?: 'code' | 'symbol' | 'symbol-narrow' | string | boolean,
         digitsInfo?: string,
         locale?: string
     ): string | null {
-        currencyCode = currencyCode || this.service.options.code;
+        currencyCode = currencyCode || `${this.service.options.code} `;
         display = display || this.service.options.display;
         digitsInfo = digitsInfo || this.service.options.digitsInfo;
         locale = locale || this.service.options.locale;

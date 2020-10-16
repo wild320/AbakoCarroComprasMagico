@@ -4,7 +4,13 @@ import { DirectionService } from '../../../../shared/services/direction.service'
 import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HeaderService } from '../../../../shared/services/header.service';
+
+// Servicios
 import {StoreService } from '../../../../shared/services/store.service';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
+
+// constantes
+import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
 
 @Component({
     selector: 'app-header-links',
@@ -17,7 +23,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     destroy$: Subject<void> = new Subject<void>();
 
-    items: NavigationLink[] = this.storaservice.navigation;
+    items: NavigationLink[];
     hoveredItem: NavigationLink = null;
 
     reCalcSubmenuPosition = false;
@@ -27,7 +33,12 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
         private header: HeaderService,
         private zone: NgZone,
         public storaservice: StoreService,
-    ) {}
+        private usuariosvc: UsuarioService
+    ) {
+
+        this.UsuarioLogueado();
+
+    }
 
     onItemMouseEnter(item: NavigationLink): void {
         if (this.hoveredItem !== item) {
@@ -37,6 +48,18 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
                 this.reCalcSubmenuPosition = true;
             }
         }
+    }
+
+    private UsuarioLogueado() {
+
+        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+
+            this.storaservice.CargarMenu(value);
+
+            this.items = this.storaservice.navigation;
+
+        });
+
     }
 
     onItemMouseLeave(item: NavigationLink): void {
@@ -66,8 +89,15 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
     }
 
-    onSubItemClick(): void {
+    onSubItemClick(item): void {
         this.hoveredItem = null;
+
+        // cerrar sesión
+        if (item.label === ClabelRutas.CerrarSesion){
+
+            this.usuariosvc.loguout();
+
+        }
     }
 
     ngOnInit(): void {

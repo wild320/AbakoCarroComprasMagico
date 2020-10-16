@@ -25,14 +25,13 @@
         <a *ngIf="item.external" class="nav-links__item-link" [href]="item.url" [target]="item.target" (appTouchClick)="onTouchClick($event, item)">
             <ng-container [ngTemplateOutlet]="link"></ng-container>
         </a>
-
         <div
             *ngIf="item.menu && item.menu.type == 'menu'"
             class="nav-links__submenu nav-links__submenu--type--menu"
             [ngClass]="{'nav-links__submenu--open': hoveredItem === item}"
             #submenuElement
         >
-            <app-header-menu [items]="item.menu.items" (itemClick)="onSubItemClick()"></app-header-menu>
+            <app-header-menu [items]="item.menu.items" (itemClick)="onSubItemClick($event)"></app-header-menu>
         </div>
         <div
             *ngIf="item.menu && item.menu.type == 'megamenu'"
@@ -40,7 +39,7 @@
             [ngClass]="{'nav-links__submenu--open': hoveredItem === item}"
             #submenuElement
         >
-            <app-header-megamenu [menu]="item.menu" (itemClick)="onSubItemClick()"></app-header-megamenu>
+            <app-header-megamenu [menu]="item.menu" (itemClick)="onSubItemClick($event)"></app-header-megamenu>
         </div>
     </li>
 </ul>

@@ -4,16 +4,16 @@
     "reportVersion": 2,
     "event": "Allocation failed - JavaScript heap out of memory",
     "trigger": "FatalError",
-    "filename": "report.20200830.195249.7744.0.001.json",
-    "dumpEventTime": "2020-08-30T19:52:49Z",
-    "dumpEventTimeStamp": "1598835169646",
-    "processId": 7744,
+    "filename": "report.20201016.085513.6892.0.001.json",
+    "dumpEventTime": "2020-10-16T08:55:13Z",
+    "dumpEventTimeStamp": "1602856513616",
+    "processId": 6892,
     "threadId": null,
     "cwd": "D:\\Desarrollo\\WEB\\Abako\\CARRO%20DE%20COMPRAS%20ABAKO\\CarroCompra-Stroyka",
     "commandLine": [
       "C:\\Program Files\\nodejs\\node.exe",
-      "C:\\Users\\alejo\\AppData\\Roaming\\npm/node_modules/@angular/cli/bin/ng",
-      "serve"
+      "D:\\Desarrollo\\WEB\\Abako\\CARRO%20DE%20COMPRAS%20ABAKO\\CarroCompra-Stroyka\\node_modules\\@ngtools\\webpack\\src\\type_checker_worker.js",
+      "9d93e901-158a-4cf9-ba1b-2f0582ffcfeb"
     ],
     "nodejsVersion": "v12.16.3",
     "wordSize": 64,
@@ -52,38 +52,38 @@
       {
         "model": "Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz",
         "speed": 2904,
-        "user": 6643500,
+        "user": 1622031,
         "nice": 0,
-        "sys": 2762843,
-        "idle": 17021375,
-        "irq": 432937
+        "sys": 770265,
+        "idle": 2561031,
+        "irq": 56078
       },
       {
         "model": "Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz",
         "speed": 2904,
-        "user": 5731000,
+        "user": 1719484,
         "nice": 0,
-        "sys": 1512875,
-        "idle": 19183640,
-        "irq": 38625
+        "sys": 437343,
+        "idle": 2796296,
+        "irq": 12703
       },
       {
         "model": "Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz",
         "speed": 2904,
-        "user": 7270265,
+        "user": 1993546,
         "nice": 0,
-        "sys": 2069890,
-        "idle": 17087359,
-        "irq": 36593
+        "sys": 618671,
+        "idle": 2340906,
+        "irq": 9171
       },
       {
         "model": "Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz",
         "speed": 2904,
-        "user": 7130531,
+        "user": 1979640,
         "nice": 0,
-        "sys": 1611531,
-        "idle": 17685453,
-        "irq": 30281
+        "sys": 426875,
+        "idle": 2546609,
+        "irq": 8250
       }
     ],
     "networkInterfaces": [
@@ -100,7 +100,7 @@
         "name": "Wi-Fi",
         "internal": false,
         "mac": "a0:c5:89:62:4b:2f",
-        "address": "192.168.1.13",
+        "address": "192.168.2.105",
         "netmask": "255.255.255.0",
         "family": "IPv4"
       },
@@ -132,99 +132,75 @@
   },
   "nativeStack": [
     {
-      "pc": "0x00007ff7f4c82449",
+      "pc": "0x00007ff6f8172449",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+11577"
     },
     {
-      "pc": "0x00007ff7f4c869a9",
+      "pc": "0x00007ff6f81769a9",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+29337"
     },
     {
-      "pc": "0x00007ff7f4c85828",
+      "pc": "0x00007ff6f8175828",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+24856"
     },
     {
-      "pc": "0x00007ff7f4dbd8c2",
+      "pc": "0x00007ff6f82ad8c2",
       "symbol": "v8::base::CPU::has_sse+68658"
     },
     {
-      "pc": "0x00007ff7f55d9bbe",
+      "pc": "0x00007ff6f8ac9bbe",
       "symbol": "v8::Isolate::ReportExternalAllocationLimitReached+94"
     },
     {
-      "pc": "0x00007ff7f55c1c91",
+      "pc": "0x00007ff6f8ab1c91",
       "symbol": "v8::SharedArrayBuffer::Externalize+833"
     },
     {
-      "pc": "0x00007ff7f548e1ec",
+      "pc": "0x00007ff6f897e1ec",
       "symbol": "v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1436"
     },
     {
-      "pc": "0x00007ff7f5499420",
+      "pc": "0x00007ff6f8989420",
       "symbol": "v8::internal::Heap::ProtectUnprotectedMemoryChunks+1312"
     },
     {
-      "pc": "0x00007ff7f5495f44",
+      "pc": "0x00007ff6f8985f44",
       "symbol": "v8::internal::Heap::PageFlagsAreConsistent+3204"
     },
     {
-      "pc": "0x00007ff7f548b743",
+      "pc": "0x00007ff6f897b743",
       "symbol": "v8::internal::Heap::CollectGarbage+1283"
     },
     {
-      "pc": "0x00007ff7f5489db4",
+      "pc": "0x00007ff6f8979db4",
       "symbol": "v8::internal::Heap::AddRetainedMap+2452"
     },
     {
-      "pc": "0x00007ff7f54aafbd",
+      "pc": "0x00007ff6f899afbd",
       "symbol": "v8::internal::Factory::NewFillerObject+61"
     },
     {
-      "pc": "0x00007ff7f5211871",
+      "pc": "0x00007ff6f8701871",
       "symbol": "v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator=+1665"
     },
     {
-      "pc": "0x00007ff7f5a26c4d",
+      "pc": "0x00007ff6f8f16c4d",
       "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+546637"
     },
     {
-      "pc": "0x00007ff7f5a90c24",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+980772"
+      "pc": "0x00007ff6f8e97970",
+      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+25712"
     },
     {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff7f59abbfc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x000001a29ccec03c",
+      "pc": "0x00000208ef98e0a5",
       "symbol": ""
     }
   ],
   "javascriptHeap": {
-    "totalMemory": 2152714240,
-    "totalCommittedMemory": 2152714240,
-    "usedMemory": 2107782240,
-    "availableMemory": 47783896,
+    "totalMemory": 2152239104,
+    "totalCommittedMemory": 2152239104,
+    "usedMemory": 2119708584,
+    "availableMemory": 47803632,
     "memoryLimit": 2197815296,
     "heapSpaces": {
       "read_only_space": {
@@ -238,42 +214,42 @@
         "memorySize": 2097152,
         "committedMemory": 2097152,
         "capacity": 1047456,
-        "used": 271232,
-        "available": 776224
+        "used": 22400,
+        "available": 1025056
       },
       "old_space": {
-        "memorySize": 1893347328,
-        "committedMemory": 1893347328,
-        "capacity": 1882874760,
-        "used": 1882015600,
-        "available": 859160
+        "memorySize": 1924018176,
+        "committedMemory": 1924018176,
+        "capacity": 1909206616,
+        "used": 1909051688,
+        "available": 154928
       },
       "code_space": {
-        "memorySize": 18255872,
-        "committedMemory": 18255872,
-        "capacity": 16475488,
-        "used": 16475488,
+        "memorySize": 7245824,
+        "committedMemory": 7245824,
+        "capacity": 6537280,
+        "used": 6537280,
         "available": 0
       },
       "map_space": {
-        "memorySize": 33034240,
-        "committedMemory": 33034240,
-        "capacity": 3954800,
-        "used": 3954800,
+        "memorySize": 14946304,
+        "committedMemory": 14946304,
+        "capacity": 1069120,
+        "used": 1069120,
         "available": 0
       },
       "large_object_space": {
-        "memorySize": 205094912,
-        "committedMemory": 205094912,
-        "capacity": 204488024,
-        "used": 204488024,
+        "memorySize": 203620352,
+        "committedMemory": 203620352,
+        "capacity": 202992504,
+        "used": 202992504,
         "available": 0
       },
       "code_large_object_space": {
-        "memorySize": 622592,
-        "committedMemory": 622592,
-        "capacity": 544288,
-        "used": 544288,
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 2784,
+        "used": 2784,
         "available": 0
       },
       "new_large_object_space": {
@@ -286,17 +262,17 @@
     }
   },
   "resourceUsage": {
-    "userCpuSeconds": 836.406,
-    "kernelCpuSeconds": 24.921,
-    "cpuConsumptionPercent": 14.1433,
-    "maxRss": 2249547776,
+    "userCpuSeconds": 636.828,
+    "kernelCpuSeconds": 54.218,
+    "cpuConsumptionPercent": 16.9832,
+    "maxRss": 2221641728,
     "pageFaults": {
-      "IORequired": 3613786,
+      "IORequired": 2185022,
       "IONotRequired": 0
     },
     "fsActivity": {
-      "reads": 19590,
-      "writes": 46
+      "reads": 38029,
+      "writes": 7
     }
   },
   "libuv": [
@@ -307,6 +283,8 @@
     "ALLUSERSPROFILE": "C:\\ProgramData",
     "APPDATA": "C:\\Users\\alejo\\AppData\\Roaming",
     "BROWSERSLIST_IGNORE_OLD_DATA": "1",
+    "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\crashpad_1944_LVXNKMLOZNHYWOZS",
+    "COLORTERM": "truecolor",
     "CommonProgramFiles": "C:\\Program Files\\Common Files",
     "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
     "CommonProgramW6432": "C:\\Program Files\\Common Files",
@@ -317,6 +295,7 @@
     "FPS_BROWSER_USER_PROFILE_STRING": "Default",
     "HOMEDRIVE": "C:",
     "HOMEPATH": "\\Users\\alejo",
+    "LANG": "es_ES.UTF-8",
     "LOCALAPPDATA": "C:\\Users\\alejo\\AppData\\Local",
     "LOGONSERVER": "\\\\CIO",
     "NUMBER_OF_PROCESSORS": "4",
@@ -324,7 +303,7 @@
     "OneDriveConsumer": "C:\\Users\\alejo\\OneDrive",
     "ORIGINAL_XDG_CURRENT_DESKTOP": "undefined",
     "OS": "Windows_NT",
-    "Path": "C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files (x86)\\Appeon\\Shared\\PowerBuilder;C:\\Program Files (x86)\\Appeon\\Shared\\PowerBuilder\\x64;C:\\Program Files (x86)\\Appeon\\PowerBuilder 19.0;C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319;C:\\Program Files\\nodejs\\;C:\\Users\\alejo\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\alejo\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\alejo\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\alejo\\AppData\\Roaming\\npm;C:\\Users\\alejo\\.dotnet\\tools;C:\\Program Files\\MongoDB\\Server\\4.2\\bin;C:\\Users\\alejo\\.dotnet\\tools;C:\\Users\\alejo\\AppData\\Local\\Microsoft\\WindowsApps;",
+    "Path": "C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files (x86)\\Appeon\\Shared\\PowerBuilder;C:\\Program Files (x86)\\Appeon\\Shared\\PowerBuilder\\x64;C:\\Program Files (x86)\\Appeon\\PowerBuilder 19.0;C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319;C:\\Program Files\\nodejs\\;C:\\Users\\alejo\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\alejo\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\alejo\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\alejo\\AppData\\Roaming\\npm;C:\\Users\\alejo\\.dotnet\\tools;C:\\Program Files\\MongoDB\\Server\\4.2\\bin;C:\\Users\\alejo\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\alejo\\.dotnet\\tools",
     "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL",
     "PROCESSOR_ARCHITECTURE": "AMD64",
     "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
@@ -340,17 +319,15 @@
     "SystemDrive": "C:",
     "SystemRoot": "C:\\WINDOWS",
     "TEMP": "C:\\Users\\alejo\\AppData\\Local\\Temp",
+    "TERM_PROGRAM": "vscode",
+    "TERM_PROGRAM_VERSION": "1.50.1",
     "TMP": "C:\\Users\\alejo\\AppData\\Local\\Temp",
     "USERDOMAIN": "CIO",
     "USERDOMAIN_ROAMINGPROFILE": "CIO",
     "USERNAME": "alejo",
     "USERPROFILE": "C:\\Users\\alejo",
     "WEBPACK_DEV_SERVER": "true",
-    "windir": "C:\\WINDOWS",
-    "TERM_PROGRAM": "vscode",
-    "TERM_PROGRAM_VERSION": "1.48.2",
-    "LANG": "es_ES.UTF-8",
-    "COLORTERM": "truecolor"
+    "windir": "C:\\WINDOWS"
   },
   "sharedObjects": [
     "C:\\Program Files\\nodejs\\node.exe",
@@ -359,17 +336,17 @@
     "C:\\WINDOWS\\System32\\KERNELBASE.dll",
     "C:\\WINDOWS\\System32\\WS2_32.dll",
     "C:\\WINDOWS\\System32\\RPCRT4.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
     "C:\\WINDOWS\\System32\\PSAPI.DLL",
     "C:\\WINDOWS\\System32\\ADVAPI32.dll",
     "C:\\WINDOWS\\System32\\msvcrt.dll",
-    "C:\\WINDOWS\\System32\\sechost.dll",
-    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
-    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
     "C:\\WINDOWS\\System32\\ucrtbase.dll",
+    "C:\\WINDOWS\\System32\\sechost.dll",
+    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
     "C:\\WINDOWS\\System32\\USER32.dll",
     "C:\\WINDOWS\\System32\\win32u.dll",
-    "C:\\WINDOWS\\System32\\GDI32.dll",
     "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
+    "C:\\WINDOWS\\System32\\GDI32.dll",
     "C:\\WINDOWS\\System32\\gdi32full.dll",
     "C:\\WINDOWS\\System32\\msvcp_win.dll",
     "C:\\WINDOWS\\System32\\CRYPT32.dll",
@@ -388,8 +365,6 @@
     "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc6.DLL",
     "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc.DLL",
     "C:\\WINDOWS\\SYSTEM32\\DNSAPI.dll",
-    "C:\\Windows\\System32\\rasadhlp.dll",
-    "C:\\WINDOWS\\System32\\fwpuclnt.dll",
     "C:\\WINDOWS\\system32\\napinsp.dll",
     "C:\\WINDOWS\\system32\\pnrpnsp.dll",
     "C:\\WINDOWS\\system32\\wshbth.dll",

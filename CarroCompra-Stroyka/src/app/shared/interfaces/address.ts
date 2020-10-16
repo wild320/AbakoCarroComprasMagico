@@ -1,11 +1,11 @@
 export interface Address {
     default?: boolean;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    country: string;
-    city: string;
-    postcode: string;
-    address: string;
+    nombres: string;
+    apellidos: string;
+    correo: string;
+    telefono: string;
+    pais: string;
+    ciudad: string;
+    estado: string;
+    direccion: string;
 }

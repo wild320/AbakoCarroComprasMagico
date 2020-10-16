@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h5>Order History</h5>
+        <h5>Historial de Pedidos</h5>
     </div>
     <div class="card-divider"></div>
     <div class="card-table">
@@ -8,25 +8,25 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Order</th>
-                    <th>Date</th>
-                    <th>Status</th>
+                    <th>Pedido</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
                     <th>Total</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let order of orders">
-                    <td><a [routerLink]="'/account/orders/' + order.id">#{{ order.id }}</a></td>
-                    <td>{{ order.date }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.total|currencyFormat }} for {{ order.quantity }} item(s)</td>
+                <tr *ngFor="let order of pedidosvc.orders">
+                    <td><a [routerLink]="'/account/orders/' + order.pedido">#{{ order.pedido }}</a></td>
+                    <td>{{ order.fecha }}</td>
+                    <td>{{ order.estado | titlecase  }}</td>
+                    <td>{{ order.total|currencyFormat }} por {{ order.cantidadArticulos }} Item(s)</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="card-divider"></div>
+    <div class="card-divider"></div> 
     <div class="card-footer">
-        <app-pagination [total]="3"></app-pagination>
+        <app-pagination [total]= pedidosvc.NumeroPaginas (pageChange)= "CambioPagina($event)"></app-pagination>
     </div>
 </div>

@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
 import { CurrencyService } from '../../../../shared/services/currency.service';
+import { Link } from '../../../../shared/interfaces/link';
 
 // servicios
 import { PaginasService } from '../../../../shared/services/paginas.service';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
+
+// constantes
+import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+
 
 @Component({
     selector: 'app-header-topbar',
@@ -12,6 +17,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 })
 export class TopbarComponent {
     usuariologueado = false;
+    linksMicuenta: Link[];
     languages = [
         {name: 'Español', image: 'language-6'},
   //      {name: 'English', image: 'language-1'},
@@ -32,10 +38,12 @@ export class TopbarComponent {
     constructor(
         public currencyService: CurrencyService,
         public pagina: PaginasService,
-        public usuariosvc: UsuarioService
+        public usuariosvc: UsuarioService,
     ) {
 
         this.EstaLogueadoUsuario();
+
+        this.CargarMenu();
 
     }
 
@@ -56,4 +64,18 @@ export class TopbarComponent {
         });
 
     }
+
+    CargarMenu() {
+
+            this.linksMicuenta = [];
+
+            this.linksMicuenta.push({label: ClabelRutas.Dashboard,  url: Crutas.Dashboard});
+            this.linksMicuenta.push({label: ClabelRutas.EditarCuenta,  url: Crutas.EditarCuenta});
+            this.linksMicuenta.push({label: 'Historial Pedidos',  url: Crutas.MiHistorial});
+            this.linksMicuenta.push({label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones});
+            this.linksMicuenta.push({label: ClabelRutas.Cotrasena,  url: Crutas.Cotrasena});
+            this.linksMicuenta.push({label: ClabelRutas.CerrarSesion,  url: Crutas.CerrarSesion});
+
+    }
+
 }

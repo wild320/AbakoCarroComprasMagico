@@ -6,16 +6,32 @@ export const Crutas = {
     faq: '/site/faq',
     contactenos: '/site/contact-us',
     listaDeseo: '/shop/wishlist',
+
+    Dashboard: '/account/dashboard',
+    EditarCuenta: '/account/profile',
+    MiHistorial: '/account/orders',
+    MisDirecciones:   '/account/addresses',
+    Cotrasena:  '/account/password',
+    CerrarSesion:  '.'
+
 };
 
 
 export const ClabelRutas = {
     acecaNosotros: 'Acerca de Nosotros',
-    informacionEvio: 'Información de Envio',
+    informacionEvio: 'Información de Envío',
     terminosCondiciones: 'Térm. y Condiciones',
     politicasPrivacidad: 'Políticas de Privacidad',
     faq: 'FAQ',
-    contactenos: 'Contactanos',
+    contactenos: 'Contáctanos',
     listaDeseo: 'Lista de Deseos',
+
+    Dashboard: 'Dashboard',
+    EditarCuenta: 'Editar Perfil',
+    MiHistorial: 'Historial de Pedidos',
+    MisDirecciones: 'Direcciones',
+    Cotrasena: 'Contraseña',
+    CerrarSesion: 'Cerrar Sesión',
+
 };
 

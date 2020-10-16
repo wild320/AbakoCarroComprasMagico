@@ -3,5 +3,8 @@ export const CServicios = {
     ApiNegocio: 'ApiNegocio/api/',
     ServicioConfiguracionCC: 'Configuracion',
     ServicioPaginas: 'Paginas',
-    ServivioLoguinCLiente: 'CredencialesCliente'
+    ServicioPedidosCliente: 'Pedidos/GetPedidosCliente',
+    ServicioDetallePedido: 'Pedidos/GetDetallePedidos',
+    ServivioLoguinCLiente: 'CredencialesCliente',
+    ServivioCRUDPersonaExistente: 'CRUDPersonaExistente'
 };

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 // modules
 import { SharedModule } from '../../shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // components
 import { AccountMenuComponent } from './components/account-menu/account-menu.component';
@@ -37,6 +38,8 @@ import { TopbarComponent } from './components/topbar/topbar.component';
         // modules (angular)
         CommonModule,
         RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
         // modules
         SharedModule
     ],

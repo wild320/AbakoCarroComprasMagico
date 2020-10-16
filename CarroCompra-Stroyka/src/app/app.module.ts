@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+
 // modules (third-party)
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ToastrModule } from 'ngx-toastr';
@@ -98,5 +99,6 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
 export class AppModule { }
 
 export function getBaseUrl() {
+
     return document.getElementsByTagName('base')[0].href;
 }

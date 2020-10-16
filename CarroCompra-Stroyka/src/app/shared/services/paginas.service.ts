@@ -106,5 +106,5 @@ export class PaginasService {
         .catch((err: any) => {
             console.error(err);
         });
-  }
+    }
 }

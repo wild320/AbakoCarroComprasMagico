@@ -1,31 +1,43 @@
 <div class="card">
     <div class="card-header">
-        <h5>Edit Profile</h5>
+        <h5>Editar Perfil</h5>
     </div>
     <div class="card-divider"></div>
     <div class="card-body">
         <div class="row no-gutters">
             <div class="col-12 col-lg-7 col-xl-6">
-                <div class="form-group">
-                    <label for="profile-first-name">First Name</label>
-                    <input type="text" class="form-control" id="profile-first-name" placeholder="First Name">
-                </div>
-                <div class="form-group">
-                    <label for="profile-last-name">Last Name</label>
-                    <input type="text" class="form-control" id="profile-last-name" placeholder="Last Name">
-                </div>
-                <div class="form-group">
-                    <label for="profile-email">Email Address</label>
-                    <input type="email" class="form-control" id="profile-email" placeholder="Email Address">
-                </div>
-                <div class="form-group">
-                    <label for="profile-phone">Phone Number</label>
-                    <input type="text" class="form-control" id="profile-phone" placeholder="Phone Number">
-                </div>
+                <form [formGroup]="EditarPerfilForm" (ngSubmit)="submitForm()" > 
+                    <div class="form-group">
+                        <label for="profile-first-name">Nombres</label>
+                        <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Nombres">
+                    </div>
 
-                <div class="form-group mt-5 mb-0">
-                    <button class="btn btn-primary">Save</button>
-                </div>
+                    <div class="form-group">
+                        <label for="profile-last-name">Apellidos</label>
+                        <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Apellidos">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-email">Correo Electrónico</label>
+                        <input type="email" formControlName="Correo" class="form-control" id="profile-email" placeholder="Correo Electrónico">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-phone">Numero de Teléfono</label>
+                        <input type="text" formControlName="Telefono" class="form-control" id="profile-phone" placeholder="Numero de Teléfono">
+                    </div> 
+
+                    <div class="form-group mt-5 mb-0">
+                        <button  type="submit"  class="btn btn-primary">Guardar</button>
+                    </div><br>
+
+                    <div class="alert alert-danger" *ngIf="mensajerespuestaerror.length>0" role="alert">
+                        {{mensajerespuestaerror}}
+                    </div>
+                      <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
+                        {{mensajerespuestaexito}}
+                      </div>
+                </form> 
             </div>
         </div>
     </div>

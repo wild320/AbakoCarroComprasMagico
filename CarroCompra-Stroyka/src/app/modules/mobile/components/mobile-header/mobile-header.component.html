@@ -12,7 +12,7 @@
                     appDropdown="mobile-header__search--open"
                     class="mobile-header__search"
                     location="mobile-header"
-                    (closeButtonClick)="searchDropdown.close()"
+                    (closeButtonClick)="searchDropdown.close($event)"
                     #search="search"
                     #searchDropdown="appDropdown"
                 ></app-search>

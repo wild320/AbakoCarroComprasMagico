@@ -7,6 +7,10 @@ import { NegocioService } from '../../shared/services/negocio.service';
 import { ServiceHelper } from '../services/ServiceHelper';
 import { LocalService } from '../services/local-service.service';
 
+// interfaces
+import { Address } from '../interfaces/address';
+import { addresses } from '../../../data/account-addresses';
+
 
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
@@ -15,7 +19,8 @@ import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
 // modelos
 import {LoguinRequest} from '../../../data/modelos/seguridad/LoguinRequest';
 import {LoginClienteResponse} from '../../../data/modelos/seguridad/LoginClienteResponse';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import {CRUDPersonaExistenteRequest} from '../../../data/modelos/seguridad/CRUDPersonaExistenteRequest';
+import { Persona } from '../../../data/modelos/seguridad/CRUDPersonaExistente';
 
 
 @Injectable({
@@ -27,10 +32,18 @@ export class UsuarioService {
   private UsrLogin$ = new Subject<LoginClienteResponse>();
   httpOptions: any;
   private UsuarioLogueado: BehaviorSubject<boolean>;
+  public addresses: Address[];
+  public DatosPersona = new Persona();
+  public DatosPersonaRequest = new CRUDPersonaExistenteRequest();
+  public logueo: boolean;
+  public Idempresa: number;
+  public IdPersona: number;
   MensajeError = '';
   recordar = false;
   private token = 'token';
-
+  public razonsocial: string;
+  public correo: string;
+  public UsrLogin: LoginClienteResponse;
 
   constructor(
         private servicehelper: ServiceHelper<any, any>,
@@ -38,7 +51,13 @@ export class UsuarioService {
         private localService: LocalService
         ) {
 
-         this.UsuarioLogueado = new BehaviorSubject<boolean>(false);
+        this.addresses = addresses;
+
+        this.UsuarioLogueado = new BehaviorSubject<boolean>(false);
+
+        this.UsuarioLogueado.subscribe(value => {
+          this.logueo = value;
+        });
 
   }
 
@@ -47,6 +66,7 @@ export class UsuarioService {
   }
 
   getEstadoLogueo(): Observable<boolean> {
+
     return this.UsuarioLogueado.asObservable();
   }
 
@@ -56,6 +76,34 @@ export class UsuarioService {
 
   getUsrLoguin(): Observable<LoginClienteResponse> {
     return this.UsrLogin$.asObservable();
+  }
+
+  private CRUDPersonaExistente(accion: string, persona: Persona ): Promise<void> {
+    this.UrlServicioLoguin =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiNegocio +
+        CServicios.ServivioCRUDPersonaExistente;
+
+    // cargar los datos del usaurios
+    this.DatosPersonaRequest.accion = accion;
+    this.DatosPersonaRequest.idPersona = this.IdPersona;
+    this.DatosPersonaRequest.persona = persona;
+
+    return this.servicehelper
+      .PostData(this.UrlServicioLoguin, this.DatosPersonaRequest)
+      .toPromise()
+      .then((config: any) => {
+
+        this.DatosPersona = config;
+
+        return config;
+
+      })
+      .catch((err: any) => {
+          console.error(err);
+      });
+
+
   }
 
   Loguin(usrrq: LoguinRequest) {
@@ -71,11 +119,33 @@ export class UsuarioService {
         .toPromise()
         .then((config: any) => {
             this.cargarRespuesta(config, usrrq);
-
         })
         .catch((err: any) => {
             console.error(err);
         });
+
+  }
+
+  GuardarActualizarUsuario(Nombres: string, Apellidos: string, Correo: string, telefono: string ){
+
+    // cambiar datos del objecto
+    this.DatosPersona.nombres = Nombres;
+    this.DatosPersona.apellidos = Apellidos;
+
+    // datos de loguin
+
+    return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
+
+      // recuperar de nuevo loguin
+      this.cargarUsuarioStorage();
+
+      // Direcciones
+      this.CargarDirecciones();
+
+      return ret;
+
+
+    });
 
   }
 
@@ -118,13 +188,27 @@ export class UsuarioService {
 
     }else{
 
-      // cambiar estado de logueado
-      this.setEstadoLogueo(true);
-
       // guardar storage
       this.guardarStorage(usrrq);
 
       this.setUsrLoguin (config);
+
+      this.razonsocial = config.usuario[0].rzScl;
+      this.correo = config.usuario[0].mail.toLowerCase();
+      this.Idempresa = config.usuario[0].idEmp;
+      this.IdPersona = config.usuario[0].idPersona;
+
+      this.UsrLogin = config;
+
+      this.CRUDPersonaExistente('GET', this.DatosPersona).then((ret: any) => {
+
+        // Direcciones
+        this.CargarDirecciones();
+
+        // cambiar estado de logueado
+        this.setEstadoLogueo(true);
+
+      });
 
     }
 
@@ -136,6 +220,37 @@ export class UsuarioService {
       this.localService.setJsonValue(this.token, usrrq);
     }else{
       this.localService.clearToken();
+    }
+  }
+
+  private CargarDirecciones(){
+
+    if (Array.isArray(this.UsrLogin.usuario) && this.UsrLogin.usuario.length  ){
+
+      this.addresses = [
+        {
+            default: true,
+            nombres: this.UsrLogin.usuario[0].nmb.toLowerCase(),
+            apellidos: this.UsrLogin.usuario[0].apll.toLowerCase(),
+            correo: this.UsrLogin.usuario[0].mail,
+            telefono: this.UsrLogin.usuario[0].tel,
+            pais: this.UsrLogin.usuario[0].pai.toLowerCase(),
+            ciudad: this.UsrLogin.usuario[0].ciu.toLowerCase(),
+            estado: this.UsrLogin.usuario[0].ciu.toLowerCase(),
+            direccion: this.UsrLogin.usuario[0].dir
+        },
+        {
+            default: false,
+            nombres: 'Jupiter',
+            apellidos: 'Saturnov',
+            correo: 'stroyka@example.com',
+            telefono: 'ZX 971 972-57-26',
+            pais: 'RandomLand',
+            ciudad: 'MarsGrad',
+            estado: 'Estado',
+            direccion: 'Sun Orbit, 43.3241-85.239'
+        }
+      ];
     }
   }
 

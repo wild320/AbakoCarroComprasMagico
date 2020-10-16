@@ -1,21 +1,46 @@
 <div class="account-menu">
-    <form *ngIf="!usuariologueado" class="account-menu__form" novalidate>
+    <form [formGroup]="ingresoForm" (ngSubmit)="submitForm()" *ngIf="!usuariologueado"  class="account-menu__form">
         <div class="account-menu__form-title">Ingrese a su cuenta</div>
         <div class="form-group">
             <label for="header-signin-email" class="sr-only">Usuario</label>
-            <input id="header-signin-email" type="text" class="form-control form-control-sm" placeholder="Usuario">
+            <input id="header-signin-email" formControlName="usuario"  type="text" class="form-control form-control-sm" placeholder="Usuario">
         </div>
         <div class="form-group">
             <label for="header-signin-password" class="sr-only">Contraseña</label>
             <div class="account-menu__form-forgot">
-                <input id="header-signin-password" type="password" class="form-control form-control-sm" placeholder="Contraseña">
+                <input id="header-signin-password" formControlName="contrasena" type="password" class="form-control form-control-sm" placeholder="Contraseña">
                 <a href="" class="account-menu__form-forgot-link">¿Olvidó?</a>
             </div>
         </div>
+        <div class="form-group">
+            <div class="form-check">
+                <span class="form-check-input input-check">
+                    <span class="input-check__body">
+                        <input formControlName= "recordar" class="input-check__input" type="checkbox" id="login-remember1">
+                        <span class="input-check__box"></span>
+                        <app-icon class="input-check__icon" name="check-9x7" size="9x7"></app-icon>
+                    </span>
+                </span>
+                <label class="form-check-label" for="login-remember">Recordar</label>
+            </div>
+        </div>    
         <div class="form-group account-menu__form-button">
-            <button type="submit" class="btn btn-primary btn-sm">Ingresar</button>
+            <button 
+            type="submit" 
+            [disabled]="loading" 
+            class="btn btn-primary btn-sm">
+            <i *ngIf="!loading"> Ingresar </i>
+            <i *ngIf="loading"> Cargando.... </i>
+            </button>
+
         </div>
+
+        <div class="alert alert-danger" *ngIf="error" role="alert">
+            {{mensajeerror}}
+          </div>
+
         <div class="account-menu__form-link"><a routerLink="/account/login" (click)="closeMenu.emit()">Crear Usuario</a></div>
+        
     </form>
     <div *ngIf="usuariologueado" class="account-menu__divider"></div>
     <a *ngIf="usuariologueado" routerLink="/account/dashboard" class="account-menu__user" (click)="closeMenu.emit()">
@@ -25,7 +50,7 @@
         </div>
         ----->
         <div class="account-menu__user-info">
-            <div class="account-menu__user-name">{{usuario | titlecase}}</div>
+            <div class="account-menu__user-name">{{razonsocial | titlecase}}</div>
             <div class="account-menu__user-email">{{correo}}</div>
         </div>
     </a>

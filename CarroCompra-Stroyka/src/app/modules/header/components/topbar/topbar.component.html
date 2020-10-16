@@ -20,14 +20,7 @@
                     </button>
 
                     <div class="topbar-dropdown__body">
-                        <app-header-menu layout="topbar" (itemClick)="accountDropdown.close()" [items]="[
-                            {label: 'Dashboard',     url: '/account/dashboard'},
-                            {label: 'Editar Cuenta',  url: '/account/profile'},
-                            {label: 'Mi Historial', url: '/account/orders'},
-                            {label: 'Direcciones',     url: '/account/addresses'},
-                            {label: 'Contraseña',      url: '/account/password'},
-                            {label: 'Cerrar Sesion',        url: '/account/login'}
-                        ]"></app-header-menu>
+                        <app-header-menu layout="topbar" (itemClick)="accountDropdown.close($event)" [items]="linksMicuenta"></app-header-menu>
                     </div>
                 </div>
             </div>
@@ -48,7 +41,7 @@
                                     (mouseleave)="menuItem.classList.remove('menu__item--hover')"
                                     #menuItem
                                 >
-                                    <button class="menu__item-link" type="button" (click)="setCurrency(currency); currencyDropdown.close();">
+                                    <button class="menu__item-link" type="button" (click)="setCurrency(currency); currencyDropdown.close($event);">
                                         {{ currency.name }}
                                     </button>
                                 </li>
@@ -74,7 +67,7 @@
                                     (mouseleave)="menuItem.classList.remove('menu__item--hover')"
                                     #menuItem
                                 >
-                                    <button class="menu__item-link" type="button" (click)="languageDropdown.close();">
+                                    <button class="menu__item-link" type="button" (click)="languageDropdown.close($event);">
                                         <span class="menu__item-icon">
                                             <img [src]="'assets/images/languages/'+language.image+'.png'"
                                                  [srcset]="'assets/images/languages/'+language.image+'.png 1x,' +

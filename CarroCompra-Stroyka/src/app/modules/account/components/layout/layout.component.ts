@@ -1,4 +1,12 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+// servicios
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+
+// constantes
+import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+
 
 @Component({
     selector: 'app-layout',
@@ -7,15 +15,26 @@ import { Component } from '@angular/core';
 })
 export class LayoutComponent {
     links: {label: string; url: string}[] = [
-        {label: 'Dashboard', url: './dashboard'},
-        {label: 'Edit Profile', url: './profile'},
-        {label: 'Order History', url: './orders'},
-        {label: 'Order Details', url: './orders/5'},
-        {label: 'Addresses', url: './addresses'},
-        {label: 'Edit Address', url: './addresses/5'},
-        {label: 'Password', url: './password'},
-        {label: 'Logout', url: './login'}
+        {label: ClabelRutas.Dashboard, url: Crutas.Dashboard},
+        {label: ClabelRutas.EditarCuenta, url:  Crutas.EditarCuenta},
+        {label: ClabelRutas.MiHistorial, url: Crutas.MiHistorial},
+        {label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones},
+        {label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena},
+        {label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion}
     ];
 
-    constructor() { }
+    constructor(public usuariosvc: UsuarioService,
+                private router: Router) { }
+
+    onClick(e) {
+
+        // cerrar sesión
+        if (e.target.innerHTML === ClabelRutas.CerrarSesion){
+
+            this.usuariosvc.loguout();
+
+            // direccionar al home
+            this.router.navigate(['/']);
+         }
+    }
 }

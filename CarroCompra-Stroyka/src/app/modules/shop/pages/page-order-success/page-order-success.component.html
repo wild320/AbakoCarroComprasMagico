@@ -3,30 +3,30 @@
         <div class="order-success__body">
             <div class="order-success__header">
                 <app-icon class="order-success__icon" name="check-100" size="100"></app-icon>
-                <h1 class="order-success__title">Thank you</h1>
+                <h1 class="order-success__title">Gracias</h1>
                 <div class="order-success__subtitle">Your order has been received</div>
                 <div class="order-success__actions">
-                    <a routerLink="/" class="btn btn-xs btn-secondary">Go To Homepage</a>
+                    <a routerLink="/" class="btn btn-xs btn-secondary">Ir al Home</a>
                 </div>
             </div>
 
             <div class="order-success__meta">
                 <ul class="order-success__meta-list">
                     <li class="order-success__meta-item">
-                        <span class="order-success__meta-title">Order number:</span>
-                        <span class="order-success__meta-value">#{{ order.id }}</span>
+                        <span class="order-success__meta-title">Pedido Numero:</span>
+                        <span class="order-success__meta-value">#{{ order.pedido }}</span>
                     </li>
                     <li class="order-success__meta-item">
-                        <span class="order-success__meta-title">Created at:</span>
-                        <span class="order-success__meta-value">{{ order.date }}</span>
+                        <span class="order-success__meta-title">Creado en:</span>
+                        <span class="order-success__meta-value">{{ order.fecha }}</span>
                     </li>
                     <li class="order-success__meta-item">
                         <span class="order-success__meta-title">Total:</span>
                         <span class="order-success__meta-value">{{ order.total|currencyFormat }}</span>
                     </li>
                     <li class="order-success__meta-item">
-                        <span class="order-success__meta-title">Payment method:</span>
-                        <span class="order-success__meta-value">{{ order.paymentMethod }}</span>
+                        <span class="order-success__meta-title">Metodo de Pago:</span>
+                        <span class="order-success__meta-value">{{ order.metodoPago }}</span>
                     </li>
                 </ul>
             </div>
@@ -46,12 +46,12 @@
                             <td class="order-list__column-image">
                                 <div class="product-image">
                                     <a [routerLink]="root.product(item)" class="product-image__body">
-                                        <img class="product-image__img" [src]="item.image" alt="">
+                                        <img class="product-image__img" [src]="item.imagen" alt="">
                                     </a>
                                 </div>
                             </td>
                             <td class="order-list__column-product">
-                                <a [routerLink]="root.product(item)">{{ item.name }}</a>
+                                <a [routerLink]="root.product(item)">{{ item.nombre }}</a>
                                 <div *ngIf="item.options?.length > 0" class="order-list__options">
                                     <ul class="order-list__options-list">
                                         <li *ngFor="let option of item.options" class="order-list__options-item">
@@ -61,18 +61,18 @@
                                     </ul>
                                 </div>
                             </td>
-                            <td class="order-list__column-quantity" data-title="Qty:">{{ item.quantity }}</td>
+                            <td class="order-list__column-quantity" data-title="Qty:">{{ item.cantidad }}</td>
                             <td class="order-list__column-total">{{ item.total|currencyFormat }}</td>
                         </tr>
                         </tbody>
-                        <tbody *ngIf="order.additionalLines.length > 0" class="order-list__subtotals">
+                        <tbody *ngIf="order.lineasAdicionales.length > 0" class="order-list__subtotals">
                         <tr>
                             <th class="order-list__column-label" colspan="3">Subtotal</th>
                             <td class="order-list__column-total">{{ order.subtotal|currencyFormat }}</td>
                         </tr>
-                        <tr *ngFor="let line of order.additionalLines">
-                            <th class="order-list__column-label" colspan="3">{{ line.label }}</th>
-                            <td class="order-list__column-total">{{ line.total|currencyFormat }}</td>
+                        <tr *ngFor="let line of order.lineasAdicionales">
+                            <th class="order-list__column-label" colspan="3">{{ line.clave }}</th>
+                            <td class="order-list__column-total">{{ line.valor|currencyFormat }}</td>
                         </tr>
                         </tbody>
                         <tfoot class="order-list__footer">
@@ -90,40 +90,40 @@
                     <div class="card address-card">
                         <div class="address-card__body">
                             <div class="address-card__badge address-card__badge--muted">Shipping Address</div>
-                            <div class="address-card__name">{{ order.shippingAddress.firstName + ' ' + order.shippingAddress.lastName}}</div>
+                            <div class="address-card__name">{{ order.direccionEnvio.nombres + ' ' + order.direccionEnvio.apellidos}}</div>
                             <div class="address-card__row">
-                                {{ order.shippingAddress.country }}<br>
-                                {{ order.shippingAddress.postcode }}, {{ order.shippingAddress.city }}<br>
-                                {{ order.shippingAddress.address }}
+                                {{ order.direccionEnvio.pais }}<br>
+                                {{ order.direccionEnvio.ciudad }}<br>
+                                {{ order.direccionEnvio.direccion }}
                             </div>
                             <div class="address-card__row">
                                 <div class="address-card__row-title">Phone Number</div>
-                                <div class="address-card__row-content">{{ order.shippingAddress.phone }}</div>
+                                <div class="address-card__row-content">{{ order.direccionEnvio.telefono }}</div>
                             </div>
                             <div class="address-card__row">
                                 <div class="address-card__row-title">Email Address</div>
-                                <div class="address-card__row-content">{{ order.shippingAddress.email }}</div>
+                                <div class="address-card__row-content">{{ order.direccionEnvio.correo }}</div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
                 <div class="col-sm-6 col-12 px-2 mt-sm-0 mt-3">
                     <div class="card address-card">
                         <div class="address-card__body">
                             <div class="address-card__badge address-card__badge--muted">Billing Address</div>
-                            <div class="address-card__name">{{ order.billingAddress.firstName + ' ' + order.billingAddress.lastName}}</div>
+                            <div class="address-card__name">{{ order.direccionPrincipal.nombres + ' ' + order.direccionPrincipal.apellidos}}</div>
                             <div class="address-card__row">
-                                {{ order.billingAddress.country }}<br>
-                                {{ order.billingAddress.postcode }}, {{ order.billingAddress.city }}<br>
-                                {{ order.billingAddress.address }}
+                                {{ order.direccionPrincipal.pais }}<br>
+                                {{ order.direccionPrincipal.ciudad }}<br>
+                                {{ order.direccionPrincipal.direccion }}
                             </div>
                             <div class="address-card__row">
                                 <div class="address-card__row-title">Phone Number</div>
-                                <div class="address-card__row-content">{{ order.billingAddress.phone }}</div>
+                                <div class="address-card__row-content">{{ order.direccionPrincipal.telefono }}</div>
                             </div>
                             <div class="address-card__row">
                                 <div class="address-card__row-title">Email Address</div>
-                                <div class="address-card__row-content">{{ order.billingAddress.email }}</div>
+                                <div class="address-card__row-content">{{ order.direccionPrincipal.correo }}</div>
                             </div>
                         </div>
                     </div>

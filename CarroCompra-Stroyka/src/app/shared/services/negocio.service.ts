@@ -18,7 +18,9 @@ export class NegocioService {
   constructor(
     private httpClient: HttpClient) {
 
-        this.UrlJsonConfguracion = './' + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
+        const base = document.getElementsByTagName('base')[0].href;
+
+        this.UrlJsonConfguracion = base  + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
 
     }
 
@@ -30,7 +32,7 @@ export class NegocioService {
 
         })
         .catch((err: any) => {
-            console.error(err);
+            console.error('Error leyendo json de configuracion:' + err);
         });
   }
 
