@@ -16,8 +16,6 @@ import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteRes
 })
 export class PageDashboardComponent implements OnInit {
 
-    UsrLogin: Observable<LoginClienteResponse>;
-
     constructor(public usuariosvc: UsuarioService,
                 public pedidosvc: PedidosService) {
 

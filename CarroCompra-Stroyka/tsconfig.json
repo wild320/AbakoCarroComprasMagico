@@ -5,7 +5,7 @@
   To learn more about this file see: https://angular.io/config/solution-tsconfig.
 */
 {
-  "files": [],
+  "files": [], 
   "references": [
     {
       "path": "./tsconfig.app.json"
@@ -17,10 +17,14 @@
       "path": "./e2e/tsconfig.json"
     },
     {
-      "path": "./tsconfig.server.json"
+      "path" : "./tsconfig.server.json"
     }
   ],
   "types": [
     "node"
   ],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": true
+  },
 }

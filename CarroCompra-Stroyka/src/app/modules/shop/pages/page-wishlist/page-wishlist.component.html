@@ -1,12 +1,12 @@
-<app-page-header [header]="'Wish List'" [breadcrumbs]="[
-    {label: 'Home',      url: '/'},
-    {label: 'Wish List', url: ''}
+<app-page-header [header]="'Lista de Deseos'" [breadcrumbs]="[
+    {label: 'Inicio',      url: '/'},
+    {label: 'Lista de Deseos', url: ''}
 ]"></app-page-header>
 
 <div class="block block-empty" *ngIf="!(wishlist.items$|async).length">
     <div class="container">
         <div class="block-empty__body">
-            <div class="block-empty__message">Your wish list is empty!</div>
+            <div class="block-empty__message">Su lista de deseos esta vacia!</div>
             <div class="block-empty__actions">
                 <a routerLink="/" class="btn btn-primary btn-sm">Continue</a>
             </div>

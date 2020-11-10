@@ -3,10 +3,10 @@
     <div class="departments__body" #bodyElement>
         <div class="departments__links-wrapper" (mouseleave)="onMouseLeave()">
             <div class="departments__submenus-container" #containerElement>
-                <ng-container *ngFor="let item of items">
+                <ng-container *ngFor="let item of articulossvc.menu">
                     <div
                         *ngIf="item.menu && item.menu.type == 'megamenu'"
-                        class="departments__submenu departments__submenu--type--megamenu departments__submenu--size--{{ item.menu.size }}"
+                        class="departments__submenu departments__submenu--type--megamenu departments__submenu--size--{{item.menu.size }}"
                         [ngClass]="{'departments__submenu--open': item === hoveredItem}"
                         #submenuElement
                     >
@@ -24,7 +24,7 @@
             </div>
             <ul class="departments__links">
                 <li
-                    *ngFor="let item of items"
+                    *ngFor="let item of articulossvc.menu"
                     class="departments__item"
                     [ngClass]="{
                         'departments__item--menu': item.menu && item.menu.type == 'menu',
@@ -35,7 +35,7 @@
                 >
 
                     <ng-template #link>
-                        {{ item.label }}
+                        {{ item.label | titlecase}}
                         <app-icon *ngIf="item.menu" class="departments__item-arrow" name="arrow-rounded-right-6x9" size="6x9"></app-icon>
                     </ng-template>
 
@@ -52,7 +52,7 @@
 
     <button class="departments__button" (click)="toggle()">
         <app-icon class="departments__button-icon" name="menu-18x14" size="18x14"></app-icon>
-        Shop By Category
+       Comprar por Categoria
         <app-icon class="departments__button-arrow" name="arrow-rounded-down-9x6" size="9x6"></app-icon>
     </button>
 </div>

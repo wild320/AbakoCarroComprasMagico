@@ -19,9 +19,10 @@
                                 <label>Contraseña</label>
                                 <input type="password"  formControlName="contrasena" class="form-control" placeholder="Contraseña">
                                 <small class="form-text text-muted">
-                                    <a href="">Olvido Contraseña</a>
+                                    <a [routerLink]="RutaRecuperarContrasena">Olvido Contraseña</a>
                                 </small>
                             </div>
+
                             <div class="form-group">
                                 <div class="form-check">
                                     <span class="form-check-input input-check">
@@ -34,20 +35,23 @@
                                     <label class="form-check-label" for="login-remember">Recordar</label>
                                 </div>
                             </div>
+                            
                             <button 
                                 type="submit" 
                                 [disabled]="loading" 
                                 class="btn btn-primary mt-2 mt-md-3 mt-lg-4">
                                 <i *ngIf="!loading"> Ingresar </i>
                                 <i *ngIf="loading"> Cargando.... </i>
-                            </button>
+                            </button>  <br><br>
+
+                            <div class="alert alert-danger" *ngIf="error" role="alert">
+                                {{mensajeerror}}
+                            </div>
                             
                         </form>
                     </div>                
                     
-                    <div class="alert alert-danger" *ngIf="error" role="alert">
-                        {{mensajeerror}}
-                      </div>
+                    
 
                 </div>
             </div>
@@ -55,20 +59,36 @@
                 <div class="card flex-grow-1 mb-0">
                     <div class="card-body">
                         <h3 class="card-title">Registrar</h3>
-                        <form>
+                        <form  [formGroup]="registroForm" (ngSubmit)="submitRegistroForm()"> 
+
                             <div class="form-group">
                                 <label>Identificación</label>
-                                <input type="text" class="form-control" placeholder="Ingresar Identificación">
+                                <input type="text" formControlName="identificacion"  class="form-control" placeholder="Ingresar Identificación">
                             </div>
+
                             <div class="form-group">
-                                <label>Contraseña</label>
-                                <input type="password" class="form-control" placeholder="Contraseña">
+                                <label for="profile-first-name">Nombres</label>
+                                <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Digite sus nombres">
                             </div>
-                            <div class="form-group">
-                                <label>Repetir Contraseña</label>
-                                <input type="password" class="form-control" placeholder="Contraseña">
+            
+                            <div class="form-group" >
+                                <label for="profile-last-name">Apellidos</label>
+                                <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Digite sus apellidos">
                             </div>
-                            <button type="submit" class="btn btn-primary mt-2 mt-md-3 mt-lg-4">Registrar</button>
+
+                            <button 
+                                type="submit" 
+                                [disabled]="loadingRegistro" 
+                                class="btn btn-primary mt-2 mt-md-3 mt-lg-4">
+                                <i *ngIf="!loadingRegistro"> Registrar </i>
+                                <i *ngIf="loadingRegistro"> Registrando.... </i>
+                            </button> <br><br>
+
+                            <div class="alert alert-danger" *ngIf="errorRegistro" role="alert">
+                                {{mensajeerroRegistro}}
+                            </div>
+
+
                         </form>
                     </div>
                 </div>

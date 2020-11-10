@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 // Contantes
@@ -13,6 +13,7 @@ export class NegocioService {
 
   configuracion: any = {};
   UrlJsonConfguracion: string;
+  headers: HttpHeaders = new HttpHeaders();
 
 
   constructor(
@@ -25,7 +26,14 @@ export class NegocioService {
     }
 
   cargarConfiguracionLocal() {
-    return this.httpClient.get( this.UrlJsonConfguracion)
+
+    this.headers.append('Access-Control-Allow-Origin', '*');
+
+    const options = {
+      headers: this.headers
+    };
+
+    return this.httpClient.get( this.UrlJsonConfguracion, options)
         .toPromise()
         .then((config: any) => {
           this.configuracion = config;

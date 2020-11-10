@@ -35,7 +35,7 @@
 
         </div>
 
-        <div class="alert alert-danger" *ngIf="error" role="alert">
+        <div *ngIf="mensajeerror.length>0" class="alert alert-danger"  role="alert">
             {{mensajeerror}}
           </div>
 
@@ -50,8 +50,8 @@
         </div>
         ----->
         <div class="account-menu__user-info">
-            <div class="account-menu__user-name">{{razonsocial | titlecase}}</div>
-            <div class="account-menu__user-email">{{correo}}</div>
+            <div class="account-menu__user-name">{{usuariosvc.razonsocial | titlecase}}</div>
+            <div class="account-menu__user-email">{{usuariosvc.correo}}</div>
         </div>
     </a>
     <div *ngIf="usuariologueado" class="account-menu__divider"></div>

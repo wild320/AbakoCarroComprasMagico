@@ -1,9 +1,9 @@
 <div class="card">
-    <div class="card-header">
-        <h5>Editar Perfil</h5>
-    </div>
     <div class="card-divider"></div>
     <div class="card-body">
+        <div class="card-header">
+            <h5>Editar Perfil</h5>
+        </div>
         <div class="row no-gutters">
             <div class="col-12 col-lg-7 col-xl-6">
                 <form [formGroup]="EditarPerfilForm" (ngSubmit)="submitForm()" > 
@@ -12,9 +12,14 @@
                         <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Nombres">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" >
                         <label for="profile-last-name">Apellidos</label>
                         <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Apellidos">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-last-name">Identificación:   </label>
+                        <input type="text" formControlName="Identificacion" class="form-control" id="profile-ident" placeholder="Identificación">
                     </div>
 
                     <div class="form-group">
@@ -25,18 +30,24 @@
                     <div class="form-group">
                         <label for="profile-phone">Numero de Teléfono</label>
                         <input type="text" formControlName="Telefono" class="form-control" id="profile-phone" placeholder="Numero de Teléfono">
-                    </div> 
+                    </div>               
 
                     <div class="form-group mt-5 mb-0">
-                        <button  type="submit"  class="btn btn-primary">Guardar</button>
+                        <button 
+                            type="submit"
+                            [disabled]="loading" 
+                            class="btn btn-primary">
+                            <i *ngIf="!loading"> Guardar </i>
+                            <i *ngIf="loading"> Actualizando.... </i>
+                        </button>
                     </div><br>
 
                     <div class="alert alert-danger" *ngIf="mensajerespuestaerror.length>0" role="alert">
                         {{mensajerespuestaerror}}
                     </div>
-                      <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
+                    <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
                         {{mensajerespuestaexito}}
-                      </div>
+                    </div>
                 </form> 
             </div>
         </div>

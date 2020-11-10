@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Order } from 'src/app/shared/interfaces/order';
-
 
 // servicios
 import { PedidosService } from 'src/app/shared/services/pedidos.service';
@@ -17,8 +15,6 @@ import { Crutas } from 'src/data/contantes/cRutas';
     styleUrls: ['./page-order-details.component.scss']
 })
 export class PageOrderDetailsComponent implements OnInit {
-
-    private order: Order;
 
     constructor(public usuariosvc: UsuarioService,
                 private rutaActiva: ActivatedRoute,

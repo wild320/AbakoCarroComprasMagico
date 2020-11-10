@@ -17,27 +17,27 @@ export class ServiceHelper<T, P> {
 
   constructor(http: HttpClient,
               @Inject('BASE_URL') baseUrl: string ) {
-    //  this.headers.append('Accept', 'application/json');
+    // this.headers.append('Accept', 'application/json');
     this.headers.append('Content-Type', 'application/json');
-    // this.headers.append('Access-Control-Allow-Origin', '*');
+   //  this.headers.append('Access-Control-Allow-Origin', '*');
     this.protocol = http;
     this.url = baseUrl;
   }
 
   // Obtiene los datos de un servicio con un get
   // ToDo permitir el get con datos complejos en el body
-  getData(requestURL: string, remoteUrl: string = ''): Observable<T> {
+  getData(requestURL: string, parametros: string = ''): Observable<T> {
     const options = {
       headers: this.headers
     };
-    if (remoteUrl !== '') {
+    if (parametros !== '') {
       return this.protocol
-        .get(remoteUrl + requestURL, options)
+        .get(requestURL + '/' + parametros, options)
         .pipe(map(this.extractData))
         .pipe(catchError(this.handleError));
     } else {
       return this.protocol
-        .get(this.url + requestURL, options)
+        .get(requestURL, options)
         .pipe(map(this.extractData))
         .pipe(catchError(this.handleError));
     }

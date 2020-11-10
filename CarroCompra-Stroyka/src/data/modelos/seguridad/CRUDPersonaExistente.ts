@@ -22,6 +22,11 @@ export class Persona {
         predeterminado: number,
         codigoPostal: string,
         operacion: string,
+        barrio: string,
+        ciudad: string,
+        departamento: string,
+        pais: string,
+        direccion: string,
     }>;
 
     dllTelefono: Array<{
@@ -42,6 +47,13 @@ export class Persona {
         predeterminado: number;
         operacion: string;
     }>;
+
+    empresaUsuario: {
+        idEmpresa: number,
+        identificacion: string,
+        razon_Social: string,
+        nombre_Comun: string
+    };
 
     estado: Array<{
         msgId: number,

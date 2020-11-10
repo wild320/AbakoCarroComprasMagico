@@ -16,14 +16,14 @@
 
                             <div class="contact-us__address">
                                 <p>
-                                    {{store.address}}<br>
-                                    Correo Electrónico: {{store.email}}<br>
-                                    Telófono: {{store.phone}}
+                                    {{store.configuracionSitio.address}}<br>
+                                    Correo Electrónico: {{store.configuracionSitio.email}}<br>
+                                    Telófono: {{store.configuracionSitio.phone}}
                                 </p>
 
                                 <p>
                                     <strong>Horarios de Apertura</strong><br>
-                                    {{store.hours}}<br>
+                                    {{store.configuracionSitio.hours}}<br>
                                 </p>
 
                                 <div [innerHTML]="pagina.Contatenos"></div>

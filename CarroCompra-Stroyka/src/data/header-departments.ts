@@ -1,7 +1,8 @@
 import { NavigationLink } from '../app/shared/interfaces/navigation-link';
 
 export const departments: NavigationLink[] = [
-    {label: 'Power Tools', url: '/shop/catalog', menu: {
+    {label: 'Power Tools', url: '/shop/catalog',
+        menu: {
         type: 'megamenu',
         size: 'xl',
         image: 'assets/images/megamenu/megamenu-1.jpg',

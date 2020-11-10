@@ -20,7 +20,7 @@
             "allowedCommonJsDependencies": [
               "crypto-js",
               "secure-web-storage"
-           ],
+            ],
             "outputPath": "dist/AbakoCarroCompras",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -30,6 +30,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/web.config",
+              "src/assets/configuracion/configuracion.app.json",
               {
                 "glob": "**/*",
                 "input": "node_modules/photoswipe/dist",
@@ -42,6 +44,7 @@
               }
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
               "src/styles.scss"
@@ -316,6 +319,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
               "src/styles.scss",

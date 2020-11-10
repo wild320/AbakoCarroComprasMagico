@@ -6,6 +6,9 @@ export const Crutas = {
     faq: '/site/faq',
     contactenos: '/site/contact-us',
     listaDeseo: '/shop/wishlist',
+    Registrarse: '/account/suscribirse',
+    RecuperarContrasena: '/account/recuperarusuario',
+    loguin: '/account/login',
 
     Dashboard: '/account/dashboard',
     EditarCuenta: '/account/profile',

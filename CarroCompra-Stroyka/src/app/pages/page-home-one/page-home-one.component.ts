@@ -8,6 +8,9 @@ import { Category } from '../../shared/interfaces/category';
 import { BlockHeaderGroup } from '../../shared/interfaces/block-header-group';
 import { takeUntil, tap } from 'rxjs/operators';
 
+// Servivios
+import { StoreService } from '../../shared/services/store.service';
+
 interface ProductsCarouselGroup extends BlockHeaderGroup {
     products$: Observable<Product[]>;
 }
@@ -41,6 +44,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     constructor(
         private shop: ShopService,
+        public StoreSvc: StoreService,
     ) { }
 
     ngOnInit(): void {
@@ -64,7 +68,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
             products: [],
             groups: [
                 {
-                    name: 'All',
+                    name: 'Todos',
                     current: true,
                     products$: this.shop.getFeaturedProducts(null, 8),
                 },

@@ -8,6 +8,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 // Modelos
 import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
+import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 
 
 @Component({
@@ -20,9 +21,6 @@ export class AccountMenuComponent implements OnInit{
 
     public ingresoForm: FormGroup;
     usuariologueado = false;
-    razonsocial: string;
-    correo: string;
-    public error = false;
     UsrLogin: Observable<LoginClienteResponse>;
     public mensajeerror: string;
     public loading = false;
@@ -32,8 +30,7 @@ export class AccountMenuComponent implements OnInit{
                 private router: Router
                 ) {
 
-        this.EstaLogueadoUsuario();
-
+      this.InicializarValores();
     }
 
     ngOnInit() {
@@ -44,30 +41,40 @@ export class AccountMenuComponent implements OnInit{
           recordar: new FormControl(false, [])
         });
 
-        this.ingresoForm.valueChanges.subscribe(query => {
-          if (this.error){ this.error = false; }
-        });
+        this.InicializarValores();
 
+        this.EstaLogueadoUsuario();
+
+    }
+
+    InicializarValores(){
+      this.mensajeerror = '';
     }
 
     submitForm() {
 
         this.loading = true;
 
+        this.InicializarValores();
+
         if (this.ingresoForm.valid){
 
           this.usuariosvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
             // si no llega logueado validar mensaje
-            if  (!this.usuariosvc.logueo){
-              this.mensajeerror = this.usuariosvc.MensajeError;
-              this.error = true;
-             }else{
+            if  (config.msgId !== EstadoRespuestaMensaje.exitoso || this.usuariosvc.MensajeError.length > 0 ){
 
-              this.error = false;
+              if (config.msgId === EstadoRespuestaMensaje.Error){
+                this.mensajeerror = config.msgStr;
+              }else{
+                this.mensajeerror = this.usuariosvc.MensajeError;
+              }
 
-              // direccionar al home
-              this.router.navigate(['/']);
+            }else{
+
+               // direccionar al home
+               this.router.navigate(['/']);
+
             }
 
             this.loading = false;
@@ -85,15 +92,10 @@ export class AccountMenuComponent implements OnInit{
             this.mensajeerror = 'Debe ingresar información valida en usuario';
           }
 
-          this.error = true;
           this.loading = false;
 
         }
       }
-
-      get usuario() { return this.ingresoForm.get('usuario'); }
-
-      get contrasena() { return this.ingresoForm.get('contrasena'); }
 
     EstaLogueadoUsuario(){
 
@@ -111,15 +113,16 @@ export class AccountMenuComponent implements OnInit{
 
             this.UsrLogin = this.usuariosvc.getUsrLoguin();
 
-            this.UsrLogin.subscribe((value) => {
-                this.razonsocial = value.usuario[0].rzScl;
-                this.correo = value.usuario[0].mail.toLowerCase();
-            });
+            this.UsrLogin.subscribe((value) => { });
         }
     }
 
     CerrarSesion(){
         this.usuariosvc.loguout();
     }
+
+    get usuario() { return this.ingresoForm.get('usuario'); }
+
+    get contrasena() { return this.ingresoForm.get('contrasena'); }
 
 }

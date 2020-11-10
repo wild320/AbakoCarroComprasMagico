@@ -10,23 +10,42 @@ import { PaginasService } from './paginas.service';
 import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
 import { CServicios } from '../../../data/contantes/cServicios';
 
+// modelos
+import {ConfiguracionSitio} from '../../../data/modelos/negocio/ConfiguracionSitio';
+
 @Injectable({
     providedIn: 'root'
 })
 export class StoreService {
     UrlServicioCarroCompras: string;
-    address = '';
-    email = '';
-    phone = '';
-    hours = '';
-    scrmapa = '';
-    verArticulos = '';
-    verDetalleArticulo = '';
     public navigation: NavigationLink[];
+    public configuracionSitio = new ConfiguracionSitio();
 
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService,
                 private paginaService: PaginasService) {
+
+        this.Iniciarlizarconfigurcion();
+
+    }
+
+    private Iniciarlizarconfigurcion(){
+
+        this.configuracionSitio.address = '',
+        this.configuracionSitio.email = '';
+        this.configuracionSitio.phone = '';
+        this.configuracionSitio.hours = '';
+        this.configuracionSitio.scrmapa = '';
+        this.configuracionSitio.verArticulos = '';
+        this.configuracionSitio.verDetalleArticulo = '';
+        this.configuracionSitio.VerProductosDestacados = false;
+        this.configuracionSitio.VerMasVendidos = false;
+        this.configuracionSitio.VerCategoriasPopulares = false;
+        this.configuracionSitio.VerRecienllegados = false;
+        this.configuracionSitio.VerUltimasNoticias = false;
+        this.configuracionSitio.VerMarcas = false;
+        this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = false;
+        this.configuracionSitio.VerBannerIntermedio = false;
 
     }
 
@@ -55,37 +74,86 @@ export class StoreService {
 
             // Hora de servicio
             if (element.id === 'A1'){
-                this.hours =  element.valor;
+                this.configuracionSitio.hours =  element.valor;
             }
 
             // Como ver la lista de articulos
             if (element.id === 'A2'){
-                this.verArticulos =   this.VerArticulos(element.valor);
+                this.configuracionSitio.verArticulos =   this.VerArticulos(element.valor);
             }
 
             // Como ver la detalle de articulo
             if (element.id === 'A3'){
-                this.verDetalleArticulo =   this.VerDetalleArticulos(element.valor);
+                this.configuracionSitio.verDetalleArticulo =   this.VerDetalleArticulos(element.valor);
             }
 
             // src mapa google
             if (element.id === 'A4'){
-                this.scrmapa =   element.valor;
+                this.configuracionSitio.scrmapa =   element.valor;
+            }
+
+            if (element.id === 'A6'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerProductosDestacados = true;
+                }
+
+            }
+
+            if (element.id === 'A7'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerMasVendidos = true;
+                }
+            }
+
+            if (element.id === 'A8'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerCategoriasPopulares = true;
+                }
+            }
+
+            if (element.id === 'A9'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerRecienllegados = true;
+                }
+            }
+
+            if (element.id === 'A10'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerUltimasNoticias = true;
+                }
+            }
+
+            if (element.id === 'A11'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerMarcas = true;
+                }
+            }
+
+            if (element.id === 'A12'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = true;
+                }
+            }
+
+            if (element.id === 'A13'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerBannerIntermedio = true;
+                }
             }
 
             // Direccion
             if (element.id === 'B1'){
-                this.address =  element.valor;
+                this.configuracionSitio.address =  element.valor;
             }
 
             // telefono
             if (element.id === 'B2'){
-                this.phone =  element.valor;
+                this.configuracionSitio.phone =  element.valor;
             }
 
             // correo
             if (element.id === 'B3'){
-                this.email =  element.valor;
+                this.configuracionSitio.email =  element.valor;
             }
 
             // activar o desactivar paginas
@@ -107,7 +175,7 @@ export class StoreService {
             {label: 'Comprar', url: '/shop/catalog/power-tools', menu: {
                 type: 'menu',
                 items: [
-                    {label: 'Artículos', url: this.verArticulos},
+                    {label: 'Artículos', url: this.configuracionSitio.verArticulos},
                     {label: 'Lista de Deseos', url: '/shop/wishlist'},
                     {label: 'Comparar', url: '/shop/compare'},
                 ]

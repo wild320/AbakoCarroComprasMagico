@@ -17,7 +17,7 @@ export class BlockMapComponent {
     constructor(private sanitizer: DomSanitizer,
                 private Store: StoreService) {
 
-        this.frameMap = `<iframe src='${this.Store.scrmapa}' frameborder='0' scrolling='no' marginheight='0' marginwidth='0'></iframe>`;
+        this.frameMap = `<iframe src='${this.Store.configuracionSitio.scrmapa}' frameborder='0' scrolling='no' marginheight='0' marginwidth='0'></iframe>`;
 
         this.sanitizeHtml = this.sanitizer.bypassSecurityTrustHtml(
             this.frameMap

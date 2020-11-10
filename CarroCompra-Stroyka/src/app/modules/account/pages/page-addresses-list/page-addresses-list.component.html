@@ -1,32 +1,37 @@
 <div class="addresses-list">
     <a routerLink="./" class="addresses-list__item addresses-list__item--new">
         <div class="addresses-list__plus"></div>
-        <div class="btn btn-secondary btn-sm">Add New</div>
+        <div class="btn btn-secondary btn-sm">
+            <a [routerLink]="'./0'">Adicionar Nueva </a>
+        </div>
     </a>
     <div class="addresses-list__divider"></div>
 
-    <ng-container *ngFor="let address of addresses">
+    <ng-container *ngFor="let address of usuariosvc.addresses">
         <div class="addresses-list__item card address-card">
-            <div class="address-card__badge" *ngIf="address.default">Default</div>
+            <div class="address-card__badge" *ngIf="address?.default">Predeterminada</div>
             <div class="address-card__body">
-                <div class="address-card__name">{{ address.firstName + ' ' + address.lastName}}</div>
+                <div class="address-card__name">{{ address?.nombres + ' ' + address.apellidos | titlecase}}</div>
                 <div class="address-card__row">
-                    {{ address.country }}<br>
-                    {{ address.postcode }}, {{ address.city }}<br>
-                    {{ address.address }}
+                    {{ address?.pais | titlecase }}<br>
+                    {{ address?.estado | titlecase }} <a *ngIf="address.Id>0"> - </a> {{ address?.ciudad | titlecase}}<br>
+                    {{ address?.direccion | titlecase }}
                 </div>
                 <div class="address-card__row">
-                    <div class="address-card__row-title">Phone Number</div>
-                    <div class="address-card__row-content">{{ address.phone }}</div>
+                    <div class="address-card__row-title">Número de Teléfono</div>
+                    <div class="address-card__row-content">{{ address?.telefono }}</div>
                 </div>
                 <div class="address-card__row">
-                    <div class="address-card__row-title">Email Address</div>
-                    <div class="address-card__row-content">{{ address.email }}</div>
+                    <div class="address-card__row-title">Correo Electrónico</div>
+                    <div class="address-card__row-content">{{ address?.correo }}</div>
                 </div>
                 <div class="address-card__footer">
-                    <a routerLink="./5">Edit</a>&nbsp;&nbsp;
-                    <a routerLink="./">Remove</a>
+                    <a *ngIf="address.Id>0" [routerLink]="'./' + address.Id">Editar</a>
+                    <a *ngIf="address.Id==0" [routerLink]="'./' + address.Id">Agregar Dirección</a>&nbsp;&nbsp;
+                    <a *ngIf="address.Id>0" (click)="openDialog(address)" style="color: #47991f; cursor: pointer">Eliminar</a>
+                    <span *ngIf="eliminando" style="margin-left: 20px;" class="spinner-border text-success"></span>
                 </div>
+
             </div>
         </div>
         <div class="addresses-list__divider"></div>

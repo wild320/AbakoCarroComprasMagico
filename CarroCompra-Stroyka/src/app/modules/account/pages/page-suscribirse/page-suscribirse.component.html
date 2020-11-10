@@ -1,0 +1,98 @@
+<br>
+
+<div class="container"> 
+    <div class="card">
+        <div class="card-body">
+            
+            <div class="card-title">
+                <h3>Suscribirse</h3>
+            </div>
+            
+            <div class="col-12 col-lg-7 col-xl-6">
+                
+                <form [formGroup]="SuscribirseForm" (ngSubmit)="submitForm()" > 
+
+                    <div class="form-group">
+                        <label for="profile-first-name">Nombres</label>
+                        <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Digite sus nombres">
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="profile-last-name">Apellidos</label>
+                        <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Digite sus apellidos">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-identificacion">Identificación:</label>
+                        <input type="text" formControlName="Identificacion" class="form-control" id="profile-identificacion" placeholder="Digite su identificación">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-email">Correo Electrónico</label>
+                        <input type="email" formControlName="Correo" class="form-control" id="profile-email" placeholder="Digite su correo electrónico">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-phone">Numero de Teléfono</label>
+                        <input type="text" formControlName="Telefono" class="form-control" id="profile-phone" placeholder="Digite su numero de teléfono">
+                    </div>    
+                    
+                    <div class="form-group">
+                        <label for="profile-usuario">Usuario</label>
+                        <input type="text" formControlName="Usuario" class="form-control" id="profile-usuario" placeholder="Digite su usuario">
+                    </div>  
+
+                    <div class="form-group">
+                        <label for="profile-contrasena">Contraseña</label>
+                        <input type="text" formControlName="Contrasena" class="form-control" id="profile-contrasena" placeholder="Digite su contraseña">
+                    </div>  
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <span class="form-check-input input-check">
+                                <span class="input-check__body">
+                                    <input formControlName= "recibirpromociones" class="input-check__input" type="checkbox">
+                                    <span class="input-check__box"></span>
+                                    <app-icon class="input-check__icon" name="check-9x7" size="9x7"></app-icon>
+                                </span>
+                            </span>
+                            <label class="form-check-label" for="login-remember">Me gustaría recibir comunicaciones promocionales (Recibirás un e-mail de confirmación).</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <span class="form-check-input input-check">
+                                <span class="input-check__body">
+                                    <input formControlName= "aceptopoliticas" class="input-check__input" type="checkbox">
+                                    <span class="input-check__box"></span>
+                                    <app-icon class="input-check__icon" name="check-9x7" size="9x7"></app-icon>
+                                </span>
+                            </span>
+                            <label class="form-check-label" for="login-remember">Declaro que he leído y acepto la nueva <a [href]="RutaPoliticas" target="_blank">Política de Privacidad</a> y los <a [href]="RutaTerminos" target="_blank">Términos y Condiciones</a>  de {{titulo}}.</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-5 mb-0">
+                        <button 
+                            type="submit"
+                            [disabled]="loading" 
+                            class="btn btn-primary">
+                            <i *ngIf="!loading"> Guardar </i>
+                            <i *ngIf="loading"> Actualizando.... </i>
+                        </button>
+                    </div><br>
+
+                    <div class="alert alert-danger" *ngIf="mensajerespuestaerror.length>0" role="alert">
+                        {{mensajerespuestaerror}}
+                    </div>
+                    <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
+                        {{mensajerespuestaexito}}
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+

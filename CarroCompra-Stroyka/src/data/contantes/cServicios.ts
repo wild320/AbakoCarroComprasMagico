@@ -6,5 +6,11 @@ export const CServicios = {
     ServicioPedidosCliente: 'Pedidos/GetPedidosCliente',
     ServicioDetallePedido: 'Pedidos/GetDetallePedidos',
     ServivioLoguinCLiente: 'CredencialesCliente',
-    ServivioCRUDPersonaExistente: 'CRUDPersonaExistente'
+    ServivioCrearCliente: 'CrearCliente',
+    ServivioEnviarUsuarioGenerado: 'RecuperarUsuario/enviarusuario',
+    ServivioExistenciaCLiente: 'CredencialesCliente/VerificarExistenciaCliente',
+    ServivioCRUDPersonaExistente: 'CRUDPersonaExistente',
+    ServivioRecuperarCodigoSeguridad: 'RecuperarUsuario',
+    ServivioMenu: 'Menu',
+    ServivioMaestrosLocalizacion: 'MaestrosLocalizacion'
 };

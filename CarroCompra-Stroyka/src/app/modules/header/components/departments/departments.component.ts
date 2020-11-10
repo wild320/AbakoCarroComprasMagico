@@ -10,12 +10,16 @@ import {
 } from '@angular/core';
 import { fromEvent, merge, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { departments } from '../../../../../data/header-departments';
-import { NavigationLink } from '../../../../shared/interfaces/navigation-link';
 import { isPlatformBrowser } from '@angular/common';
 import { HeaderService } from '../../../../shared/services/header.service';
 import { fromMatchMedia } from '../../../../shared/functions/rxjs/fromMatchMedia';
 import { fromOutsideTouchClick } from '../../../../shared/functions/rxjs/fromOutsideTouchClick';
+
+// servicios
+import { ArticulosService } from '../../../../shared/services/articulos.service';
+
+// interfaces
+import { NavigationLink } from 'src/app/shared/interfaces/navigation-link';
 
 @Component({
     selector: 'app-header-departments',
@@ -30,8 +34,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     @ViewChildren('submenuElement') submenuElements: QueryList<ElementRef>;
     @ViewChildren('itemElement') itemElements: QueryList<ElementRef>;
 
-    items: NavigationLink[] = departments;
-    hoveredItem: NavigationLink = null;
+     hoveredItem: NavigationLink = null;
 
     isOpen = false;
     fixed = false;
@@ -48,9 +51,14 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         private el: ElementRef,
         private header: HeaderService,
         private zone: NgZone,
+        public articulossvc: ArticulosService,
     ) { }
 
     ngOnInit(): void {
+
+        // cargar departamentos
+        this.articulossvc.cargarDepartamentos();
+
         const root = this.element.querySelector('.departments') as HTMLElement;
         const content = this.element.querySelector('.departments__links-wrapper') as HTMLElement;
 
@@ -240,6 +248,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
 
     onItemMouseEnter(item: NavigationLink): void {
+
         if (this.hoveredItem !== item) {
             this.hoveredItem = item;
 
@@ -254,6 +263,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
 
     onTouchClick(event, item: NavigationLink): void {
+
         if (event.cancelable) {
             if (this.hoveredItem && this.hoveredItem === item) {
                 return;
@@ -291,9 +301,9 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         const paddingBottom = 20;
 
         if (this.hoveredItem.menu.type === 'megamenu') {
-            const submenuTop = submenuElement.getBoundingClientRect().top;
+           const submenuTop = submenuElement.getBoundingClientRect().top;
 
-            submenuElement.style.maxHeight = `${viewportHeight - submenuTop - paddingBottom}px`;
+           submenuElement.style.maxHeight = `${viewportHeight - submenuTop - paddingBottom}px`;
         }
 
         if (this.hoveredItem.menu.type === 'menu') {
@@ -322,7 +332,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             return null;
         }
 
-        const index = this.items.indexOf(this.hoveredItem);
+        const index = this.articulossvc.menu.indexOf(this.hoveredItem);
         const elements = this.itemElements.toArray();
 
         if (index === -1 || !elements[index]) {
@@ -337,7 +347,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             return null;
         }
 
-        const index = this.items.filter(x => x.menu).indexOf(this.hoveredItem);
+        const index = this.articulossvc.menu.filter(x => x.menu).indexOf(this.hoveredItem);
         const elements = this.submenuElements.toArray();
 
         if (index === -1 || !elements[index]) {
