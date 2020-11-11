@@ -6,7 +6,7 @@
                 <ng-container *ngFor="let item of articulossvc.menu">
                     <div
                         *ngIf="item.menu && item.menu.type == 'megamenu'"
-                        class="departments__submenu departments__submenu--type--megamenu departments__submenu--size--{{item.menu.size }}"
+                        class="departments__submenu departments__submenu--type--megamenu departments__submenu--size--xl"
                         [ngClass]="{'departments__submenu--open': item === hoveredItem}"
                         #submenuElement
                     >

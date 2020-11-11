@@ -28,16 +28,22 @@ export class ArticulosService {
 
   public cargarDepartamentos(){
 
-      this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+      this.ConsultarDepartamento(0).then((config: any) => {
 
-        if (this.menu !== undefined || this.usuariosvc.Idempresa > 0){
-          return this.ConsultarDepartamento(this.usuariosvc.Idempresa).then((config: any) => { });
-        }
+        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
 
-        if (this.menu === undefined || this.usuariosvc.Idempresa === undefined){
-          return this.ConsultarDepartamento(0).then((config: any) => { });
-        }
-    });
+            if (value){
+              return this.ConsultarDepartamento(this.usuariosvc.Idempresa).then((conf: any) => { });
+            }else {
+              if (this.usuariosvc.Idempresa === 0){
+                this.ConsultarDepartamento(0).then((configu: any) => {});
+              }
+            }
+        });
+
+      });
+
+      console.log (this.menu);
 
   }
 
@@ -52,8 +58,6 @@ export class ArticulosService {
         .then((config: any) => {
 
           this.menu = JSON.parse(config).menuCarro;
-
-          console.log ( this.menu);
 
         })
         .catch((err: any) => {

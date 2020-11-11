@@ -1,12 +1,15 @@
 <!-- .megamenu -->
 <div class="megamenu">
-    <div class="megamenu__body" [style.background-image]="menu.image ? 'url('+menu.image+')' : ''">
+    <div class="megamenu__body" >
         <div class="row">
-            <div *ngFor="let column of menu.columns" class="col-{{ menu.size }}">
+
+            <div *ngFor="let column of menu.columns" class="col-lg-4">
                 <ul class="megamenu__links megamenu__links--level--0">
+
                     <li *ngFor="let item of column.items" class="megamenu__item" [ngClass]="{'megamenu__item--with-submenu': item.items}">
 
                         <a *ngIf="!item.external" [routerLink]="item.url" [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
+                        
                         <a *ngIf="item.external" [href]="item.url" [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
 
                         <ul *ngIf="item.items" class="megamenu__links megamenu__links--level--1">
@@ -17,10 +20,13 @@
 
                             </li>
                         </ul>
+
                     </li>
+
                 </ul>
             </div>
+
         </div>
-    </div>
+
 </div>
 <!-- .megamenu / end -->

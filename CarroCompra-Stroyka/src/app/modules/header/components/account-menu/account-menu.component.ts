@@ -10,6 +10,9 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
 import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 
+// constantes
+import { Crutas } from 'src/data/contantes/cRutas';
+
 
 @Component({
     selector: 'app-account-menu',
@@ -24,6 +27,7 @@ export class AccountMenuComponent implements OnInit{
     UsrLogin: Observable<LoginClienteResponse>;
     public mensajeerror: string;
     public loading = false;
+    public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
 
     constructor(public usuariosvc: UsuarioService,
                 private fb: FormBuilder,

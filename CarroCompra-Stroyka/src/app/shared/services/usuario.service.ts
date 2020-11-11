@@ -557,10 +557,17 @@ export class UsuarioService {
 
   loguout(){
 
+    // colocar datos en cero
+    this.razonsocial = '';
+    this.correo = '';
+    this.Idempresa = 0;
+    this.IdPersona = 0;
+
     // quitar logueo
     this.setEstadoLogueo(false);
 
     this.recordar = false;
+
 
     // borrar registro storage
     const usr = new LoguinRequest();
