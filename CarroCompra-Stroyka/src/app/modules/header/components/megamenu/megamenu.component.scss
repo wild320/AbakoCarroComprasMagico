@@ -1,0 +1,18 @@
+.megamenu {
+    height: auto;
+    max-height: 449px;
+    overflow-y: auto;
+}
+
+.departments__submenu--size--xl {
+    min-height: 449px;
+}
+
+::ng-deep .departments__submenu--type--megamenu {
+    height: auto;
+}
+
+
+::ng-dep .ng-star-inserted {
+    width: 100%;
+}

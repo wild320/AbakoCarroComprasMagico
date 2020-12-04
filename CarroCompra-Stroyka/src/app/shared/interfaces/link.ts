@@ -1,6 +1,6 @@
 export interface Link {
     label: string;
-    url: string;
     external?: boolean;
+    url?: string;
     target?: '_self'|'_blank';
 }

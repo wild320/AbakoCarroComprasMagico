@@ -1,22 +1,24 @@
 <!-- .megamenu -->
 <div class="megamenu">
     <div class="megamenu__body" >
-        <div class="row">
+        <div class="">
 
-            <div *ngFor="let column of menu.columns" class="col-lg-4">
-                <ul class="megamenu__links megamenu__links--level--0">
+            <div *ngFor="let column of menu.columns"  >
+                
+                <ul class="megamenu__links megamenu__links--level--0 row">
+ 
+                    <li *ngFor="let item of column.items" class="megamenu__item col-lg-4 pl-2 pr-2 mb-5" [ngClass]="{'megamenu__item--with-submenu': item.items}">
 
-                    <li *ngFor="let item of column.items" class="megamenu__item" [ngClass]="{'megamenu__item--with-submenu': item.items}">
+                        <!-- .grupo de menu -->
+                        <a *ngIf="!item.external" [routerLink]="RutaShop + '/Power Tools'"  [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
 
-                        <a *ngIf="!item.external" [routerLink]="item.url" [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
-                        
-                        <a *ngIf="item.external" [href]="item.url" [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
+                        <a *ngIf="item.external" [href]="RutaShop" [target]="item.target" (click)="itemClick.emit(item)">{{ item.label | titlecase }}</a>
 
                         <ul *ngIf="item.items" class="megamenu__links megamenu__links--level--1">
                             <li *ngFor="let subItem of item.items" class="megamenu__item">
 
-                                <a *ngIf="!subItem.external" [routerLink]="subItem.url" [target]="subItem.target" (click)="itemClick.emit(subItem)">{{ subItem.label | titlecase}}</a>
-                                <a *ngIf="subItem.external" [href]="subItem.url" [target]="subItem.target" (click)="itemClick.emit(subItem)">{{ subItem.label | titlecase }}</a>
+                                <a *ngIf="!subItem.external" [routerLink]="RutaShop" [target]="subItem.target" (click)="itemClick.emit(subItem)">{{ subItem.label | titlecase}}</a>
+                                <a *ngIf="subItem.external" [href]="RutaShop" [target]="subItem.target" (click)="itemClick.emit(subItem)">{{ subItem.label | titlecase }}</a>
 
                             </li>
                         </ul>

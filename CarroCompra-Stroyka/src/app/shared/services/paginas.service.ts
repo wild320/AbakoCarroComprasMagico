@@ -91,7 +91,7 @@ export class PaginasService {
 
    }
 
-   public cargarPagina(tipoPagina: number ) {
+  public cargarPagina(tipoPagina: number ) {
 
     this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
     CServicios.ServicioPaginas;
@@ -106,5 +106,24 @@ export class PaginasService {
         .catch((err: any) => {
             console.error(err);
         });
+
     }
+
+  public cargarAcordeon() {
+
+      this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
+      CServicios.ServicioAcordeon;
+
+      return this.httpClient.get(this.UrlServicioPaginas, { responseType: 'text' })
+          .toPromise()
+          .then((resp: any) => {
+              return  JSON.parse(resp);
+
+          })
+          .catch((err: any) => {
+              console.error(err);
+          });
+      }
+
+
 }

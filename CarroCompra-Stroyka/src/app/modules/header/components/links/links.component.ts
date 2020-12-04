@@ -10,7 +10,7 @@ import {StoreService } from '../../../../shared/services/store.service';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
 
 // constantes
-import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { ClabelRutas } from 'src/data/contantes/cRutas';
 
 @Component({
     selector: 'app-header-links',

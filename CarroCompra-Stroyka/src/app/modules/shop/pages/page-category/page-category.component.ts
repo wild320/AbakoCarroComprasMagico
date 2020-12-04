@@ -39,13 +39,13 @@ export class PageCategoryComponent implements OnDestroy {
     ) {
         this.route.data.subscribe(data => {
             this.breadcrumbs = [
-                {label: 'Home', url: this.root.home()},
-                {label: 'Shop', url: this.root.shop()},
+                {label: 'Inicio', url: this.root.home()},
+                {label: 'Comprar', url: this.root.shop()},
             ];
 
             // If categorySlug is undefined then this is a root catalog page.
             if (!this.getCategorySlug()) {
-                this.pageHeader = 'Shop';
+                this.pageHeader = 'Comprar';
             } else {
                 this.pageHeader = data.category.name;
 
@@ -147,6 +147,7 @@ export class PageCategoryComponent implements OnDestroy {
     }
 
     getCategorySlug(): string|null {
+
         return this.route.snapshot.params.categorySlug || this.route.snapshot.data.categorySlug || null;
     }
 }

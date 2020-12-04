@@ -14,6 +14,7 @@ import {
     getRelatedProducts,
     getSpecialOffers,
     getTopRated,
+    setCategories,
     getShopCategoriesBySlugs,
     getShopCategoriesTree,
     getShopCategory,
@@ -21,6 +22,10 @@ import {
     getProductsList,
 } from '../../../fake-server';
 import { getSuggestions } from 'src/fake-server/database/products';
+
+// servicios
+import { ArticulosService } from '../services/articulos.service';
+
 
 export interface ListOptions {
     page?: number;
@@ -35,7 +40,12 @@ export interface ListOptions {
 export class ShopService {
     constructor(
         private http: HttpClient,
-    ) { }
+        private articulosvc: ArticulosService
+    ) {
+
+        this.suscribirMenu();
+
+    }
 
     /**
      * Returns category object by slug.
@@ -55,6 +65,15 @@ export class ShopService {
 
         // This is for demonstration purposes only. Remove it and use the code above.
         return getShopCategory(slug);
+    }
+
+    suscribirMenu(){
+
+        this.articulosvc.getMenuCategoria().subscribe(menu => {
+
+            setCategories(menu);
+
+        });
     }
 
     /**

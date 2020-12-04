@@ -9,6 +9,7 @@ export const Crutas = {
     Registrarse: '/account/suscribirse',
     RecuperarContrasena: '/account/recuperarusuario',
     loguin: '/account/login',
+    shop: '/shop/catalog',
 
     Dashboard: '/account/dashboard',
     EditarCuenta: '/account/profile',
@@ -28,6 +29,7 @@ export const ClabelRutas = {
     faq: 'FAQ',
     contactenos: 'Contáctanos',
     listaDeseo: 'Lista de Deseos',
+    shop: 'Shop',
 
     Dashboard: 'Dashboard',
     EditarCuenta: 'Editar Perfil',
@@ -35,6 +37,7 @@ export const ClabelRutas = {
     MisDirecciones: 'Direcciones',
     Cotrasena: 'Contraseña',
     CerrarSesion: 'Cerrar Sesión',
+
 
 };
 

@@ -10,14 +10,18 @@ import { ShopService } from '../../../shared/api/shop.service';
     providedIn: 'root'
 })
 export class CategoryResolverService implements Resolve<any> {
+
     constructor(
         private root: RootService,
         private router: Router,
         private shop: ShopService,
-    ) { }
+    ) {   }
+
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         const categorySlug = route.params.categorySlug || route.data.categorySlug || null;
+
+        console.log ('category: ' +  categorySlug );
 
         if (categorySlug === null) {
             return null;

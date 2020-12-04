@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 
 // Contantes
 import { CServicios } from 'src/data/contantes/cServicios';
@@ -11,6 +12,9 @@ import { NegocioService } from '../../shared/services/negocio.service';
 // interfaces
 import { NavigationLink } from '../../shared/interfaces/navigation-link';
 
+// Modelos
+import {MenuCarroCategoria } from '../../../data/modelos/negocio/MenuCarroCategoria';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +22,29 @@ import { NavigationLink } from '../../shared/interfaces/navigation-link';
 export class ArticulosService {
 
   private UrlServicio: string;
-  public menu: NavigationLink[];
+  public menu = new Subject<NavigationLink[]>();
+  public menuCategorias = new Subject<MenuCarroCategoria[]>();
 
   constructor(public usuariosvc: UsuarioService,
               private httpClient: HttpClient,
               private negocio: NegocioService,
     ) { }
 
+  setMenu(newValue): void {
+    this.menu.next(newValue);
+  }
+
+  getMenu(): Observable<NavigationLink[]> {
+    return this.menu.asObservable();
+  }
+
+  setMenuCategoria(newValue): void {
+    this.menuCategorias.next(newValue);
+  }
+
+  getMenuCategoria(): Observable<MenuCarroCategoria[]> {
+    return this.menuCategorias.asObservable();
+  }
 
   public cargarDepartamentos(){
 
@@ -33,21 +53,17 @@ export class ArticulosService {
         this.usuariosvc.getEstadoLogueo().subscribe((value) => {
 
             if (value){
-              return this.ConsultarDepartamento(this.usuariosvc.Idempresa).then((conf: any) => { });
+              return this.ConsultarDepartamento(this.usuariosvc.Idempresa);
             }else {
               if (this.usuariosvc.Idempresa === 0){
-                this.ConsultarDepartamento(0).then((configu: any) => {});
+                this.ConsultarDepartamento(0);
               }
             }
         });
-
       });
+   }
 
-      console.log (this.menu);
-
-  }
-
-  private ConsultarDepartamento(IdEmpresa: number ): Promise<void> {
+  private ConsultarDepartamento(IdEmpresa: number ){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +
@@ -57,7 +73,8 @@ export class ArticulosService {
         .toPromise()
         .then((config: any) => {
 
-          this.menu = JSON.parse(config).menuCarro;
+        this.setMenu(JSON.parse(config).menuCarro);
+        this.setMenuCategoria(JSON.parse(config).menuCarroCategoria);
 
         })
         .catch((err: any) => {

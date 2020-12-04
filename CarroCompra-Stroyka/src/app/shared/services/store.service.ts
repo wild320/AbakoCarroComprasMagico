@@ -172,7 +172,7 @@ export class StoreService {
 
         this.navigation = [
             {label: 'Inicio', url: '/'},
-            {label: 'Comprar', url: '/shop/catalog/power-tools', menu: {
+            {label: 'Comprar', url: '/shop/catalog', menu: {
                 type: 'menu',
                 items: [
                     {label: 'Artículos', url: this.configuracionSitio.verArticulos},
@@ -228,7 +228,7 @@ export class StoreService {
 
         switch (ver) {
             case 'En Cuadricula 3 Columnas con Slider':
-                tipoVer = '/shop/catalog/power-tools';
+                tipoVer = '/shop/catalog';
                 break;
 
             case 'En Cuadricula 4 Columnas Full':
@@ -248,7 +248,7 @@ export class StoreService {
                 break;
 
             default:
-                tipoVer = '/shop/catalog/power-tools';
+                tipoVer = '/shop/catalog';
                 break;
 
         }

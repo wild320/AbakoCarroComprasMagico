@@ -17,11 +17,11 @@ export class PageTermsComponent {
         if (this.pagina.TerminosCondiciones === '' ||  this.pagina.TerminosCondiciones === null
         || this.pagina.TerminosCondiciones === undefined ){
 
-        this.pagina.cargarPagina(Cpaginas.terminosCondiciones).then((resp: any) => {
-            this.pagina.TerminosCondiciones = resp;
+            this.pagina.cargarPagina(Cpaginas.terminosCondiciones).then((resp: any) => {
+                this.pagina.TerminosCondiciones = resp;
 
-        }) ;
+            }) ;
 
-         }
+        }
     }
 }

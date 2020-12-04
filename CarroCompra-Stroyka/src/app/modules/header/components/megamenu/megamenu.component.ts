@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Megamenu } from '../../../../shared/interfaces/megamenu';
 import { NestedLink } from '../../../../shared/interfaces/nested-link';
 
+// constantes
+import {Crutas } from '../../../../../data/contantes/cRutas';
+
 @Component({
     selector: 'app-header-megamenu',
     templateUrl: './megamenu.component.html',
@@ -12,5 +15,10 @@ export class MegamenuComponent {
 
     @Output() itemClick: EventEmitter<NestedLink> = new EventEmitter<NestedLink>();
 
-    constructor() { }
+    RutaShop: string;
+
+    constructor() {
+
+        this.RutaShop = Crutas.shop;
+     }
 }

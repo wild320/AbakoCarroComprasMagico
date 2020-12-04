@@ -21,6 +21,9 @@ import { ArticulosService } from '../../../../shared/services/articulos.service'
 // interfaces
 import { NavigationLink } from 'src/app/shared/interfaces/navigation-link';
 
+// constantes
+import {Crutas } from '../../../../../data/contantes/cRutas';
+
 @Component({
     selector: 'app-header-departments',
     templateUrl: './departments.component.html',
@@ -39,6 +42,9 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     isOpen = false;
     fixed = false;
 
+    RutaShop: string;
+    Menu: NavigationLink[] = null;
+
     reCalcSubmenuPosition = false;
 
     private get element(): HTMLElement {
@@ -52,12 +58,17 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         private header: HeaderService,
         private zone: NgZone,
         public articulossvc: ArticulosService,
-    ) { }
+    ) {
+        this.RutaShop = Crutas.shop;
+    }
 
     ngOnInit(): void {
 
         // cargar departamentos
         this.articulossvc.cargarDepartamentos();
+
+        // suscribir menu
+        this.suscribirMenu();
 
         const root = this.element.querySelector('.departments') as HTMLElement;
         const content = this.element.querySelector('.departments__links-wrapper') as HTMLElement;
@@ -332,7 +343,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             return null;
         }
 
-        const index = this.articulossvc.menu.indexOf(this.hoveredItem);
+        const index =  this.Menu.indexOf(this.hoveredItem);
         const elements = this.itemElements.toArray();
 
         if (index === -1 || !elements[index]) {
@@ -340,6 +351,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         }
 
         return elements[index].nativeElement as HTMLDivElement;
+
     }
 
     getCurrentSubmenuElement(): HTMLDivElement {
@@ -347,7 +359,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             return null;
         }
 
-        const index = this.articulossvc.menu.filter(x => x.menu).indexOf(this.hoveredItem);
+        const index = this.Menu.filter(x => x.menu).indexOf(this.hoveredItem);
         const elements = this.submenuElements.toArray();
 
         if (index === -1 || !elements[index]) {
@@ -355,5 +367,15 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         }
 
         return elements[index].nativeElement as HTMLDivElement;
+
+    }
+
+    suscribirMenu(){
+
+        this.articulossvc.getMenu().subscribe(menu => {
+
+            this.Menu = menu;
+
+        });
     }
 }
