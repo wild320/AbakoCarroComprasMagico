@@ -33,13 +33,13 @@
                     (mouseenter)="onItemMouseEnter(item)"
                     #itemElement
                 >
-
+                     <!-- menu derecho -->   
                     <ng-template #link>
                         {{ item.label | titlecase}}
                         <app-icon *ngIf="item.menu" class="departments__item-arrow" name="arrow-rounded-right-6x9" size="6x9"></app-icon>
                     </ng-template>
 
-                    <a *ngIf="!item.external" class="departments__item-link" [routerLink]="RutaShop +'/' + item.id " [target]="item.target" (click)="onItemClick()" (appTouchClick)="onTouchClick($event, item)">
+                    <a *ngIf="!item.external" class="departments__item-link" [routerLink]="RutaShop +'/' + item.label" [target]="item.target" (click)="onItemClick()" (appTouchClick)="onTouchClick($event, item)">
                         <ng-container [ngTemplateOutlet]="link"></ng-container>
                     </a>
                     <a *ngIf="item.external" class="departments__item-link" [href]="RutaShop" [target]="item.target" (click)="onItemClick()" (appTouchClick)="onTouchClick($event, item)">

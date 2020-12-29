@@ -33,11 +33,10 @@ const routes: Routes = [
     {
         path: 'catalog',
         component: PageCategoryComponent,
-        data: categoryPageData,
         resolve: categoryPageResolvers,
     },
     {
-        path: 'catalog/:categorySlug',
+        path: 'catalog/:label',
         component: PageCategoryComponent,
         data: categoryPageData,
         resolve: categoryPageResolvers,

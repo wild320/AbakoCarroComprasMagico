@@ -75,7 +75,7 @@ function walkTree(categoriesType: 'shop'|'blog', categoriesDef: CategoryDef[], p
             type: categoriesType,
             name: categoryDef.name,
             slug: categoryDef.slug,
-            path: [...parents.map(x => x.slug), categoryDef.slug].join('/'),
+            path: [...parents.map(x => x.name), categoryDef.name].join('/'),
             image: categoryDef.image || null,
             items: categoryDef.items || 0,
             customFields: {},
@@ -140,12 +140,16 @@ export function getShopCategoriesBySlugs(slugs: string[], depth: number = 0): Ob
 }
 
 export function setCategories(menu: MenuCarroCategoria[]){
+
     shopCategoriesDef = menu;
     console.log(shopCategoriesDef);
+
 }
 
 export function getShopCategory(slug: string): Observable<Category> {
-    const category = shopCategoriesList.find(x => x.slug === slug);
+
+    console.log (shopCategoriesList);
+    const category = shopCategoriesList.find(x => x.name === slug);
 
     if (!category) {
         return throwError(new HttpErrorResponse({status: 404, statusText: 'Sitio no Encontrado'}));

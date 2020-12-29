@@ -38,6 +38,7 @@ export class PageCategoryComponent implements OnDestroy {
         private location: Location,
     ) {
         this.route.data.subscribe(data => {
+
             this.breadcrumbs = [
                 {label: 'Inicio', url: this.root.home()},
                 {label: 'Comprar', url: this.root.shop()},
@@ -47,6 +48,7 @@ export class PageCategoryComponent implements OnDestroy {
             if (!this.getCategorySlug()) {
                 this.pageHeader = 'Comprar';
             } else {
+                console.log(data);
                 this.pageHeader = data.category.name;
 
                 this.breadcrumbs = this.breadcrumbs.concat([
@@ -147,7 +149,7 @@ export class PageCategoryComponent implements OnDestroy {
     }
 
     getCategorySlug(): string|null {
+        return this.route.snapshot.params.label || this.route.snapshot.data.label || null;
 
-        return this.route.snapshot.params.categorySlug || this.route.snapshot.data.categorySlug || null;
     }
 }

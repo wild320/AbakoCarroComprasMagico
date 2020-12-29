@@ -44,6 +44,7 @@ export class ArticulosService {
 
   getMenuCategoria(): Observable<MenuCarroCategoria[]> {
     return this.menuCategorias.asObservable();
+
   }
 
   public cargarDepartamentos(){

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Category } from '../interfaces/category';
 import { HttpClient } from '@angular/common/http';
 import { Brand } from '../interfaces/brand';
@@ -26,6 +26,9 @@ import { getSuggestions } from 'src/fake-server/database/products';
 // servicios
 import { ArticulosService } from '../services/articulos.service';
 
+// Modelos
+import {MenuCarroCategoria } from '../../../data/modelos/negocio/MenuCarroCategoria';
+
 
 export interface ListOptions {
     page?: number;
@@ -38,6 +41,9 @@ export interface ListOptions {
     providedIn: 'root'
 })
 export class ShopService {
+
+    public menuCategorias: MenuCarroCategoria[];
+
     constructor(
         private http: HttpClient,
         private articulosvc: ArticulosService
@@ -52,26 +58,21 @@ export class ShopService {
      *
      * @param slug - Unique human-readable category identifier.
      */
-    getCategory(slug: string): Observable<Category> {
-        /**
-         * This is what your API endpoint might look like:
-         *
-         * https://example.com/api/shop/categories/power-tools.json
-         *
-         * where:
-         * - power-tools = slug
-         */
-        // return this.http.get<Category>(`https://example.com/api/shop/categories/${slug}.json`);
+    getCategory(slug: string): Observable<MenuCarroCategoria[]> {
 
-        // This is for demonstration purposes only. Remove it and use the code above.
-        return getShopCategory(slug);
+       // return getShopCategory(slug);
+
+        return of(this.menuCategorias);
+
     }
 
     suscribirMenu(){
 
         this.articulosvc.getMenuCategoria().subscribe(menu => {
 
-            setCategories(menu);
+            this.menuCategorias = menu;
+
+            console.log(this.menuCategorias);
 
         });
     }

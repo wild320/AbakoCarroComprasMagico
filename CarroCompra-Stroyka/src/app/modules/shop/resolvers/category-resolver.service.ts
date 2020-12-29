@@ -19,9 +19,7 @@ export class CategoryResolverService implements Resolve<any> {
 
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-        const categorySlug = route.params.categorySlug || route.data.categorySlug || null;
-
-        console.log ('category: ' +  categorySlug );
+        const categorySlug = route.params.label || route.data.label || null;
 
         if (categorySlug === null) {
             return null;
