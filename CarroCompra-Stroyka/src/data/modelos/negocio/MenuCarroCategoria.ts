@@ -4,22 +4,19 @@ export class MenuCarroCategoria {
     type: string;
     name: string;
     slug: string;
-    path: string;
     items: number;
+    selection: string;
     children: Array<{
         id: number;
         type: string;
         name: string;
         slug: string;
-        path: string;
-        image: string;
         items: number;
         children: Array<{
             id: number;
             type: string;
             name: string;
             slug: string;
-            path: string;
             items: number;
         }>;
     }>;

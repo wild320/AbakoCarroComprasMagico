@@ -1,15 +1,17 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { PageCategoryService } from '../../services/page-category.service';
 import { Link } from '../../../../shared/interfaces/link';
-import { RootService } from '../../../../shared/services/root.service';
 import { of, Subject, timer } from 'rxjs';
 import { debounce, mergeMap, takeUntil } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { parseProductsListParams } from '../../resolvers/products-list-resolver.service';
 import { ShopService } from '../../../../shared/api/shop.service';
 import { parseFilterValue } from '../../../../shared/helpers/filter';
+
+// servicios
+import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 @Component({
     selector: 'app-grid',
@@ -20,7 +22,7 @@ import { parseFilterValue } from '../../../../shared/helpers/filter';
         {provide: ShopSidebarService, useClass: ShopSidebarService},
     ]
 })
-export class PageCategoryComponent implements OnDestroy {
+export class PageCategoryComponent implements OnInit, OnDestroy {
     destroy$: Subject<void> = new Subject<void>();
 
     columns: 3|4|5 = 3;
@@ -30,33 +32,32 @@ export class PageCategoryComponent implements OnDestroy {
     pageHeader: string;
 
     constructor(
-        private root: RootService,
         private router: Router,
         private route: ActivatedRoute,
         private pageService: PageCategoryService,
         private shop: ShopService,
         private location: Location,
+        public articulossvc: ArticulosService,
     ) {
+
+  }
+
+    ngOnInit(): void {
+
         this.route.data.subscribe(data => {
 
-            this.breadcrumbs = [
-                {label: 'Inicio', url: this.root.home()},
-                {label: 'Comprar', url: this.root.shop()},
-            ];
+            console.log('data', data);
 
-            // If categorySlug is undefined then this is a root catalog page.
+            this.breadcrumbs = this.shop.breadcrumbs;
+
             if (!this.getCategorySlug()) {
                 this.pageHeader = 'Comprar';
             } else {
-                console.log(data);
-                this.pageHeader = data.category.name;
 
-                this.breadcrumbs = this.breadcrumbs.concat([
-                    ...data.category.parents.map(
-                        parent => ({label: parent.name, url: this.root.category(parent)})
-                    ),
-                    {label: data.category.name, url: this.root.category(data.category)},
-                ]);
+                this.pageHeader = data.menucategoria[0].selection;
+
+                this.breadcrumbs = this.shop.breadcrumbs;
+
             }
 
             this.pageService.setList(data.products);
@@ -89,6 +90,8 @@ export class PageCategoryComponent implements OnDestroy {
             this.pageService.setList(list);
             this.pageService.setIsLoading(false);
         });
+
+
     }
 
     ngOnDestroy(): void {

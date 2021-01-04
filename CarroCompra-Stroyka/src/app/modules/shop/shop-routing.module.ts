@@ -25,7 +25,7 @@ const categoryPageData: Data = {
 };
 
 const categoryPageResolvers: ResolveData = {
-    category: CategoryResolverService,
+    menucategoria: CategoryResolverService,
     products: ProductsListResolverService
 };
 

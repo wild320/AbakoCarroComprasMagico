@@ -43,7 +43,7 @@ export class PageCategoryService {
     get to(): number { return this.listState.to; }
     get filters(): Filter[] { return this.listState.filters; }
     get filterValues(): SerializedFilterValues { return this.listState.filterValues; }
- 
+
     // set functions
     setIsLoading(value: boolean): void {
         this.isLoadingState = value;

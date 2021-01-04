@@ -1,4 +1,4 @@
-<app-page-header [header]="pageHeader" [breadcrumbs]="breadcrumbs"></app-page-header>
+<app-page-header [header]="pageHeader | titlecase  " [breadcrumbs]="breadcrumbs"></app-page-header>
 
 <ng-container *ngIf="columns === 3">
     <div class="container">

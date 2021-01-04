@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
 import { Category } from '../interfaces/category';
 import { Brand } from '../interfaces/brand';
+import {MenuCarroCategoria} from '../../../../src/data/modelos/negocio/MenuCarroCategoria';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class RootService {
         return `/shop/catalog`;
     }
 
-    category(category: Partial<Category>): string {
+    category(category: Partial<MenuCarroCategoria>): string {
         if (category.type === 'shop') {
             const basePath = this.shop();
 

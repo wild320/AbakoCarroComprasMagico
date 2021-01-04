@@ -64,7 +64,7 @@ export class ArticulosService {
       });
    }
 
-  private ConsultarDepartamento(IdEmpresa: number ){
+  public ConsultarDepartamento(IdEmpresa: number ){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +

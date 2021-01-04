@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Category } from '../interfaces/category';
-import { HttpClient } from '@angular/common/http';
 import { Brand } from '../interfaces/brand';
 import { Product } from '../interfaces/product';
 import { ProductsList } from '../interfaces/list';
 import { SerializedFilterValues } from '../interfaces/filter';
+import { Link } from '../../shared/interfaces/link';
+import { RootService } from '../../shared/services/root.service';
+
 import {
     getBestsellers,
     getFeatured,
@@ -14,10 +16,8 @@ import {
     getRelatedProducts,
     getSpecialOffers,
     getTopRated,
-    setCategories,
     getShopCategoriesBySlugs,
     getShopCategoriesTree,
-    getShopCategory,
     getBrands,
     getProductsList,
 } from '../../../fake-server';
@@ -28,6 +28,9 @@ import { ArticulosService } from '../services/articulos.service';
 
 // Modelos
 import {MenuCarroCategoria } from '../../../data/modelos/negocio/MenuCarroCategoria';
+
+// utils
+import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
 
 
 export interface ListOptions {
@@ -43,38 +46,144 @@ export interface ListOptions {
 export class ShopService {
 
     public menuCategorias: MenuCarroCategoria[];
+    public linea: MenuCarroCategoria[];
+    public categoria: any[];
+    public segmento: any[];
+    public breadcrumbs: Link[] = [];
 
     constructor(
-        private http: HttpClient,
-        private articulosvc: ArticulosService
+        private root: RootService,
+        private articulosvc: ArticulosService,
+        private utils: UtilsTexto,
     ) {
+
+        this.linea = [];
+        this.categoria = [];
+        this.segmento = [];
 
         this.suscribirMenu();
 
     }
 
-    /**
-     * Returns category object by slug.
-     *
-     * @param slug - Unique human-readable category identifier.
-     */
-    getCategory(slug: string): Observable<MenuCarroCategoria[]> {
+   getCategory(slug: string): Observable<MenuCarroCategoria[]> {
 
-       // return getShopCategory(slug);
+        this.inicializarBreadcrumbs();
 
-        return of(this.menuCategorias);
+        if (this.menuCategorias !== undefined) {
+
+            this.MenuCategoria(slug);
+            return of (this.linea);
+        }
+
+        return of (this.menuCategorias);
+
+    }
+
+    private inicializarBreadcrumbs() {
+
+        this.breadcrumbs = [
+            {label: 'Inicio', url: this.root.home()},
+            {label: 'Comprar', url: this.root.shop()},
+        ];
+
+    }
+
+    private SetBreadcrumbs(label: string, url: string) {
+
+        this.breadcrumbs.push (
+            {label: this.utils.capitalize(label),
+            url: `${this.root.shop()}/${url}`},
+        );
 
     }
 
     suscribirMenu(){
 
         this.articulosvc.getMenuCategoria().subscribe(menu => {
-
             this.menuCategorias = menu;
-
-            console.log(this.menuCategorias);
-
+            console.log('cargar menu', menu);
         });
+    }
+
+    MenuCategoria(slug: string) {
+
+         // Separar el slug
+         const divseleccion  = slug.split('|');
+         const seleccion     = divseleccion[0];
+         let linea           = '';
+         let categoria       = '';
+         let segmento        = '';
+         let indexlinea;
+         let indexcategoria;
+         let indexsegmento;
+
+         this.linea = [];
+
+         switch (seleccion) {
+             case 'ln':
+
+                linea       = divseleccion[1];
+                indexlinea  = this.menuCategorias.findIndex( x => x.id === Number (linea));
+
+                this.linea[0] = this.menuCategorias[indexlinea];
+
+                 // Nombre del item seleccionado
+                this.menuCategorias[0].selection = this.linea[0].name;
+
+                console.log('selection', this.menuCategorias[0].selection);
+
+                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
+
+                break;
+
+             case 'ct':
+
+                linea       = divseleccion[1];
+                categoria   = divseleccion[2];
+
+                indexlinea      = this.menuCategorias.findIndex( x => x.id === Number (linea));
+                indexcategoria  = this.menuCategorias[indexlinea].children.findIndex( x => x.id === Number (categoria));
+
+                this.linea[0] = this.menuCategorias[indexlinea];
+                this.categoria[0] = this.menuCategorias[indexlinea].children[indexcategoria];
+
+                // Nombre del item seleccionado
+                this.menuCategorias[0].selection = this.categoria[0].name;
+
+                console.log('selection', this.menuCategorias[0].selection);
+
+                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
+                this.SetBreadcrumbs(this.categoria[0].name, `ct|${this.linea[0].id}|${this.categoria[0].id}`);
+
+                break;
+
+             case 'sg':
+
+                linea       = divseleccion[1];
+                categoria   = divseleccion[2];
+                segmento    = divseleccion[3];
+
+                indexlinea      = this.menuCategorias.findIndex( x => x.id === Number (linea));
+                indexcategoria  = this.menuCategorias[indexlinea].children.findIndex( x => x.id === Number (categoria));
+                indexsegmento   = this.menuCategorias[indexlinea].children[indexcategoria].children.
+                                findIndex( x => x.id === Number (segmento));
+
+                this.linea[0] = this.menuCategorias[indexlinea];
+                this.categoria[0] = this.menuCategorias[indexlinea].children[indexcategoria];
+                this.segmento[0] = this.menuCategorias[indexlinea].children[indexcategoria].children[indexsegmento];
+
+                // Nombre del item seleccionado
+                this.menuCategorias[0].selection = this.segmento[0].name;
+
+                console.log('selection', this.menuCategorias[0].selection);
+
+                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
+                this.SetBreadcrumbs(this.categoria[0].name, `ct|${this.linea[0].id}|${this.categoria[0].id}`);
+                this.SetBreadcrumbs(this.segmento[0].name, `sg|${this.linea[0].id}|${this.categoria[0].id}|${this.segmento[0].id}`);
+
+                break;
+        }
+
     }
 
     /**
