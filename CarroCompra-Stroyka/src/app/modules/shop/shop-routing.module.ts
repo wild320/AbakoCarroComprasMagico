@@ -9,7 +9,6 @@ import { PageTrackOrderComponent } from './pages/page-track-order/page-track-ord
 import { CheckoutGuard } from './guards/checkout.guard';
 import { PageProductComponent } from './pages/page-product/page-product.component';
 import { ProductsListResolverService } from './resolvers/products-list-resolver.service';
-import { CategoryResolverService } from './resolvers/category-resolver.service';
 import { ProductResolverService } from './resolvers/product-resolver.service';
 import { PageOrderSuccessComponent } from './pages/page-order-success/page-order-success.component';
 
@@ -25,7 +24,6 @@ const categoryPageData: Data = {
 };
 
 const categoryPageResolvers: ResolveData = {
-    menucategoria: CategoryResolverService,
     products: ProductsListResolverService
 };
 
@@ -94,7 +92,6 @@ const routes: Routes = [
             categorySlug: 'power-tools',
         },
         resolve: {
-            category: CategoryResolverService,
             products: ProductsListResolverService
         },
     },
@@ -107,7 +104,6 @@ const routes: Routes = [
             categorySlug: 'power-tools',
         },
         resolve: {
-            category: CategoryResolverService,
             products: ProductsListResolverService
         },
     },
@@ -121,7 +117,6 @@ const routes: Routes = [
             categorySlug: 'power-tools',
         },
         resolve: {
-            category: CategoryResolverService,
             products: ProductsListResolverService
         },
     },
@@ -135,7 +130,6 @@ const routes: Routes = [
             categorySlug: 'power-tools',
         },
         resolve: {
-            category: CategoryResolverService,
             products: ProductsListResolverService
         },
     },

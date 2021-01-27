@@ -14,6 +14,7 @@ import { Address } from '../interfaces/address';
 // modelos
 import { VerificarExistenciaClienteRequest } from '../../../data/modelos/negocio/VerificarExistenciaCliente';
 import {CrearClienteCarroRequest} from '../../../data/modelos/seguridad/CrearClienteCarroRequest';
+import {UsuarioStorage} from '../../../data/modelos/seguridad/UsuarioStorage';
 import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
 
 // Contantes
@@ -42,8 +43,10 @@ export class UsuarioService {
   private UrlServicioLoguin: string;
   private UrlServicioLocalizacion: string;
   private UsrLogin$ = new Subject<LoginClienteResponse>();
-  private UsuarioLogueado: BehaviorSubject<boolean>;
+  private UsuarioLogueado$: BehaviorSubject<boolean>;
+  private UsuarioLogueado: false;
   private VerificarExistencia = new VerificarExistenciaClienteRequest();
+  private usuarioStorage = new UsuarioStorage();
   private MsgRespuesta = new Mensaje();
   public addresses: Address[];
   public departamentos: string[];
@@ -53,7 +56,6 @@ export class UsuarioService {
   public objMaestrosLocalizacion = new MaestrosLocalizacionResponse();
   public MaestrosLocalizacionRequest = new MaestrosLocalizacionRequest();
   public RecuperarUsuario = new RecuperarUsuarioResponse();
-  public logueo: boolean;
   public Idempresa: number;
   public IdPersona: number;
   MensajeError = '';
@@ -70,22 +72,24 @@ export class UsuarioService {
         private localService: LocalService
         ) {
 
-        this.UsuarioLogueado = new BehaviorSubject<boolean>(false);
+        this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
         this.addresses = [];
 
-        this.UsuarioLogueado.subscribe(value => {
-          this.logueo = value;
-        });
+        this.getEstadoLoguin$().subscribe(value => {});
 
   }
 
-  setEstadoLogueo(newValue): void {
-    this.UsuarioLogueado.next(newValue);
+  setEstadoLoguin$(newValue): void {
+    this.UsuarioLogueado = newValue;
+    this.UsuarioLogueado$.next(newValue);
   }
 
-  getEstadoLogueo(): Observable<boolean> {
+  getEstadoLoguin(){
+    return this.UsuarioLogueado;
+  }
 
-    return this.UsuarioLogueado.asObservable();
+  getEstadoLoguin$(): Observable<boolean> {
+    return this.UsuarioLogueado$.asObservable();
   }
 
   setUsrLoguin(usuario: LoginClienteResponse) {
@@ -215,7 +219,8 @@ export class UsuarioService {
         CServicios.ApiNegocio +
         CServicios.ServivioLoguinCLiente;
 
-    this.recordar = usrrq.recordar;
+    this.recordar     = usrrq.recordar;
+    this.MensajeError = '';
 
     return this.servicehelper
         .PostData(this.UrlServicioLoguin, usrrq)
@@ -224,13 +229,23 @@ export class UsuarioService {
 
             this.cargarRespuesta(config, usrrq);
 
-            this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
-            this.MsgRespuesta.msgStr = 'Usuario exitoso';
+            if (this.MensajeError.length === 0){
+              this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
+              this.MsgRespuesta.msgStr = 'Usuario exitoso';
 
-            // cambiar estado de logueado
-            this.setEstadoLogueo(true);
+              // cambiar estado de logueado
+              this.setEstadoLoguin$(true);
+
+              return this.MsgRespuesta;
+            }
+
+            this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+            this.MsgRespuesta.msgStr = this.MensajeError;
+
+            this.setEstadoLoguin$(false);
 
             return this.MsgRespuesta;
+
 
         })
         .catch((err: any) => {
@@ -423,14 +438,14 @@ export class UsuarioService {
 
     return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
 
-      if (this.logueo){
+      if (this.getEstadoLoguin()){
 
         // actualizamos datos del storage
         let UsuarioSesion = new LoguinRequest();
         UsuarioSesion = this.localService.getJsonValue(this.token);
         UsuarioSesion.contrasena = Contrasena;
 
-        this.guardarStorage(UsuarioSesion);
+        this.guardarStorage(UsuarioSesion, this.DatosPersona.empresaUsuario.idEmpresa);
 
       }
 
@@ -542,15 +557,18 @@ export class UsuarioService {
 
   cargarUsuarioStorage(){
 
-    // validar que tenga usuario en el stora y lo logueamos
+    // validar que tenga usuario en el storage y lo logueamos
     const usrlogueado = this.localService.getJsonValue(this.token);
 
     if (usrlogueado)   {
 
-      const RestaurarSesion: LoguinRequest = usrlogueado;
+      const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
+      this.Idempresa = usrlogueado.IdEmp;
 
       this.Loguin(RestaurarSesion);
 
+    }else{
+      this.setEstadoLoguin$(false);
     }
 
   }
@@ -564,15 +582,14 @@ export class UsuarioService {
     this.IdPersona = 0;
 
     // quitar logueo
-    this.setEstadoLogueo(false);
+    this.setEstadoLoguin$(false);
 
     this.recordar = false;
-
 
     // borrar registro storage
     const usr = new LoguinRequest();
 
-    this.guardarStorage(usr);
+    this.guardarStorage(usr, this.Idempresa);
 
   }
 
@@ -581,13 +598,13 @@ export class UsuarioService {
     // validar mensaje
     if (config.estado[0].msgId === EstadoRespuestaMensaje.Error) {
 
-      this.setEstadoLogueo(false);
+      this.setEstadoLoguin$(false);
       this.MensajeError = config.estado[0].msgStr;
 
     }else{
 
       // guardar storage
-      this.guardarStorage(usrrq);
+      this.guardarStorage(usrrq, config.usuario[0].idEmp);
 
       this.setUsrLoguin (config);
 
@@ -609,10 +626,13 @@ export class UsuarioService {
 
   }
 
-  private guardarStorage(usrrq: LoguinRequest){
+  private guardarStorage(usrrq: LoguinRequest, idempresa: number){
+
+    this.usuarioStorage.loguin = usrrq;
+    this.usuarioStorage.IdEmp = idempresa;
 
     if (this.recordar) {
-      this.localService.setJsonValue(this.token, usrrq);
+      this.localService.setJsonValue(this.token, this.usuarioStorage);
     }else{
       this.localService.clearToken();
     }

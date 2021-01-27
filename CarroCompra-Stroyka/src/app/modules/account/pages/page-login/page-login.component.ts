@@ -65,7 +65,7 @@ export class PageLoginComponent implements OnInit{
         this.usuariossvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
           // si no llega logueado validar mensaje
-          if  (!this.usuariossvc.logueo){
+          if  (!this.usuariossvc.getEstadoLoguin()){
             this.mensajeerror = this.usuariossvc.MensajeError;
             this.error = true;
            }else{

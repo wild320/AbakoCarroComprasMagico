@@ -11,7 +11,6 @@ export {
     getShopCategoriesBySlugs,
     getShopCategoriesTree,
     getShopCategory,
-    setCategories,
     getBlogCategoriesTree,
 } from './database/categories';
 export {

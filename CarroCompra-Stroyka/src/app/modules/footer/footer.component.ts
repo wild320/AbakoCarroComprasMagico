@@ -34,7 +34,7 @@ export class FooterComponent {
 
      CargarMenuMicuenta() {
 
-        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
             this.linksMicuenta = [];
 

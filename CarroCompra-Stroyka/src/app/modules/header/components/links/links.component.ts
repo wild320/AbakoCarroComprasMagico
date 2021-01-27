@@ -52,7 +52,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     private UsuarioLogueado() {
 
-        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
             this.storaservice.CargarMenu(value);
 

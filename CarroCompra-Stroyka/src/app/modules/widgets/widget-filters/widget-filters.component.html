@@ -17,12 +17,12 @@
                             <ul class="filter-categories__list">
                                 <li *ngIf="!filter.root" class="filter-categories__item filter-categories__item--parent">
                                     <app-icon class="filter-categories__arrow"  name="arrow-rounded-left-6x9" size="6x9"></app-icon>
-                                    <a [routerLink]="this.root.shop()">All Products</a>
+                                    <a [routerLink]="this.root.shop()">Todos los productos</a>
                                 </li>
                                 <li *ngFor="let item of filter.items; trackBy: trackBySlug" class="filter-categories__item filter-categories__item--{{ item.type }}">
                                     <app-icon *ngIf="item.type == 'parent'" class="filter-categories__arrow"  name="arrow-rounded-left-6x9" size="6x9"></app-icon>
-                                    <a [routerLink]="this.root.category(item.category)">{{ item.name }}</a>
-                                    <div class="filter-categories__counter" *ngIf="item.type === 'child'">{{ item.count }}</div>
+                                    <a [routerLink]="">{{ item.name | titlecase}}</a>
+                                    <div class="filter-categories__counter" > {{ item.items }}</div>
                                 </li>
                             </ul>
                         </div>
@@ -133,6 +133,6 @@
         </div>
     </div>
     <div class="widget-filters__actions d-flex">
-        <button class="btn btn-secondary btn-sm" (click)="reset()">Reset</button>
+        <button class="btn btn-secondary btn-sm" (click)="reset()">Borrar Selección</button>
     </div>
 </div>

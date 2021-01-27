@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { parseProductsListParams } from '../../resolvers/products-list-resolver.service';
 import { ShopService } from '../../../../shared/api/shop.service';
 import { parseFilterValue } from '../../../../shared/helpers/filter';
+import { RootService } from '../../../../shared/services/root.service';
 
 // servicios
 import { ArticulosService } from '../../../../shared/services/articulos.service';
@@ -33,39 +34,46 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     constructor(
         private router: Router,
+        private root: RootService,
         private route: ActivatedRoute,
         private pageService: PageCategoryService,
         private shop: ShopService,
         private location: Location,
         public articulossvc: ArticulosService,
-    ) {
-
-  }
+    ) {  }
 
     ngOnInit(): void {
 
+
         this.route.data.subscribe(data => {
 
-            console.log('data', data);
-
-            this.breadcrumbs = this.shop.breadcrumbs;
-
-            if (!this.getCategorySlug()) {
-                this.pageHeader = 'Comprar';
-            } else {
-
-                this.pageHeader = data.menucategoria[0].selection;
-
-                this.breadcrumbs = this.shop.breadcrumbs;
-
+            if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
+                this.articulossvc.RecuperarArticulos('nn');
+            }else{
+                this.articulossvc.RecuperarArticulos(this.getCategorySlug());
             }
 
+            this.articulossvc.getArticulos$().subscribe(articulos => {
+
+                // iniciarlizar SetBreadcrumbs
+                this.SetBreadcrumbs(this.articulossvc.getArticulos().breadcrumbs);
+
+                // titulo o marca seleccionado
+                this.pageHeader = this.articulossvc.getArticulos().seleccion;
+
+
+            });
+
             this.pageService.setList(data.products);
+
+            console.log(data);
 
             this.columns = 'columns' in data ? data.columns : this.columns;
             this.viewMode = 'viewMode' in data ? data.viewMode : this.viewMode;
             this.sidebarPosition = 'sidebarPosition' in data ? data.sidebarPosition : this.sidebarPosition;
+
         });
+
         this.route.queryParams.subscribe(queryParams => {
             this.pageService.setOptions(parseProductsListParams(queryParams), false);
         });
@@ -91,6 +99,42 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
             this.pageService.setIsLoading(false);
         });
 
+    }
+
+    SetBreadcrumbs(breadcrumbs: any[]){
+
+        this.breadcrumbs = this.shop.breadcrumbs;
+
+        // informaciob de la categoria
+        if (!this.getCategorySlug()) {
+            this.pageHeader = 'Comprar';
+        } else {
+
+            try {
+
+                this.shop.SetBreadcrumbs(breadcrumbs);
+
+                this.breadcrumbs = this.shop.breadcrumbs;
+
+                this.validarUrlNOFound(this.getCategorySlug());
+
+            } catch (err) {
+
+                this.router.navigate([this.root.notFound()]).then();
+
+            }
+
+        }
+
+        // recuperar informacion del producto
+
+    }
+
+    validarUrlNOFound(Slug: string ){
+
+        if (this.router.url === this.root.notFound()){
+            this.router.navigate([`${this.root.shop()}/${Slug}`]).then();
+        }
 
     }
 
@@ -155,4 +199,5 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
         return this.route.snapshot.params.label || this.route.snapshot.data.label || null;
 
     }
+
 }

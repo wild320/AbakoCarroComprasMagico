@@ -3,15 +3,15 @@
     <ul class="widget-categories__list" appCollapse>
         <li *ngFor="let category of categories" class="widget-categories__item" appCollapseItem="widget-categories__item--open" #collapse="appCollapseItem">
             <div class="widget-categories__row">
-                <a [routerLink]="root.category(category)">
+                <a [routerLink]="">
                     <app-icon class="widget-categories__arrow" name="arrow-rounded-right-6x9" size="6x9"></app-icon>
                     {{ category.name }}
                 </a>
                 <button *ngIf="category.children?.length" class="widget-categories__expander" type="button" (click)="collapse.toggle()"></button>
             </div>
             <div *ngIf="category.children?.length" class="widget-categories__subs" appCollapseContent>
-                <ul>
-                    <li *ngFor="let sub of category.children"><a [routerLink]="root.category(sub)">{{ sub.name }}</a></li>
+                <ul> 
+                    <li *ngFor="let sub of category.children"><a [routerLink]="">{{ sub.name }}</a></li>
                 </ul>
             </div>
         </li>

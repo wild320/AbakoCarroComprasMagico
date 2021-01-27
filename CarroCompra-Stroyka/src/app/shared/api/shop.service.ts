@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from '../interfaces/category';
 import { Brand } from '../interfaces/brand';
 import { Product } from '../interfaces/product';
@@ -23,15 +23,6 @@ import {
 } from '../../../fake-server';
 import { getSuggestions } from 'src/fake-server/database/products';
 
-// servicios
-import { ArticulosService } from '../services/articulos.service';
-
-// Modelos
-import {MenuCarroCategoria } from '../../../data/modelos/negocio/MenuCarroCategoria';
-
-// utils
-import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
-
 
 export interface ListOptions {
     page?: number;
@@ -45,38 +36,13 @@ export interface ListOptions {
 })
 export class ShopService {
 
-    public menuCategorias: MenuCarroCategoria[];
-    public linea: MenuCarroCategoria[];
-    public categoria: any[];
-    public segmento: any[];
     public breadcrumbs: Link[] = [];
 
     constructor(
         private root: RootService,
-        private articulosvc: ArticulosService,
-        private utils: UtilsTexto,
     ) {
 
-        this.linea = [];
-        this.categoria = [];
-        this.segmento = [];
-
-        this.suscribirMenu();
-
-    }
-
-   getCategory(slug: string): Observable<MenuCarroCategoria[]> {
-
         this.inicializarBreadcrumbs();
-
-        if (this.menuCategorias !== undefined) {
-
-            this.MenuCategoria(slug);
-            return of (this.linea);
-        }
-
-        return of (this.menuCategorias);
-
     }
 
     private inicializarBreadcrumbs() {
@@ -88,103 +54,14 @@ export class ShopService {
 
     }
 
-    private SetBreadcrumbs(label: string, url: string) {
+    public SetBreadcrumbs(breadcrumbs: any[]) {
 
-        this.breadcrumbs.push (
-            {label: this.utils.capitalize(label),
-            url: `${this.root.shop()}/${url}`},
-        );
+        this.inicializarBreadcrumbs();
 
-    }
-
-    suscribirMenu(){
-
-        this.articulosvc.getMenuCategoria().subscribe(menu => {
-            this.menuCategorias = menu;
-            console.log('cargar menu', menu);
-        });
-    }
-
-    MenuCategoria(slug: string) {
-
-         // Separar el slug
-         const divseleccion  = slug.split('|');
-         const seleccion     = divseleccion[0];
-         let linea           = '';
-         let categoria       = '';
-         let segmento        = '';
-         let indexlinea;
-         let indexcategoria;
-         let indexsegmento;
-
-         this.linea = [];
-
-         switch (seleccion) {
-             case 'ln':
-
-                linea       = divseleccion[1];
-                indexlinea  = this.menuCategorias.findIndex( x => x.id === Number (linea));
-
-                this.linea[0] = this.menuCategorias[indexlinea];
-
-                 // Nombre del item seleccionado
-                this.menuCategorias[0].selection = this.linea[0].name;
-
-                console.log('selection', this.menuCategorias[0].selection);
-
-                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
-
-                break;
-
-             case 'ct':
-
-                linea       = divseleccion[1];
-                categoria   = divseleccion[2];
-
-                indexlinea      = this.menuCategorias.findIndex( x => x.id === Number (linea));
-                indexcategoria  = this.menuCategorias[indexlinea].children.findIndex( x => x.id === Number (categoria));
-
-                this.linea[0] = this.menuCategorias[indexlinea];
-                this.categoria[0] = this.menuCategorias[indexlinea].children[indexcategoria];
-
-                // Nombre del item seleccionado
-                this.menuCategorias[0].selection = this.categoria[0].name;
-
-                console.log('selection', this.menuCategorias[0].selection);
-
-                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
-                this.SetBreadcrumbs(this.categoria[0].name, `ct|${this.linea[0].id}|${this.categoria[0].id}`);
-
-                break;
-
-             case 'sg':
-
-                linea       = divseleccion[1];
-                categoria   = divseleccion[2];
-                segmento    = divseleccion[3];
-
-                indexlinea      = this.menuCategorias.findIndex( x => x.id === Number (linea));
-                indexcategoria  = this.menuCategorias[indexlinea].children.findIndex( x => x.id === Number (categoria));
-                indexsegmento   = this.menuCategorias[indexlinea].children[indexcategoria].children.
-                                findIndex( x => x.id === Number (segmento));
-
-                this.linea[0] = this.menuCategorias[indexlinea];
-                this.categoria[0] = this.menuCategorias[indexlinea].children[indexcategoria];
-                this.segmento[0] = this.menuCategorias[indexlinea].children[indexcategoria].children[indexsegmento];
-
-                // Nombre del item seleccionado
-                this.menuCategorias[0].selection = this.segmento[0].name;
-
-                console.log('selection', this.menuCategorias[0].selection);
-
-                this.SetBreadcrumbs(this.linea[0].name, `ln|${this.linea[0].id.toString()}`);
-                this.SetBreadcrumbs(this.categoria[0].name, `ct|${this.linea[0].id}|${this.categoria[0].id}`);
-                this.SetBreadcrumbs(this.segmento[0].name, `sg|${this.linea[0].id}|${this.categoria[0].id}|${this.segmento[0].id}`);
-
-                break;
-        }
+        this.breadcrumbs.push(...breadcrumbs);
 
     }
+
 
     /**
      * Returns a category tree.
@@ -252,40 +129,9 @@ export class ShopService {
      * @param options.filterValues - An object whose keys are filter slugs and values ​​are filter values (optional).
      */
     getProductsList(categorySlug: string|null, options: ListOptions): Observable<ProductsList> {
-        /**
-         * This is what your API endpoint might look like:
-         *
-         * https://example.com/api/products.json?category=screwdriwers&page=2&limit=12&sort=name_desc&filter_price=500-1000
-         *
-         * where:
-         * - category     = categorySlug
-         * - page         = options.page
-         * - limit        = options.limit
-         * - sort         = options.sort
-         * - filter_price = options.filterValues.price
-         */
-        // const params: {[param: string]: string} = {};
-        //
-        // if (categorySlug) {
-        //     params.category = categorySlug;
-        // }
-        // if ('page' in options) {
-        //     params.page = options.page.toString();
-        // }
-        // if ('limit' in options) {
-        //     params.limit = options.limit.toString();
-        // }
-        // if ('sort' in options) {
-        //     params.sort = options.sort;
-        // }
-        // if ('filterValues' in options) {
-        //     Object.keys(options.filterValues).forEach(slug => params[`filter_${slug}`] = options.filterValues[slug]);
-        // }
-        //
-        // return this.http.get<ProductsList>('https://example.com/api/products.json', {params});
 
-        // This is for demonstration purposes only. Remove it and use the code above.
         return getProductsList(categorySlug, options);
+
     }
 
     getProduct(productSlug: string): Observable<Product> {

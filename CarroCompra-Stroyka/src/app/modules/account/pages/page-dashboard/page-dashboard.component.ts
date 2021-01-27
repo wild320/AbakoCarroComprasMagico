@@ -28,7 +28,7 @@ export class PageDashboardComponent implements OnInit {
 
     EstaLogueadoUsuario(){
 
-        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
             if (value){
 

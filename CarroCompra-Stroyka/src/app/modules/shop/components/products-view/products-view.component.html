@@ -1,7 +1,7 @@
 <div class="products-view" [ngClass]="{'products-view--loading': this.pageService.isLoading$|async}" [formGroup]="listOptionsForm">
     <div class="products-view__loader"></div>
 
-    <div *ngIf="pageService.items?.length" class="products-view__content">
+    <div *ngIf="pageService?.items?.length" class="products-view__content">
         <div class="products-view__options">
             <div class="view-options" [ngClass]="{
                 'view-options--offcanvas--always': offcanvas === 'always',

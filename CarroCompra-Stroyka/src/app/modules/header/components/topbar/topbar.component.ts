@@ -57,7 +57,7 @@ export class TopbarComponent {
 
     EstaLogueadoUsuario(){
 
-        this.usuariosvc.getEstadoLogueo().subscribe((value) => {
+        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
             this.usuariologueado = value;
 

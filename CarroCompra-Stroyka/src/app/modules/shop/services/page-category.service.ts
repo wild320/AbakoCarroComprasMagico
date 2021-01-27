@@ -34,7 +34,7 @@ export class PageCategoryService {
 
     // getters for list
     get items(): Product[] { return this.listState.items; }
-    get page(): number { return this.listState.page; }
+    get page(): number { return this.listState.page;  }
     get limit(): number { return this.listState.limit; }
     get sort(): string { return this.listState.sort; }
     get total(): number { return this.listState.total; }

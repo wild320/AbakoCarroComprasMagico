@@ -64,9 +64,6 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     ngOnInit(): void {
 
-        // cargar departamentos
-        this.articulossvc.cargarDepartamentos();
-
         // suscribir menu
         this.suscribirMenu();
 
@@ -372,7 +369,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     suscribirMenu(){
 
-        this.articulossvc.getMenu().subscribe(menu => {
+        this.articulossvc.getMegaMenu$().subscribe(menu => {
 
             this.Menu = menu;
 

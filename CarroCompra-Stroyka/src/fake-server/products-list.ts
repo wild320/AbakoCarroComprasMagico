@@ -28,9 +28,9 @@ export function getProductsList(categorySlug: string|null, options: ListOptions)
     const filterValues = options.filterValues || {};
     const filters: Filter[] = [];
     const filtersDef = [
-        {type: 'range', slug: 'price', name: 'Price'},
-        {type: 'check', slug: 'brand', name: 'Brand'},
-        {type: 'radio', slug: 'discount', name: 'With Discount'},
+        {type: 'range', slug: 'price', name: 'Precio'},
+        {type: 'check', slug: 'brand', name: 'Marca'},
+        {type: 'radio', slug: 'discount', name: 'Con Descuento'},
         {type: 'color', slug: 'color', name: 'Color'},
     ];
     let items = productsTable.slice();
@@ -40,14 +40,15 @@ export function getProductsList(categorySlug: string|null, options: ListOptions)
         filters.push({
             type: 'categories',
             slug: 'categories',
-            name: 'Categories',
-            root: true,
+            name: 'Categorias',
+            root: false,
             items: [
                 ...shopCategoriesTree.map(x => makeCategoryFilterItem('child', x)),
             ],
         });
     } else {
-        const category = shopCategoriesList.find(x => x.slug === categorySlug);
+
+        const category = null;
 
         if (!category) {
             return throwError(new HttpErrorResponse({status: 404, statusText: 'Page Not Found'}));

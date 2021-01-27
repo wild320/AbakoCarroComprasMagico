@@ -13,5 +13,6 @@ export const CServicios = {
     ServivioCRUDPersonaExistente: 'CRUDPersonaExistente',
     ServivioRecuperarCodigoSeguridad: 'RecuperarUsuario',
     ServivioMenu: 'Menu',
-    ServivioMaestrosLocalizacion: 'MaestrosLocalizacion'
+    ServivioMaestrosLocalizacion: 'MaestrosLocalizacion',
+    ServicioRecuperarArticulos: 'Articulos/RecuperarArticuloCarroCompras'
 };

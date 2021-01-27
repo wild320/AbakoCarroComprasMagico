@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
-import { Category } from '../interfaces/category';
 import { Brand } from '../interfaces/brand';
-import {MenuCarroCategoria} from '../../../../src/data/modelos/negocio/MenuCarroCategoria';
+
 
 @Injectable({
     providedIn: 'root'
@@ -16,26 +15,6 @@ export class RootService {
 
     shop(): string {
         return `/shop/catalog`;
-    }
-
-    category(category: Partial<MenuCarroCategoria>): string {
-        if (category.type === 'shop') {
-            const basePath = this.shop();
-
-            if ('slug' in category) {
-                return `${basePath}/${category.slug}`;
-            }
-            if ('id' in category) {
-                return `${basePath}/${category.id}`;
-            }
-
-            throw Error('Provide category with "path", "slug" or "id".');
-        }
-        if (category.type === 'blog') {
-            return this.blog();
-        }
-
-        throw Error('Provided category with unknown type.');
     }
 
     product(product: Partial<Product>): string {

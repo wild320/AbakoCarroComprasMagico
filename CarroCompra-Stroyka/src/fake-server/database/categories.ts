@@ -3,12 +3,11 @@ import { Category } from '../../app/shared/interfaces/category';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-// Modelos
-import {MenuCarroCategoria } from '../../data/modelos/negocio/MenuCarroCategoria';
+
 
 let lastCategoryId = 0;
 
-let shopCategoriesDef: CategoryDef[] = [];
+const shopCategoriesDef: CategoryDef[] = [];
 const blogCategoriesDef: CategoryDef[] = [
     {
         name: 'Latest News',
@@ -137,13 +136,6 @@ export function getBlogCategoriesTree(parentSlug: string = null, depth: number =
 
 export function getShopCategoriesBySlugs(slugs: string[], depth: number = 0): Observable<Category[]> {
     return of(limitDepth(shopCategoriesList.filter(x => slugs.includes(x.slug)), depth));
-}
-
-export function setCategories(menu: MenuCarroCategoria[]){
-
-    shopCategoriesDef = menu;
-    console.log(shopCategoriesDef);
-
 }
 
 export function getShopCategory(slug: string): Observable<Category> {
