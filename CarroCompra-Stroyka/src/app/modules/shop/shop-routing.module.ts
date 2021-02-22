@@ -23,21 +23,16 @@ const categoryPageData: Data = {
     sidebarPosition: 'start'
 };
 
-const categoryPageResolvers: ResolveData = {
-    products: ProductsListResolverService
-};
 
 const routes: Routes = [
     {
         path: 'catalog',
-        component: PageCategoryComponent,
-        resolve: categoryPageResolvers,
+        component: PageCategoryComponent
     },
     {
         path: 'catalog/:label',
         component: PageCategoryComponent,
-        data: categoryPageData,
-        resolve: categoryPageResolvers,
+        data: categoryPageData
     },
     {
         path: 'products/:productSlug',

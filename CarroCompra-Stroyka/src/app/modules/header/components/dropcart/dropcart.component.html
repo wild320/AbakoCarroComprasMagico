@@ -32,15 +32,15 @@
                     </div>
                     <div class="dropcart__product-info">
                         <div class="dropcart__product-name">
-                            <a [routerLink]="root.product(item.product)" (click)="closeMenu.emit()">{{ item.product.name }}</a>
+                            <a [routerLink]="root.product(item.product)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
                         </div>
 
                         <ul *ngIf="item.options.length" class="dropcart__product-options">
-                            <li *ngFor="let option of item.options">{{ option.name }}: {{ option.value }}</li>
+                            <li *ngFor="let option of item.options">{{ option.name  }}: {{ option.value }}</li>
                         </ul>
                         <div class="dropcart__product-meta">
                             <span class="dropcart__product-quantity">{{ item.quantity }}</span> ×
-                            <span class="dropcart__product-price">{{ item.product.price|currencyFormat }}</span>
+                            <span class="dropcart__product-price">{{ item.product.price|currency }}</span>
                         </div>
                     </div>
 
@@ -54,22 +54,22 @@
                 <table>
                     <tr *ngIf="(cart.totals$|async).length">
                         <th>Subtotal</th>
-                        <td>{{ cart.subtotal$|async|currencyFormat }}</td>
+                        <td>{{ cart.subtotal$|async|currency }}</td>
                     </tr>
                     <tr *ngFor="let total of cart.totals$|async">
                         <th>{{ total.title }}</th>
-                        <td>{{ total.price|currencyFormat  }}</td>
+                        <td>{{ total.price|currency  }}</td>
                     </tr>
                     <tr>
                         <th>Total</th>
-                        <td>{{ cart.total$|async|currencyFormat }}</td>
+                        <td>{{ cart.total$|async|currency }}</td>
                     </tr>
                 </table>
             </div>
 
             <div class="dropcart__buttons">
-                <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">View Cart</a>
-                <a class="btn btn-primary" [routerLink]="root.checkout()" (click)="closeMenu.emit()">Checkout</a>
+                <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Ver Carro</a>
+                <a class="btn btn-primary" [routerLink]="root.checkout()" (click)="closeMenu.emit()">Pagar</a>
             </div>
         </ng-container>
     </div>

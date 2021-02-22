@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Link } from '../../interfaces/link';
+import { RootService } from '../../../shared/services/root.service';
+
 
 @Component({
     selector: 'app-page-header',
@@ -10,5 +12,7 @@ export class PageHeaderComponent {
     @Input() header: string;
     @Input() breadcrumbs: Link[] = [];
 
-    constructor() { }
+    constructor(
+        public root: RootService
+        ) {    }
 }

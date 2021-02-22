@@ -138,12 +138,12 @@ export class CartService {
         const totals: CartTotal[] = [];
 
         totals.push({
-            title: 'Shipping',
+            title: 'Envío',
             price: 25,
             type: 'shipping'
         });
         totals.push({
-            title: 'Tax',
+            title: 'Impuestos',
             price: subtotal * 0.20,
             type: 'tax'
         });

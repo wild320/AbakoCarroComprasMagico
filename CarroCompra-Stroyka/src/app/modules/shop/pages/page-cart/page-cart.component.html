@@ -1,12 +1,12 @@
-<app-page-header [header]="'Shopping Cart'" [breadcrumbs]="[
+<app-page-header [header]="'Carro de Compras'" [breadcrumbs]="[
     {label: 'Home',          url: root.home()},
-    {label: 'Shopping Cart', url: ''}
+    {label: 'Carro de Compras', url: ''}
 ]"></app-page-header>
 
 <div class="block block-empty" *ngIf="!items.length">
     <div class="container">
         <div class="block-empty__body">
-            <div class="block-empty__message">Your shopping cart is empty!</div>
+            <div class="block-empty__message">Su carro de compras esta vacio!</div>
             <div class="block-empty__actions">
                 <a [routerLink]="root.shop()" class="btn btn-primary btn-sm">Continue</a>
             </div>
@@ -19,10 +19,10 @@
         <table class="cart__table cart-table">
             <thead class="cart-table__head">
             <tr class="cart-table__row">
-                <th class="cart-table__column cart-table__column--image">Image</th>
-                <th class="cart-table__column cart-table__column--product">Product</th>
-                <th class="cart-table__column cart-table__column--price">Price</th>
-                <th class="cart-table__column cart-table__column--quantity">Quantity</th>
+                <th class="cart-table__column cart-table__column--image">Imagen</th>
+                <th class="cart-table__column cart-table__column--product">Producto</th>
+                <th class="cart-table__column cart-table__column--price">Precio</th>
+                <th class="cart-table__column cart-table__column--quantity">Cantidad</th>
                 <th class="cart-table__column cart-table__column--total">Total</th>
                 <th class="cart-table__column cart-table__column--remove"></th>
             </tr>
@@ -37,16 +37,16 @@
                     </div>
                 </td>
                 <td class="cart-table__column cart-table__column--product">
-                    <a [routerLink]="root.product(item.cartItem.product)" class="cart-table__product-name">{{ item.cartItem.product.name }}</a>
+                    <a [routerLink]="root.product(item.cartItem.product)" class="cart-table__product-name">{{ item.cartItem.product.name | titlecase }}</a>
                     <ul *ngIf="item.cartItem.options.length" class="cart-table__options">
                         <li *ngFor="let option of item.cartItem.options">{{ option.name }}: {{ option.value }}</li>
                     </ul>
                 </td>
-                <td class="cart-table__column cart-table__column--price" data-title="Price">{{ item.cartItem.product.price|currencyFormat }}</td>
+                <td class="cart-table__column cart-table__column--price" data-title="Price">{{ item.cartItem.product.price|currency }}</td>
                 <td class="cart-table__column cart-table__column--quantity" data-title="Quantity">
                     <app-input-number [formControl]="item.quantityControl" [min]="1"></app-input-number>
                 </td>
-                <td class="cart-table__column cart-table__column--total" data-title="Total">{{ item.cartItem.product.price * item.quantity|currencyFormat }}</td>
+                <td class="cart-table__column cart-table__column--total" data-title="Total">{{ item.cartItem.product.price * item.quantity|currency}}</td>
                 <td class="cart-table__column cart-table__column--remove">
                     <button type="button" class="btn btn-light btn-sm btn-svg-icon" (click)="remove(item.cartItem)" [ngClass]="{'btn-loading': removedItems.includes(item.cartItem)}">
                         <app-icon name="cross-12" size="12"></app-icon>
@@ -58,13 +58,13 @@
 
         <div class="cart__actions">
             <form class="cart__coupon-form" novalidate>
-                <label for="input-coupon-code" class="sr-only">Password</label>
+                <label for="input-coupon-code" class="sr-only">Contraseña</label>
                 <input type="text" class="form-control" id="input-coupon-code" placeholder="Coupon Code">
-                <button type="submit" class="btn btn-primary">Apply Coupon</button>
+                <button type="submit" class="btn btn-primary">Aplicar Cupón</button>
             </form>
             <div class="cart__buttons">
-                <a routerLink="/" class="btn btn-light">Continue Shopping</a>
-                <button type="button" class="btn btn-primary cart__update-button" (click)="update()" [ngClass]="{'btn-loading': updating}" [disabled]="!needUpdate()">Update Cart</button>
+                <a routerLink="/" class="btn btn-light">Continue Comprando</a>
+                <button type="button" class="btn btn-primary cart__update-button" (click)="update()" [ngClass]="{'btn-loading': updating}" [disabled]="!needUpdate()">Actualizar Carro</button>
             </div>
         </div>
 
@@ -72,32 +72,32 @@
             <div class="col-12 col-md-7 col-lg-6 col-xl-5">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Cart Totals</h3>
+                        <h3 class="card-title">Totales</h3>
 
                         <table class="cart__totals">
                             <thead *ngIf="(cart.totals$|async).length" class="cart__totals-header">
                             <tr>
                                 <th>Subtotal</th>
-                                <td>{{ cart.subtotal$|async|currencyFormat }}</td>
+                                <td>{{ cart.subtotal$|async|currency }}</td>
                             </tr>
                             </thead>
                             <tbody *ngIf="(cart.totals$|async).length" class="cart__totals-body">
                             <tr *ngFor="let total of cart.totals$|async">
                                 <th>{{ total.title }}</th>
                                 <td>
-                                    {{ total.price|currencyFormat }}
-                                    <div *ngIf="total.type === 'shipping'" class="cart__calc-shipping"><a href="" (click)="$event.preventDefault()">Calculate Shipping</a></div>
+                                    {{ total.price|currency }}
+                                    <div *ngIf="total.type === 'shipping'" class="cart__calc-shipping"><a href="" (click)="$event.preventDefault()">Calcular Envío</a></div>
                                 </td>
                             </tr>
                             </tbody>
                             <tfoot class="cart__totals-footer">
                             <tr>
                                 <th>Total</th>
-                                <td>{{ cart.total$|async|currencyFormat }}</td>
+                                <td>{{ cart.total$|async|currency }}</td>
                             </tr>
                             </tfoot>
                         </table>
-                        <a class="btn btn-primary btn-xl btn-block cart__checkout-button" routerLink="./checkout">Proceed to checkout</a>
+                        <a class="btn btn-primary btn-xl btn-block cart__checkout-button" routerLink="./checkout">Proceder a Pagar</a>
                     </div>
                 </div>
             </div>

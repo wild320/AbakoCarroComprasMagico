@@ -47,11 +47,11 @@ export class PaginationComponent implements OnChanges, OnInit, ControlValueAcces
         }
 
         this.current = value;
-        this.calc();
 
         if (emitEvent) {
             this.pageChange.emit(this.current);
         }
+
     }
 
     trackByFn(index: number): number {
@@ -59,14 +59,16 @@ export class PaginationComponent implements OnChanges, OnInit, ControlValueAcces
     }
 
     private calc(): void {
-        const min = Math.max(1, this.current - this.siblings - Math.max(0, this.siblings - this.total + this.current));
-        const max = Math.min(this.total, min + this.siblings * 2);
+
+        const min = 1;
+        const max = Math.min(this.total);
 
         this.pages = [];
 
         for (let i = min; i <= max; i++) {
             this.pages.push(i);
         }
+
     }
 
     registerOnChange(fn: any): void {

@@ -1,7 +1,11 @@
-<div class="products-view" [ngClass]="{'products-view--loading': this.pageService.isLoading$|async}" [formGroup]="listOptionsForm">
+<div class="products-view" [ngClass]="{'products-view--loading': this.articulossvc.isLoading$|async}" [formGroup]="listOptionsForm">
     <div class="products-view__loader"></div>
 
-    <div *ngIf="pageService?.items?.length" class="products-view__content">
+    <div style="justify-content: center; display: flex;">
+        <div class="loader" *ngIf="this.articulossvc.isLoadingState"></div>
+    </div>
+
+    <div *ngIf="this.Productos.items?.length" class="products-view__content">
         <div class="products-view__options">
             <div class="view-options" [ngClass]="{
                 'view-options--offcanvas--always': offcanvas === 'always',
@@ -36,8 +40,8 @@
                     </div>
                 </div>
                 <div class="view-options__legend">
-                    Viendo {{ this.pageService.from }}–{{ this.pageService.to }}
-                    de {{ this.pageService.total }}
+                    Viendo {{ this.articulossvc.AtributosFiltros.from }}–{{ this.articulossvc.AtributosFiltros.to }}
+                    de {{ this.articulossvc.AtributosFiltros.total }}
                     resultados
                 </div>
                 <div class="view-options__divider"></div>
@@ -65,20 +69,22 @@
 
         <div class="products-view__list products-list" [attr.data-layout]="layout != 'list' ? grid : layout" [attr.data-with-features]="layout == 'grid-with-features' ? 'true' : 'false'">
             <div class="products-list__body">
-                <div *ngFor="let product of pageService.items" class="products-list__item">
+                <div *ngFor="let product of ProductosSeleccionados" class="products-list__item">
                     <app-product-card [product]="product"></app-product-card>
                 </div>
             </div>
         </div>
 
         <div class="products-view__pagination">
-            <app-pagination formControlName="page" [siblings]="2" [total]="pageService.pages"></app-pagination>
+            <app-pagination formControlName="page" [siblings]="2" [total]="this.articulossvc.AtributosFiltros.pages"></app-pagination>
         </div>
     </div>
 
-    <div *ngIf="!pageService.items?.length" class="products-view__empty">
-        <div class="products-view__empty-title">No matching items</div>
-        <div class="products-view__empty-subtitle">Try resetting the filters</div>
-        <button type="button" class="btn btn-primary btn-sm" (click)="resetFilters()">Reset filters</button>
+    <div *ngIf="!this.articulossvc.isLoadingState" >
+        <div *ngIf="!this.Productos.items?.length" class="products-view__empty">
+            <div class="products-view__empty-title">No hay elementos coincidentes</div>
+            <div class="products-view__empty-subtitle">Intente restablecer los filtros</div>
+            <button type="button" class="btn btn-primary btn-sm" (click)="resetFilters()">Restablecer filtros</button>
+        </div>
     </div>
 </div>

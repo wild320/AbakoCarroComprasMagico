@@ -2,8 +2,14 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { PageCategoryService } from '../../services/page-category.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+
+// Servicios
+import { ArticulosService } from '../../../../shared/services/articulos.service';
+
+// modelos
+import { Products} from '../../../../../data/modelos/articulos/DetalleArticulos';
+
 
 export type Layout = 'grid'|'grid-with-features'|'list';
 
@@ -21,35 +27,78 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
     listOptionsForm: FormGroup;
     filtersCount = 0;
+    ProductosSeleccionados = new Products();
+    Productos = new Products();
 
     constructor(
         private fb: FormBuilder,
         public sidebar: ShopSidebarService,
         public pageService: PageCategoryService,
-    ) { }
+        public articulossvc: ArticulosService,
+    ) {
+        // recuperar todos los articulos
+        this.articulossvc.getArticulos$().subscribe(articulos => {
+
+            this.articulossvc.setAtributosFiltros(this.articulossvc.getArticulos().products);
+
+        });
+
+        // recuperar solo los articulos seleccionados
+        this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+
+            this.Productos = this.articulossvc.getArticulos().products;
+            this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
+
+        });
+
+    }
 
     ngOnInit(): void {
 
+        this.articulossvc.getAtributos$().subscribe(atributos => {
+            this.SetAtributos();
+        });
+
         this.listOptionsForm = this.fb.group({
-            page:   this.fb.control(this.pageService.page),
-            limit: this.fb.control(this.pageService.limit),
-            sort: this.fb.control(this.pageService.sort),
+            page:   this.fb.control(this.articulossvc.AtributosFiltros.page),
+            limit: this.fb.control(this.articulossvc.AtributosFiltros.limit),
+            sort: this.fb.control(this.articulossvc.AtributosFiltros.sort),
         });
 
         this.listOptionsForm.valueChanges.subscribe(value => {
+
             value.limit = parseFloat(value.limit);
 
-            this.pageService.updateOptions(value);
+            if (value.page  == null || value.limit == null || value.sort == null  ){
+                return;
+            }
+
+            this.SetLIstaOpciones(value);
+
+            this.articulossvc.setAtributosFiltros( this.articulossvc.AtributosFiltros);
+
         });
 
-        this.pageService.list$.pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(
-            ({page, limit, sort, filterValues}) => {
-                this.filtersCount = Object.keys(filterValues).length;
-                this.listOptionsForm.setValue({page, limit, sort}, {emitEvent: false});
-            }
-        );
+    }
+
+    SetAtributos(){
+        this.page.setValue(this.articulossvc.AtributosFiltros?.page, {emitEvent: false});
+        this.limit.setValue(this.articulossvc.AtributosFiltros?.limit, {emitEvent: false});
+        this.sort.setValue(this.articulossvc.AtributosFiltros?.sort, {emitEvent: false});
+    }
+
+    SetLIstaOpciones(value: any){
+
+        const total = this.articulossvc.AtributosFiltros.total;
+        const limit = value.limit;
+
+        this.articulossvc.AtributosFiltros.page = value.page;
+        this.articulossvc.AtributosFiltros.limit = limit;
+        this.articulossvc.AtributosFiltros.sort = value.sort;
+        this.articulossvc.AtributosFiltros.pages = Math.ceil(total / limit);
+        this.articulossvc.AtributosFiltros.from = ((value.page - 1) * value.limit) + 1 ;
+        this.articulossvc.AtributosFiltros.to = value.page   * limit;
+
     }
 
     ngOnDestroy(): void {
@@ -62,6 +111,10 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     resetFilters(): void {
-        this.pageService.updateOptions({filterValues: {}});
+        //
     }
+
+    get page() { return this.listOptionsForm.get('page'); }
+    get limit() { return this.listOptionsForm.get('limit'); }
+    get sort() { return this.listOptionsForm.get('sort'); }
 }

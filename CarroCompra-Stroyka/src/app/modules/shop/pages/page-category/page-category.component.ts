@@ -6,7 +6,6 @@ import { Link } from '../../../../shared/interfaces/link';
 import { of, Subject, timer } from 'rxjs';
 import { debounce, mergeMap, takeUntil } from 'rxjs/operators';
 import { Location } from '@angular/common';
-import { parseProductsListParams } from '../../resolvers/products-list-resolver.service';
 import { ShopService } from '../../../../shared/api/shop.service';
 import { parseFilterValue } from '../../../../shared/helpers/filter';
 import { RootService } from '../../../../shared/services/root.service';
@@ -44,8 +43,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-
-        this.route.data.subscribe(data => {
+        this.route.paramMap.subscribe(data => {
 
             if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
                 this.articulossvc.RecuperarArticulos('nn');
@@ -61,12 +59,13 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
                 // titulo o marca seleccionado
                 this.pageHeader = this.articulossvc.getArticulos().seleccion;
 
-
             });
 
-            this.pageService.setList(data.products);
+        });
 
-            console.log(data);
+        this.route.data.subscribe(data => {
+
+            this.pageService.setList(data.products);
 
             this.columns = 'columns' in data ? data.columns : this.columns;
             this.viewMode = 'viewMode' in data ? data.viewMode : this.viewMode;
@@ -74,9 +73,6 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
         });
 
-        this.route.queryParams.subscribe(queryParams => {
-            this.pageService.setOptions(parseProductsListParams(queryParams), false);
-        });
 
         this.pageService.optionsChange$.pipe(
             debounce(changedOptions => {
@@ -84,7 +80,6 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
             }),
             mergeMap(() => {
                 this.updateUrl();
-                this.pageService.setIsLoading(true);
 
                 return this.shop.getProductsList(
                     this.getCategorySlug(),
@@ -95,11 +90,13 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
             }),
             takeUntil(this.destroy$),
         ).subscribe(list => {
-            this.pageService.setList(list);
-            this.pageService.setIsLoading(false);
+           // this.pageService.setList(list);
+
         });
 
     }
+
+
 
     SetBreadcrumbs(breadcrumbs: any[]){
 
@@ -125,8 +122,6 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
             }
 
         }
-
-        // recuperar informacion del producto
 
     }
 

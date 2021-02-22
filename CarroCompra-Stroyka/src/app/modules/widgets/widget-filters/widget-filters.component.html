@@ -21,8 +21,8 @@
                                 </li>
                                 <li *ngFor="let item of filter.items; trackBy: trackBySlug" class="filter-categories__item filter-categories__item--{{ item.type }}">
                                     <app-icon *ngIf="item.type == 'parent'" class="filter-categories__arrow"  name="arrow-rounded-left-6x9" size="6x9"></app-icon>
-                                    <a [routerLink]="">{{ item.name | titlecase}}</a>
-                                    <div class="filter-categories__counter" > {{ item.items }}</div>
+                                    <a [routerLink]="this.root.shop() + '/' + item.slug ">{{ item.name | titlecase}}</a>
+                                    <div class="filter-categories__counter" > {{ item.count }}</div>
                                 </li>
                             </ul>
                         </div>
@@ -45,15 +45,15 @@
                                 </div>
                             </div>
                             <div class="filter-price__title">
-                                <span class="filter-price__min-value">{{ (rightToLeft ? slider.highValue : slider.value)|currencyFormat }}</span> –
-                                <span class="filter-price__max-value">{{ (rightToLeft ? slider.value : slider.highValue)|currencyFormat }}</span>
+                                <span class="filter-price__min-value">{{ (rightToLeft ? slider.highValue : slider.value)|currency }}</span> –
+                                <span class="filter-price__max-value">{{ (rightToLeft ? slider.value : slider.highValue)|currency }}</span>
                             </div>
                         </div>
 
-                        <div *ngIf="filter.type === 'check'" class="filter-list" [formGroupName]="filter.slug">
+                        <div *ngIf="filter.type === 'check'" class="filter-list" [formGroupName]="filter?.slug">
                             <div class="filter-list__list">
                                 <label
-                                    *ngFor="let item of filter.items; trackBy: trackBySlug"
+                                    *ngFor="let item of filter?.items; trackBy: trackBySlug"
                                     class="filter-list__item"
                                     [ngClass]="{'filter-list__item--disabled': isItemDisabled(filter, item)}"
                                 >
@@ -71,7 +71,7 @@
                                         </span>
                                     </span>
 
-                                    <span class="filter-list__title">{{ item.name }}</span>
+                                    <span class="filter-list__title">{{ item.name | titlecase }}</span>
                                     <span class="filter-list__counter">{{ item.count }}</span>
                                 </label>
                             </div>
@@ -91,13 +91,13 @@
                                                 type="radio"
                                                 [attr.disabled]="isItemDisabled(filter, item) ? true : null"
                                                 [value]="item.slug"
-                                                [formControlName]="filter.slug"
+                                                [formControlName]="filter.slug" 
                                             >
                                             <span class="input-radio__circle"></span>
                                         </span>
                                     </span>
 
-                                    <span class="filter-list__title">{{ item.name }}</span>
+                                    <span class="filter-list__title">{{ item.name | titlecase}}</span>
                                     <span class="filter-list__counter">{{ item.count }}</span>
                                 </label>
                             </div>

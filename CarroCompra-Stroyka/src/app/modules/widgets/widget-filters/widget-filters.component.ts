@@ -1,11 +1,13 @@
+
 import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { DirectionService } from '../../../shared/services/direction.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
+
 import {
     ColorFilter,
     ColorFilterItem,
-    Filter,
     SerializedFilterValues,
     CheckFilter,
     FilterItem, RadioFilter
@@ -13,7 +15,13 @@ import {
 import { RootService } from '../../../shared/services/root.service';
 import { Subject } from 'rxjs';
 import { PageCategoryService } from '../../shop/services/page-category.service';
-import { map, takeUntil } from 'rxjs/operators';
+
+// Servicios
+import { ArticulosService } from '../../../shared/services/articulos.service';
+
+// Modelos
+import { Products} from '../../../../data/modelos/articulos/DetalleArticulos';
+import { Filters } from '../../../../data/modelos/articulos/filters';
 
 interface FormFilterValues {
     [filterSlug: string]: [number, number] | {[itemSlug: string]: boolean} | string;
@@ -29,10 +37,13 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     destroy$: Subject<void> = new Subject<void>();
 
-    filters: Filter[];
+
+    filters: Filters[];
     filtersForm: FormGroup;
     isPlatformBrowser = isPlatformBrowser(this.platformId);
+    ArticulosSuscribe$: any;
     rightToLeft = false;
+    Productos = new Products();
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
@@ -40,39 +51,45 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         public root: RootService,
         public pageCategory: PageCategoryService,
+        public articulossvc: ArticulosService,
     ) {
         this.rightToLeft = this.direction.isRTL();
+
     }
 
     ngOnInit(): void {
-        this.pageCategory.list$.pipe(
-            map(x => x.filters),
-            takeUntil(this.destroy$),
-        ).subscribe(filters => {
-            this.filters = filters;
-            this.filtersForm = this.makeFiltersForm(filters);
+
+        // recuperar todos los articulos
+        this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
+
+            this.filters = this.articulossvc.getArticulos().products.filters;
+
+            this.filtersForm = this.makeFiltersForm(this.articulossvc.getArticulos().products.filters);
+
+            this.descuento.setValue('Any');
 
             this.filtersForm.valueChanges.subscribe(formValues => {
-                this.pageCategory.updateOptions({
-                    filterValues: this.convertFormToFilterValues(filters, formValues)
-                });
+                this.articulossvc.SetFiltrarArticulos (this.convertFormToFilterValues(this.filters, formValues));
             });
+
         });
+
     }
 
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.ArticulosSuscribe$.unsubscribe();
     }
 
     trackBySlug(index: number, item: {slug: string}): any {
         return item.slug;
     }
 
-    makeFiltersForm(filters: Filter[]): FormGroup {
+    makeFiltersForm(filtro: Filters[]): FormGroup {
         const filtersFromGroup = {};
 
-        filters.forEach(filter => {
+        filtro.forEach(filter => {
             switch (filter.type) {
                 case 'range':
                 case 'radio':
@@ -88,7 +105,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return this.fb.group(filtersFromGroup);
     }
 
-    makeListFilterForm(filter: CheckFilter|ColorFilter): FormGroup {
+    makeListFilterForm(filter: any): FormGroup {
         const group = {};
 
         filter.items.forEach(item => {
@@ -113,7 +130,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return item.count === 0 && (filter.type === 'radio' || !filter.value.includes(item.slug));
     }
 
-    convertFormToFilterValues(filters: Filter[], formValues: FormFilterValues): SerializedFilterValues {
+    convertFormToFilterValues(filters: Filters[], formValues: FormFilterValues): SerializedFilterValues {
         const filterValues: SerializedFilterValues = {};
 
         filters.forEach(filter => {
@@ -129,8 +146,6 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
                 case 'color':
                     const filterFormValues = formValue as object || {};
 
-                    // Reactive forms do not add a values of disabled checkboxes.
-                    // This code will add them manually.
                     filter.value.forEach(filterValue => {
                         if (!(filterValue in filterFormValues)) {
                             filterFormValues[filterValue] = true;
@@ -179,4 +194,6 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
         this.filtersForm.setValue(formValues);
     }
+
+    get descuento() { return this.filtersForm.get('discount'); }
 }

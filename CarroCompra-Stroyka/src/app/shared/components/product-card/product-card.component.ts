@@ -38,6 +38,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     ) { }
 
     ngOnInit(): void {
+
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
         });
@@ -50,7 +51,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('product' in changes) {
-            this.featuredAttributes = !this.product ? [] : this.product.attributes.filter(x => x.featured);
+            this.featuredAttributes = !this.product ? [] : this.product.attributes?.filter(x => x.featured);
         }
     }
 
