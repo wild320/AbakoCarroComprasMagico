@@ -6,5 +6,6 @@ export class ItemsFiltros {
         type: string;
         color: string;
         count: number;
+        checked: boolean;
         items: [];
 }

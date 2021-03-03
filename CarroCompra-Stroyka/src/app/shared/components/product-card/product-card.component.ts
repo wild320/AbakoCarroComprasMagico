@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { CartService } from '../../services/cart.service';
-import { Product, ProductAttribute } from '../../interfaces/product';
+import { ProductAttribute } from '../../interfaces/product';
 import { WishlistService } from '../../services/wishlist.service';
 import { CompareService } from '../../services/compare.service';
 import { QuickviewService } from '../../services/quickview.service';
@@ -8,6 +8,9 @@ import { RootService } from '../../services/root.service';
 import { CurrencyService } from '../../services/currency.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+
+// modelos
+import { Item } from '../../../../data/modelos/articulos/Items';
 
 @Component({
     selector: 'app-product-card',
@@ -18,7 +21,7 @@ import { Subject } from 'rxjs';
 export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     private destroy$: Subject<void> = new Subject();
 
-    @Input() product: Product;
+    @Input() product: Item;
     @Input() layout: 'grid-sm'|'grid-nl'|'grid-lg'|'list'|'horizontal'|null = null;
 
     addingToCart = false;
@@ -51,7 +54,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('product' in changes) {
-            this.featuredAttributes = !this.product ? [] : this.product.attributes?.filter(x => x.featured);
+            // this.featuredAttributes = !this.product ? [] : this.product.attributes?.filter(x => x.featured);
         }
     }
 

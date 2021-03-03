@@ -2,44 +2,23 @@
     <div class="product-tabs__list">
         <a href="#tab-description" class="product-tabs__item"
            [ngClass]="{'product-tabs__item--active': tab === 'description'}"
-           (click)="$event.preventDefault(); tab = 'description'">Description</a>
-
+           (click)="$event.preventDefault(); tab = 'description'">Descripción</a>
+        <!-- 
         <a href="#tab-specification" class="product-tabs__item"
            [ngClass]="{'product-tabs__item--active': tab === 'specification'}"
            (click)="$event.preventDefault(); tab = 'specification'">Specification</a>
-
+        -->
         <a href="#tab-reviews" class="product-tabs__item"
            [ngClass]="{'product-tabs__item--active': tab === 'reviews'}"
-           (click)="$event.preventDefault(); tab = 'reviews'">Reviews</a>
+           (click)="$event.preventDefault(); tab = 'reviews'">Comentarios</a>
     </div>
     <div class="product-tabs__content">
 
         <div class="product-tabs__pane" id="tab-description" [ngClass]="{'product-tabs__pane--active': tab === 'description'}">
             <div class="typography">
-                <h3>Product Full Description</h3>
+                <h3>Descripción Completa del Producto</h3>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fermentum, diam non iaculis finibus,
-                    ipsum arcu sollicitudin dolor, ut cursus sapien sem sed purus. Donec vitae fringilla tortor, sed
-                    fermentum nunc. Suspendisse sodales turpis dolor, at rutrum dolor tristique id. Quisque pellentesque
-                    ullamcorper felis, eget gravida mi elementum a. Maecenas consectetur volutpat ante, sit amet molestie
-                    urna luctus in. Nulla eget dolor semper urna malesuada dictum. Duis eleifend pellentesque dui et
-                    finibus. Pellentesque dapibus dignissim augue. Etiam odio est, sodales ac aliquam id, iaculis eget
-                    lacus. Aenean porta, ante vitae suscipit pulvinar, purus dui interdum tellus, sed dapibus mi mauris
-                    vitae tellus.
-                </p>
-                <h3>Etiam lacus lacus mollis in mattis</h3>
-                <p>
-                    Praesent mattis eget augue ac elementum. Maecenas vel ante ut enim mollis accumsan. Vestibulum vel
-                    eros at mi suscipit feugiat. Sed tortor purus, vulputate et eros a, rhoncus laoreet orci. Proin sapien
-                    neque, commodo at porta in, vehicula eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et
-                    ultrices posuere cubilia Curae; Curabitur porta vulputate augue, at sollicitudin nisl molestie eget.
-                </p>
-                <p>
-                    Nunc sollicitudin, nunc id accumsan semper, libero nunc aliquet nulla, nec pretium ipsum risus ac
-                    neque. Morbi eu facilisis purus. Quisque mi tortor, cursus in nulla ut, laoreet commodo quam.
-                    Pellentesque et ornare sapien. In ac est tempus urna tincidunt finibus. Integer erat ipsum, tristique
-                    ac lobortis sit amet, dapibus sit amet purus. Nam sed lorem nisi. Vestibulum ultrices tincidunt turpis,
-                    sit amet fringilla odio scelerisque non.
+                    {{product?.observaciones | lowercase}}
                 </p>
             </div>
         </div>
@@ -63,7 +42,7 @@
         <div class="product-tabs__pane" id="tab-reviews" [ngClass]="{'product-tabs__pane--active': tab === 'reviews'}">
             <div class="reviews-view">
                 <div class="reviews-view__list">
-                    <h3 class="reviews-view__header">Customer Reviews</h3>
+                    <h3 class="reviews-view__header">Comentarios de Clientes</h3>
 
                     <div class="reviews-list">
                         <ol class="reviews-list__content">
@@ -88,35 +67,35 @@
                 </div>
 
                 <form class="reviews-view__form" novalidate>
-                    <h3 class="reviews-view__header">Write A Review</h3>
+                    <h3 class="reviews-view__header">Escribe un comentario</h3>
                     <div class="row">
                         <div class="col-12 col-lg-9 col-xl-8">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    <label for="review-stars">Review Stars</label>
+                                    <label for="review-stars">Estrellas de Revisión</label>
                                     <select id="review-stars" class="form-control">
-                                        <option>5 Stars Rating</option>
-                                        <option>4 Stars Rating</option>
-                                        <option>3 Stars Rating</option>
-                                        <option>2 Stars Rating</option>
-                                        <option>1 Stars Rating</option>
+                                        <option>5 Estrellas</option>
+                                        <option>4 Estrellas</option>
+                                        <option>3 Estrellas</option>
+                                        <option>2 Estrellas</option>
+                                        <option>1 Estrellas</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="review-author">Your Name</label>
+                                    <label for="review-author">Tu Nombre</label>
                                     <input type="text" class="form-control" id="review-author" placeholder="Your Name">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="review-email">Email Address</label>
+                                    <label for="review-email">Correo Electrónico</label>
                                     <input type="text" class="form-control" id="review-email" placeholder="Email Address">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="review-text">Your Review</label>
+                                <label for="review-text">Tu Comentario</label>
                                 <textarea class="form-control" id="review-text" rows="6"></textarea>
                             </div>
                             <div class="form-group mb-0">
-                                <button type="submit" class="btn btn-primary btn-lg">Post Your Review</button>
+                                <button type="submit" class="btn btn-primary btn-lg">Publica tu Comentario</button>
                             </div>
                         </div>
                     </div>

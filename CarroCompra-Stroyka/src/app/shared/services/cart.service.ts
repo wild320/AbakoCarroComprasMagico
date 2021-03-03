@@ -1,9 +1,12 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Product } from '../interfaces/product';
+// import { Product } from '../interfaces/product';
 import { CartItem } from '../interfaces/cart-item';
 import { BehaviorSubject, Observable, Subject, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
+
+// modelos
+import { Item } from 'src/data/modelos/articulos/Items';
 
 interface CartTotal {
     title: string;
@@ -36,7 +39,7 @@ export class CartService {
     private subtotalSubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.subtotal);
     private totalsSubject$: BehaviorSubject<CartTotal[]> = new BehaviorSubject(this.data.totals);
     private totalSubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.total);
-    private onAddingSubject$: Subject<Product> = new Subject();
+    private onAddingSubject$: Subject<Item> = new Subject();
 
     get items(): ReadonlyArray<CartItem> {
         return this.data.items;
@@ -52,7 +55,7 @@ export class CartService {
     readonly totals$: Observable<CartTotal[]> = this.totalsSubject$.asObservable();
     readonly total$: Observable<number> = this.totalSubject$.asObservable();
 
-    readonly onAdding$: Observable<Product> = this.onAddingSubject$.asObservable();
+    readonly onAdding$: Observable<Item> = this.onAddingSubject$.asObservable();
 
     constructor(
         @Inject(PLATFORM_ID)
@@ -64,7 +67,7 @@ export class CartService {
         }
     }
 
-    add(product: Product, quantity: number, options: {name: string; value: string}[] = []): Observable<CartItem> {
+    add(product: Item, quantity: number, options: {name: string; value: string}[] = []): Observable<CartItem> {
         // timer only for demo
         return timer(1000).pipe(map(() => {
             this.onAddingSubject$.next(product);

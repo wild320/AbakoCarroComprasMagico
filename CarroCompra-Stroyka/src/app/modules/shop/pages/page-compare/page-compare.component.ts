@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CompareService } from '../../../../shared/services/compare.service';
 import { CartService } from '../../../../shared/services/cart.service';
-import { Product } from '../../../../shared/interfaces/product';
+// import { Product } from '../../../../shared/interfaces/product';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { RootService } from '../../../../shared/services/root.service';
+
+// modelos
+import { Item } from '../../../../../data/modelos/articulos/Items';
 
 interface Feature {
     name: string;
@@ -19,10 +22,10 @@ interface Feature {
 export class PageCompareComponent implements OnInit, OnDestroy {
     private destroy$: Subject<void> = new Subject();
 
-    products: Product[] = [];
+    products: Item[] = [];
     features: Feature[] = [];
-    addedToCartProducts: Product[] = [];
-    removedProducts: Product[] = [];
+    addedToCartProducts: Item[] = [];
+    removedProducts: Item[] = [];
 
     constructor(
         public root: RootService,
@@ -45,7 +48,7 @@ export class PageCompareComponent implements OnInit, OnDestroy {
                     features.push(feature);
                 }
 
-                feature.values[product.id] = productAttribute.values.map(x => x.name).join(', ');
+                // feature.values[product.id] = productAttribute.values.map(x => x.name).join(', ');
             }));
 
             this.products = products;
@@ -58,7 +61,7 @@ export class PageCompareComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    addToCart(product: Product): void {
+    addToCart(product: Item): void {
         if (this.addedToCartProducts.includes(product)) {
             return;
         }
@@ -71,7 +74,7 @@ export class PageCompareComponent implements OnInit, OnDestroy {
         });
     }
 
-    remove(product: Product): void {
+    remove(product: Item): void {
         if (this.removedProducts.includes(product)) {
             return;
         }

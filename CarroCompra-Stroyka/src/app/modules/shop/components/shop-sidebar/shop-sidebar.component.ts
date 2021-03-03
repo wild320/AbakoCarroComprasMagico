@@ -1,11 +1,10 @@
 import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { Product } from '../../../../shared/interfaces/product';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { fromMatchMedia } from '../../../../shared/functions/rxjs/fromMatchMedia';
 import { isPlatformBrowser } from '@angular/common';
-import { ShopService } from '../../../../shared/api/shop.service';
+
 
 @Component({
     selector: 'app-shop-sidebar',
@@ -21,18 +20,15 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
     @Input() offcanvas: 'always'|'mobile' = 'mobile';
 
     destroy$: Subject<void> = new Subject<void>();
-    bestsellers$: Observable<Product[]>;
     isOpen = false;
 
     constructor(
-        private shop: ShopService,
         public sidebar: ShopSidebarService,
         @Inject(PLATFORM_ID)
         private platformId: any
     ) { }
 
     ngOnInit(): void {
-        this.bestsellers$ = this.shop.getBestsellers().pipe(map(x => x.slice(0, 5)));
 
         this.sidebar.isOpen$.pipe(
             takeUntil(this.destroy$)

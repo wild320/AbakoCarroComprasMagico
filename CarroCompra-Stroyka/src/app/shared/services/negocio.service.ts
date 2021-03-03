@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-
 // Contantes
 import { Cconfiguracion } from '../../../data/contantes/cConfiguracion';
 

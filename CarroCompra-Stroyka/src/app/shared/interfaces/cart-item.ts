@@ -1,7 +1,10 @@
 import { Product } from './product';
 
+// modelos
+import { Item } from 'src/data/modelos/articulos/Items';
+
 export interface CartItem {
-    product: Product;
+    product: Item;
     options: {
         name: string;
         value: string;

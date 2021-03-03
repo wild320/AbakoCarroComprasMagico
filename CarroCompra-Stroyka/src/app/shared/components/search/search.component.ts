@@ -11,7 +11,6 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { Product } from '../../interfaces/product';
 import { RootService } from '../../services/root.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, map, switchMap, takeUntil, throttleTime } from 'rxjs/operators';
@@ -20,6 +19,9 @@ import { ShopService } from '../../api/shop.service';
 import { Category } from '../../interfaces/category';
 import { DOCUMENT } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+
+// modelos
+import { Item } from '../../../../data/modelos/articulos/Items';
 
 export type SearchLocation = 'header' | 'indicator' | 'mobile-header';
 
@@ -40,9 +42,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     categories: CategoryWithDepth[] = [];
 
-    suggestedProducts: Product[] = [];
+    suggestedProducts: Item[] = [];
 
-    addedToCartProducts: Product[] = [];
+    addedToCartProducts: Item[] = [];
 
     @Input() location: SearchLocation;
 
@@ -163,7 +165,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         return '&nbsp;'.repeat(category.depth * 4) + category.name;
     }
 
-    addToCart(product: Product): void {
+    addToCart(product: Item): void {
         if (this.addedToCartProducts.includes(product)) {
             return;
         }

@@ -17,17 +17,12 @@ export class RootService {
         return `/shop/catalog`;
     }
 
-    product(product: Partial<Product>): string {
+    product(Id: number): string {
+
         const basePath = '/shop/products';
 
-        if ('slug' in product) {
-            return `${basePath}/${product.slug}`;
-        }
-        if ('id' in product) {
-            return `${basePath}/${product.id}`;
-        }
+        return `${basePath}/${Id}`;
 
-        throw Error('Provide product with "slug" or "id".');
     }
 
     brand(brand: Partial<Brand>): string {

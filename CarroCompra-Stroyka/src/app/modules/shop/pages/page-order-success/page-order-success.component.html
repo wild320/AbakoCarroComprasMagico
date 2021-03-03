@@ -45,13 +45,13 @@
                         <tr *ngFor="let item of order.items">
                             <td class="order-list__column-image">
                                 <div class="product-image">
-                                    <a [routerLink]="root.product(item)" class="product-image__body">
+                                    <a [routerLink]="root.product(item.id)" class="product-image__body">
                                         <img class="product-image__img" [src]="item.imagen" alt="">
                                     </a>
                                 </div>
                             </td>
                             <td class="order-list__column-product">
-                                <a [routerLink]="root.product(item)">{{ item.nombre }}</a>
+                                <a [routerLink]="root.product(item.id)">{{ item.nombre }}</a>
                                 <div *ngIf="item.options?.length > 0" class="order-list__options">
                                     <ul class="order-list__options-list">
                                         <li *ngFor="let option of item.options" class="order-list__options-item">

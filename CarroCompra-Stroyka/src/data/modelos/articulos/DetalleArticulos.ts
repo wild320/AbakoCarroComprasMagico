@@ -1,4 +1,4 @@
-import {item} from './Items';
+import {Item} from './Items';
 import {Filters} from './filters';
 import {filterValues} from './filterValues';
 
@@ -11,7 +11,7 @@ export class Products {
     from: number;
     to: number;
     filters: Filters[];
-    items: item[];
+    items: Item[];
     filterValues: filterValues[];
 
 }

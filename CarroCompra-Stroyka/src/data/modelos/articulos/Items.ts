@@ -1,5 +1,5 @@
 
-export class item {
+export class Item {
     id: number;
     name: string;
     availability: string;
@@ -21,6 +21,9 @@ export class item {
     marca: string;
     tieneDescuento: string;
     color: string;
+    colorhx: string;
+    caracteristicas: string;
+    observaciones: string;
     attributes: Array <{
         name: string;
         slug: string;

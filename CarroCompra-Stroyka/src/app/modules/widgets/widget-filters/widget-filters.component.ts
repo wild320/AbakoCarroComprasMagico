@@ -23,6 +23,7 @@ import { ArticulosService } from '../../../shared/services/articulos.service';
 import { Products} from '../../../../data/modelos/articulos/DetalleArticulos';
 import { Filters } from '../../../../data/modelos/articulos/filters';
 
+
 interface FormFilterValues {
     [filterSlug: string]: [number, number] | {[itemSlug: string]: boolean} | string;
 }
@@ -40,6 +41,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     filters: Filters[];
     filtersForm: FormGroup;
+    filtrosValores: SerializedFilterValues = {};
     isPlatformBrowser = isPlatformBrowser(this.platformId);
     ArticulosSuscribe$: any;
     rightToLeft = false;
@@ -53,26 +55,99 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         public pageCategory: PageCategoryService,
         public articulossvc: ArticulosService,
     ) {
+
         this.rightToLeft = this.direction.isRTL();
 
     }
 
     ngOnInit(): void {
 
-        // recuperar todos los articulos
-        this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
+        // recuperar todos los filtros
+        this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().subscribe(filtros => {
 
-            this.filters = this.articulossvc.getArticulos().products.filters;
+            this.filters = this.articulossvc.getFiltrosCarro();
 
-            this.filtersForm = this.makeFiltersForm(this.articulossvc.getArticulos().products.filters);
+            this.filtersForm = this.makeFiltersForm(this.articulossvc.getFiltrosCarro());
 
-            this.descuento.setValue('Any');
-
-            this.filtersForm.valueChanges.subscribe(formValues => {
-                this.articulossvc.SetFiltrarArticulos (this.convertFormToFilterValues(this.filters, formValues));
-            });
+            this.UpdateValuesSeleted();
 
         });
+
+    }
+
+    ChangeForm(values: any ) {
+
+        this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
+        this.articulossvc.SetFiltrarArticulos (this.filtrosValores);
+    }
+
+    UpdateValuesSeleted(){
+
+        const formValues = {};
+        let filtrosMarcasSeleccionadas = [];
+        let filtrosColorSeleccionados = [];
+
+        // si tiene filtro de marca lo guarda en un array
+        if (this.filtrosValores.brand) {
+            filtrosMarcasSeleccionadas = this.filtrosValores.brand.split(',');
+        }
+
+        // si tiene filtro de color lo guarda en un array
+        if (this.filtrosValores.color) {
+            filtrosColorSeleccionados = this.filtrosValores.color.split(',');
+        }
+
+        this.filters.forEach(filter => {
+            switch (filter.type) {
+                case 'range':
+                    if (this.filtrosValores.price) {
+                        formValues[filter.slug] = this.filtrosValores.price.split('-').map(pr => Number(pr));
+                    }else{
+                        formValues[filter.slug] = [filter.min, filter.max];
+                    }
+                    break;
+                case 'check':
+
+                    formValues[filter.slug] = {};
+
+                    filter.items.forEach(item => {
+
+                        if ( filtrosMarcasSeleccionadas.includes(item.slug)){
+                            formValues[filter.slug][item.slug] = true;
+                        }else{
+                            formValues[filter.slug][item.slug] = false;
+                        }
+
+                    });
+                    break;
+
+                case 'color':
+
+                    formValues[filter.slug] = {};
+
+                    filter.items.forEach(item => {
+
+                        if ( filtrosColorSeleccionados.includes(item.slug)){
+                            formValues[filter.slug][item.slug] = true;
+                        }else{
+                            formValues[filter.slug][item.slug] = false;
+                        }
+
+                    });
+                    break;
+
+                case 'radio':
+                    if (this.filtrosValores.discount) {
+                        formValues[filter.slug] = this.filtrosValores.discount;
+                    }else{
+                        formValues[filter.slug] = filter.items[0].slug;
+                    }
+
+                    break;
+            }
+        });
+
+        this.filtersForm.setValue(formValues);
 
     }
 
@@ -171,6 +246,10 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     }
 
     reset(): void {
+
+        this.filtrosValores = {};
+        this.articulossvc.SetFiltrarArticulos (this.filtrosValores);
+
         const formValues = {};
 
         this.filters.forEach(filter => {
@@ -196,4 +275,8 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     }
 
     get descuento() { return this.filtersForm.get('discount'); }
+    get color() { return this.filtersForm.get('color'); }
+    get marca() { return this.filtersForm.get('brand'); }
+    get precio() { return this.filtersForm.get('price'); }
+
 }

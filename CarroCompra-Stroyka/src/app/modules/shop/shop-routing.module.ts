@@ -9,7 +9,6 @@ import { PageTrackOrderComponent } from './pages/page-track-order/page-track-ord
 import { CheckoutGuard } from './guards/checkout.guard';
 import { PageProductComponent } from './pages/page-product/page-product.component';
 import { ProductsListResolverService } from './resolvers/products-list-resolver.service';
-import { ProductResolverService } from './resolvers/product-resolver.service';
 import { PageOrderSuccessComponent } from './pages/page-order-success/page-order-success.component';
 
 const categoryPageData: Data = {
@@ -44,9 +43,6 @@ const routes: Routes = [
             // It does not matter if the value of the 'layout' parameter is not 'sidebar'.
             // For LTR scripts "start" is "left" and "end" is "right".
             sidebarPosition: 'start'
-        },
-        resolve: {
-            product: ProductResolverService
         },
     },
     {
@@ -135,10 +131,7 @@ const routes: Routes = [
             layout: 'standard',
             sidebarPosition: 'start',
             productSlug: 'brandix-screwdriver-screw1500acc',
-        },
-        resolve: {
-            product: ProductResolverService
-        },
+        }
     },
     {
         path: 'product-columnar',
@@ -146,9 +139,6 @@ const routes: Routes = [
         data: {
             layout: 'columnar',
             productSlug: 'brandix-screwdriver-screw1500acc',
-        },
-        resolve: {
-            product: ProductResolverService
         },
     },
     {
@@ -158,9 +148,6 @@ const routes: Routes = [
             layout: 'sidebar',
             sidebarPosition: 'start',
             productSlug: 'brandix-screwdriver-screw1500acc',
-        },
-        resolve: {
-            product: ProductResolverService
         },
     },
     // --- END ---

@@ -1,10 +1,13 @@
-import { Component, Inject, Input, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Input, PLATFORM_ID , OnInit} from '@angular/core';
 import { Product } from '../../interfaces/product';
 import { FormControl } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { CompareService } from '../../services/compare.service';
 import { RootService } from '../../services/root.service';
+
+// modelos
+import { Item } from '../../../../data/modelos/articulos/Items';
 
 export type ProductLayout = 'standard' | 'sidebar' | 'columnar' | 'quickview';
 
@@ -13,16 +16,17 @@ export type ProductLayout = 'standard' | 'sidebar' | 'columnar' | 'quickview';
     templateUrl: './product.component.html',
     styleUrls: ['./product.component.scss']
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
     @Input() layout: ProductLayout;
 
-    @Input() product: Product;
+    @Input() product: Item;
 
     quantity: FormControl = new FormControl(1);
 
     addingToCart = false;
     addingToWishlist = false;
     addingToCompare = false;
+    url: string;
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
@@ -30,7 +34,9 @@ export class ProductComponent {
         private wishlist: WishlistService,
         private compare: CompareService,
         public root: RootService,
-    ) { }
+    ) {  }
+
+    ngOnInit(): void {  }
 
     addToCart(): void {
         if (!this.addingToCart && this.product && this.quantity.value > 0) {

@@ -29,6 +29,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
     viewMode: 'grid'|'grid-with-features'|'list' = 'grid';
     sidebarPosition: 'start'|'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
     breadcrumbs: Link[] = [];
+    ArticulosSuscribe$: any;
     pageHeader: string;
 
     constructor(
@@ -43,6 +44,9 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
+        // Recuperar los artoculos mas vendidos
+        this.articulossvc.RecuperarArticulosMasVendidos();
+
         this.route.paramMap.subscribe(data => {
 
             if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
@@ -51,10 +55,10 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
                 this.articulossvc.RecuperarArticulos(this.getCategorySlug());
             }
 
-            this.articulossvc.getArticulos$().subscribe(articulos => {
+            this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
 
-                // iniciarlizar SetBreadcrumbs
-                this.SetBreadcrumbs(this.articulossvc.getArticulos().breadcrumbs);
+                // inicializar SetBreadcrumbs
+                this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticulos().breadcrumbs)));
 
                 // titulo o marca seleccionado
                 this.pageHeader = this.articulossvc.getArticulos().seleccion;
@@ -96,9 +100,8 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     }
 
-
-
     SetBreadcrumbs(breadcrumbs: any[]){
+
 
         this.breadcrumbs = this.shop.breadcrumbs;
 
@@ -136,6 +139,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.ArticulosSuscribe$.unsubscribe();
     }
 
     updateUrl(): void {

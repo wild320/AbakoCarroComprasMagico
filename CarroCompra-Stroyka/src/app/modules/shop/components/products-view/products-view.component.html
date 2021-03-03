@@ -40,8 +40,8 @@
                     </div>
                 </div>
                 <div class="view-options__legend">
-                    Viendo {{ this.articulossvc.AtributosFiltros.from }}–{{ this.articulossvc.AtributosFiltros.to }}
-                    de {{ this.articulossvc.AtributosFiltros.total }}
+                    Viendo {{ this.articulossvc.getAtributosFiltros().from }}–{{ this.articulossvc.getAtributosFiltros().to }}
+                    de {{ this.articulossvc.getAtributosFiltros().total }}
                     resultados
                 </div>
                 <div class="view-options__divider"></div>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="products-view__pagination">
-            <app-pagination formControlName="page" [siblings]="2" [total]="this.articulossvc.AtributosFiltros.pages"></app-pagination>
+            <app-pagination formControlName="page" [siblings]="2" [total]="this.articulossvc.getAtributosFiltros().pages"></app-pagination>
         </div>
     </div>
 

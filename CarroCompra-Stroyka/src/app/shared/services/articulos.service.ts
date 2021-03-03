@@ -19,7 +19,14 @@ import { NavigationLink } from '../../shared/interfaces/navigation-link';
 // Modelos
 import {ArticulosCarroComprasResponse } from '../../../data/modelos/articulos/Articulos';
 import { Products} from '../../../data/modelos/articulos/DetalleArticulos';
-import { Filters} from '../../../data/modelos/articulos/Filters';
+import { ItemsFiltros} from '../../../data/modelos/articulos/ItemsFiltros';
+import { Filters } from '../../../data/modelos/articulos/Filters';
+import {Item} from '../../../data/modelos/articulos/Items';
+import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSeleccionado';
+
+// constantes
+import {cFiltros} from '../../../data/contantes/Cfiltros';
+
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +39,21 @@ export class ArticulosService {
   private Articulos: ArticulosCarroComprasResponse;
   private ArticulosSeleccionados$ = new Subject<Products>();
   private ArticulosSeleccionados: Products;
-  private Articulosfiltrados: Products;
-  public AtributosFiltros = new Products();
+  private Articulosfiltrados = new Products();
+  private AtributosFiltros = new Products();
   private AtributosFiltros$ = new Subject<Products>();
+  private AtributosMasVendidos: Item[];
+  private AtributosMasVendidos$ = new Subject<Item[]>();
+  private seleccionado = new ArticuloSeleccionado();
+  private ArticulosDetalle: ArticuloSeleccionado;
+  private ArticulosDetalle$ = new Subject<ArticuloSeleccionado>();
+  private FiltrosCarro: Filters[];
+  private FiltrosCarro$ = new Subject<Filters[]>();
   private IdempresaCLienteLogueada: number;
   private isfiltrado = false ;
+  private FiltroMarca: ItemsFiltros[];
+  private FiltroColores: ItemsFiltros[];
+  private FiltroDescuento: ItemsFiltros[];
 
   // isLoading
   public isLoadingState = false;
@@ -68,7 +85,7 @@ export class ArticulosService {
   setAtributosFiltros(Seleccion: Products){
 
     this.setAtributos$(Seleccion);
-    this.FiltrarArticulosSeleccion();
+    this.ArticulosSeleccionPagina();
 
   }
 
@@ -83,7 +100,74 @@ export class ArticulosService {
     return this.AtributosFiltros$.asObservable();
   }
 
-  private FiltrarArticulosSeleccion(){
+  getArticulosMasVendidos(): Item[] {
+    return this.AtributosMasVendidos;
+  }
+
+  setArticulosMasVendidos$(newValue){
+
+    this.AtributosMasVendidos = newValue;
+    this.AtributosMasVendidos$.next(newValue);
+  }
+
+  getArticulosMasVendidos$(): Observable<Item[]> {
+    return this.AtributosMasVendidos$.asObservable();
+  }
+
+  getArticuloDetalle(): ArticuloSeleccionado {
+    return this.ArticulosDetalle;
+  }
+
+  setArticuloDetalle$(newValue){
+
+    this.ArticulosDetalle = newValue;
+    this.ArticulosDetalle$.next(newValue);
+  }
+
+  getArticuloDetalle$(): Observable<ArticuloSeleccionado> {
+    return this.ArticulosDetalle$.asObservable();
+  }
+
+  SetSeleccionarArticuloDetalle(idArticulo: number, SiempreRecuperar: boolean ){
+
+    // Si el articulo no existe aun debe consultarlo a la api
+    if (this.getArticulos()?.products === undefined || SiempreRecuperar){
+
+      this.RecuperarArticuloDetalle(idArticulo);
+
+    }else{
+
+      const index = this.getArticulos().products.items.findIndex(element =>  element.id ===  idArticulo);
+
+      this.seleccionado.item = this.getArticulos().products.items[index];
+      this.seleccionado.breadcrumbs = this.getArticulos().breadcrumbs;
+
+      this.setArticuloDetalle$(this.seleccionado);
+
+    }
+
+  }
+
+  setFitrosCarro$(newValue){
+
+   this.FiltrosCarro = newValue;
+   this.FiltrosCarro$.next(newValue);
+
+  }
+
+  getFiltrosCarro$(): Observable<Filters[]> {
+   return this.FiltrosCarro$.asObservable();
+  }
+
+  getFiltrosCarro(): Filters[] {
+    return this.FiltrosCarro;
+  }
+
+  getAtributosFiltros(): Products {
+    return this.AtributosFiltros;
+  }
+
+  private ArticulosSeleccionPagina(){
 
     const inicial = this.AtributosFiltros.from - 1 ;
     const final = this.AtributosFiltros.to;
@@ -101,7 +185,6 @@ export class ArticulosService {
 
   }
 
-  // set functions
   setIsLoading(value: boolean): void {
     this.isLoadingState = value;
     this.isLoadingSource.next(value);
@@ -130,23 +213,14 @@ export class ArticulosService {
 
   SetFiltrarArticulos(filtros: SerializedFilterValues){
 
-    this.Articulosfiltrados = JSON.parse(JSON.stringify(this.Articulos.products));
+    this.Articulosfiltrados = JSON.parse(JSON.stringify(this.getArticulos().products));
     this.isfiltrado = false;
+    const tipoFiltro = [];
 
-    if (filtros.brand !== undefined) {
-      console.log (filtros.brand);
-    }
-
-    if (filtros.color !== undefined) {
-      console.log (filtros.color);
-    }
-
-    if (filtros.discount !== undefined) {
-      console.log (filtros.discount);
-
-    }
-
+     // Filtrar por precio;
     if (filtros.price !== undefined) {
+
+      tipoFiltro.push( cFiltros.Precio );
 
       const precioInicial = parseFloat (filtros.price.split('-')[0]);
       const precioFinal = parseFloat (filtros.price.split('-')[1]);
@@ -161,6 +235,58 @@ export class ArticulosService {
 
     }
 
+    // filtra por las marcas
+    if (filtros.brand !== undefined) {
+
+      tipoFiltro.push( cFiltros.Marca);
+
+      const filtrosMarcasSeleccionadas = filtros.brand.split(',');
+
+      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((marca) => {
+
+        if ( filtrosMarcasSeleccionadas.includes(marca.marca)){
+          return (marca);
+        }
+
+        this.isfiltrado = true;
+
+      });
+
+    }
+
+    // filtrar por descuentos
+    if (filtros.discount !== undefined && filtros.discount.length)  {
+
+      tipoFiltro.push( cFiltros.Descuento );
+
+      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulos) => {
+        if (articulos.tieneDescuento === filtros.discount){
+          return articulos;
+        }
+      });
+
+      this.isfiltrado = true;
+
+    }
+
+    // filtrar por los colores
+    if (filtros.color !== undefined) {
+
+      tipoFiltro.push( cFiltros.Color );
+
+      const filtrosColoresSeleccionadas = filtros.color.split(',');
+
+      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((color) => {
+
+        if ( filtrosColoresSeleccionadas.includes(color.color)){
+          return (color);
+        }
+
+        this.isfiltrado = true;
+
+      });
+    }
+
     // cambiar los filtros
     const total = this.Articulosfiltrados.items.length;
 
@@ -171,23 +297,95 @@ export class ArticulosService {
     this.Articulosfiltrados.from = 1;
     this.Articulosfiltrados.to = this.Articulos.products.limit;
 
-    console.log (this.Articulosfiltrados);
-
-    this.SetRecalcularFiltros();
+    this.SetRecalcularFiltros(tipoFiltro);
     this.setAtributos$(this.Articulosfiltrados);
-    this.FiltrarArticulosSeleccion();
+    this.ArticulosSeleccionPagina();
 
   }
 
-  SetRecalcularFiltros(){
+  SetRecalcularFiltros(TipoFiltro: any ){
 
-    const filtros = this.Articulosfiltrados.items.reduce( (contador, item) => {
+    this.FiltroColores = [];
+    this.FiltroMarca = [];
+    this.FiltroDescuento = [];
+    let indexfiltros;
 
-        return contador + 1;
-
+    // Total Registros
+    const totalDescuentos = this.Articulosfiltrados.items.reduce( (cont, item) => {
+      return cont += 1;
     }, 0);
 
-    console.log (filtros);
+    // Agregar total descuento
+    this.FiltroDescuento.push(Object.assign({id: 0 , name: 'Todos' , slug: 'Todos', count: totalDescuentos }));
+
+    // armas de nuevo los objectos de los filtros
+    this.Articulosfiltrados.items.forEach(articulo => {
+
+      // Armar los item filtro marca
+      const indexMarca = this.FiltroMarca.findIndex(element =>  element.name ===  articulo.marca);
+
+      if  (indexMarca >= 0) {
+        this.FiltroMarca[indexMarca].count += 1;
+      }else{
+        this.FiltroMarca.push(Object.assign({id: articulo.idMarca , name: articulo.marca  , slug: articulo.marca ,
+          count: 1 }));
+      }
+
+      // Armar los item filtro colores
+      const indexColores = this.FiltroColores.findIndex(element =>  element.name ===  articulo.color);
+
+      if  (indexColores >= 0) {
+        this.FiltroColores[indexColores].count += 1;
+      }else{
+        this.FiltroColores.push(Object.assign({id: 0 , name: articulo.color , slug: articulo.color ,
+          count: 1 , color: articulo.colorhx}));
+      }
+
+      // Armar los item filtro descuento
+      const indexdesc = this.FiltroDescuento.findIndex(element =>  element.name ===  articulo.tieneDescuento);
+
+      if  (indexdesc >= 0) {
+        this.FiltroDescuento[indexdesc].count += 1;
+      }else{
+        this.FiltroDescuento.push(Object.assign({id: 0 , name: articulo.tieneDescuento , slug: articulo.tieneDescuento , count: 1 }));
+      }
+
+    });
+
+    // asignar los objecto a los articulos filtros
+    // marcas
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Marca);
+
+    if (TipoFiltro.findIndex(ft => ft === cFiltros.Marca) === -1) {
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroMarca;
+    }else{
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
+        element.slug ===  cFiltros.Marca).items;
+    }
+
+    // Colores
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Color);
+
+    if (TipoFiltro.findIndex(ft => ft === cFiltros.Color) === -1) {
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroColores;
+    }else{
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
+        element.slug ===  cFiltros.Color).items;
+    }
+
+    // Descuentos
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Descuento);
+
+    if (TipoFiltro.findIndex(ft => ft === cFiltros.Descuento) === -1) {
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroDescuento;
+    }else{
+      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
+        element.slug ===  cFiltros.Descuento).items;
+    }
+
+
+    // console.log ('filtros normales', this.Articulosfiltrados.filters);
+    this.setFitrosCarro$(this.Articulosfiltrados.filters);
 
   }
 
@@ -250,13 +448,15 @@ export class ArticulosService {
         CServicios.ApiCarroCompras +
         CServicios.ServicioRecuperarArticulos;
 
+
     if (!this.usuariosvc.Idempresa ) {
-      return;
+      this.usuariosvc.Idempresa = 0;
     }
 
     const TipoFiltro  = slug.split('|')[0];
     const Id          = this.GetIdFiltro(TipoFiltro, slug);
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+
 
     this.setIsLoading(true);
 
@@ -264,7 +464,11 @@ export class ArticulosService {
         .toPromise()
         .then((config: any) => {
 
-          this.setArticulos$(JSON.parse(config));
+          this.setFitrosCarro$(JSON.parse(config).products.filters);
+
+          const articulos = JSON.parse(config);
+
+          this.setArticulos$(articulos);
           this.setIsLoading(false);
 
         })
@@ -277,5 +481,72 @@ export class ArticulosService {
 
   }
 
+  public RecuperarArticulosMasVendidos(){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioRecuperarArticulosMasVendidos;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa  = 0;
+    }
+
+    const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}`, { responseType: 'text' })
+        .toPromise()
+        .then((art: any) => {
+
+          const {items} = JSON.parse(art);
+          this.setArticulosMasVendidos$(items);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
+
+  public RecuperarArticuloDetalle(Id: number){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioRecuperarArticulosDetalle;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa = 0;
+    }
+
+    const IdEmpresa  = this.usuariosvc.Idempresa.toString();
+    const IdArticulo = Id.toString();
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${IdArticulo}`, { responseType: 'text' })
+        .toPromise()
+        .then((art: any) => {
+
+          const {articulo} = JSON.parse(art);
+          const {breadcrumbs} = JSON.parse(art);
+
+          this.seleccionado.item = articulo;
+          this.seleccionado.breadcrumbs = breadcrumbs;
+
+          this.setArticuloDetalle$(this.seleccionado);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
 
 }

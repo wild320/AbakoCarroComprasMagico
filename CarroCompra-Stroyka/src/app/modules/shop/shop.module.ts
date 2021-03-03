@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 // modules (angular)
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
 
 // modules (third-party)
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -57,7 +58,9 @@ import { PageOrderSuccessComponent } from './pages/page-order-success/page-order
         BlocksModule,
         SharedModule,
         ShopRoutingModule,
-        WidgetsModule
+        WidgetsModule,
+
+        MatBadgeModule
     ]
 })
 export class ShopModule { }

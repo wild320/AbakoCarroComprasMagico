@@ -17,13 +17,13 @@
     </div>
 
     <div class="product-card__image product-image">
-        <a appClick [routerLink]="root.product(product)" *ngIf="product.images?.length" class="product-image__body">
+        <a appClick [routerLink]="root.product(product.id)" *ngIf="product.images?.length" class="product-image__body">
             <img class="product-image__img" [src]="product.images[0]" alt="">
         </a>
     </div>
     <div class="product-card__info">
         <div class="product-card__name">
-            <a appClick [routerLink]="root.product(product)">{{ product.name | titlecase  }}</a>
+            <a appClick [routerLink]="root.product(product.id)">{{ product.name | titlecase  }}</a>
         </div>
         <div class="product-card__rating">
             <app-rating [value]="product.rating"></app-rating>
@@ -42,6 +42,7 @@
         <div class="product-card__availability">
             Disponible:
             <span *ngIf="product.availability === 'Disponible'" class="text-success">Si</span>
+            <span *ngIf="product.availability === 'No Disponible'" class="text-danger">No</span>
         </div>
         <div class="product-card__prices">
             <ng-container *ngIf="product.compareAtPrice">

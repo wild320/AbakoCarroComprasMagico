@@ -58,7 +58,25 @@ export class ShopService {
 
         this.inicializarBreadcrumbs();
 
+        breadcrumbs.forEach((br) =>
+
+            br.url = `${this.root.shop()}/${br.url}`
+
+        );
+
         this.breadcrumbs.push(...breadcrumbs);
+
+    }
+
+    public SetBreadcrumb(alabel: string, aurl: string) {
+
+        if (aurl.length === 0) {
+            aurl = '';
+        }else{
+            aurl = `${this.root.shop()}/${aurl}`;
+        }
+
+        this.breadcrumbs.push({label: alabel, url: aurl});
 
     }
 
@@ -132,21 +150,6 @@ export class ShopService {
 
         return getProductsList(categorySlug, options);
 
-    }
-
-    getProduct(productSlug: string): Observable<Product> {
-        /**
-         * This is what your API endpoint might look like:
-         *
-         * https://example.com/api/products/electric-planer-brandix-kl370090g-300-watts.json
-         *
-         * where:
-         * - electric-planer-brandix-kl370090g-300-watts = productSlug
-         */
-        // return this.http.get<Product>(`https://example.com/api/products/${productSlug}.json`);
-
-        // This is for demonstration purposes only. Remove it and use the code above.
-        return getProduct(productSlug);
     }
 
     /**

@@ -24,7 +24,7 @@
                         <a
                             *ngIf="item.product.images?.length"
                             class="product-image__body"
-                            [routerLink]="root.product(item.product)"
+                            [routerLink]="root.product(item.product.id)"
                             (click)="closeMenu.emit()"
                         >
                             <img class="product-image__img" [src]="item.product.images[0]" alt="">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="dropcart__product-info">
                         <div class="dropcart__product-name">
-                            <a [routerLink]="root.product(item.product)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
+                            <a [routerLink]="root.product(item.product.id)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
                         </div>
 
                         <ul *ngIf="item.options.length" class="dropcart__product-options">

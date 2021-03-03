@@ -1,19 +1,15 @@
-<app-page-header [breadcrumbs]="[
-    {label: 'Home',         url: '/'},
-    {label: 'Screwdrivers', url: '/catalog'},
-    {label: product?.name,  url: ''}
-]"></app-page-header>
+<app-page-header [breadcrumbs]="breadcrumbs"></app-page-header>
 
 <ng-container *ngIf="layout !== 'sidebar'">
     <div class="block">
         <div class="container">
             <app-product [product]="product" [layout]="layout"></app-product>
 
-            <app-product-tabs></app-product-tabs>
+            <app-product-tabs [product]="product"></app-product-tabs>
         </div>
     </div>
 
-    <app-block-products-carousel header="Related Products" [products]="relatedProducts$|async" [rows]="1" layout="grid-5"></app-block-products-carousel>
+    <app-block-products-carousel header="Productos Relacionados" [products]="relatedProducts$|async" [rows]="1" layout="grid-5"></app-block-products-carousel>
 </ng-container>
 
 <ng-container *ngIf="layout === 'sidebar'">

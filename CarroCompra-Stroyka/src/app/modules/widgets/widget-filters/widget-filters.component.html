@@ -8,16 +8,17 @@
         <div *ngFor="let filter of filters; trackBy: trackBySlug" class="widget-filters__item">
             <div class="filter filter--opened" appCollapseItem="filter--opened" #collapse="appCollapseItem">
                 <button type="button" class="filter__title" (click)="collapse.toggle()">
-                    {{ filter.name }}
+                    {{ filter.name }} 
                     <app-icon class="filter__arrow" name="arrow-rounded-down-12x7" size="12x7"></app-icon>
                 </button>
                 <div class="filter__body" appCollapseContent>
                     <div class="filter__container">
-                        <div *ngIf="filter.type === 'categories'" class="filter-categories" [ngClass]="{'filter-categories--root': filter.root}">
+
+                        <div *ngIf="filter.type === 'categories'" class="filter-categories" [ngClass]="{'filter-categories--root': filter.root} ">
                             <ul class="filter-categories__list">
                                 <li *ngIf="!filter.root" class="filter-categories__item filter-categories__item--parent">
                                     <app-icon class="filter-categories__arrow"  name="arrow-rounded-left-6x9" size="6x9"></app-icon>
-                                    <a [routerLink]="this.root.shop()">Todos los productos</a>
+                                    <a [routerLink]="this.root.shop()">Todos los productos </a>
                                 </li>
                                 <li *ngFor="let item of filter.items; trackBy: trackBySlug" class="filter-categories__item filter-categories__item--{{ item.type }}">
                                     <app-icon *ngIf="item.type == 'parent'" class="filter-categories__arrow"  name="arrow-rounded-left-6x9" size="6x9"></app-icon>
@@ -31,6 +32,7 @@
                             <div class="filter-price__slider">
                                 <div class="ngx-slider-custom">
                                     <ngx-slider
+                                        (userChange)="ChangeForm($event)"
                                         [formControlName]="filter.slug"
                                         [options]="{
                                             animate: false,
@@ -60,9 +62,11 @@
                                     <span class="filter-list__input input-check">
                                         <span class="input-check__body">
                                             <input
+                                                (change)="ChangeForm($event)"
                                                 class="input-check__input"
                                                 type="checkbox"
                                                 [value]="item.slug"
+                                                [checked]="item.checked"
                                                 [name]="'filter_' + filter.slug"
                                                 [formControlName]="item.slug"
                                             >
@@ -87,6 +91,7 @@
                                     <span class="filter-list__input input-radio">
                                         <span class="input-radio__body">
                                             <input
+                                                (change)="ChangeForm($event)"
                                                 class="input-radio__input"
                                                 type="radio"
                                                 [attr.disabled]="isItemDisabled(filter, item) ? true : null"
@@ -102,6 +107,7 @@
                                 </label>
                             </div>
                         </div>
+                        
 
                         <div *ngIf="filter.type === 'color'" class="filter-color" [formGroupName]="filter.slug">
                             <div class="filter-color__list">
@@ -113,6 +119,7 @@
                                     >
                                         <label class="input-check-color__body">
                                             <input
+                                                (change)="ChangeForm($event)"
                                                 class="input-check-color__input"
                                                 type="checkbox"
                                                 [value]="item.slug"
@@ -126,7 +133,10 @@
                                     </span>
                                 </label>
                             </div>
+                        
                         </div>
+
+
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import { ListOptions } from '../../../shared/api/shop.service';
 
 // modelos
 import { Products} from '../../../../data/modelos/articulos/DetalleArticulos';
-import { item} from '../../../../data/modelos/articulos/Items';
+import { Item} from '../../../../data/modelos/articulos/Items';
 import { Filters} from '../../../../data/modelos/articulos/filters';
 import { filterValues} from '../../../../data/modelos/articulos/filterValues';
 
@@ -42,7 +42,7 @@ export class PageCategoryService {
     optionsChange$: EventEmitter<ListOptions> = new EventEmitter<ListOptions>();
 
     // getters for list
-    get items(): item[] { return this.listState.items; }
+    get items(): Item[] { return this.listState.items; }
     get total(): number { return this.listState.total; }
     get pages(): number { return this.listState.pages; }
     get from(): number { return this.listState.from; }

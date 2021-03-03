@@ -45,7 +45,6 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
         // recuperar solo los articulos seleccionados
         this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
-
             this.Productos = this.articulossvc.getArticulos().products;
             this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
 
@@ -60,9 +59,9 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         });
 
         this.listOptionsForm = this.fb.group({
-            page:   this.fb.control(this.articulossvc.AtributosFiltros.page),
-            limit: this.fb.control(this.articulossvc.AtributosFiltros.limit),
-            sort: this.fb.control(this.articulossvc.AtributosFiltros.sort),
+            page:   this.fb.control(this.articulossvc.getAtributosFiltros().page),
+            limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
+            sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
         });
 
         this.listOptionsForm.valueChanges.subscribe(value => {
@@ -75,29 +74,29 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
             this.SetLIstaOpciones(value);
 
-            this.articulossvc.setAtributosFiltros( this.articulossvc.AtributosFiltros);
+            this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
 
         });
 
     }
 
     SetAtributos(){
-        this.page.setValue(this.articulossvc.AtributosFiltros?.page, {emitEvent: false});
-        this.limit.setValue(this.articulossvc.AtributosFiltros?.limit, {emitEvent: false});
-        this.sort.setValue(this.articulossvc.AtributosFiltros?.sort, {emitEvent: false});
+        this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, {emitEvent: false});
+        this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, {emitEvent: false});
+        this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, {emitEvent: false});
     }
 
     SetLIstaOpciones(value: any){
 
-        const total = this.articulossvc.AtributosFiltros.total;
+        const total = this.articulossvc.getAtributosFiltros().total;
         const limit = value.limit;
 
-        this.articulossvc.AtributosFiltros.page = value.page;
-        this.articulossvc.AtributosFiltros.limit = limit;
-        this.articulossvc.AtributosFiltros.sort = value.sort;
-        this.articulossvc.AtributosFiltros.pages = Math.ceil(total / limit);
-        this.articulossvc.AtributosFiltros.from = ((value.page - 1) * value.limit) + 1 ;
-        this.articulossvc.AtributosFiltros.to = value.page   * limit;
+        this.articulossvc.getAtributosFiltros().page = value.page;
+        this.articulossvc.getAtributosFiltros().limit = limit;
+        this.articulossvc.getAtributosFiltros().sort = value.sort;
+        this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / limit);
+        this.articulossvc.getAtributosFiltros().from = ((value.page - 1) * value.limit) + 1 ;
+        this.articulossvc.getAtributosFiltros().to = value.page   * limit;
 
     }
 

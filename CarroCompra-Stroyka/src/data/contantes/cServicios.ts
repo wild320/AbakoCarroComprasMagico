@@ -14,5 +14,8 @@ export const CServicios = {
     ServivioRecuperarCodigoSeguridad: 'RecuperarUsuario',
     ServivioMenu: 'Menu',
     ServivioMaestrosLocalizacion: 'MaestrosLocalizacion',
-    ServicioRecuperarArticulos: 'Articulos/RecuperarArticuloCarroCompras'
+    ServicioRecuperarArticulos: 'Articulos/RecuperarArticuloCarroCompras',
+    ServicioRecuperarArticulosMasVendidos: 'Articulos/RecuperarArticuloMasVendidosCarroCompras',
+    ServicioRecuperarArticulosDetalle: 'Articulos/RecuperarArticuloDetalleCarroCompras'
 };
+

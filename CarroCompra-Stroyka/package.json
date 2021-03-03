@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "dev": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve -o --port 4300",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "sprite": "svg-sprite --config src/sprite-config.json src/svg/*.svg",

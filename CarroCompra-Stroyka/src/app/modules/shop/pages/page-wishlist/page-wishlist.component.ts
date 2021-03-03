@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { WishlistService } from '../../../../shared/services/wishlist.service';
-import { Product } from '../../../../shared/interfaces/product';
 import { CartService } from '../../../../shared/services/cart.service';
 import { RootService } from '../../../../shared/services/root.service';
+
+// modelos
+import { Item } from '../../../../../data/modelos/articulos/Items';
 
 @Component({
     selector: 'app-wishlist',
@@ -16,10 +18,10 @@ export class PageWishlistComponent {
         public cart: CartService
     ) { }
 
-    addedToCartProducts: Product[] = [];
-    removedProducts: Product[] = [];
+    addedToCartProducts: Item[] = [];
+    removedProducts: Item[] = [];
 
-    addToCart(product: Product): void {
+    addToCart(product: Item): void {
         if (this.addedToCartProducts.includes(product)) {
             return;
         }
@@ -32,7 +34,7 @@ export class PageWishlistComponent {
         });
     }
 
-    remove(product: Product): void {
+    remove(product: Item): void {
         if (this.removedProducts.includes(product)) {
             return;
         }
