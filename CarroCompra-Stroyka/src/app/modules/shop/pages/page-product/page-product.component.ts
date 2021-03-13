@@ -32,6 +32,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
     ) {
 
         // tomar el articulos seleccionado
+        // tslint:disable-next-line: deprecation
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
 
             this.product = this.articulossvc.getArticuloDetalle().item;
@@ -49,6 +50,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
+        // tslint:disable-next-line: deprecation
         this.route.data.subscribe(data => {
             this.layout = data.layout || this.layout;
             this.sidebarPosition = data.sidebarPosition || this.sidebarPosition;

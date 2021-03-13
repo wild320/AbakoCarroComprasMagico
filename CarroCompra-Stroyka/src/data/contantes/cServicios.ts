@@ -15,7 +15,7 @@ export const CServicios = {
     ServivioMenu: 'Menu',
     ServivioMaestrosLocalizacion: 'MaestrosLocalizacion',
     ServicioRecuperarArticulos: 'Articulos/RecuperarArticuloCarroCompras',
-    ServicioRecuperarArticulosMasVendidos: 'Articulos/RecuperarArticuloMasVendidosCarroCompras',
+    ServicioRecuperarEspecialesVendidos: 'Articulos/RecuperarArticulosEspecialesCarroCompras',
     ServicioRecuperarArticulosDetalle: 'Articulos/RecuperarArticuloDetalleCarroCompras'
 };
 

@@ -7,6 +7,14 @@ import { isPlatformBrowser } from '@angular/common';
 import { fromMatchMedia } from '../../../../shared/functions/rxjs/fromMatchMedia';
 import { filter, first, shareReplay, takeUntil } from 'rxjs/operators';
 
+// servicios
+import { StoreService } from '../../../../shared/services/store.service';
+import { NegocioService } from '../../../../shared/services/negocio.service';
+
+// constantes
+import { Cconfiguracion } from '../../../../../data/contantes/cConfiguracion';
+
+
 export type MobileHeaderMode = 'alwaysOnTop' | 'pullToShow';
 
 export type MobileHeaderPosition = 'static' | 'sticky';
@@ -34,6 +42,8 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     scrollPosition = 0;
     scrollDistance = 0;
 
+    logo: string;
+
     media: Observable<MediaQueryList>;
 
     get element(): HTMLDivElement {
@@ -50,7 +60,13 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
         public wishlist: WishlistService,
         public cart: CartService,
         public zone: NgZone,
-    ) { }
+        public store: StoreService,
+        public negocio: NegocioService,
+    ) {
+
+        this.logo = Cconfiguracion.urlAssetsConfiguracion + this.negocio.configuracion.Logo ;
+
+     }
 
     ngOnDestroy(): void {
         this.destroy$.next();

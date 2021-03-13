@@ -8,8 +8,17 @@ import { Category } from '../../shared/interfaces/category';
 import { BlockHeaderGroup } from '../../shared/interfaces/block-header-group';
 import { takeUntil, tap } from 'rxjs/operators';
 
+// Modelos
+import {Item} from '../../../data/modelos/articulos/Items';
+
 // Servivios
 import { StoreService } from '../../shared/services/store.service';
+import { ArticulosService } from '../../shared/services/articulos.service';
+
+// Contantes
+import {CArticulos} from '../../../data/contantes/CArticulos';
+import { ConstantPool } from '@angular/compiler';
+import { Console } from 'console';
 
 interface ProductsCarouselGroup extends BlockHeaderGroup {
     products$: Observable<Product[]>;
@@ -29,7 +38,7 @@ interface ProductsCarouselData {
 })
 export class PageHomeOneComponent implements OnInit, OnDestroy {
     destroy$: Subject<void> = new Subject<void>();
-    bestsellers$: Observable<Product[]>;
+    bestsellers: Item[] = [];
     brands$: Observable<Brand[]>;
     popularCategories$: Observable<Category[]>;
 
@@ -44,11 +53,35 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     constructor(
         private shop: ShopService,
+        private articulossvc: ArticulosService,
         public StoreSvc: StoreService,
     ) { }
 
     ngOnInit(): void {
-        this.bestsellers$ = this.shop.getBestsellers(7);
+
+        // Recuperar los artoculos mas vendidos
+        if (!this.articulossvc.RecuperoMasVendidos){
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
+        }
+
+        // recuperar si no ha recuperado aun
+        if (!this.articulossvc.RecuperoDestacados){
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosDestacadoss);
+        }
+
+        // recuperar artculos destacados
+        // tslint:disable-next-line: deprecation
+        this.articulossvc.getArticulosDestacados$().subscribe( data => {
+                console.log('destacados', data);
+        });
+
+        // recuperar artculos mas vendidos
+        // tslint:disable-next-line: deprecation
+        this.articulossvc.getArticulosMasVendidos$().subscribe( data => {
+            this.bestsellers = this.articulossvc.getArticulosMasVendidos().slice(0 , 7);
+        });
+
+        // this.bestsellers$ = this.shop.getBestsellers(7);
         this.brands$ = this.shop.getPopularBrands();
         this.popularCategories$ = this.shop.getCategoriesBySlug([
             'power-tools',
@@ -133,6 +166,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         (group as ProductsCarouselGroup).products$.pipe(
             tap(() => carousel.loading = false),
             takeUntil(merge(this.destroy$, carousel.abort$)),
+        // tslint:disable-next-line: deprecation
         ).subscribe(x => carousel.products = x);
     }
 }

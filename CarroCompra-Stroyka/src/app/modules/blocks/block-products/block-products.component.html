@@ -14,7 +14,7 @@
                 </ng-container>
             </ng-template>
             <ng-template #smallsTemplate>
-                <div *ngIf="smalls.length > 0" class="block-products__list">
+                <div *ngIf="smalls?.length > 0" class="block-products__list">
                     <div *ngFor="let product of smalls" class="block-products__list-item">
                         <app-product-card [product]="product"></app-product-card>
                     </div>

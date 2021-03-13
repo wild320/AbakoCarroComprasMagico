@@ -11,9 +11,9 @@ export class BlockProductsComponent {
     @Input() products: any[] = [];
 
     get large(): any {
-        if (this.layout === 'large-first' && this.products.length > 0) {
+        if (this.layout === 'large-first' && this.products?.length > 0) {
             return this.products[0];
-        } else if (this.layout === 'large-last' && this.products.length > 6) {
+        } else if (this.layout === 'large-last' && this.products?.length > 6) {
             return this.products[6];
         }
 
@@ -22,9 +22,9 @@ export class BlockProductsComponent {
 
     get smalls(): any[] {
         if (this.layout === 'large-first') {
-            return this.products.slice(1, 7);
+            return this.products?.slice(1, 7);
         } else  {
-            return this.products.slice(0, 6);
+            return this.products?.slice(0, 6);
         }
     }
 

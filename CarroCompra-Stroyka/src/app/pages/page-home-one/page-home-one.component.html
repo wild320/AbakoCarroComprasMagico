@@ -16,7 +16,7 @@
 <app-block-banner *ngIf="StoreSvc.configuracionSitio.VerBannerIntermedio"></app-block-banner>
 
 <app-block-products *ngIf="StoreSvc.configuracionSitio.VerMasVendidos"
-header="Mas Vendidos" layout="large-first" [products]="bestsellers$|async"></app-block-products>
+header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-products>
 
 <app-block-categories *ngIf="StoreSvc.configuracionSitio.VerCategoriasPopulares" header="Categorias más Populares" layout="classic" [categories]="popularCategories$|async"></app-block-categories>
 

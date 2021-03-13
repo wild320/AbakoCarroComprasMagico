@@ -36,6 +36,8 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         public pageService: PageCategoryService,
         public articulossvc: ArticulosService,
     ) {
+
+
         // recuperar todos los articulos
         this.articulossvc.getArticulos$().subscribe(articulos => {
 
@@ -45,10 +47,29 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
         // recuperar solo los articulos seleccionados
         this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+
             this.Productos = this.articulossvc.getArticulos().products;
             this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
 
         });
+
+    }
+
+    OnCLickOnChange(){
+
+        const value = this.listOptionsForm.value;
+
+        value.limit = parseFloat(value.limit);
+
+        if (value.page  == null || value.limit == null || value.sort == null  ){
+            return;
+        }
+
+        this.SetLIstaOpciones(value);
+
+        console.log(value);
+
+        this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
 
     }
 
@@ -58,13 +79,16 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             this.SetAtributos();
         });
 
+
         this.listOptionsForm = this.fb.group({
             page:   this.fb.control(this.articulossvc.getAtributosFiltros().page),
             limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
             sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
         });
 
-        this.listOptionsForm.valueChanges.subscribe(value => {
+       /* this.listOptionsForm.valueChanges.subscribe(value => {
+
+            console.log (value);
 
             value.limit = parseFloat(value.limit);
 
@@ -74,9 +98,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
             this.SetLIstaOpciones(value);
 
-            this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
+            console.log('suscribe', value);
 
-        });
+            // this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
+
+        }); */
 
     }
 

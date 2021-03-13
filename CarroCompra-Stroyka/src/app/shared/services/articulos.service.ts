@@ -26,6 +26,7 @@ import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSele
 
 // constantes
 import {cFiltros} from '../../../data/contantes/Cfiltros';
+import {CArticulos} from '../../../data/contantes/CArticulos';
 
 
 @Injectable({
@@ -44,6 +45,7 @@ export class ArticulosService {
   private AtributosFiltros$ = new Subject<Products>();
   private AtributosMasVendidos: Item[];
   private AtributosMasVendidos$ = new Subject<Item[]>();
+  private AtributosDestacados$ = new Subject<Item[]>();
   private seleccionado = new ArticuloSeleccionado();
   private ArticulosDetalle: ArticuloSeleccionado;
   private ArticulosDetalle$ = new Subject<ArticuloSeleccionado>();
@@ -55,8 +57,11 @@ export class ArticulosService {
   private FiltroColores: ItemsFiltros[];
   private FiltroDescuento: ItemsFiltros[];
 
+
   // isLoading
   public isLoadingState = false;
+  public RecuperoDestacados = false;
+  public RecuperoMasVendidos = false;
   private isLoadingSource: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.isLoadingState);
 
   isLoading$: Observable<boolean> = this.isLoadingSource.asObservable();
@@ -66,7 +71,8 @@ export class ArticulosService {
               private negocio: NegocioService,
     ) {
 
-      this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+      // tslint:disable-next-line: deprecation
+      this.usuariosvc.getEstadoLoguin$().subscribe(() => {
 
         if (this.IdempresaCLienteLogueada === undefined && this.usuariosvc.Idempresa === undefined){
           this.IdempresaCLienteLogueada = 0;
@@ -105,7 +111,7 @@ export class ArticulosService {
   }
 
   setArticulosMasVendidos$(newValue){
-
+    this.RecuperoMasVendidos = true;
     this.AtributosMasVendidos = newValue;
     this.AtributosMasVendidos$.next(newValue);
   }
@@ -113,6 +119,16 @@ export class ArticulosService {
   getArticulosMasVendidos$(): Observable<Item[]> {
     return this.AtributosMasVendidos$.asObservable();
   }
+
+  setArticulosDestacados$(newValue){
+    this.RecuperoDestacados = true;
+    this.AtributosDestacados$.next(newValue);
+  }
+
+  getArticulosDestacados$(): Observable<Item[]> {
+    return this.AtributosDestacados$.asObservable();
+  }
+
 
   getArticuloDetalle(): ArticuloSeleccionado {
     return this.ArticulosDetalle;
@@ -457,7 +473,6 @@ export class ArticulosService {
     const Id          = this.GetIdFiltro(TipoFiltro, slug);
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
 
-
     this.setIsLoading(true);
 
     return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${TipoFiltro}/${Id}`, { responseType: 'text' })
@@ -481,11 +496,11 @@ export class ArticulosService {
 
   }
 
-  public RecuperarArticulosMasVendidos(){
+  public RecuperarArticulosEspeciales(Tipo: string){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +
-        CServicios.ServicioRecuperarArticulosMasVendidos;
+        CServicios.ServicioRecuperarEspecialesVendidos;
 
     if (!this.usuariosvc.Idempresa ) {
       this.usuariosvc.Idempresa  = 0;
@@ -495,12 +510,21 @@ export class ArticulosService {
 
     this.setIsLoading(true);
 
-    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}`, { responseType: 'text' })
+    return this.httpClient.get(`${this.UrlServicio}/${Tipo}/${IdEmpresa}`, { responseType: 'text' })
         .toPromise()
         .then((art: any) => {
 
           const {items} = JSON.parse(art);
-          this.setArticulosMasVendidos$(items);
+
+          switch (Tipo) {
+            case CArticulos.ArticulosEspecialesMasVendidos:
+              this.setArticulosMasVendidos$(items);
+              break;
+
+            case CArticulos.ArticulosDestacadoss:
+              this.setArticulosDestacados$(items);
+              break;
+          }
 
         })
         .catch((err: any) => {

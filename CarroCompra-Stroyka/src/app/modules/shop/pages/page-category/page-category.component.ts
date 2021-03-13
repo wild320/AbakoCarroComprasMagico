@@ -13,6 +13,9 @@ import { RootService } from '../../../../shared/services/root.service';
 // servicios
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
+// Contantes
+import {CArticulos} from '../../../../../data/contantes/CArticulos';
+
 @Component({
     selector: 'app-grid',
     templateUrl: './page-category.component.html',
@@ -45,8 +48,11 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         // Recuperar los artoculos mas vendidos
-        this.articulossvc.RecuperarArticulosMasVendidos();
+        if (!this.articulossvc.RecuperoMasVendidos){
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
+        }
 
+        // tslint:disable-next-line: deprecation
         this.route.paramMap.subscribe(data => {
 
             if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
@@ -55,6 +61,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
                 this.articulossvc.RecuperarArticulos(this.getCategorySlug());
             }
 
+            // tslint:disable-next-line: deprecation
             this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
 
                 // inicializar SetBreadcrumbs
@@ -67,6 +74,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
         });
 
+        // tslint:disable-next-line: deprecation
         this.route.data.subscribe(data => {
 
             this.pageService.setList(data.products);
@@ -93,6 +101,7 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
                 );
             }),
             takeUntil(this.destroy$),
+        // tslint:disable-next-line: deprecation
         ).subscribe(list => {
            // this.pageService.setList(list);
 

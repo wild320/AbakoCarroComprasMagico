@@ -6,7 +6,8 @@ import { RootService } from '../../../shared/services/root.service';
 import { ArticulosService } from '../../../shared/services/articulos.service';
 
 // modelos
-import { Item } from 'src/data/modelos/articulos/Items';
+import { Item } from '../../../../data/modelos/articulos/Items';
+
 
 @Component({
     selector: 'app-widget-products',
@@ -21,11 +22,16 @@ export class WidgetProductsComponent {
     constructor(public root: RootService,
                 public articulossvc: ArticulosService) {
 
-        this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-
+        // Recuperar los artoculos mas vendidos
+        if (this.articulossvc.RecuperoMasVendidos){
             this.products = this.articulossvc.getArticulosMasVendidos().slice(0 , 6);
+        }else{
 
-        });
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+                this.products = this.articulossvc.getArticulosMasVendidos().slice(0 , 6);
+            });
+        }
 
      }
 }

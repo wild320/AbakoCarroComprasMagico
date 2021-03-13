@@ -58,7 +58,7 @@
                 <div class="view-options__control">
                     <label for="view-options-limit">Ver</label>
                     <div>
-                        <select class="form-control form-control-sm" id="view-options-limit" formControlName="limit">
+                        <select  (change)="OnCLickOnChange()" class="form-control form-control-sm" id="view-options-limit" formControlName="limit">
                             <option value="12">12</option>
                             <option value="24">24</option>
                         </select>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="products-view__pagination">
-            <app-pagination formControlName="page" [siblings]="2" [total]="this.articulossvc.getAtributosFiltros().pages"></app-pagination>
+            <app-pagination formControlName="page" (click)="OnCLickOnChange()"  [siblings]="2" [total]="this.articulossvc.getAtributosFiltros().pages"></app-pagination>
         </div>
     </div>
 
