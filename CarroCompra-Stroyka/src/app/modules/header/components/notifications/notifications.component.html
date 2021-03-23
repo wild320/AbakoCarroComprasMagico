@@ -1,0 +1,23 @@
+<div [ngClass]="selectedNotification?.estilo" class="notification-container" *ngIf="this.notifications?.length" >
+  <i id= "bell" class="fa fa-bell" aria-hidden="true"></i>
+    <span id= "titulo">{{selectedNotification?.titulo | titlecase}} :</span>
+    <span>{{selectedNotification?.mensaje| titlecase}}</span>
+    <div class="box-actions">
+
+      <a [ngClass]="selectedNotification?.estilo" 
+         class="cursor-pointer"
+         (click)="CerrarNotificacion(selectedNotification)">
+        <i class="fa fa-times"></i>
+      </a>
+
+      <div class="box-rows" *ngIf="this.notifications.length>1">
+        <div class="cursor-pointer box-icons">
+          <i class="fa fa-angle-up" aria-hidden="true" (click)="CambiarNotificacionUp(selectedNotification)" ></i>  
+        </div>
+        <div class="cursor-pointer">
+          <i class="fa fa-angle-down" aria-hidden="true" (click)="CambiarNotificacionDown(selectedNotification)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  

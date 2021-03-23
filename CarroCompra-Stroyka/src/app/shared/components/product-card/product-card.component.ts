@@ -42,6 +42,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnInit(): void {
 
+        // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
         });
@@ -64,6 +65,8 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.addingToCart = true;
+        // tslint:disable-next-line: deprecation
+        // tslint:disable-next-line: deprecation
         this.cart.add(this.product, 1).subscribe({
             complete: () => {
                 this.addingToCart = false;
@@ -77,7 +80,9 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
+        // tslint:disable-next-line: deprecation
         this.addingToWishlist = true;
+        // tslint:disable-next-line: deprecation
         this.wishlist.add(this.product).subscribe({
             complete: () => {
                 this.addingToWishlist = false;
@@ -92,6 +97,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.addingToCompare = true;
+        // tslint:disable-next-line: deprecation
         this.compare.add(this.product).subscribe({
             complete: () => {
                 this.addingToCompare = false;
@@ -106,6 +112,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.showingQuickview = true;
+        // tslint:disable-next-line: deprecation
         this.quickview.show(this.product).subscribe({
             complete: () => {
                 this.showingQuickview = false;

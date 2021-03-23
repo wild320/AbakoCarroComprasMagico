@@ -36,8 +36,6 @@ export class StoreService {
         this.configuracionSitio.phone = '';
         this.configuracionSitio.hours = '';
         this.configuracionSitio.scrmapa = '';
-        this.configuracionSitio.verArticulos = '';
-        this.configuracionSitio.verDetalleArticulo = '';
         this.configuracionSitio.VerProductosDestacados = false;
         this.configuracionSitio.VerMasVendidos = false;
         this.configuracionSitio.VerCategoriasPopulares = false;
@@ -75,16 +73,6 @@ export class StoreService {
             // Hora de servicio
             if (element.id === 'A1'){
                 this.configuracionSitio.hours =  element.valor;
-            }
-
-            // Como ver la lista de articulos
-            if (element.id === 'A2'){
-                this.configuracionSitio.verArticulos =   this.VerArticulos(element.valor);
-            }
-
-            // Como ver la detalle de articulo
-            if (element.id === 'A3'){
-                this.configuracionSitio.verDetalleArticulo =   this.VerDetalleArticulos(element.valor);
             }
 
             // src mapa google
@@ -175,7 +163,7 @@ export class StoreService {
             {label: 'Comprar', url: '/shop/catalog', menu: {
                 type: 'menu',
                 items: [
-                    {label: 'Artículos', url: this.configuracionSitio.verArticulos},
+                    {label: 'Artículos', url: '/shop/catalog'},
                     {label: 'Lista de Deseos', url: '/shop/wishlist'},
                     {label: 'Comparar', url: '/shop/compare'},
                 ]
@@ -220,66 +208,6 @@ export class StoreService {
             }
         });
 
-    }
-
-    private VerArticulos(ver: string): string {
-
-        let tipoVer = '';
-
-        switch (ver) {
-            case 'En Cuadricula 3 Columnas con Slider':
-                tipoVer = '/shop/catalog';
-                break;
-
-            case 'En Cuadricula 4 Columnas Full':
-                tipoVer = '/shop/category-grid-4-columns-full';
-                break;
-
-            case 'En Cuadricula 5 Columnas Full':
-                tipoVer = '/shop/category-grid-5-columns-full';
-                break;
-
-             case 'En Lista':
-                tipoVer = '/shop/category-list';
-                break;
-
-            case 'En Cuadricula Slider A la Derecha':
-                tipoVer = '/shop/category-right-sidebar';
-                break;
-
-            default:
-                tipoVer = '/shop/catalog';
-                break;
-
-        }
-
-        return tipoVer;
-    }
-
-    private VerDetalleArticulos(ver: string): string {
-
-        let tipoDetalleVer = '';
-
-        switch (ver) {
-            case 'Estandar':
-                tipoDetalleVer = '/shop/product-standard';
-                break;
-
-            case 'Columna':
-                tipoDetalleVer = '/shop/product-columnar';
-                break;
-
-            case 'SliBar':
-                tipoDetalleVer = '/shop/product-sidebar';
-                break;
-
-            default:
-                tipoDetalleVer = '/shop/product-standard';
-                break;
-
-        }
-
-        return tipoDetalleVer;
     }
 
     private ActicarPaginas(ses: string){

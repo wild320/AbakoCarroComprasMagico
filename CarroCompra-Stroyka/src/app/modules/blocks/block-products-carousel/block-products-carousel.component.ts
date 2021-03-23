@@ -3,6 +3,9 @@ import { Product } from '../../../shared/interfaces/product';
 import { BlockHeaderGroup } from '../../../shared/interfaces/block-header-group';
 import { DirectionService } from '../../../shared/services/direction.service';
 
+// Modelos
+import {Item} from '../../../../data/modelos/articulos/Items';
+
 @Component({
     selector: 'app-block-products-carousel',
     templateUrl: './block-products-carousel.component.html',
@@ -12,14 +15,14 @@ export class BlockProductsCarouselComponent implements OnChanges {
     @Input() header: string;
     @Input() layout: 'grid-4'|'grid-4-sm'|'grid-5'|'horizontal' = 'grid-4';
     @Input() rows = 1;
-    @Input() products: Product[] = [];
+    @Input() products: Item[] = [];
     @Input() groups: BlockHeaderGroup[] = [];
     @Input() withSidebar = false;
     @Input() loading = false;
 
     @Output() groupChange: EventEmitter<BlockHeaderGroup> = new EventEmitter();
 
-    columns: Product[][] = [];
+    columns: Item[][] = [];
 
     carouselDefaultOptions: any = {
         items: 4,
@@ -75,7 +78,7 @@ export class BlockProductsCarouselComponent implements OnChanges {
 
     constructor(
         private direction: DirectionService
-    ) { }
+    ) {  }
 
     ngOnChanges(changes: SimpleChanges): void {
         const properties = Object.keys(changes);

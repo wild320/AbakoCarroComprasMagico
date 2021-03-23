@@ -1,0 +1,67 @@
+:host {
+    flex: 1;
+  }
+  
+  .notification-container {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .box-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .RED {
+    background-color: rgba(233, 19, 19, 0.78);
+    color: white;
+  }
+  
+  .ORANGE {
+    background-color: rgb(250, 234, 208);
+    color: #73879c;
+  }
+  
+  .GREEN {
+    background-color: rgb(208, 250, 212);
+    color: #73879c;
+  }
+  
+  #bell {
+    margin-left: 2rem;
+    color: rgb(83, 99, 84);
+  }
+
+  #titulo {
+    margin-left: 1rem;
+    font-size: 13px;
+    color: rgb(83, 99, 84);
+  }
+  
+  span {
+    margin-left: 0.5rem;
+    //color: #73879c;
+    font-size: 13px;
+  }
+  
+  a {
+    margin-left: auto;
+    margin-right: 1rem;
+  }
+  
+  .box-rows {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .box-icons {
+    max-height: 14px;
+  }
+  

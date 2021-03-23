@@ -1,5 +1,8 @@
 
 export const CArticulos = {
     ArticulosEspecialesMasVendidos: 'MV',
-    ArticulosDestacadoss: 'DT',
+    ArticulosDestacados: 'DT',
+    ArticulosRecienLlegados: 'RL',
+    ArticulosMejorValorados: 'VL',
+    ArticulosOfertasEspeciales: 'OE',
 };

@@ -4,7 +4,7 @@
 
     <ul *ngIf="groups?.length" class="block-header__groups-list">
         <li *ngFor="let group of groups">
-            <button type="button" class="block-header__group" [ngClass]="{'block-header__group--active': group.current}" (click)="setGroup(group)">{{ group.name }}</button>
+            <button type="button" class="block-header__group" [ngClass]="{'block-header__group--active': group.current}" (click)="setGroup(group)">{{ group.name | titlecase}}</button>
         </li>
     </ul>
 

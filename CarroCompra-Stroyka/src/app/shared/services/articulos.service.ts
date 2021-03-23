@@ -1,9 +1,13 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
 // interfaces
 import {SerializedFilterValues} from '../../shared/interfaces/filter';
+import { NavigationLink } from '../../shared/interfaces/navigation-link';
+import { Category } from '../../shared/interfaces/category';
+import { Brand } from '../../shared/interfaces/brand';
 
 // Contantes
 import { CServicios } from 'src/data/contantes/cServicios';
@@ -12,9 +16,6 @@ import { CTipoFiltros } from 'src/data/contantes/cTipoFiltros';
 // Servicios
 import { UsuarioService } from '../services/usuario.service';
 import { NegocioService } from '../../shared/services/negocio.service';
-
-// interfaces
-import { NavigationLink } from '../../shared/interfaces/navigation-link';
 
 // Modelos
 import {ArticulosCarroComprasResponse } from '../../../data/modelos/articulos/Articulos';
@@ -46,6 +47,17 @@ export class ArticulosService {
   private AtributosMasVendidos: Item[];
   private AtributosMasVendidos$ = new Subject<Item[]>();
   private AtributosDestacados$ = new Subject<Item[]>();
+  private AtributosOfertasEspeciales: Item[];
+  private AtributosOfertasEspeciales$ = new Subject<Item[]>();
+  private AtributosMejorValorados: Item[];
+  private AtributosMejorValorados$ = new Subject<Item[]>();
+  private AtributosDestacados: Item[];
+  private AtributosRecienLlegados$ = new Subject<Item[]>();
+  private AtributosRecienLlegados: Item[];
+  private CategoriasPopulares$ = new Subject<Category[]>();
+  private CategoriasPopulares: Category[];
+  private MarcasPopulares$ = new Subject<Brand[]>();
+  private MarcasPopulares: Brand[];
   private seleccionado = new ArticuloSeleccionado();
   private ArticulosDetalle: ArticuloSeleccionado;
   private ArticulosDetalle$ = new Subject<ArticuloSeleccionado>();
@@ -62,6 +74,11 @@ export class ArticulosService {
   public isLoadingState = false;
   public RecuperoDestacados = false;
   public RecuperoMasVendidos = false;
+  public RecuperarRecienLlegados = false;
+  public RecuperarCategoriasPopulares = false;
+  public RecuperarMarcasPopulares = false;
+  public RecuperarOfertasEspeciales = false;
+  public RecuperarMejorValorados = false;
   private isLoadingSource: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.isLoadingState);
 
   isLoading$: Observable<boolean> = this.isLoadingSource.asObservable();
@@ -120,15 +137,92 @@ export class ArticulosService {
     return this.AtributosMasVendidos$.asObservable();
   }
 
+  getCategoriasPopulares(): Category[] {
+    return this.CategoriasPopulares;
+  }
+
+  setCategoriasPopulares$(newValue){
+    this.RecuperarCategoriasPopulares = true;
+    this.CategoriasPopulares = newValue;
+    this.CategoriasPopulares$.next(newValue);
+  }
+
+  getCategoriasPopulares$(): Observable<Category[]> {
+    return this.CategoriasPopulares$.asObservable();
+  }
+
+  getMarcasPopulares(): Brand[] {
+    return this.MarcasPopulares;
+  }
+
+  setMarcasPopulares$(newValue){
+    this.RecuperarMarcasPopulares = true;
+    this.MarcasPopulares = newValue;
+    this.MarcasPopulares$.next(newValue);
+  }
+
+  getMarcasPopulares$(): Observable<Brand[]> {
+    return this.MarcasPopulares$.asObservable();
+  }
+
+
+  getArticulosRecienLlegados(): Item[] {
+    return this.AtributosRecienLlegados;
+  }
+
+  setArticulosRecienLlegados$(newValue){
+    this.RecuperarRecienLlegados = true;
+    this.AtributosRecienLlegados = newValue;
+    this.AtributosRecienLlegados$.next(newValue);
+  }
+
+  getArticulosRecienLlegados$(): Observable<Item[]> {
+    return this.AtributosRecienLlegados$.asObservable();
+  }
+
+  getArticulosOfertasEspeciales(): Item[] {
+    return this.AtributosOfertasEspeciales;
+  }
+
+  setArticulosOfertasEspeciales$(newValue){
+    this.RecuperarOfertasEspeciales = true;
+    this.AtributosOfertasEspeciales = newValue;
+    this.AtributosOfertasEspeciales$.next(newValue);
+  }
+
+  getArticulosOfertasEspeciales$(): Observable<Item[]> {
+    return this.AtributosOfertasEspeciales$.asObservable();
+  }
+
+  getArticulosMejorValorados(): Item[] {
+    return this.AtributosMejorValorados;
+  }
+
+  setArticulosMejorValorados$(newValue){
+    this.RecuperarMejorValorados = true;
+    this.AtributosMejorValorados = newValue;
+    this.AtributosMejorValorados$.next(newValue);
+  }
+
+  getArticulosMejorValorados$(): Observable<Item[]> {
+    return this.AtributosMejorValorados$.asObservable();
+  }
+
+
   setArticulosDestacados$(newValue){
     this.RecuperoDestacados = true;
+    this.AtributosDestacados = newValue;
     this.AtributosDestacados$.next(newValue);
   }
+
+  getArticulosDestacados(): Item[] {
+    return this.AtributosDestacados;
+  }
+
 
   getArticulosDestacados$(): Observable<Item[]> {
     return this.AtributosDestacados$.asObservable();
   }
-
 
   getArticuloDetalle(): ArticuloSeleccionado {
     return this.ArticulosDetalle;
@@ -521,8 +615,20 @@ export class ArticulosService {
               this.setArticulosMasVendidos$(items);
               break;
 
-            case CArticulos.ArticulosDestacadoss:
+            case CArticulos.ArticulosDestacados:
               this.setArticulosDestacados$(items);
+              break;
+
+            case CArticulos.ArticulosRecienLlegados:
+                this.setArticulosRecienLlegados$(items);
+                break;
+
+            case CArticulos.ArticulosOfertasEspeciales:
+              this.setArticulosOfertasEspeciales$(items);
+              break;
+
+            case CArticulos.ArticulosMejorValorados:
+              this.setArticulosMejorValorados$(items);
               break;
           }
 
@@ -535,6 +641,71 @@ export class ArticulosService {
         });
 
   }
+
+  public RecuperarGetCategoriasPopulares(){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioCategoriasPopulares;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa  = 0;
+    }
+
+    const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}`, { responseType: 'text' })
+        .toPromise()
+        .then((cat: any) => {
+
+          const {categorias}  = JSON.parse(cat);
+
+          this.setCategoriasPopulares$(categorias);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
+
+  public RecuperarGetMarcasPopulares(){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioMarcasPopulares;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa  = 0;
+    }
+
+    const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}`, { responseType: 'text' })
+        .toPromise()
+        .then((mar: any) => {
+
+          const {marcas}  = JSON.parse(mar);
+
+          this.setMarcasPopulares$(marcas);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
+
 
   public RecuperarArticuloDetalle(Id: number){
     this.UrlServicio =

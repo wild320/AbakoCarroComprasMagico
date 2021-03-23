@@ -7,10 +7,10 @@
     *ngIf="StoreSvc.configuracionSitio.VerProductosDestacados"
     header="Productos Destacados"
     layout="grid-4"
-    [loading]="featuredProducts.loading"
-    [products]="featuredProducts.products"
-    [groups]="featuredProducts.groups"
-    (groupChange)="groupChange(featuredProducts, $event)"
+    [loading]="featuredProducts?.loading"
+    [products]="featuredProducts?.products"
+    [groups]="featuredProducts?.groups"
+    (groupChange)="groupChangeDestacados(featuredProducts, $event)"
 ></app-block-products-carousel>
 
 <app-block-banner *ngIf="StoreSvc.configuracionSitio.VerBannerIntermedio"></app-block-banner>
@@ -18,25 +18,25 @@
 <app-block-products *ngIf="StoreSvc.configuracionSitio.VerMasVendidos"
 header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-products>
 
-<app-block-categories *ngIf="StoreSvc.configuracionSitio.VerCategoriasPopulares" header="Categorias más Populares" layout="classic" [categories]="popularCategories$|async"></app-block-categories>
+<app-block-categories *ngIf="StoreSvc.configuracionSitio.VerCategoriasPopulares" header="Categorias más Populares" layout="classic" [categories]="popularCategories"></app-block-categories>
 
 <app-block-products-carousel
     *ngIf="StoreSvc.configuracionSitio.VerRecienllegados"
     header="Recién llegados"
     layout="horizontal"
     [rows]="2"
-    [loading]="latestProducts.loading"
-    [products]="latestProducts.products"
-    [groups]="latestProducts.groups"
-    (groupChange)="groupChange(latestProducts, $event)"
+    [loading]="latestProducts?.loading"
+    [products]="latestProducts?.products"
+    [groups]="latestProducts?.groups"
+    (groupChange)="groupChangeRecienLlegdos(latestProducts, $event)"
 ></app-block-products-carousel>
 
 <app-block-posts *ngIf="StoreSvc.configuracionSitio.VerUltimasNoticias" header="Últimas Noticias" layout="list-sm" [posts]="posts"></app-block-posts>
 
-<app-block-brands *ngIf="StoreSvc.configuracionSitio.VerMarcas" [brands]="brands$|async"></app-block-brands>
+<app-block-brands *ngIf="StoreSvc.configuracionSitio.VerMarcas" [brands]="brands"></app-block-brands>
 
 <app-block-product-columns *ngIf="StoreSvc.configuracionSitio.VerBLoqueValoradosEspecialesVendidos" >
-    <app-block-product-columns-item header="Productos Mejor Valorados" [products]="columnTopRated$|async"></app-block-product-columns-item>
-    <app-block-product-columns-item header="Ofertas Especiales" [products]="columnSpecialOffers$|async"></app-block-product-columns-item>
-    <app-block-product-columns-item header="Mas Vendidos" [products]="columnBestsellers$|async"></app-block-product-columns-item>
+    <app-block-product-columns-item header="Productos Mejor Valorados" [products]="columnTopRated"></app-block-product-columns-item>
+    <app-block-product-columns-item header="Ofertas Especiales" [products]="columnSpecialOffers"></app-block-product-columns-item>
+    <app-block-product-columns-item header="Mas Vendidos" [products]="columnBestsellers"></app-block-product-columns-item>
 </app-block-product-columns>

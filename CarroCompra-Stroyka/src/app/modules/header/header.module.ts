@@ -19,6 +19,7 @@ import { MegamenuComponent } from './components/megamenu/megamenu.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { NavComponent } from './components/nav/nav.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { TopbarComponent } from './components/topbar/topbar.component';
         MenuComponent,
         NavComponent,
         TopbarComponent,
+        NotificationsComponent,
     ],
     imports: [
         // modules (angular)

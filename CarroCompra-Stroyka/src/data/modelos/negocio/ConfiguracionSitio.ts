@@ -4,8 +4,6 @@ export class ConfiguracionSitio {
     phone: string;
     hours: string;
     scrmapa: string;
-    verArticulos: string;
-    verDetalleArticulo: string;
     VerProductosDestacados: boolean;
     VerMasVendidos: boolean;
     VerCategoriasPopulares: boolean;

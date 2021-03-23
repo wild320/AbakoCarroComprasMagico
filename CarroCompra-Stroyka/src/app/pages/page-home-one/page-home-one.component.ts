@@ -6,7 +6,6 @@ import { ShopService } from '../../shared/api/shop.service';
 import { Product } from '../../shared/interfaces/product';
 import { Category } from '../../shared/interfaces/category';
 import { BlockHeaderGroup } from '../../shared/interfaces/block-header-group';
-import { takeUntil, tap } from 'rxjs/operators';
 
 // Modelos
 import {Item} from '../../../data/modelos/articulos/Items';
@@ -17,17 +16,15 @@ import { ArticulosService } from '../../shared/services/articulos.service';
 
 // Contantes
 import {CArticulos} from '../../../data/contantes/CArticulos';
-import { ConstantPool } from '@angular/compiler';
-import { Console } from 'console';
 
 interface ProductsCarouselGroup extends BlockHeaderGroup {
-    products$: Observable<Product[]>;
+    products: Item[];
 }
 
 interface ProductsCarouselData {
     abort$: Subject<void>;
     loading: boolean;
-    products: Product[];
+    products: Item[];
     groups: ProductsCarouselGroup[];
 }
 
@@ -39,12 +36,12 @@ interface ProductsCarouselData {
 export class PageHomeOneComponent implements OnInit, OnDestroy {
     destroy$: Subject<void> = new Subject<void>();
     bestsellers: Item[] = [];
-    brands$: Observable<Brand[]>;
-    popularCategories$: Observable<Category[]>;
+    brands: Brand[];
+    popularCategories: Category[];
 
-    columnTopRated$: Observable<Product[]>;
-    columnSpecialOffers$: Observable<Product[]>;
-    columnBestsellers$: Observable<Product[]>;
+    columnTopRated: Item[];
+    columnSpecialOffers: Item[];
+    columnBestsellers: Item[];
 
     posts = posts;
 
@@ -60,98 +57,27 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         // Recuperar los artoculos mas vendidos
-        if (!this.articulossvc.RecuperoMasVendidos){
-            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
-        }
+        this.recuperarMasVendidos();
 
         // recuperar si no ha recuperado aun
-        if (!this.articulossvc.RecuperoDestacados){
-            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosDestacadoss);
-        }
+        this.recuperarDestacados();
 
-        // recuperar artculos destacados
-        // tslint:disable-next-line: deprecation
-        this.articulossvc.getArticulosDestacados$().subscribe( data => {
-                console.log('destacados', data);
-        });
+        // recuperar articulos reciete llegados
+        this.recuperarRecienLlegados();
 
-        // recuperar artculos mas vendidos
-        // tslint:disable-next-line: deprecation
-        this.articulossvc.getArticulosMasVendidos$().subscribe( data => {
-            this.bestsellers = this.articulossvc.getArticulosMasVendidos().slice(0 , 7);
-        });
+        // organziar categorias populares
+        this.CategoriasPopulares();
 
-        // this.bestsellers$ = this.shop.getBestsellers(7);
-        this.brands$ = this.shop.getPopularBrands();
-        this.popularCategories$ = this.shop.getCategoriesBySlug([
-            'power-tools',
-            'hand-tools',
-            'machine-tools',
-            'power-machinery',
-            'measurement',
-            'clothes-and-ppe',
-        ], 1);
-        this.columnTopRated$ = this.shop.getTopRated(3);
-        this.columnSpecialOffers$ = this.shop.getSpecialOffers(3);
-        this.columnBestsellers$ = this.shop.getBestsellers(3);
+        // organizar mascas populares
+        this.MarcasPopulares();
 
-        this.featuredProducts = {
-            abort$: new Subject<void>(),
-            loading: false,
-            products: [],
-            groups: [
-                {
-                    name: 'Todos',
-                    current: true,
-                    products$: this.shop.getFeaturedProducts(null, 8),
-                },
-                {
-                    name: 'Power Tools',
-                    current: false,
-                    products$: this.shop.getFeaturedProducts('power-tools', 8),
-                },
-                {
-                    name: 'Hand Tools',
-                    current: false,
-                    products$: this.shop.getFeaturedProducts('hand-tools', 8),
-                },
-                {
-                    name: 'Plumbing',
-                    current: false,
-                    products$: this.shop.getFeaturedProducts('plumbing', 8),
-                },
-            ],
-        };
-        this.groupChange(this.featuredProducts, this.featuredProducts.groups[0]);
+        // REcuperar Ofertas Especiales
+        this.recuperarOfertasEspeciales();
 
-        this.latestProducts = {
-            abort$: new Subject<void>(),
-            loading: false,
-            products: [],
-            groups: [
-                {
-                    name: 'All',
-                    current: true,
-                    products$: this.shop.getLatestProducts(null, 8),
-                },
-                {
-                    name: 'Power Tools',
-                    current: false,
-                    products$: this.shop.getLatestProducts('power-tools', 8),
-                },
-                {
-                    name: 'Hand Tools',
-                    current: false,
-                    products$: this.shop.getLatestProducts('hand-tools', 8),
-                },
-                {
-                    name: 'Plumbing',
-                    current: false,
-                    products$: this.shop.getLatestProducts('plumbing', 8),
-                },
-            ],
-        };
-        this.groupChange(this.latestProducts, this.latestProducts.groups[0]);
+        // recuperar mejor valorados
+        this.recuperarMejorValorados();
+
+
     }
 
     ngOnDestroy(): void {
@@ -159,14 +85,200 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    groupChange(carousel: ProductsCarouselData, group: BlockHeaderGroup): void {
-        carousel.loading = true;
-        carousel.abort$.next();
+    CategoriasPopulares(){
 
-        (group as ProductsCarouselGroup).products$.pipe(
-            tap(() => carousel.loading = false),
-            takeUntil(merge(this.destroy$, carousel.abort$)),
-        // tslint:disable-next-line: deprecation
-        ).subscribe(x => carousel.products = x);
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperarCategoriasPopulares){
+            this.popularCategories = this.articulossvc.getCategoriasPopulares();
+        }else{
+
+            this.articulossvc.RecuperarGetCategoriasPopulares();
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getCategoriasPopulares$().subscribe(data => {
+                this.popularCategories = this.articulossvc.getCategoriasPopulares();
+            });
+        }
+
+    }
+
+    MarcasPopulares(){
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperarMarcasPopulares){
+            this.brands = this.articulossvc.getMarcasPopulares();
+        }else{
+
+            this.articulossvc.RecuperarGetMarcasPopulares();
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getMarcasPopulares$().subscribe(data => {
+                this.brands = this.articulossvc.getMarcasPopulares();
+            });
+        }
+
+    }
+
+    recuperarDestacados(){
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperoDestacados){
+            this.organizarArticulosDestacados();
+        }else{
+
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosDestacados);
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosDestacados$().subscribe(data => {
+                this.organizarArticulosDestacados();
+            });
+        }
+
+    }
+
+    recuperarRecienLlegados(){
+
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperarRecienLlegados){
+            this.organizarArticulosRecienLlegados();
+        }else{
+
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosRecienLlegados);
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosRecienLlegados$().subscribe(data => {
+                this.organizarArticulosRecienLlegados();
+            });
+        }
+
+    }
+
+    organizarArticulosDestacados(){
+
+        this.featuredProducts = {
+            abort$: new Subject<void>(),
+            loading: false,
+            products: [],
+            groups: this.OrganizarGrupo(this.articulossvc.getArticulosDestacados()),
+        };
+
+        this.groupChangeDestacados(this.featuredProducts, this.featuredProducts.groups[0]);
+
+    }
+
+    organizarArticulosRecienLlegados(){
+
+        this.latestProducts = {
+            abort$: new Subject<void>(),
+            loading: false,
+            products: [],
+            groups: this.OrganizarGrupo(this.articulossvc.getArticulosRecienLlegados()),
+        };
+
+        this.groupChangeRecienLlegdos(this.latestProducts, this.latestProducts.groups[0]);
+
+    }
+
+    OrganizarGrupo(articulos: Item[]): ProductsCarouselGroup[] {
+
+        const marcas: ProductsCarouselGroup[] = [];
+
+        // agregar el todosp or defecto
+        marcas.push ({
+            name: 'Todos',
+            current: true,
+            products: articulos,
+        });
+
+        // agrupar por marca
+        articulos.forEach(art => {
+
+            if (marcas.findIndex(i => i.name === art.marca) === -1 ) {
+                marcas.push({
+                    name: art.marca,
+                    current: false,
+                    products: articulos.filter(ft => ft.marca === art.marca),
+                });
+            }
+
+        });
+
+        return marcas;
+    }
+
+    recuperarMasVendidos(){
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperoMasVendidos){
+            this.bestsellers = this.articulossvc.getArticulosMasVendidos().slice(0 , 7);
+            this.columnBestsellers = this.articulossvc.getArticulosMasVendidos().slice(1 , 4);
+        }else{
+
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+                this.bestsellers = this.articulossvc.getArticulosMasVendidos().slice(0 , 7);
+                this.columnBestsellers = this.articulossvc.getArticulosMasVendidos().slice(1 , 4);
+            });
+        }
+    }
+
+    recuperarOfertasEspeciales(){
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperarOfertasEspeciales){
+            this.columnSpecialOffers = this.articulossvc.getArticulosOfertasEspeciales().slice(0 , 3);
+
+        }else{
+
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosOfertasEspeciales);
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosOfertasEspeciales$().subscribe(data => {
+                this.columnSpecialOffers = this.articulossvc.getArticulosOfertasEspeciales().slice(0 , 3);
+            });
+        }
+    }
+
+    recuperarMejorValorados(){
+
+        // Recuperar los articulos mas vendidos si ya fueron recuperados
+        if (this.articulossvc.RecuperarMejorValorados){
+            this.columnTopRated = this.articulossvc.getArticulosMejorValorados().slice(0 , 3);
+
+        }else{
+
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosMejorValorados);
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosMejorValorados$().subscribe(data => {
+                this.columnTopRated = this.articulossvc.getArticulosMejorValorados().slice(0 , 3);
+            });
+        }
+    }
+
+
+    groupChangeDestacados(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+
+        carousel.loading = true;
+
+        if (group.products !== null) {
+            this.featuredProducts.products = group.products;
+        }
+
+        carousel.loading = false;
+    }
+
+    groupChangeRecienLlegdos(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+
+        carousel.loading = true;
+
+        if (group.products !== null) {
+            this.latestProducts.products = group.products;
+        }
+
+        carousel.loading = false;
     }
 }

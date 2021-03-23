@@ -1,4 +1,4 @@
-import { Injectable, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -75,6 +75,7 @@ export class UsuarioService {
         this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
         this.addresses = [];
 
+        // tslint:disable-next-line: deprecation
         this.getEstadoLoguin$().subscribe(value => {});
 
   }
