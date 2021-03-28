@@ -7,11 +7,15 @@ import { WishlistService } from './shared/services/wishlist.service';
 
 
 import { NavigationEnd, Router } from '@angular/router';
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { isPlatformBrowser, TitleCasePipe, ViewportScroller } from '@angular/common';
 import { CurrencyService } from './shared/services/currency.service';
 import { filter, first } from 'rxjs/operators';
 
 import { NegocioService } from './shared/services/negocio.service';
+
+// utils
+import {UtilsTexto} from '../app/shared/utils/UtilsTexto';
+
 
 @Component({
     selector: 'app-root',
@@ -27,6 +31,7 @@ export class AppComponent implements OnInit {
         private compare: CompareService,
         private wishlist: WishlistService,
         private zone: NgZone,
+        private utils: UtilsTexto,
         private scroller: ViewportScroller,
         private currency: CurrencyService,
         private negocio: NegocioService,
@@ -69,13 +74,13 @@ export class AppComponent implements OnInit {
             }
         });
         this.cart.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${product.name}" Agregado al Carrito!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase (product.name) }" Agregado al Carrito!`);
         });
         this.compare.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${product.name}" Agregado para Comparar!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase (product.name)}" Agregado para Comparar!`);
         });
         this.wishlist.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${product.name}" Agregado a la Lista de Deseos!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase (product.name)}" Agregado a la Lista de Deseos!`);
         });
     }
 }

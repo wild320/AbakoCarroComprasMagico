@@ -12,6 +12,7 @@ import { CServicios } from '../../../data/contantes/cServicios';
 
 // modelos
 import {ConfiguracionSitio} from '../../../data/modelos/negocio/ConfiguracionSitio';
+import {SocialLinksItem} from '../../../data/modelos/negocio/RedesSociales';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,7 @@ export class StoreService {
     UrlServicioCarroCompras: string;
     public navigation: NavigationLink[];
     public configuracionSitio = new ConfiguracionSitio();
+    public redes: SocialLinksItem[];
 
     constructor(private httpClient: HttpClient,
                 private negocio: NegocioService,
@@ -44,6 +46,11 @@ export class StoreService {
         this.configuracionSitio.VerMarcas = false;
         this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = false;
         this.configuracionSitio.VerBannerIntermedio = false;
+        this.configuracionSitio.PasaleraContraEntrega  = true;
+        this.configuracionSitio.PasaleraPSE = true;
+        this.configuracionSitio.PasarelaTranferenciaBancaria = true;
+
+        this.redes = [];
 
     }
 
@@ -128,6 +135,44 @@ export class StoreService {
                     this.configuracionSitio.VerBannerIntermedio = true;
                 }
             }
+
+            // redes sociales
+            if (element.id === 'A20'){
+                this.redes.push({type: 'facebook', url: element.valor, icon: 'fab fa-facebook-f'});
+            }
+
+            if (element.id === 'A21'){
+                this.redes.push({type: 'twitter', url: element.valor, icon: 'fab fa-twitter'});
+            }
+
+            if (element.id === 'A22'){
+                this.redes.push({type: 'youtube', url: element.valor, icon: 'fab fa-youtube'});
+            }
+
+            if (element.id === 'A23'){
+                this.redes.push({type: 'instagram', url: element.valor, icon: 'fab fa-instagram'});
+            }
+
+            // pasarelas
+            if (element.id === 'A24'){
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.PasaleraPSE = false;
+                }
+            }
+
+            if (element.id === 'A25'){
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.PasarelaTranferenciaBancaria = false;
+                }
+            }
+
+
+            if (element.id === 'A26'){
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.PasaleraContraEntrega = false;
+                }
+            }
+
 
             // Direccion
             if (element.id === 'B1'){

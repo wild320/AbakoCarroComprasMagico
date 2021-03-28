@@ -12,6 +12,9 @@ export class ConfiguracionSitio {
     VerMarcas: boolean;
     VerBLoqueValoradosEspecialesVendidos: boolean;
     VerBannerIntermedio: boolean;
+    PasaleraContraEntrega: Boolean;
+    PasaleraPSE: boolean;
+    PasarelaTranferenciaBancaria: boolean;
   }
 
 

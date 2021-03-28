@@ -70,12 +70,17 @@ export class NotificacionesService {
         )
 
       )
-      .then( () => 
+      .then( () => {
 
-        // suscribirse al grupo de usuario 
-        this.hubConnection.invoke('AgregaraGrupo', this.idpersona.toString()).catch(err => 
-          console.log('Error agregadon a grupo: ' + err)
-        )
+        if (this.idpersona){
+
+          // suscribirse al grupo de usuario 
+          this.hubConnection.invoke('AgregaraGrupo', this.idpersona.toString()).catch(err => 
+            console.log('Error agregadon a grupo: ' + err)
+          )
+        }
+      }
+
 
       )
       .catch(err => 

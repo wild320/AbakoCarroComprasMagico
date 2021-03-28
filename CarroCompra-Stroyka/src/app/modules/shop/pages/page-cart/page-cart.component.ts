@@ -39,6 +39,7 @@ export class PageCartComponent implements OnInit, OnDestroy {
                     quantityControl: new FormControl(cartItem.quantity, Validators.required)
                 };
             }))
+        // tslint:disable-next-line: deprecation
         ).subscribe(items => this.items = items);
     }
 
@@ -53,6 +54,8 @@ export class PageCartComponent implements OnInit, OnDestroy {
         }
 
         this.removedItems.push(item);
+        // tslint:disable-next-line: deprecation
+        // tslint:disable-next-line: deprecation
         this.cart.remove(item).subscribe({complete: () => this.removedItems = this.removedItems.filter(eachItem => eachItem !== item)});
     }
 
@@ -65,6 +68,7 @@ export class PageCartComponent implements OnInit, OnDestroy {
                     item: item.cartItem,
                     quantity: item.quantityControl.value
                 }))
+        // tslint:disable-next-line: deprecation
         ).subscribe({complete: () => this.updating = false});
     }
 

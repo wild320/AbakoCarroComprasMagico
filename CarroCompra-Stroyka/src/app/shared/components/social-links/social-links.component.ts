@@ -1,11 +1,12 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { theme } from '../../../../data/theme';
 
-export interface SocialLinksItem {
-    type: string;
-    url: string;
-    icon: string;
-}
+// Servicio
+import {StoreService} from '../../../shared/services/store.service';
+
+// modelos
+import {SocialLinksItem} from '../../../../data/modelos/negocio/RedesSociales';
+
 
 export type SocialLinksShape = 'circle' | 'rounded';
 
@@ -17,13 +18,7 @@ export type SocialLinksShape = 'circle' | 'rounded';
 export class SocialLinksComponent {
     theme = theme;
 
-    items: SocialLinksItem[] = [
-        {type: 'facebook', url: this.theme.author.profile_url, icon: 'fab fa-facebook-f'},
-        {type: 'twitter', url: this.theme.author.profile_url, icon: 'fab fa-twitter'},
-        {type: 'youtube', url: this.theme.author.profile_url, icon: 'fab fa-youtube'},
-        {type: 'instagram', url: this.theme.author.profile_url, icon: 'fab fa-instagram'},
-        {type: 'rss', url: this.theme.author.profile_url, icon: 'fas fa-rss'},
-    ];
+    items: SocialLinksItem[];
 
     @Input() shape: SocialLinksShape;
 
@@ -33,5 +28,8 @@ export class SocialLinksComponent {
 
     @HostBinding('class.social-links--shape--rounded') get classSocialLinksShapeRounded(): boolean { return this.shape === 'rounded'; }
 
-    constructor() { }
+    constructor(private Store: StoreService) {
+
+        this.items = this.Store.redes.filter ( rd => rd.url.length > 0 );
+    }
 }

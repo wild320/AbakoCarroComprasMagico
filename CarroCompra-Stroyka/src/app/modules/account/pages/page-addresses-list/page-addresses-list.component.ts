@@ -6,11 +6,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import { DialogoSiNoComponent } from '../../../utils/components/dialogo-si-no/dialogo-si-no.component';
 
 // Contantes
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
+import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
 
 // servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-import { Cstring } from 'src/data/contantes/cString';
+import { UsuarioService } from '../../../../../app/shared/services/usuario.service';
+import { Cstring } from '../../../../../data/contantes/cString';
 
 
 @Component({

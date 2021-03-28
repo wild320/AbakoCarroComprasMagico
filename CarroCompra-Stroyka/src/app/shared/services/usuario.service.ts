@@ -43,6 +43,7 @@ export class UsuarioService {
   private UrlServicioLoguin: string;
   private UrlServicioLocalizacion: string;
   private UsrLogin$ = new Subject<LoginClienteResponse>();
+  private DireccionesCargadas$: BehaviorSubject<boolean>;
   private UsuarioLogueado$: BehaviorSubject<boolean>;
   private UsuarioLogueado: false;
   private VerificarExistencia = new VerificarExistenciaClienteRequest();
@@ -73,12 +74,23 @@ export class UsuarioService {
         ) {
 
         this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
+        this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
         this.addresses = [];
 
         // tslint:disable-next-line: deprecation
         this.getEstadoLoguin$().subscribe(value => {});
 
   }
+
+  
+  setdireccionesCargadas$(newValue): void {
+    this.DireccionesCargadas$.next(newValue);
+  }
+
+  getDireccionesCargadas$(): Observable<boolean> {
+    return this.DireccionesCargadas$.asObservable();
+  }
+
 
   setEstadoLoguin$(newValue): void {
     this.UsuarioLogueado = newValue;
@@ -667,6 +679,8 @@ export class UsuarioService {
           direccion: direccion.direccion
         });
       });
+
+      this.setdireccionesCargadas$(true);
 
     }
 

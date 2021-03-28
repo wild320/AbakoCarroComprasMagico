@@ -6,11 +6,11 @@ import {  Router } from '@angular/router';
 import {UsuarioService} from '../../../../shared/services/usuario.service';
 
 // utils
-import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
+import {UtilsTexto} from '../../../../shared/utils/UtilsTexto';
 
 // constantes
-import { Crutas } from 'src/data/contantes/cRutas';
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
+import { Crutas } from '../../../../../data/contantes/cRutas';
+import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
 
 // modelos
 import {EnviarUsuarioRequest} from '../../../../../data/modelos/seguridad/EnviarUsuarioRequest';

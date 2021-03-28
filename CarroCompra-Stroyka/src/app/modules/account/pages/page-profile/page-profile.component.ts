@@ -5,7 +5,7 @@ import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/form
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 // utils
-import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
+import {UtilsTexto} from '../../../../../app/shared/utils/UtilsTexto';
 
 // Contantes
 import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
