@@ -1,19 +1,5 @@
 <div class="search__body">
     <form [formGroup]="form" class="search__form" novalidate>
-        <select
-            *ngIf="location === 'header'"
-            class="search__categories"
-            aria-label="Category"
-            formControlName="category"
-            (focus)="closeSuggestion()"
-        >
-            <option value="all">Categorias</option>
-            <option
-                *ngFor="let category of categories"
-                [value]="category.slug"
-                [innerHTML]="getCategoryName(category)"
-            ></option>
-        </select>
         <input
             class="search__input"
             name="search"
@@ -51,7 +37,7 @@
 
                 <div class="suggestions__item-info">
                     <a [routerLink]="root.product(product.id)" class="suggestions__item-name" (click)="closeSuggestion()">
-                        {{ product.name }}
+                    {{ product.name | titlecase }}
                     </a>
                     <div class="suggestions__item-meta">SKU: {{ product.sku }}</div>
                 </div>

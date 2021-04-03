@@ -38,6 +38,7 @@ export class StoreService {
         this.configuracionSitio.phone = '';
         this.configuracionSitio.hours = '';
         this.configuracionSitio.scrmapa = '';
+        this.configuracionSitio.AgenciaDefaul = '';
         this.configuracionSitio.VerProductosDestacados = false;
         this.configuracionSitio.VerMasVendidos = false;
         this.configuracionSitio.VerCategoriasPopulares = false;
@@ -166,13 +167,11 @@ export class StoreService {
                 }
             }
 
-
             if (element.id === 'A26'){
                 if (element.valor === 'NO'){
                     this.configuracionSitio.PasaleraContraEntrega = false;
                 }
             }
-
 
             // Direccion
             if (element.id === 'B1'){
@@ -188,6 +187,12 @@ export class StoreService {
             if (element.id === 'B3'){
                 this.configuracionSitio.email =  element.valor;
             }
+            
+            // agencia
+            if (element.id === 'B4'){
+                this.configuracionSitio.AgenciaDefaul =  element.valor;
+            }
+
 
             // activar o desactivar paginas
             if (element.id[0]   === 'S'){

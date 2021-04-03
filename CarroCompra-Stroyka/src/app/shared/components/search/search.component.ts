@@ -13,15 +13,17 @@ import {
 } from '@angular/core';
 import { RootService } from '../../services/root.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, map, switchMap, takeUntil, throttleTime } from 'rxjs/operators';
-import { fromEvent, of, Subject, asyncScheduler } from 'rxjs';
-import { ShopService } from '../../api/shop.service';
+import { debounceTime,  takeUntil } from 'rxjs/operators';
+import { fromEvent,  Subject } from 'rxjs';
 import { Category } from '../../interfaces/category';
 import { DOCUMENT } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
+
+// Servicios
+import { ArticulosService} from '../../../shared/services/articulos.service'
 
 export type SearchLocation = 'header' | 'indicator' | 'mobile-header';
 
@@ -39,8 +41,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     form: FormGroup;
 
     hasSuggestions = false;
-
-    categories: CategoryWithDepth[] = [];
 
     suggestedProducts: Item[] = [];
 
@@ -75,50 +75,43 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         private fb: FormBuilder,
         private elementRef: ElementRef,
         private zone: NgZone,
-        private shop: ShopService,
         private cart: CartService,
         public root: RootService,
-    ) { }
+        private articulossvc: ArticulosService,
+    ) { 
+        this.cargarSugerencias();
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.location && this.location === 'header') {
-            this.shop.getCategories(null, 1).pipe(
-                takeUntil(this.destroy$),
-            ).subscribe(categories => this.categories = this.getCategoriesWithDepth(categories));
-        }
+
     }
 
     ngOnInit(): void {
+
         this.form = this.fb.group({
-            category: ['all'],
             query: [''],
         });
 
-        this.form.get('query').valueChanges.pipe(
-            throttleTime(250, asyncScheduler, {leading: true, trailing: true}),
-            map(query => query.trim()),
-            switchMap(query => {
-                if (query) {
-                    const categorySlug = this.form.value.category !== 'all' ? this.form.value.category : null;
 
-                    return this.shop.getSuggestions(query, 5, categorySlug);
-                }
+        this.form.get('query').valueChanges.subscribe(query => {
 
-                return of([]);
-            }),
-            takeUntil(this.destroy$),
-        ).subscribe(products => {
-            this.hasSuggestions = products.length > 0;
+            if (query.length > 2 ){
 
-            if (products.length > 0) {
-                this.suggestedProducts = products;
+                this.articulossvc.RecuperarArticulosBusqueda(query)
+
+                if (!this.articulossvc.SuscribirBusquedaArticulos) {
+                    this.suscribirBusqueda();  
+                } 
+
             }
-        });
+            
+          });
 
         this.zone.runOutsideAngular(() => {
             fromEvent(this.document, 'click').pipe(
                 takeUntil(this.destroy$),
             ).subscribe(event => {
+
                 const activeElement = this.document.activeElement;
 
                 // If the inner element still has focus, ignore the click.
@@ -161,9 +154,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         this.classSearchSuggestionsOpen = false;
     }
 
-    getCategoryName(category: CategoryWithDepth): string {
-        return '&nbsp;'.repeat(category.depth * 4) + category.name;
-    }
 
     addToCart(product: Item): void {
         if (this.addedToCartProducts.includes(product)) {
@@ -177,12 +167,30 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             }
         });
     }
+ 
+    private cargarSugerencias(){
 
-    private getCategoriesWithDepth(categories: Category[], depth = 0): CategoryWithDepth[] {
-        return categories.reduce<CategoryWithDepth[]>((acc, category) => [
-            ...acc,
-            {...category, depth},
-            ...this.getCategoriesWithDepth(category.children || [], depth + 1),
-        ], []);
+        if (this.suggestedProducts.length === 0 ){
+            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+                this.suggestedProducts = this.articulossvc.getArticulosMasVendidos().slice(0,6);
+                this.hasSuggestions = true;
+            });
+        }
+
+    }
+
+    private suscribirBusqueda(){
+
+        this.articulossvc.getArticulosBusqueda$().subscribe(data => {
+
+            this.hasSuggestions = this.articulossvc.getArticulosBusqueda().slice(0,12).length > 0;
+
+            if (this.articulossvc.getArticulosBusqueda().length > 0) {
+                this.suggestedProducts  = []
+                this.suggestedProducts = this.articulossvc.getArticulosBusqueda().slice(0,12);
+            }
+        });
+
     }
 }
+

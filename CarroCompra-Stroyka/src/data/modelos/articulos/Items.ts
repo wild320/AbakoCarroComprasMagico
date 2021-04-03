@@ -13,6 +13,12 @@ export class Item {
     compareAtPrice: number;
     images: string[];
     price: number;
+    priceunit: number;
+    taxes: number;
+    discount: number;
+    discountPerc: number;
+    descUM: string;
+    um: string;
     rating: number;
     reviews: number;
     sku: string;

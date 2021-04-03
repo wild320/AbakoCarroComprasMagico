@@ -41,6 +41,10 @@ export class ArticulosService {
   private Articulos: ArticulosCarroComprasResponse;
   private ArticulosSeleccionados$ = new Subject<Products>();
   private ArticulosSeleccionados: Products;
+  private ArticulosRelacionados$ = new Subject<Item[]>();
+  private ArticulosRelacionados: Item[];
+  private ArticulosBusqueda$ = new Subject<Item[]>();
+  private ArticulosBusqueda: Item[];
   private Articulosfiltrados = new Products();
   private AtributosFiltros = new Products();
   private AtributosFiltros$ = new Subject<Products>();
@@ -75,6 +79,7 @@ export class ArticulosService {
   public RecuperoDestacados = false;
   public RecuperoMasVendidos = false;
   public RecuperarRecienLlegados = false;
+  public SuscribirBusquedaArticulos = false;
   public RecuperarCategoriasPopulares = false;
   public RecuperarMarcasPopulares = false;
   public RecuperarOfertasEspeciales = false;
@@ -512,6 +517,33 @@ export class ArticulosService {
     return this.ArticulosSeleccionados;
   }
 
+  setArticulosRelacionados$(newValue): void {
+    this.ArticulosRelacionados = newValue;
+    this.ArticulosRelacionados$.next(newValue);
+  }
+
+  getArticulosRelacionados$(): Observable<Item[]> {
+    return this.ArticulosRelacionados$.asObservable();
+  }
+
+  getArticulosRelacionados(): Item[] {
+    return this.ArticulosRelacionados;
+  }
+
+  setArticulosBusqueda$(newValue): void {
+    this.SuscribirBusquedaArticulos = true;
+    this.ArticulosBusqueda = newValue;
+    this.ArticulosBusqueda$.next(newValue);
+  }
+
+  getArticulosBusqueda$(): Observable<Item[]> {
+    return this.ArticulosBusqueda$.asObservable();
+  }
+
+  getArticulosBusqueda(): Item[] {
+    return this.ArticulosBusqueda;
+  }
+
   public ConsultarDepartamento(IdEmpresa: number ){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
@@ -642,6 +674,71 @@ export class ArticulosService {
 
   }
 
+  public RecuperarArticulosRelacionados(Idarticulo: number){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioRecuperarArticulosRelacionados;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa  = 0;
+    }
+
+    const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+    const TipoRelacionado = 'DETREL'
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${TipoRelacionado}/${IdEmpresa}/${Idarticulo}`, { responseType: 'text' })
+        .toPromise()
+        .then((art: any) => {
+
+          const {items} = JSON.parse(art);
+
+          this.setArticulosRelacionados$ (items);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
+
+  public RecuperarArticulosBusqueda(Busqueda: string){
+    this.UrlServicio =
+        this.negocio.configuracion.UrlServicioCarroCompras +
+        CServicios.ApiCarroCompras +
+        CServicios.ServicioRecuperarArticulosBusqueda;
+
+    if (!this.usuariosvc.Idempresa ) {
+      this.usuariosvc.Idempresa  = 0;
+    }
+
+    const IdEmpresa   = this.usuariosvc.Idempresa.toString();
+
+    this.setIsLoading(true);
+
+    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${Busqueda}`, { responseType: 'text' })
+        .toPromise()
+        .then((art: any) => {
+
+          const {items} = JSON.parse(art);
+
+          this.setArticulosBusqueda$ (items);
+
+        })
+        .catch((err: any) => {
+
+          this.setIsLoading(false);
+          console.log ('Error al consumir servicio:' + err.message);
+
+        });
+
+  }
+
   public RecuperarGetCategoriasPopulares(){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
@@ -705,7 +802,6 @@ export class ArticulosService {
         });
 
   }
-
 
   public RecuperarArticuloDetalle(Id: number){
     this.UrlServicio =

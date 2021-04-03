@@ -18,6 +18,7 @@ interface CartData {
     items: CartItem[];
     quantity: number;
     subtotal: number;
+    discounts: number;
     totals: CartTotal[];
     total: number;
 }
@@ -30,6 +31,7 @@ export class CartService {
         items: [],
         quantity: 0,
         subtotal: 0,
+        discounts: 0,
         totals: [],
         total: 0
     };
@@ -37,6 +39,7 @@ export class CartService {
     private itemsSubject$: BehaviorSubject<CartItem[]> = new BehaviorSubject(this.data.items);
     private quantitySubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.quantity);
     private subtotalSubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.subtotal);
+    private discountsSubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.subtotal);
     private totalsSubject$: BehaviorSubject<CartTotal[]> = new BehaviorSubject(this.data.totals);
     private totalSubject$: BehaviorSubject<number> = new BehaviorSubject(this.data.total);
     private onAddingSubject$: Subject<Item> = new Subject();
@@ -52,6 +55,7 @@ export class CartService {
     readonly items$: Observable<CartItem[]> = this.itemsSubject$.asObservable();
     readonly quantity$: Observable<number> = this.quantitySubject$.asObservable();
     readonly subtotal$: Observable<number> = this.subtotalSubject$.asObservable();
+    readonly discounts$: Observable<number> = this.discountsSubject$.asObservable();
     readonly totals$: Observable<CartTotal[]> = this.totalsSubject$.asObservable();
     readonly total$: Observable<number> = this.totalSubject$.asObservable();
 
@@ -129,13 +133,24 @@ export class CartService {
         }));
     }
 
+    // vaciar carro
+    clearAll(){
+
+        this.items.map(item => this.remove(item).subscribe());
+
+    }
+
     private calc(): void {
         let quantity = 0;
         let subtotal = 0;
+        let discount = 0;
+        let taxes = 0
 
         this.data.items.forEach(item => {
             quantity += item.quantity;
-            subtotal += item.product.price * item.quantity;
+            subtotal += item.product.priceunit * item.quantity;
+            discount += item.product.discount * item.quantity;
+            taxes += item.product.taxes * item.quantity;
         });
 
         const totals: CartTotal[] = [];
@@ -147,20 +162,22 @@ export class CartService {
         });
         totals.push({
             title: 'Impuestos',
-            price: subtotal * 0.20,
+            price: taxes,
             type: 'tax'
         });
 
-        const total = subtotal + totals.reduce((acc, eachTotal) => acc + eachTotal.price, 0);
+        const total = subtotal - discount + taxes;
 
         this.data.quantity = quantity;
         this.data.subtotal = subtotal;
+        this.data.discounts = discount;
         this.data.totals = totals;
         this.data.total = total;
 
         this.itemsSubject$.next(this.data.items);
         this.quantitySubject$.next(this.data.quantity);
         this.subtotalSubject$.next(this.data.subtotal);
+        this.discountsSubject$.next(this.data.discounts);
         this.totalsSubject$.next(this.data.totals);
         this.totalSubject$.next(this.data.total);
     }

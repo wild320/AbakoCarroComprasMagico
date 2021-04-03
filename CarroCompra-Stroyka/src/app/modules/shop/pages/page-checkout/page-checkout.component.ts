@@ -9,9 +9,14 @@ import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms
 // Servicios
 import { UsuarioService } from '../../../../../app/shared/services/usuario.service';
 import {StoreService} from '../../../../shared/services/store.service';
+import {PedidosService} from '../../../../shared/services/pedidos.service';
 
 // utils
 import {UtilsTexto} from '../../../../shared/utils/UtilsTexto';
+
+// Contantes
+import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
+
 
 
 @Component({
@@ -36,7 +41,8 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         public usuariosvc: UsuarioService,
-        public Store: StoreService
+        public Store: StoreService,
+        private Pedidosvc: PedidosService 
     ) {
 
         this.loading = false;
@@ -151,7 +157,6 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         }
 
     }
-    
 
     submitForm(){
 
@@ -161,16 +166,36 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
         if (this.EsValidoFormulario()){
 
-            // this.usuariosvc.GuardarActualizarDireccion(this.DireccionGuardar).then((ret: any) => {
+            // armar detalle pedido
+            const detalle = this.cart.items.map(elem => (
+                {
+                    IdArt: elem.product.id,
+                    Cant: elem.quantity,
+                    UM: elem.product.um,
+                    Desc: elem.product.discountPerc,
+                    Dct: 0,
+                    Vr: 0,
+                } 
+            ));
 
-               // if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error ){
-                 //   this.mensajerespuestaerror = ret.estado[0].msgStr;
+            //Enviar pedido
+            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa, this.usuariosvc.IdPersona, this.Store.configuracionSitio.AgenciaDefaul,
+                this.Observaciones.value, this.seldireccion.value, detalle).then((ret: any) => {
 
-                // }else{
-                    this.mensajerespuestaexito = 'Pedido Enviado exitosamente.';
-                // }
+                if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error ){
+                    this.mensajerespuestaerror = ret.estado[0].msgStr;
 
-            // });
+                }else{
+
+                    this.mensajerespuestaexito = 'Se ha generado el pedido ' + ret.ped.toString() + ' exitosamente.'  ;
+
+                    this.cart.clearAll();
+
+                    this.Pedidosvc.CargarUltimoPedido(ret.idPed);
+   
+                }
+
+            });
 
         }
 

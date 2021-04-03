@@ -16,9 +16,13 @@ export const CServicios = {
     ServivioMaestrosLocalizacion: 'MaestrosLocalizacion',
     ServicioRecuperarArticulos: 'Articulos/RecuperarArticuloCarroCompras',
     ServicioRecuperarEspecialesVendidos: 'Articulos/RecuperarArticulosEspecialesCarroCompras',
+    ServicioRecuperarArticulosRelacionados: 'Articulos/RecuperarArticulosDetalleEspecialesCarroCompras',
+    ServicioRecuperarArticulosBusqueda: 'Articulos/RecuperarArticuloBusqueda',
     ServicioRecuperarArticulosDetalle: 'Articulos/RecuperarArticuloDetalleCarroCompras',
     ServicioCategoriasPopulares: 'Categorias/RecuperarCatagoriasPopulares',
     ServicioMarcasPopulares: 'Marcas/RecuperarMarcasPopulares',
-    ServicioSerNotificacionMensajeLeida: 'Notificacion/SetNotificacionMensajeLeida'
+    ServicioSerNotificacionMensajeLeida: 'Notificacion/SetNotificacionMensajeLeida',
+    InsertarPedidoF000: 'Pedidos/InsertarPedidoF000',
+    ServicioFechaServidor: 'FechaServidor',
 };
 

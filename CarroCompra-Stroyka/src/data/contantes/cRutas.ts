@@ -10,6 +10,7 @@ export const Crutas = {
     RecuperarContrasena: '/account/recuperarusuario',
     loguin: '/account/login',
     shop: '/shop/catalog',
+    succesorder: '/shop/cart/checkout/success',
 
     Dashboard: '/account/dashboard',
     EditarCuenta: '/account/profile',

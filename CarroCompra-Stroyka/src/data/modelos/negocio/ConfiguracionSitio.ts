@@ -15,6 +15,7 @@ export class ConfiguracionSitio {
     PasaleraContraEntrega: Boolean;
     PasaleraPSE: boolean;
     PasarelaTranferenciaBancaria: boolean;
+    AgenciaDefaul: string;
   }
 
 

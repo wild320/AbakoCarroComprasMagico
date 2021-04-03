@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <app-block-products-carousel header="Productos Relacionados" [products]="relatedProducts$|async" [rows]="1" layout="grid-5"></app-block-products-carousel>
+    <app-block-products-carousel header="Productos Relacionados" [products]="relatedProducts" [rows]="1" layout="grid-5"></app-block-products-carousel>
 </ng-container>
 
 <ng-container *ngIf="layout === 'sidebar'">
@@ -26,7 +26,7 @@
                     <app-product-tabs [withSidebar]="true"></app-product-tabs>
                 </div>
 
-                <app-block-products-carousel header="Related Products" [products]="relatedProducts$|async" [rows]="1" [withSidebar]="true" layout="grid-4-sm"></app-block-products-carousel>
+                <app-block-products-carousel header="Productos Relacionados" [products]="relatedProducts" [rows]="1" [withSidebar]="true" layout="grid-4-sm"></app-block-products-carousel>
             </div>
 
             <div *ngIf="sidebarPosition === 'end'" class="shop-layout__sidebar">

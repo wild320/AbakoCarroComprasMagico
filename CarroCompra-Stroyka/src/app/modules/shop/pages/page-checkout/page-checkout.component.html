@@ -95,10 +95,17 @@
                                 </tr>
                                 </tbody>
                                 <tbody *ngIf="(cart.totals$|async).length" class="checkout__totals-subtotals">
+
                                 <tr>
                                     <th>Subtotal</th>
                                     <td>{{ cart.subtotal$|async|currencyFormat }}</td>
                                 </tr>
+
+                                <tr>
+                                    <th>Descuentos</th>
+                                    <td>{{ cart.discounts$|async|currency }}</td>
+                                </tr>
+
                                 <tr *ngFor="let total of cart.totals$|async">
                                     <th>{{ total.title }}</th>
                                     <td>{{ total.price|currencyFormat }}</td>

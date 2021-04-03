@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 // servicios
-import { PedidosService } from 'src/app/shared/services/pedidos.service';
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
+import { PedidosService } from '../../../../../app/shared/services/pedidos.service';
+import { UsuarioService } from '../../../../../app/shared/services/usuario.service';
 
 // constantes
-import { Crutas } from 'src/data/contantes/cRutas';
+import { Crutas } from '../../../../../data/contantes/cRutas';
 
 
 @Component({
@@ -36,7 +36,12 @@ export class PageOrderDetailsComponent implements OnInit {
 
         }
 
-        this.pedidosvc.cargarDetallePedido(pedido).then((resp: any) => {
+        // sacar el numero de pedido
+        const index = this.pedidosvc.orders.findIndex( x => x.pedido === pedido);
+
+        const IdPedido =  this.pedidosvc.orders[index].idPedido;
+
+        this.pedidosvc.cargarDetallePedido(IdPedido, index).then((resp: any) => {
 
             // console.log(this.pedidosvc.ordenactual);
 

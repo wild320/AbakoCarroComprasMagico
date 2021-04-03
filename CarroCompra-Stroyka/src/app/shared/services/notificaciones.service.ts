@@ -58,18 +58,19 @@ export class NotificacionesService {
 
     let builder  = new HubConnectionBuilder()
 
-    this.hubConnection = builder.withUrl(this.UrlServicio).build()
+    this.hubConnection = builder.withUrl(this.UrlServicio)
+                                .build()
     
     this.hubConnection
       .start()
-      .then( () => 
+      .then( () => {
 
         // suscribirse al grupo de cliente 
         this.hubConnection.invoke('AgregaraGrupo', CNotificaciones.GrupoCliente).catch(err => 
           console.log('Error agregadon a grupo: ' + err)
         )
 
-      )
+      })
       .then( () => {
 
         if (this.idpersona){
@@ -95,9 +96,9 @@ export class NotificacionesService {
     // recibir notificacion 
     this.hubConnection.on("RecibirMensaje", data => {
 
-        this.ArmarNotificacion(data);
+      this.ArmarNotificacion(data);
       
-     });
+    });
 
   }
 

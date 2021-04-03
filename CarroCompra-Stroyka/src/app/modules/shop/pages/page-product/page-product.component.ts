@@ -17,7 +17,7 @@ import { Item } from '../../../../../data/modelos/articulos/Items';
     styleUrls: ['./page-product.component.scss']
 })
 export class PageProductComponent implements OnInit, OnDestroy {
-    relatedProducts$: Observable<Product[]>;
+    relatedProducts: Item[];
 
     product: Item;
     ArticulosSuscribe$: any;
@@ -57,7 +57,13 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
 
-            this.relatedProducts$ = this.shop.getRelatedProducts(data.product);
+            this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
+
+            // tslint:disable-next-line: deprecation
+            this.articulossvc.getArticulosRelacionados$().subscribe(data => {
+                this.relatedProducts = this.articulossvc.getArticulosRelacionados();
+            });
+
         });
     }
 

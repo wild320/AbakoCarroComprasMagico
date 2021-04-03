@@ -80,6 +80,10 @@
                                 <th>Subtotal</th>
                                 <td>{{ cart.subtotal$|async|currency }}</td>
                             </tr>
+                            <tr>
+                                <th>Descuentos</th>
+                                <td>{{ cart.discounts$|async|currency }}</td>
+                            </tr>
                             </thead>
                             <tbody *ngIf="(cart.totals$|async).length" class="cart__totals-body">
                             <tr *ngFor="let total of cart.totals$|async">
