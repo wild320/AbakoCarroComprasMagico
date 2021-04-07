@@ -38,3 +38,15 @@ $stroyka-theme: mat-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body:not(.style-scope):not([no-y-overflow]):not(.style-scope)::-webkit-scrollbar {
+  width: 16px;
+}
+
+body:not(.style-scope):not([no-y-overflow]):not(.style-scope)::-webkit-scrollbar-thumb {
+  height: 56px;
+  border-radius: 8px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+  background-color: #909090;
+}
