@@ -130,16 +130,17 @@ export class PageProfileComponent implements OnInit {
             && this.EditarPerfilForm !== undefined
             && this.usuariosvc.DatosPersona !== undefined ){
 
-            if (this.usuariosvc.DatosPersona.dllMail.length){
+
+            if (this.usuariosvc.DatosPersona.dllMail?.length){
                 this.correo = this.usuariosvc.DatosPersona.dllMail[0].mail;
             }
 
-            if (this.usuariosvc.DatosPersona.dllTelefono.length){
+            if (this.usuariosvc.DatosPersona.dllTelefono?.length){
                 this.telefono = this.usuariosvc.DatosPersona.dllTelefono[0].telefono;
             }
 
             this.EditarPerfilForm.patchValue({
-                Nombres: this.usuariosvc.UsrLogin.usuario[0].nmb,
+                Nombres: this.usuariosvc.UsrLogin.usuario[0].nmbr,
                 Apellidos: this.usuariosvc.UsrLogin.usuario[0].apll,
                 Identificacion: this.usuariosvc.UsrLogin.usuario[0].idnt,
                 Correo: this.correo,

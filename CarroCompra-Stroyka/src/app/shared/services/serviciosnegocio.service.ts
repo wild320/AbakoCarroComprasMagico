@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';

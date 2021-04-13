@@ -28,6 +28,7 @@ import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSele
 // constantes
 import {cFiltros} from '../../../data/contantes/Cfiltros';
 import {CArticulos} from '../../../data/contantes/CArticulos';
+import { Console } from 'console';
 
 
 @Injectable({
@@ -96,7 +97,7 @@ export class ArticulosService {
       // tslint:disable-next-line: deprecation
       this.usuariosvc.getEstadoLoguin$().subscribe(() => {
 
-        if (this.IdempresaCLienteLogueada === undefined && this.usuariosvc.Idempresa === undefined){
+        if ((this.IdempresaCLienteLogueada === undefined && this.usuariosvc.Idempresa === undefined) || this.IdempresaCLienteLogueada === 0){
           this.IdempresaCLienteLogueada = 0;
           this.ConsultarDepartamento(0);
         }else{
@@ -579,6 +580,7 @@ export class ArticulosService {
 
       case CTipoFiltros.FiltroAleatorio:
           return '0';
+
 
     }
 

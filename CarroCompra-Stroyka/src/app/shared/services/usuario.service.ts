@@ -115,8 +115,8 @@ export class UsuarioService {
 
   private CRUDPersonaExistente(accion: string, persona: Persona ): Promise<void> {
     this.UrlServicioLoguin =
-        this.negocio.configuracion.UrlServicioCarroCompras +
-        CServicios.ApiNegocio +
+        this.negocio.configuracion.UrlServicioAdministracion +
+        CServicios.ApiAdministracion +
         CServicios.ServivioCRUDPersonaExistente;
 
     // cargar los datos del usaurios
@@ -436,10 +436,10 @@ export class UsuarioService {
 
   }
 
-  CargarMaestrosLocalizacion(){
+  async CargarMaestrosLocalizacion(){
 
     if (this.objMaestrosLocalizacion.barrios === undefined){
-      return this.MaestrosLocalizacion().then((ret: any) => { });
+      return await this.MaestrosLocalizacion().then((ret: any) => { });
     }
 
   }

@@ -1,6 +1,7 @@
 export const CServicios = {
     ApiCarroCompras: 'ApiCarroCompras/api/',
     ApiNegocio: 'ApiNegocio/api/',
+    ApiAdministracion: 'ApiAdministracion/api/',
     ServicioConfiguracionCC: 'Configuracion',
     ServicioPaginas: 'Paginas',
     ServicioAcordeon: 'Acordeon',
