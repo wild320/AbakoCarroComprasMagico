@@ -23,8 +23,6 @@ export class BlockSlideshowComponent {
         rtl: this.direction.isRTL()
     };
 
-    rutaimagenes: string;
-
     slides = [];
 
     constructor(
@@ -32,17 +30,10 @@ export class BlockSlideshowComponent {
         private direction: DirectionService,
         public pagina: PaginasService
     ) {
-        this.rutaimagenes = 'assets/images/slides/';
 
         if (this.slides === undefined || this.slides.length === 0  ){
 
             this.pagina.cargarAcordeon().then((resp: any) => {
-
-                resp.forEach((element, i) => {
-                    resp[i].imagenClasica = this.rutaimagenes + element.imagenClasica;
-                    resp[i].imagenFull = this.rutaimagenes + element.imagenFull;
-                    resp[i].imagenMobile = this.rutaimagenes + element.imagenMobile;
-                });
 
                 this.slides = resp;
 

@@ -1,6 +1,6 @@
 import { Injectable,  } from '@angular/core';
 import { Observable, Subject} from 'rxjs';
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection, LogLevel } from '@aspnet/signalr';
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
@@ -58,7 +58,8 @@ export class NotificacionesService {
 
     let builder  = new HubConnectionBuilder()
 
-    this.hubConnection = builder.withUrl(this.UrlServicio)
+    this.hubConnection = builder.configureLogging(LogLevel.None)
+                                .withUrl(this.UrlServicio)
                                 .build()
     
     this.hubConnection

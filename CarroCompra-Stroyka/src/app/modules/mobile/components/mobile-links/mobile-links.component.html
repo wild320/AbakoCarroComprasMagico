@@ -2,8 +2,8 @@
     <li *ngFor="let link of links">
         <div *ngIf="['link', 'button'].includes(link.type)" class="mobile-links__item" appCollapseItem="mobile-links__item--open" #item="appCollapseItem">
             <div class="mobile-links__item-title">
-                <a *ngIf="link.type === 'link'" class="mobile-links__item-link" (click)="onItemClick(link)" [routerLink]="link.url">{{ link.label }}</a>
-                <a *ngIf="link.type !== 'link'" class="mobile-links__item-link" (click)="onItemClick(link)">{{ link.label }}</a>
+                <a *ngIf="link.type === 'link'" class="mobile-links__item-link" (click)="onItemClick(link)" [routerLink]="link.url">{{ link.label | titlecase }}</a>
+                <a *ngIf="link.type !== 'link'" class="mobile-links__item-link" (click)="onItemClick(link)">{{ link.label  | titlecase  }}</a>
                 <button *ngIf="link.children?.length" class="mobile-links__item-toggle" type="button" (click)="item.toggle()">
                     <app-icon class="mobile-links__item-arrow" name="arrow-rounded-down-12x7" size="12x7"></app-icon>
                 </button>

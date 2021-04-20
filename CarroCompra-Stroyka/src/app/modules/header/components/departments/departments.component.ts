@@ -19,7 +19,7 @@ import { fromOutsideTouchClick } from '../../../../shared/functions/rxjs/fromOut
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // interfaces
-import { NavigationLink } from 'src/app/shared/interfaces/navigation-link';
+import { NavigationLink } from '../../../../../app/shared/interfaces/navigation-link';
 
 // constantes
 import {Crutas } from '../../../../../data/contantes/cRutas';

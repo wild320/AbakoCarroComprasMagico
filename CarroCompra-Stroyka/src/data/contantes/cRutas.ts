@@ -32,6 +32,7 @@ export const ClabelRutas = {
     listaDeseo: 'Lista de Deseos',
     shop: 'Shop',
 
+    loguin: 'Iniciar Sesión',
     Dashboard: 'Dashboard',
     EditarCuenta: 'Editar Perfil',
     MiHistorial: 'Historial de Pedidos',

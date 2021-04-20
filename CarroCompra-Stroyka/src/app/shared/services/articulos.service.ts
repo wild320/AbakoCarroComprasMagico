@@ -38,6 +38,7 @@ export class ArticulosService {
 
   private UrlServicio: string;
   private megaMenu$ = new Subject<NavigationLink[]>();
+  private megaMenu: NavigationLink[];
   private Articulos$ = new Subject<ArticulosCarroComprasResponse>();
   private Articulos: ArticulosCarroComprasResponse;
   private ArticulosSeleccionados$ = new Subject<Products>();
@@ -307,11 +308,16 @@ export class ArticulosService {
   }
 
   setMegaMenu$(newValue): void {
+    this.megaMenu = newValue;
     this.megaMenu$.next(newValue);
   }
 
   getMegaMenu$(): Observable<NavigationLink[]> {
     return this.megaMenu$.asObservable();
+  }
+
+  getMegaMenu(): NavigationLink[] {
+    return this.megaMenu;
   }
 
   setArticulos$(newValue): void {

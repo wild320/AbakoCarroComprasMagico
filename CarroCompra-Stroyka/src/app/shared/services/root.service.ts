@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../interfaces/product';
 import { Brand } from '../interfaces/brand';
 
 

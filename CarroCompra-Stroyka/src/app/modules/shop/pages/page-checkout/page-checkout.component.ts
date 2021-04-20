@@ -56,6 +56,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
             if (value) {
                 this.EsUsuarioLogueado = true;
+                this.cliente.setValue(this.utils.TitleCase(this.usuariosvc.razonsocial));
             }else{
                 this.EsUsuarioLogueado = false;
             }
@@ -108,8 +109,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
     }
 
     private CargarDataUsuario(){
-        
-        this.cliente.setValue(this.utils.TitleCase(this.usuariosvc.razonsocial));
+
 
         if (this.usuariosvc.addresses) {
             this.CargaDatosDireccion(0)
@@ -211,6 +211,12 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
         // debe tener una direccion selecionada
         if (this.seldireccion.invalid){
+            this.mensajerespuestaerror = 'Debe seleccionar una dirección';
+            return false;
+        }
+        
+        // debe tener una direccion selecionada
+        if (this.Direccion.invalid){
             this.mensajerespuestaerror = 'Debe seleccionar una dirección';
             return false;
         }
