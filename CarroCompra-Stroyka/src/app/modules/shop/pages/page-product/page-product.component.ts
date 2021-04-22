@@ -50,11 +50,8 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        // tslint:disable-next-line: deprecation
-        this.route.data.subscribe(data => {
-            this.layout = data.layout || this.layout;
-            this.sidebarPosition = data.sidebarPosition || this.sidebarPosition;
-
+        this.route.paramMap.subscribe(data => {
+            
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
 
             this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
@@ -63,6 +60,16 @@ export class PageProductComponent implements OnInit, OnDestroy {
             this.articulossvc.getArticulosRelacionados$().subscribe(data => {
                 this.relatedProducts = this.articulossvc.getArticulosRelacionados();
             });
+
+        });
+
+        // tslint:disable-next-line: deprecation
+        this.route.data.subscribe(data => {
+
+
+            this.layout = data.layout || this.layout;
+            this.sidebarPosition = data.sidebarPosition || this.sidebarPosition;
+
 
         });
     }

@@ -5,7 +5,7 @@
                 <button class="mobile-header__menu-button" (click)="menu.open()">
                     <app-icon name="menu-18x14" size="18x14"></app-icon>
                 </button>
-                <a class="mobile-header__logo" routerLink="/home">
+                <a class="mobile-header__logo" routerLink="/">
                     <img [src]="logo" alt="Logo - Carro de Compras" style="width: 120px; height: 40px">
                 </a> 
                 <app-search
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="indicator indicator--mobile d-sm-flex d-none">
-                        <a routerLink="/wishlist" class="indicator__button">
+                        <a routerLink="./shop/wishlist" class="indicator__button">
                             <span class="indicator__area">
                                 <app-icon name="heart-20" size="20"></app-icon>
                                 <span class="indicator__value">{{ wishlist.count$|async }}</span>
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="indicator indicator--mobile">
-                        <a routerLink="/cart" class="indicator__button">
+                        <a routerLink="./shop/cart" class="indicator__button">
                             <span class="indicator__area">
                                 <app-icon name="cart-20" size="20"></app-icon>
                                 <span class="indicator__value">{{ cart.quantity$|async }}</span>
