@@ -34,25 +34,32 @@ export class PageCompareComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
+
         this.compare.items$.pipe(takeUntil(this.destroy$)).subscribe(products => {
             const features: Feature[] = [];
 
-            products.forEach(product => product.attributes.forEach(productAttribute => {
-                let feature: Feature = features.find(eachFeature => eachFeature.name === productAttribute.name);
+            //products.forEach(product => product.attributes.forEach(productAttribute => {
 
-                if (!feature) {
-                    feature = {
-                        name: productAttribute.name,
-                        values: {}
-                    };
-                    features.push(feature);
-                }
+                
+            //    console.log (productAttribute);
+
+            //    let feature: Feature = features.find(eachFeature => eachFeature.name === productAttribute.name);
+
+            //    if (!feature) {
+            //        feature = {
+            //            name: productAttribute.name,
+            //            values: {}
+            //        };
+            //        features.push(feature);
+            //    }
 
                 // feature.values[product.id] = productAttribute.values.map(x => x.name).join(', ');
-            }));
+            //})
+            //);
 
             this.products = products;
             this.features = features;
+
         });
     }
 
