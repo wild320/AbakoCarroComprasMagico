@@ -13,7 +13,6 @@ import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 // constantes
 import { Crutas } from 'src/data/contantes/cRutas';
 
-
 @Component({
     selector: 'app-account-menu',
     templateUrl: './account-menu.component.html',

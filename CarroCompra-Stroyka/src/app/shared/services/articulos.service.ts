@@ -28,7 +28,7 @@ import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSele
 // constantes
 import {cFiltros} from '../../../data/contantes/Cfiltros';
 import {CArticulos} from '../../../data/contantes/CArticulos';
-import { Console } from 'console';
+
 
 
 @Injectable({
@@ -562,6 +562,7 @@ export class ArticulosService {
         .then((config: any) => {
 
           this.setMegaMenu$(JSON.parse(config).megaMenu);
+          this.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
 
         })
         .catch((err: any) => {
