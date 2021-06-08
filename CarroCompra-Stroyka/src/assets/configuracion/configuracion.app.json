@@ -1,7 +1,8 @@
 {
     "NombreCliente": "[Abako ERP] - Carro Compras",
     "Logo": "LOGO.png",
-    "UrlServicioCarroCompras":  "https://sandbox.ditosas.com:9446/",
-    "UrlServicioNegocio":  "https://sandbox.ditosas.com:9446/",
-    "UrlServicioAdministracion":  "https://sandbox.ditosas.com:9446/"
+    "UrlServicioCarroCompras":  "https://betelerp.abakoerp.com:9444/",
+    "UrlServicioNegocio":  "https://betelerp.abakoerp.com:9444/",
+    "UrlServicioAdministracion":  "https://betelerp.abakoerp.com:9444/"
+
 }
