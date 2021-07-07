@@ -1,35 +1,80 @@
 <app-page-header [breadcrumbs]="[
-    {label: 'Home',        url: '/'},
-    {label: 'Track Order', url: ''}
+    {label: 'Inicio',        url: '/'},
+    {label: 'Seguimiento de Pedidos', url: ''}
 ]"></app-page-header>
 
 <div class="block">
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" *ngIf="!showSteps">
             <div class="col-xl-5 col-lg-6 col-md-8">
                 <div class="card flex-grow-1 mb-0 mt-5">
+
                     <div class="card-body">
-                        <div class="card-title text-center"><h1>Track Order</h1></div>
+                        <div class="card-title text-center"><h1>Seguimiento de Pedidos</h1></div>
                         <p class="mb-4 pt-2">
-                            Vestibulum sem odio, ullamcorper a imperdiet tincidunt sed magna felis, consequat a erat ut,
-                            rutrum finibus odio.
+                            Digita tu número de pedido para que puedas hacerle seguimiento.
                         </p>
-                        <form novalidate>
+                        <form [formGroup]="TrakingForm" (ngSubmit)="submitForm()">
                             <div class="form-group">
-                                <label for="track-order-id">Order ID</label>
-                                <input id="track-order-id" type="text" class="form-control" placeholder="Order ID">
+                                <label for="track-order-id"># de Pedido</label>
+                                <input id="track-order-id" formControlName="Pedido"  type="text" class="form-control" placeholder="# de Pedido">
                             </div>
                             <div class="form-group">
-                                <label for="track-email">Email address</label>
-                                <input id="track-email" type="email" class="form-control" placeholder="Email address">
+                                <label for="track-email">Correo Electrónico</label>
+                                <input id="track-email" formControlName="Mail"  type="email" class="form-control" placeholder="Correo Electrónico">
                             </div>
+
                             <div class="pt-3">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block">Track</button>
+                                <button 
+                                    type="submit" 
+                                    [disabled]="loading" 
+                                    class="btn btn-primary btn-lg btn-block">
+                                    <i *ngIf="!loading"> Seguimiento </i>
+                                    <i *ngIf="loading"> Buscando.... </i>
+                                </button>
+                            </div><br>
+
+                            <div class="alert alert-danger" *ngIf="mensajerespuestaerror.length>0" role="alert">
+                                {{mensajerespuestaerror}}
                             </div>
+                            <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
+                                {{mensajerespuestaexito}}
+                            </div>
+
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
+
+        <div class="container work-process  pb-5 pt-5"  *ngIf="showSteps" >
+            <div class="md-stepper-horizontal orange">
+                <div *ngFor="let item of  this.Seguimiento;let indice=index" [class]="item.id !=0 ? 'md-step active'  : 'md-step'" >
+                    <div class="md-step-circle"><span>{{indice+1}} </span></div>
+                    <div class="md-step-title">{{item.tipo}}</div>
+                    <div *ngIf="item.documento !=0" class="md-step-optional">Documento: {{item.documento}}</div>
+                    <div *ngIf="item.documento !=0" class="md-step-optional">{{item.fecha}}</div>
+                    <div *ngIf="item.observacion.length" class="md-step-optional">{{item.observacion}}</div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+            </div><br><br>
+
+            <div class="w-33">
+                <div class="center">
+                    <button 
+                        type="submit" 
+                        (click)="volver()"
+                        class="btn btn-primary btn-lg btn-block">
+                        <i > Volver </i>
+                    </button>
+                </div>
+              </div>
+
+        </div> 
+
+
+
     </div>
 </div>

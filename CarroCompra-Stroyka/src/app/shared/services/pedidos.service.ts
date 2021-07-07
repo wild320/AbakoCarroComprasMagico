@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+
 import { Order } from '../../shared/interfaces/order';
 import { Router } from '@angular/router';
 
@@ -18,6 +20,8 @@ import {UtilsTexto} from '../../shared/utils/UtilsTexto';
 
 // Modelos
 import {PedidoRequest } from '../../../data/modelos/facturacion/PedidoRequest';
+import {PedidoSeguimientoRequest } from '../../../data/modelos/facturacion/PedidoSeguimientoRequest';
+import {PedidoSeguimientoResponse } from '../../../data/modelos/facturacion/PedidoSeguimientoResponse';
 import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
 
 // constantes
@@ -36,6 +40,9 @@ export class PedidosService {
   private RecuperarRegistros = Cstring.SI;
   private CantidadPedidos: number;
   private pedidorequest = new PedidoRequest();
+  private pedidoseguimientorequest = new PedidoSeguimientoRequest();
+  private pedidoseguimiento$ = new Subject<PedidoSeguimientoResponse[]>();
+  private pedidoseguimiento: PedidoSeguimientoResponse[];
   private mensaje = new Mensaje();
   public NumeroPaginas: string;
   public PaginaActual: number;
@@ -99,7 +106,6 @@ export class PedidosService {
 
   }
 
-
   public cargarDetallePedido(IdPedido: number, index: number) {
 
     this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
@@ -121,6 +127,64 @@ export class PedidosService {
         .catch((err: any) => {
             console.error(err);
         });
+  }
+
+  
+  getpedidoseguimiento(): PedidoSeguimientoResponse[] {
+    return this.pedidoseguimiento;
+  }
+
+  setpedidoseguimiento$(newValue){
+    this.pedidoseguimiento = newValue;
+    this.pedidoseguimiento$.next(newValue);
+  }
+
+  getpedidoseguimiento$(): Observable<PedidoSeguimientoResponse[]> {
+    return this.pedidoseguimiento$.asObservable();
+  }
+
+  public GetDetalleTracking(pedido: number, mail: string) {
+
+    const UrlServicioSeguimiento: string = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
+    CServicios.SeguimientoPedido;
+
+    //armar objecto 
+    this.pedidoseguimientorequest.idPedido = 0;
+    this.pedidoseguimientorequest.pedido = Number(pedido);
+    this.pedidoseguimientorequest.correo = mail;
+
+    return this.servicehelper
+    .PostData(UrlServicioSeguimiento, this.pedidoseguimientorequest)
+    .toPromise()
+    .then((config: any) => {
+
+      this.setpedidoseguimiento$(config);
+
+      if ( config == undefined || config.length == 0){
+
+        this.mensaje.msgId = EstadoRespuestaMensaje.Error;
+        this.mensaje.msgStr = 'No existen registros para los datos seleccionados';
+
+      }else{
+
+        this.mensaje.msgId = EstadoRespuestaMensaje.exitoso;
+        this.mensaje.msgStr = "ok";
+
+      };  
+
+      return this.mensaje;
+
+    })
+    .catch((err: any) => {
+
+      this.mensaje.msgId = EstadoRespuestaMensaje.Error;
+      this.mensaje.msgStr = 'Error conectando el api: ' + err;
+
+      return this.mensaje;
+
+    });
+
+
   }
 
   public async CrearPedido(idempresa: number, idpersona: number, agencia: string, observacion: string, direccion: number, detalle: any){

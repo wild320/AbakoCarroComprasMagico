@@ -24,6 +24,7 @@ export const CServicios = {
     ServicioMarcasPopulares: 'Marcas/RecuperarMarcasPopulares',
     ServicioSerNotificacionMensajeLeida: 'Notificacion/SetNotificacionMensajeLeida',
     InsertarPedidoF000: 'Pedidos/InsertarPedidoF000',
+    SeguimientoPedido: 'Pedidos/SeguimientoPedido',
     ServicioFechaServidor: 'FechaServidor',
 };
 
