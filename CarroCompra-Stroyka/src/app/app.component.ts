@@ -63,8 +63,8 @@ export class AppComponent implements OnInit {
         // https://angular.io/api/common/CurrencyPipe
         this.currency.options = {
             code: 'COP',
-            // display: 'symbol',
-            // digitsInfo: '1.2-2',
+            display:  'code',
+            digitsInfo: '1.0-2',
             // locale: 'en-US'
         };
 

@@ -48,6 +48,7 @@ export class TopbarComponent {
     }
 
     setCurrency(currency): void {
+
         this.currencyService.options = {
             code: currency.code,
             display: currency.symbol,

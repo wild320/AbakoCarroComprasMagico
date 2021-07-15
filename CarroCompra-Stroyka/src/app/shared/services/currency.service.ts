@@ -21,6 +21,7 @@ export class CurrencyService {
     get options(): CurrencyFormatOptions {
         return this.data.options;
     }
+    
     set options(value: CurrencyFormatOptions) {
         this.data.options = value;
         this.changesSubject$.next(value);
