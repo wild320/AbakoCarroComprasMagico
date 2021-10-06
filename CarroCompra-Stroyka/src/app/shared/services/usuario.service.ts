@@ -243,10 +243,12 @@ export class UsuarioService {
             this.cargarRespuesta(config, usrrq);
 
             if (this.MensajeError.length === 0){
+              if(!this.recordar ){
+                this.localService.setJsonValueSession(this.token, this.usuarioStorage);
+              } 
               this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
               this.MsgRespuesta.msgStr = 'Usuario exitoso';
-
-              // cambiar estado de logueado
+        // cambiar estado de logueado
               this.setEstadoLoguin$(true);
 
               return this.MsgRespuesta;
@@ -572,8 +574,9 @@ export class UsuarioService {
   cargarUsuarioStorage(){
 
     // validar que tenga usuario en el storage y lo logueamos
-    const usrlogueado = this.localService.getJsonValue(this.token);
-
+   
+    const usrlogueado = this.localService.getJsonValue(this.token)??this.localService.getJsonValueSession(this.token);
+  
     if (usrlogueado)   {
 
       const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
@@ -581,7 +584,8 @@ export class UsuarioService {
 
       this.Loguin(RestaurarSesion);
 
-    }else{
+    }
+    else{
       this.setEstadoLoguin$(false);
     }
 

@@ -18,6 +18,17 @@ export class LocalService {
 
   }
 
+  setJsonValueSession(key: string, value: any) {
+    this.storageService.secureStorageSession.setItem(key, value);
+  }
+  // Get the json value from local
+  getJsonValueSession(key: string) {
+    return this.storageService.secureStorageSession.getItem(key);
+
+  }
+
+
+  
   // Clear the local
   clearToken() {
     return this.storageService.secureStorage.clear();
