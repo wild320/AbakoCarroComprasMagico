@@ -12,7 +12,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 // directives
 import { ClickDirective } from './directives/click.directive';
-import { CollapseContentDirective, CollapseDirective, CollapseItemDirective } from './directives/collapse.directive';
+import {
+    CollapseContentDirective,
+    CollapseDirective,
+    CollapseItemDirective,
+} from './directives/collapse.directive';
 import { DepartmentsAreaDirective } from './directives/departments-area.directive';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { FakeSlidesDirective } from './directives/fake-slides.directive';
@@ -41,7 +45,8 @@ import { AbsoluteUrlPipe } from './pipes/absolute-url.pipe';
 import { ColorTypePipe } from './pipes/color-type.pipe';
 import { CurrencyFormatPipe } from './pipes/currency-format.pipe';
 import { ProductGalleryComponent } from './components/product-gallery/product-gallery.component';
-
+import { IntersectionObserverDirective } from './directives/intersection-observer.directive';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
     declarations: [
@@ -56,6 +61,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         OutsideTouchClickDirective,
         OwlPreventClickDirective,
         TouchClickDirective,
+        IntersectionObserverDirective,
         // components
         AlertComponent,
         IconComponent,
@@ -76,6 +82,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         ColorTypePipe,
         CurrencyFormatPipe,
         ProductGalleryComponent,
+        LoadingSpinnerComponent,
     ],
     imports: [
         // modules (angular)
@@ -86,7 +93,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         RouterModule,
         // modules (third-party)
         CarouselModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
     ],
     exports: [
         // directives
@@ -100,6 +107,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         OutsideTouchClickDirective,
         OwlPreventClickDirective,
         TouchClickDirective,
+        IntersectionObserverDirective,
         // components
         AlertComponent,
         IconComponent,
@@ -119,6 +127,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         ColorTypePipe,
         CurrencyFormatPipe,
         ShareButtonsComponent,
-    ]
+        LoadingSpinnerComponent,
+    ],
 })
-export class SharedModule { }
+export class SharedModule {}

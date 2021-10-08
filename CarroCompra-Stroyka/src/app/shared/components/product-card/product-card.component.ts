@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { ProductAttribute } from '../../interfaces/product';
 import { WishlistService } from '../../services/wishlist.service';
@@ -11,24 +20,33 @@ import { Subject } from 'rxjs';
 
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
+import { IntersectionStatus } from '../../directives/from-intersection-observer';
 
 @Component({
     selector: 'app-product-card',
     templateUrl: './product-card.component.html',
     styleUrls: ['./product-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     private destroy$: Subject<void> = new Subject();
 
     @Input() product: Item;
-    @Input() layout: 'grid-sm'|'grid-nl'|'grid-lg'|'list'|'horizontal'|null = null;
+    @Input() layout:
+        | 'grid-sm'
+        | 'grid-nl'
+        | 'grid-lg'
+        | 'list'
+        | 'horizontal'
+        | null = null;
 
     addingToCart = false;
     addingToWishlist = false;
     addingToCompare = false;
     showingQuickview = false;
     featuredAttributes: ProductAttribute[] = [];
+    visibilityStatus: { [key: number]: IntersectionStatus } = {};
+    intersectionStatus = IntersectionStatus;
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -38,10 +56,9 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         public compare: CompareService,
         public quickview: QuickviewService,
         public currency: CurrencyService
-    ) { }
+    ) {}
 
     ngOnInit(): void {
-
         // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
@@ -71,7 +88,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             complete: () => {
                 this.addingToCart = false;
                 this.cd.markForCheck();
-            }
+            },
         });
     }
 
@@ -87,7 +104,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             complete: () => {
                 this.addingToWishlist = false;
                 this.cd.markForCheck();
-            }
+            },
         });
     }
 
@@ -102,7 +119,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             complete: () => {
                 this.addingToCompare = false;
                 this.cd.markForCheck();
-            }
+            },
         });
     }
 
@@ -117,7 +134,11 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             complete: () => {
                 this.showingQuickview = false;
                 this.cd.markForCheck();
-            }
+            },
         });
+    }
+
+    onVisibilityChanged(index: number, status: IntersectionStatus) {
+        this.visibilityStatus[index] = status;
     }
 }
