@@ -12,11 +12,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 // directives
 import { ClickDirective } from './directives/click.directive';
-import {
-    CollapseContentDirective,
-    CollapseDirective,
-    CollapseItemDirective,
-} from './directives/collapse.directive';
+import { CollapseContentDirective, CollapseDirective, CollapseItemDirective } from './directives/collapse.directive';
 import { DepartmentsAreaDirective } from './directives/departments-area.directive';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { FakeSlidesDirective } from './directives/fake-slides.directive';
@@ -45,8 +41,7 @@ import { AbsoluteUrlPipe } from './pipes/absolute-url.pipe';
 import { ColorTypePipe } from './pipes/color-type.pipe';
 import { CurrencyFormatPipe } from './pipes/currency-format.pipe';
 import { ProductGalleryComponent } from './components/product-gallery/product-gallery.component';
-import { IntersectionObserverDirective } from './directives/intersection-observer.directive';
-import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+
 
 @NgModule({
     declarations: [
@@ -61,7 +56,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
         OutsideTouchClickDirective,
         OwlPreventClickDirective,
         TouchClickDirective,
-        IntersectionObserverDirective,
         // components
         AlertComponent,
         IconComponent,
@@ -82,7 +76,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
         ColorTypePipe,
         CurrencyFormatPipe,
         ProductGalleryComponent,
-        LoadingSpinnerComponent,
     ],
     imports: [
         // modules (angular)
@@ -93,7 +86,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
         RouterModule,
         // modules (third-party)
         CarouselModule,
-        ModalModule.forRoot(),
+        ModalModule.forRoot()
     ],
     exports: [
         // directives
@@ -107,7 +100,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
         OutsideTouchClickDirective,
         OwlPreventClickDirective,
         TouchClickDirective,
-        IntersectionObserverDirective,
         // components
         AlertComponent,
         IconComponent,
@@ -127,7 +119,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
         ColorTypePipe,
         CurrencyFormatPipe,
         ShareButtonsComponent,
-        LoadingSpinnerComponent,
-    ],
+    ]
 })
-export class SharedModule {}
+export class SharedModule { }
