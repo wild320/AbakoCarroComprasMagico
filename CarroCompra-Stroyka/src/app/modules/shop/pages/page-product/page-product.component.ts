@@ -36,7 +36,6 @@ export class PageProductComponent implements OnInit, OnDestroy {
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
 
             this.product = this.articulossvc.getArticuloDetalle().item;
-            console.log(this.product)
 
             // verificar si el articulo seleccioando existe en articulos
             if (this.product === undefined){

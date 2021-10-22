@@ -165,9 +165,6 @@ export class ShareButtonsComponent implements OnChanges {
         pageUrl = this.pageUrl || pageUrl;
         pageTitle = this.pageTitle || pageTitle;
         pageImage = this.pageImage || pageImage;
-        console.log(pageUrl)
-        console.log(pageTitle)
-        console.log(pageImage)
         return baseUrl
             .replace('%URL%', encodeURIComponent(pageUrl))
             .replace('%TITLE%', encodeURIComponent(pageTitle))
