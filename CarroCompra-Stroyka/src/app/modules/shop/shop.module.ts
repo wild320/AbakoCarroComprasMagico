@@ -7,12 +7,15 @@ import { MatBadgeModule } from '@angular/material/badge';
 
 // modules (third-party)
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+
 
 // modules
 import { BlocksModule } from '../blocks/blocks.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ShopRoutingModule } from './shop-routing.module';
 import { WidgetsModule } from '../widgets/widgets.module';
+
 
 // components
 import { ProductsViewComponent } from './components/products-view/products-view.component';
@@ -29,6 +32,9 @@ import { PageTrackOrderComponent } from './pages/page-track-order/page-track-ord
 import { PageWishlistComponent } from './pages/page-wishlist/page-wishlist.component';
 import { ProductSidebarComponent } from './components/product-sidebar/product-sidebar.component';
 import { PageOrderSuccessComponent } from './pages/page-order-success/page-order-success.component';
+
+
+
 
 @NgModule({
     declarations: [
@@ -59,8 +65,8 @@ import { PageOrderSuccessComponent } from './pages/page-order-success/page-order
         SharedModule,
         ShopRoutingModule,
         WidgetsModule,
-
-        MatBadgeModule
+        MatBadgeModule,
+        LazyLoadImageModule 
     ]
 })
 export class ShopModule { }

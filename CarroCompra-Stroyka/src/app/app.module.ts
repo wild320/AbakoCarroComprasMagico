@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ToastrModule } from 'ngx-toastr';
 
+
 // modules
 import { AppRoutingModule } from './app-routing.module';
 import { BlocksModule } from './modules/blocks/blocks.module';

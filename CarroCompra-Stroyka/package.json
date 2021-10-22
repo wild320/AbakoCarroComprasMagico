@@ -36,6 +36,7 @@
     "bootstrap": "^4.5.0",
     "crypto-js": "^4.0.0",
     "express": "^4.15.2",
+    "ng-lazyload-image": "^9.1.0",
     "ngx-bootstrap": "^5.6.1",
     "ngx-owl-carousel-o": "^3.0.1",
     "ngx-toastr": "^12.1.0",

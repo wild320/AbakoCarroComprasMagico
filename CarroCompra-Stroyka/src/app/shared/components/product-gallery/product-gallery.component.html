@@ -5,6 +5,7 @@
     <owl-carousel-o [options]="carouselOptions" (changed)="featuredCarouselTranslated($event)" appOwlPreventClick #featuredCarousel>
         <!--suppress AngularUndefinedBinding -->
         <ng-template *ngFor="let item of items" carouselSlide [id]="item.id">
+            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
             <div class="product-image product-image--location--gallery">
                 <a
                     appClick
@@ -21,7 +22,12 @@
                     attribute, in which case the width and height will be obtained from the naturalWidth
                     and naturalHeight property of img.product-image__img.
                     -->
-                    <img class="product-image__img" [src]="item.image" alt="" #imageElement>
+                     <img class="product-image__img zoom" [src]="item.image" alt="" #imageElement>
+                     
+                     <!-- <a href="http://www.losminions-lapelicula.es/images/shareimage.jpg" class="zoom"></a>
+                        <img src="http://www.losminions-lapelicula.es/images/shareimage.jpg" width="320px" height="240px" /> -->
+                     
+                     > 
                 </a>
             </div>
         </ng-template>
@@ -52,3 +58,5 @@
         <ng-template *ngFor="let i of fakeSlides.slides" carouselSlide [id]="'fake-slide-'+i"></ng-template>
     </owl-carousel-o>
 </div>
+
+

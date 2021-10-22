@@ -16,6 +16,11 @@ import { Crutas } from '../../../../../data/contantes/cRutas';
 })
 export class PageOrderDetailsComponent implements OnInit {
 
+
+   public option = 0;
+   public infoTracking;
+   public expression: boolean = false;
+
     constructor(public usuariosvc: UsuarioService,
                 private rutaActiva: ActivatedRoute,
                 public pedidosvc: PedidosService,
@@ -38,14 +43,39 @@ export class PageOrderDetailsComponent implements OnInit {
 
         // sacar el numero de pedido
         const index = this.pedidosvc.orders.findIndex( x => x.pedido === pedido);
-
         const IdPedido =  this.pedidosvc.orders[index].idPedido;
-
         this.pedidosvc.cargarDetallePedido(IdPedido, index).then((resp: any) => {
 
-            // console.log(this.pedidosvc.ordenactual);
 
         });
 
     }
+
+    optionTracking() {
+         this.infoTracking = this.pedidosvc.ordenactual;
+        this.router.navigate([`shop/track-order/${this.infoTracking.idPedido}`])
+      }
+
+      anularPedido(infoPedido : any){
+
+          const parameter = {
+            movimiento: 67,
+            idUsuario: infoPedido.usuarioCreacion,
+            documento: infoPedido.pedido,
+            referenciaValidacion: infoPedido.referenciaValidacion
+          }
+
+          this.pedidosvc.anularPedido(parameter).then
+          ((resp: any) => {
+            if(resp.msgStr === 'OK' && resp.msgId ===  1 ){
+             this.router.navigate([`account/orders`])
+
+            }
+        });
+
+
+
+
+      }
+      
 }

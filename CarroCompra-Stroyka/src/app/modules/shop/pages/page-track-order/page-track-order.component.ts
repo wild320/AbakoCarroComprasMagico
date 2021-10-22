@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 //Servicios
@@ -10,6 +11,7 @@ import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes'
 
 // modelos
 import {PedidoSeguimientoResponse } from '../../../../../data/modelos/facturacion/PedidoSeguimientoResponse';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-track-order',
@@ -23,19 +25,51 @@ export class PageTrackOrderComponent {
     public loading: boolean;
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
+    private idPedido: any;
+    public pedido: any;
+    public correo:any;
 
     public Seguimiento: PedidoSeguimientoResponse[];
 
     constructor(private fb: FormBuilder,
-        private Pedidosvc: PedidosService ) {
+        private Pedidosvc: PedidosService, 
+        private activatedRoute: ActivatedRoute,
+          private router: Router
+       ) {
+           
+            this.activatedRoute.params.subscribe(Params => {
 
-        this.InitValues();
+                 this.idPedido = Params['id'];
+                 
+                if (this.idPedido == 0) {
+                    this.InitValues();
 
-        this.inicializarFormulario();
+                    this.inicializarFormulario();
+                } else{
+                    this.showSteps = true;
+                    this.loading = false;
+
+                    this.SetiarMensajes();
+                    this.consultarPedido();
+                }      
+          
+              });
+
+       
+    }
+
+    consultarPedido(): void{
+        this.Pedidosvc.cargarDetallePedido(this.idPedido, 0).then((resp: any) => {
+            this.pedido = resp.pedido
+            this.correo = resp.direccionEnvio.correo
+            this.validarSeguimiento();
+        });
     }
 
 
     private InitValues(){
+
+
 
         this.showSteps = false;
         this.loading = false;
@@ -55,11 +89,10 @@ export class PageTrackOrderComponent {
     }
 
     submitForm(){
-
+        
         this.loading = true;
 
         if (this.EsValidoFormulario()){
-
             //Enviar pedido
             this.Pedidosvc.GetDetalleTracking(this.Pedido.value, this.Mail.value).then((ret: any) => {
                 
@@ -82,10 +115,38 @@ export class PageTrackOrderComponent {
 
     }
 
+     validarSeguimiento(){
+
+       this.loading = true;
+         //Enviar pedido
+
+
+        
+           this.Pedidosvc.GetDetalleTracking(this.pedido, this.correo).then((ret: any) => {
+               if (ret.msgId === EstadoRespuestaMensaje.Error ){
+                  this.mensajerespuestaerror = ret.msgStr;
+              }else{
+                  this.showSteps = true;
+
+              this.Seguimiento = this.Pedidosvc.getpedidoseguimiento()
+
+              }
+
+              this.loading = false;
+                
+
+            });
+
+     }
+
     volver(){
 
         this.showSteps = false;
         this.loading = false;
+
+        if(this.idPedido != 0){
+            this.router.navigate([`account/orders`])
+        }
 
     }
 

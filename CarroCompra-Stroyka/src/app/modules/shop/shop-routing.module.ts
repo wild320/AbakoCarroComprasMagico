@@ -68,7 +68,7 @@ const routes: Routes = [
         component: PageCompareComponent
     },
     {
-        path: 'track-order',
+        path: 'track-order/:id',
         component: PageTrackOrderComponent
     },
 

@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 // modules (third-party)
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 // directives
 import { ClickDirective } from './directives/click.directive';
@@ -86,6 +87,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         RouterModule,
         // modules (third-party)
         CarouselModule,
+        LazyLoadImageModule,
         ModalModule.forRoot()
     ],
     exports: [

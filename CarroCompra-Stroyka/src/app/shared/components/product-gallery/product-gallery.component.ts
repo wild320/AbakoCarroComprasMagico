@@ -5,6 +5,7 @@ import { PhotoSwipeItem, PhotoSwipeService, PhotoSwipeThumbBounds } from '../../
 import { DirectionService } from '../../services/direction.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ProductLayout } from '../product/product.component';
+declare var $: any;
 
 export interface ProductGalleryItem {
     id: string;
@@ -68,6 +69,7 @@ export class ProductGalleryComponent implements OnInit {
         if (this.productLayout !== 'quickview' && isPlatformBrowser(this.platformId)) {
             this.photoSwipe.load().subscribe();
         }
+
     }
 
     featuredCarouselTranslated(event: SlidesOutputData): void {

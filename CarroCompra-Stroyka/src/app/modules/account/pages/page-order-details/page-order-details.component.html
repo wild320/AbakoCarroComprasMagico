@@ -1,8 +1,10 @@
 <div class="card">
-    <div class="order-header">
-        <div class="order-header__actions">
-            <a routerLink="/account/orders" class="btn btn-xs btn-secondary">Regresar a la lista</a>
+    <div class="order-header" >
+        <div class="order-header__actions" >
+            <a routerLink="/account/orders" class="btn btn-xs btn-secondary" >Regresar a la lista</a>
+            <a class="btn btn-xs btn-danger" *ngIf="pedidosvc.ordenactual?.estado=='PENDIENTE'" style="display: block; margin-top: 15px; color:white" (click)="anularPedido(pedidosvc.ordenactual)"> Anular pedido </a>
         </div>
+        <a class="btn btn-xs btn-primary" (click)="optionTracking()"  style="color:white">Seguimiento </a>
         <h5 class="order-header__title">Pedido #{{ pedidosvc.ordenactual?.pedido }}</h5>
         <div class="order-header__subtitle">
             fue realizado el <mark class="order-header__date">{{ pedidosvc.ordenactual?.fecha }}</mark>
@@ -90,3 +92,5 @@
         </div>
     </div>
 </div>
+
+

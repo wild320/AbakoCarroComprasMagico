@@ -35,6 +35,7 @@ export class PedidosService {
 
   private UrlServicioPaginas: string;
   private UrlServicioPedido: string;
+  private UrlServicioAnular: string
   private TIPOPEDIDOCOMERCIAL: string = '1'
   private FUENTECARROCOMPRAS: number = 9
   private RecuperarRegistros = Cstring.SI;
@@ -252,5 +253,18 @@ export class PedidosService {
         });
     
   }
+
+  public anularPedido(parameter ){
+
+    this.UrlServicioAnular = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras +  CServicios.ServicioAnular;
+
+    return this.httpClient.post(this.UrlServicioAnular, parameter)
+        .toPromise()
+        .catch((err: any) => {
+            console.error(err);
+        });
+  }
+
+
 
 }

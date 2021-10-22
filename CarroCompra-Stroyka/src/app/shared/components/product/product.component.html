@@ -42,7 +42,7 @@
             -->
             <ul class="product__meta">
 
-                <li class="product__meta-availability">Inventario: 
+                <li class="product__meta-availability">Inventario:
 
                     <span *ngIf="product.availability === 'Disponible'" class="text-success">{{product.availability}}</span>
                     <span *ngIf="product.availability === 'No Disponible'" class="text-danger">{{product.availability}}</span>
@@ -170,7 +170,7 @@
                 [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'pinterest']"
                 [pageUrl]="root.product(product.id)|absoluteUrl:'angular'"
                 [pageTitle]="product.name"
-                [pageImage]="product.images[0]|absoluteUrl:'html'"
+                [pageImage]="product.images[0] | absoluteUrl:'html'"
             ></app-share-buttons>
         </div>
     </div>
