@@ -34,6 +34,8 @@ export class PageLoginComponent implements OnInit{
 
     ngOnInit() {
 
+
+       
         this.ingresoForm = this.fb.group({
           usuario: new FormControl('', Validators.compose([Validators.required])),
           contrasena: new FormControl('', Validators.compose([Validators.required])),

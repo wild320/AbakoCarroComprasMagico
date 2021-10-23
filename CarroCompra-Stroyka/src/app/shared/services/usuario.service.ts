@@ -59,6 +59,7 @@ export class UsuarioService {
   public RecuperarUsuario = new RecuperarUsuarioResponse();
   public Idempresa: number;
   public IdPersona: number;
+  public cedula: any;
   MensajeError = '';
   recordar = false;
   private token = 'token';
@@ -243,10 +244,12 @@ export class UsuarioService {
             this.cargarRespuesta(config, usrrq);
 
             if (this.MensajeError.length === 0){
+              if(!this.recordar ){
+                this.localService.setJsonValueSession(this.token, this.usuarioStorage);
+              } 
               this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
               this.MsgRespuesta.msgStr = 'Usuario exitoso';
-
-              // cambiar estado de logueado
+        // cambiar estado de logueado
               this.setEstadoLoguin$(true);
 
               return this.MsgRespuesta;
@@ -407,7 +410,7 @@ export class UsuarioService {
     this.ActualizarTelefono (telefono);
 
 
-    return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
+    return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
       // actualizar datos de loguin
       this.UsrLogin.usuario[0].Apll = Apellidos.toUpperCase();
@@ -450,7 +453,7 @@ export class UsuarioService {
     // cambiar datos del objecto
     this.DatosPersona.dllUsuario[0].contrasena = Contrasena;
 
-    return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
+    return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
       if (this.getEstadoLoguin()){
 
@@ -459,7 +462,7 @@ export class UsuarioService {
         UsuarioSesion = this.localService.getJsonValue(this.token);
         UsuarioSesion.contrasena = Contrasena;
 
-        this.guardarStorage(UsuarioSesion, this.DatosPersona.empresaUsuario.idEmpresa);
+        this.guardarStorage(UsuarioSesion, this.DatosPersona.empresaUsuario.idEmpresa, this.DatosPersona.idPersona, this.DatosPersona.identificacion );
 
       }
 
@@ -503,7 +506,7 @@ export class UsuarioService {
         pais: objGuardar.pais, direccion: objGuardar.direccion });
     }
 
-    return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
+    return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
         // Direcciones
         this.CargarDirecciones();
@@ -528,7 +531,7 @@ export class UsuarioService {
       }
     }
 
-    return this.CRUDPersonaExistente('SET', this.DatosPersona).then((ret: any) => {
+    return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
         // Direcciones
         this.CargarDirecciones();
@@ -572,16 +575,17 @@ export class UsuarioService {
   cargarUsuarioStorage(){
 
     // validar que tenga usuario en el storage y lo logueamos
-    const usrlogueado = this.localService.getJsonValue(this.token);
-
+   
+    const usrlogueado = this.localService.getJsonValue(this.token)??this.localService.getJsonValueSession(this.token);
+  
     if (usrlogueado)   {
 
       const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
       this.Idempresa = usrlogueado.IdEmp;
-
       this.Loguin(RestaurarSesion);
 
-    }else{
+    }
+    else{
       this.setEstadoLoguin$(false);
     }
 
@@ -594,6 +598,7 @@ export class UsuarioService {
     this.correo = '';
     this.Idempresa = 0;
     this.IdPersona = 0;
+    this.cedula = 0;
 
     // quitar logueo
     this.setEstadoLoguin$(false);
@@ -603,7 +608,7 @@ export class UsuarioService {
     // borrar registro storage
     const usr = new LoguinRequest();
 
-    this.guardarStorage(usr, this.Idempresa);
+    this.guardarStorage(usr, this.Idempresa, this.IdPersona, this.cedula);
 
   }
 
@@ -618,7 +623,7 @@ export class UsuarioService {
     }else{
 
       // guardar storage
-      this.guardarStorage(usrrq, config.usuario[0].idEmp);
+      this.guardarStorage(usrrq, config.usuario[0].idEmp, config.usuario[0].idnt, config.usuario[0].idPersona );
 
       this.setUsrLoguin (config);
 
@@ -626,6 +631,7 @@ export class UsuarioService {
       this.correo = config.usuario[0].mail.toLowerCase();
       this.Idempresa = config.usuario[0].idEmp;
       this.IdPersona = config.usuario[0].idPersona;
+      this.cedula= config.usuario[0].idnt
 
       this.UsrLogin = config;
 
@@ -640,10 +646,13 @@ export class UsuarioService {
 
   }
 
-  private guardarStorage(usrrq: LoguinRequest, idempresa: number){
+  private guardarStorage(usrrq: LoguinRequest, idempresa: number, idPersona: number, cedula: any){
 
     this.usuarioStorage.loguin = usrrq;
     this.usuarioStorage.IdEmp = idempresa;
+    this.usuarioStorage.IdPersona = idPersona;
+    this.usuarioStorage.cedula = cedula;
+
 
     if (this.recordar) {
       this.localService.setJsonValue(this.token, this.usuarioStorage);

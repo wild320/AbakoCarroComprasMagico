@@ -88,6 +88,8 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+  
+
     private inicializarFormulario(){
 
         this.ClientePedidoForm = this.fb.group({
@@ -233,6 +235,13 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
         return true;
 
+    }
+
+
+    redireccionar(){
+
+        this.router.navigate(['/account/addresses/0'])
+        
     }
 
     get cliente() { return this.ClientePedidoForm.get('cliente'); }

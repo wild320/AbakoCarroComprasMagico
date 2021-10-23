@@ -4,6 +4,7 @@ export const CServicios = {
     ApiAdministracion: 'ApiAdministracion/api/',
     ServicioConfiguracionCC: 'Configuracion',
     ServicioPaginas: 'Paginas',
+    ServicioAnular: 'OperacionesDocumentos/AnularDocumentos',
     ServicioAcordeon: 'Acordeon',
     ServicioPedidosCliente: 'Pedidos/GetPedidosCliente',
     ServicioDetallePedido: 'Pedidos/GetDetallePedidos',

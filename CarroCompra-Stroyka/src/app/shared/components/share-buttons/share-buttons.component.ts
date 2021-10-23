@@ -32,12 +32,12 @@ export type ShareButtonsList = string | Array<string | ShareButtonUserDef>;
 
 const shareButtonsDef: Record<string, ShareButtonDef> = {
     facebook: {
-        url: 'https://www.facebook.com/sharer/sharer.php?u=%URL%',
+        url: 'https://www.facebook.com/sharer/sharer.php?u=%URL%&media=%IMAGE%&description=%TITLE%',
         icon: 'fab fa-facebook-f',
         label: 'Like',
     },
     twitter: {
-        url: 'https://twitter.com/share?url=%URL%',
+        url: 'https://twitter.com/share?url=%URL%&media=%IMAGE%&description=%TITLE%',
         icon: 'fab fa-twitter',
         label: 'Tweet',
     },
@@ -102,7 +102,11 @@ export class ShareButtonsComponent implements OnChanges {
 
     @HostBinding('class.share-buttons') classShareLinks = true;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: any) {}
+    constructor(@Inject(PLATFORM_ID) private platformId: any) {
+        
+
+
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (
@@ -161,7 +165,6 @@ export class ShareButtonsComponent implements OnChanges {
         pageUrl = this.pageUrl || pageUrl;
         pageTitle = this.pageTitle || pageTitle;
         pageImage = this.pageImage || pageImage;
-
         return baseUrl
             .replace('%URL%', encodeURIComponent(pageUrl))
             .replace('%TITLE%', encodeURIComponent(pageTitle))

@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ToastrModule } from 'ngx-toastr';
 
+
 // modules
 import { AppRoutingModule } from './app-routing.module';
 import { BlocksModule } from './modules/blocks/blocks.module';
@@ -41,6 +42,8 @@ import { UsuarioService } from './shared/services/usuario.service';
 
 // utils
 import {UtilsTexto} from './shared/utils/UtilsTexto';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 // Configuracion inicial
 export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService) {
@@ -79,7 +82,13 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
         MobileModule,
         SharedModule,
         WidgetsModule,
-        UtilsModule
+        UtilsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          enabled: environment.production,
+          // Register the ServiceWorker as soon as the app is stable
+          // or after 30 seconds (whichever comes first).
+          registrationStrategy: 'registerWhenStable:30000'
+        })
     ],
     providers: [
           ServiceHelper,

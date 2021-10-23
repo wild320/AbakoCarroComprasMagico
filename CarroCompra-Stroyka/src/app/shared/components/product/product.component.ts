@@ -34,9 +34,14 @@ export class ProductComponent implements OnInit {
         private wishlist: WishlistService,
         private compare: CompareService,
         public root: RootService,
-    ) {  }
+    ) { 
+       
+     }
 
-    ngOnInit(): void {  }
+    ngOnInit(): void {
+    
+
+    }
 
     addToCart(): void {
         if (!this.addingToCart && this.product && this.quantity.value > 0) {
