@@ -24,7 +24,7 @@
                 <tbody class="card-table__body card-table__body--merge-rows">
                 <tr *ngFor="let item of pedidosvc.ordenactual?.items">
                     <td>{{ item.nombre | titlecase }} × {{ item.cantidad }}</td>
-                    <td>{{ item.total|currencyFormat }}</td>
+                    <td>{{ item.total| currencyFormat }}</td>
                 </tr>
                 </tbody>
                 <tbody *ngIf="pedidosvc.ordenactual?.lineasAdicionales.length > 0" class="card-table__body card-table__body--merge-rows">

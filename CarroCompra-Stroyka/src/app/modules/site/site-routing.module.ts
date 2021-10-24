@@ -16,7 +16,7 @@ const routes: Routes = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'about-us'
-    },
+    },   
     {
         path: 'about-us',
         component: PageAboutUsComponent
