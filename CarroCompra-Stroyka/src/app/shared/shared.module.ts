@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { NgxImageZoomModule } from 'ngx-image-zoom'
 
 // directives
 import { ClickDirective } from './directives/click.directive';
@@ -85,6 +86,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         HttpClientModule,
         ReactiveFormsModule,
         RouterModule,
+        NgxImageZoomModule,
         // modules (third-party)
         CarouselModule,
         LazyLoadImageModule,
