@@ -94,7 +94,7 @@ export class PageTrackOrderComponent {
 
         if (this.EsValidoFormulario()){
             //Enviar pedido
-            this.Pedidosvc.GetDetalleTracking(this.Pedido.value, this.Mail.value).then((ret: any) => {
+            this.Pedidosvc.GetDetalleTracking(this.Pedido.value, this.idPedido, this.Mail.value).then((ret: any) => {
                 
                 if (ret.msgId === EstadoRespuestaMensaje.Error ){
                     this.mensajerespuestaerror = ret.msgStr;
@@ -122,7 +122,7 @@ export class PageTrackOrderComponent {
 
 
         
-           this.Pedidosvc.GetDetalleTracking(this.pedido, this.correo).then((ret: any) => {
+           this.Pedidosvc.GetDetalleTracking(this.idPedido, this.pedido, this.correo).then((ret: any) => {
                if (ret.msgId === EstadoRespuestaMensaje.Error ){
                   this.mensajerespuestaerror = ret.msgStr;
               }else{
