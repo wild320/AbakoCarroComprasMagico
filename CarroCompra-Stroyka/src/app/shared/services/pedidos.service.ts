@@ -144,13 +144,13 @@ export class PedidosService {
     return this.pedidoseguimiento$.asObservable();
   }
 
-  public GetDetalleTracking(pedido: number, mail: string) {
+  public GetDetalleTracking(idPedido:number, pedido: number, mail: string) {
 
     const UrlServicioSeguimiento: string = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
     CServicios.SeguimientoPedido;
 
     //armar objecto 
-    this.pedidoseguimientorequest.idPedido = 0;
+    this.pedidoseguimientorequest.idPedido =  Number(idPedido);
     this.pedidoseguimientorequest.pedido = Number(pedido);
     this.pedidoseguimientorequest.correo = mail;
 

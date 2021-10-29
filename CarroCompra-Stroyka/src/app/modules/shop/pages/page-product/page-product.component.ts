@@ -48,11 +48,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
             this.product["ValorUnidadV"] = `${valor}`;
             this.product["NombreUnidadV"] = `${valorFinal[1]}`;
      
-    
-    
 
-            
-            console.log('produc',this.product)
             // verificar si el articulo seleccioando existe en articulos
             if (this.product === undefined){
                 this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
