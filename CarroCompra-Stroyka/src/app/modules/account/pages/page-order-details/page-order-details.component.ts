@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
+import { ToastrService } from 'ngx-toastr';
 // servicios
 import { PedidosService } from '../../../../../app/shared/services/pedidos.service';
 import { UsuarioService } from '../../../../../app/shared/services/usuario.service';
@@ -24,7 +24,8 @@ export class PageOrderDetailsComponent implements OnInit {
     constructor(public usuariosvc: UsuarioService,
                 private rutaActiva: ActivatedRoute,
                 public pedidosvc: PedidosService,
-                private router: Router) {
+                private router: Router,
+                private toastr: ToastrService,) {
 
         this.RecuperarDetallePedidos (this.rutaActiva.snapshot.params.orderId);
 
@@ -68,6 +69,7 @@ export class PageOrderDetailsComponent implements OnInit {
           this.pedidosvc.anularPedido(parameter).then
           ((resp: any) => {
             if(resp.msgStr === 'OK' && resp.msgId ===  1 ){
+              this.toastr.success(`Pedido anulado con exito!`);
              this.router.navigate([`account/orders`])
 
             }

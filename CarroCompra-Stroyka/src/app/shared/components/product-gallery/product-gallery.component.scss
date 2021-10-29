@@ -1,0 +1,24 @@
+::ng-deep .ngxImageZoomContainer > img{
+  max-height: 500px;
+}
+
+
+
+
+
+
+@media (max-width: 1200px){
+    ::ng-deep .ngxImageZoomContainer > img{
+        max-height: 415px;
+      }
+      
+}
+
+
+@media (max-width: 992px){
+    ::ng-deep .ngxImageZoomContainer > img{
+        max-height: 270px;
+      }
+      
+}
+
