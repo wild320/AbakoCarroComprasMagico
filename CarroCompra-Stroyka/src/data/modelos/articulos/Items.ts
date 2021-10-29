@@ -28,6 +28,8 @@ export class Item {
     tieneDescuento: string;
     color: string;
     colorhx: string;
+    ValorUnidadV: any;
+    NombreUnidadV: string;
     caracteristicas: string;
     observaciones: string;
     attributes: Array <{

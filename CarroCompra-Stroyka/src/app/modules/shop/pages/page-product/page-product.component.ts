@@ -24,7 +24,9 @@ export class PageProductComponent implements OnInit, OnDestroy {
     breadcrumbs: Link[] = [];
     layout: 'standard'|'columnar'|'sidebar' = 'standard';
     sidebarPosition: 'start'|'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
-
+    cadenaString : any;
+    valorUnitario: any;
+    valorProductoUnit:any;
     constructor(
         private shop: ShopService,
         private route: ActivatedRoute,
@@ -36,7 +38,21 @@ export class PageProductComponent implements OnInit, OnDestroy {
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
 
             this.product = this.articulossvc.getArticuloDetalle().item;
+            this.cadenaString = this.product.name;
+            this.valorProductoUnit = this.product.price;
+            var regExp = /\(([^)]+)\)/;
+            var matches = regExp.exec(this.cadenaString);
+            const valorFinal = matches[1].split(' ');
+            this.valorUnitario = valorFinal[0];
+            const valor = parseInt(this.valorProductoUnit) / parseInt(this.valorUnitario)
+            this.product["ValorUnidadV"] = `${valor}`;
+            this.product["NombreUnidadV"] = `${valorFinal[1]}`;
+     
+    
+    
 
+            
+            console.log('produc',this.product)
             // verificar si el articulo seleccioando existe en articulos
             if (this.product === undefined){
                 this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
@@ -66,10 +82,8 @@ export class PageProductComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line: deprecation
         this.route.data.subscribe(data => {
 
-
             this.layout = data.layout || this.layout;
             this.sidebarPosition = data.sidebarPosition || this.sidebarPosition;
-
 
         });
     }
