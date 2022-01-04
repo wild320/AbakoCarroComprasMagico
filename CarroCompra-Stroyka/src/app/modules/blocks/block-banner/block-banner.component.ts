@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { async } from 'rxjs/internal/scheduler/async';
+import { BannerService } from 'src/app/shared/services/banner.service';
+
 
 @Component({
     selector: 'app-block-banner',
@@ -6,5 +9,14 @@ import { Component } from '@angular/core';
     styleUrls: ['./block-banner.component.scss']
 })
 export class BlockBannerComponent {
-    constructor() { }
+   infoBanner
+
+    constructor( public banner: BannerService) {
+      
+        this.banner.cargarBanner().then(data => {
+        this.infoBanner = data
+    })
+       
+    }
+    
 }
