@@ -27,5 +27,6 @@ export const CServicios = {
     InsertarPedidoF000: 'Pedidos/InsertarPedidoF000',
     SeguimientoPedido: 'Pedidos/SeguimientoPedido',
     ServicioFechaServidor: 'FechaServidor',
+    ServicioBanner: 'Banners/ModificarBanners',
 };
 
