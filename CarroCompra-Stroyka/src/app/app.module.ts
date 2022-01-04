@@ -39,6 +39,7 @@ import { NegocioService } from './shared/services/negocio.service';
 import { StoreService } from './shared/services/store.service';
 import {ServiceHelper} from './shared/services/ServiceHelper';
 import { UsuarioService } from './shared/services/usuario.service';
+import { BannerService } from './shared/services/banner.service';
 
 // utils
 import {UtilsTexto} from './shared/utils/UtilsTexto';
@@ -46,10 +47,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 // Configuracion inicial
-export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService) {
+export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService, banner:  BannerService) {
     return () => configLocal.cargarConfiguracionLocal()
         .then(() => configGeneral.cargarConfiguracionGeneral()
             .then(() => usuario.cargarUsuarioStorage())
+            .then(() => banner.cargarBanner())
                 .then()
         );
 }
@@ -95,12 +97,13 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
           UtilsTexto,
           NegocioService,
           UsuarioService,
+          BannerService,
           StoreService,
             {
             provide: APP_INITIALIZER,
             useFactory: CargarConfiguracion,
             multi: true,
-            deps: [NegocioService, StoreService, UsuarioService]
+            deps: [NegocioService, StoreService, UsuarioService, BannerService]
             },
             { provide: 'BASE_URL', useFactory: getBaseUrl },
         ],
