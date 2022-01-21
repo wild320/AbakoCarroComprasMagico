@@ -31,9 +31,14 @@ export class PageProductComponent implements OnInit, OnDestroy {
         private shop: ShopService,
         private route: ActivatedRoute,
         public articulossvc: ArticulosService,
-    ) {
+    ) {}
 
-        // tomar el articulos seleccionado
+    ngOnInit(): void {
+
+        this.route.paramMap.subscribe(data => {
+
+
+              // tomar el articulos seleccionado
         // tslint:disable-next-line: deprecation
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
 
@@ -57,12 +62,6 @@ export class PageProductComponent implements OnInit, OnDestroy {
             this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
 
         });
-
-     }
-
-    ngOnInit(): void {
-
-        this.route.paramMap.subscribe(data => {
             
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
 
