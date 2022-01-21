@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { async } from 'rxjs/internal/scheduler/async';
 import { BannerService } from 'src/app/shared/services/banner.service';
 
 
