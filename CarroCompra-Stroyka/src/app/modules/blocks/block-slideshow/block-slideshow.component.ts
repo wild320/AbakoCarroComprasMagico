@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { async } from 'rxjs/internal/scheduler/async';
 import { DirectionService } from '../../../shared/services/direction.service';
 
 // servicio
@@ -10,7 +11,7 @@ import { PaginasService } from '../../../shared/services/paginas.service';
     templateUrl: './block-slideshow.component.html',
     styleUrls: ['./block-slideshow.component.scss']
 })
-export class BlockSlideshowComponent {
+export class BlockSlideshowComponent  {
     @Input() withDepartments = false;
 
     options = {
@@ -31,9 +32,15 @@ export class BlockSlideshowComponent {
         public pagina: PaginasService
     ) {
 
+        this. CargarAcordeones();
+
+    }
+
+    private async CargarAcordeones(){
+
         if (this.slides === undefined || this.slides.length === 0  ){
 
-            this.pagina.cargarAcordeon().then((resp: any) => {
+            await this.pagina.cargarAcordeon().then((resp: any) => {
 
                 this.slides = resp;
 
@@ -41,8 +48,10 @@ export class BlockSlideshowComponent {
 
         }
 
-     }
+    }
+
 }
+
 
 
 // slides = [
