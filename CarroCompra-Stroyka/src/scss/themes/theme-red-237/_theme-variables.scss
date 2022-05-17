@@ -1,15 +1,14 @@
 // colors
 $light-opposite-color:  #3d464d       !default;
-$accent-color:          #ED3237       !default;
 $accent-opposite-color: #fff          !default;
-$link-color:            $accent-color !default;
-$link-hover-color:      $accent-color !default;
+$link-color:            #ED3237 !default;
+$link-hover-color:      #ED3237 !default;
 
 
 // .nav-links
 $nav-links-item-font-weight:         400             !default;
 $nav-links-item-default-arrow-color: rgba(#000, .25) !default;
-$nav-links-item-hover-bg:            rgba( #FFCA1C , .15) !default;
+$nav-links-item-hover-bg:            rgba( #ED3237 , .15) !default;
 
 
 // .departments
@@ -46,5 +45,10 @@ $product-card-quickview-default-color: $light-opposite-color   !default;
 
 
 // .nouislider
-$nouislider-border-color: $accent-color          !default;
+$nouislider-border-color: #ED3237          !default;
 $nouislider-handle-color: $accent-opposite-color !default;
+
+
+.nav-panel{
+    background-image: linear-gradient(to right, #ed3237, #fa5e29, #ff841a, #ffa80f, #ffca1c)!important;
+}
