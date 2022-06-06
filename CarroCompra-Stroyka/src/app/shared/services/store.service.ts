@@ -50,6 +50,8 @@ export class StoreService {
         this.configuracionSitio.PasaleraContraEntrega  = true;
         this.configuracionSitio.PasaleraPSE = true;
         this.configuracionSitio.PasarelaTranferenciaBancaria = true;
+        this.configuracionSitio.VerBannerInformacion = true;
+        
 
         this.redes = [];
 
@@ -64,6 +66,7 @@ export class StoreService {
             .toPromise()
             .then((config: any) => {
                 this.SetiarInformacion (config);
+                console.log('cpmfig', config);
 
             })
             .catch((err: any) => {
@@ -172,6 +175,12 @@ export class StoreService {
                     this.configuracionSitio.PasaleraContraEntrega = false;
                 }
             }
+            if (element.id === 'A28'){
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.VerBannerInformacion = false;
+                }
+            }
+
 
             // Direccion
             if (element.id === 'B1'){

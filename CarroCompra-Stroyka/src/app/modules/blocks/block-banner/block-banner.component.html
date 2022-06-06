@@ -4,8 +4,8 @@
         <a href="" class="block-banner__body">
             <img class="block-banner__image block-banner__image--desktop"[src]='infoBanner?.imagenFull'>
             <img class="block-banner__image block-banner__image--mobile" [src]='infoBanner?.imagenMobile'>
-            <div class="block-banner__title">{{infoBanner?.titulo}}</div>
-            <div class="block-banner__text">{{infoBanner?.descripcion}} </div>
+            <div class="block-banner__title"*ngIf="StoreSvc.configuracionSitio.VerBannerInformacion"  >{{infoBanner?.titulo}}</div>
+            <div class="block-banner__text" *ngIf="StoreSvc.configuracionSitio.VerBannerInformacion" >{{infoBanner?.descripcion}} </div>
            <!--  <div class="block-banner__button">
                 <span class="btn btn-sm btn-primary">Comprar Ahora</span>
             </div> -->
