@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BannerService } from 'src/app/shared/services/banner.service';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 
 @Component({
@@ -10,7 +11,8 @@ import { BannerService } from 'src/app/shared/services/banner.service';
 export class BlockBannerComponent {
    infoBanner
 
-    constructor( public banner: BannerService) {
+    constructor( public banner: BannerService,
+                 public StoreSvc: StoreService) {
       
         this.banner.cargarBanner().then(data => {
         this.infoBanner = data

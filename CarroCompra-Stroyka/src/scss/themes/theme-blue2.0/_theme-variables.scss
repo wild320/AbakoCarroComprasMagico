@@ -1,21 +1,23 @@
 // colors
 $light-opposite-color:  #3d464d       !default;
+$accent-color:           #1498b8     !default;
 $accent-opposite-color: #fff          !default;
-$link-color:            #ED3237 !default;
-$link-hover-color:      #ED3237 !default;
+$link-color:            $accent-color !default;
+$link-hover-color:      $accent-color !default;
+
+
+// .topbar
+$topbar-bg:                transparent               !default;
+$topbar-height:            34px                      !default;
+$topbar-shadow:            0 0 0 1px rgba(#000, .08) !default;
+$topbar-font-color:        #8c8c8c                   !default;
+$topbar-dropdown-hover-bg: #f2f2f2                   !default;
 
 
 // .nav-links
 $nav-links-item-font-weight:         400             !default;
 $nav-links-item-default-arrow-color: rgba(#000, .25) !default;
-$nav-links-item-hover-bg:            rgba( #ED3237 , .15) !default;
-
-
-// .departments
-$departments-bg:            #303138         !default;
-$departments-icon-color:    rgba(#fff, .4)  !default;
-$departments-arrow-color:   rgba(#fff, .4)  !default;
-$departments-item-hover-bg: rgba(#fff, .08) !default;
+$nav-links-item-hover-bg:            rgba(#fff, .15) !default;
 
 
 // .mobile-header
@@ -45,10 +47,5 @@ $product-card-quickview-default-color: $light-opposite-color   !default;
 
 
 // .nouislider
-$nouislider-border-color: #ED3237          !default;
+$nouislider-border-color: $accent-color          !default;
 $nouislider-handle-color: $accent-opposite-color !default;
-
-
-.nav-panel{
-    background-image: linear-gradient(to right, #ed3237, #fa5e29, #ff841a, #ffa80f, #ffca1c)!important;
-}
