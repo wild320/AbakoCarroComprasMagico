@@ -11,6 +11,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { RootService } from '../../services/root.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime,  takeUntil } from 'rxjs/operators';
@@ -45,6 +46,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     suggestedProducts: Item[] = [];
 
     addedToCartProducts: Item[] = [];
+
+    quantity: FormControl = new FormControl(1);
 
     @Input() location: SearchLocation;
 
@@ -161,7 +164,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         }
 
         this.addedToCartProducts.push(product);
-        this.cart.add(product, 1).subscribe({
+        this.cart.add(product, this.quantity.value).subscribe({
             complete: () => {
                 this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
             }

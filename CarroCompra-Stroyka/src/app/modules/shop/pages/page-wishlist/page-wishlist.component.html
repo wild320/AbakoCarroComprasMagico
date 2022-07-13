@@ -48,11 +48,11 @@
                     </div>
                 </td>
                 <td class="wishlist__column wishlist__column--stock">
-                    <div class="badge badge-success">Disponible</div>
+                    <div class="badge badge-success">{{product.availability}}</div>
                 </td>
                 <td class="wishlist__column wishlist__column--price">{{ product.price | currency }}</td>
                 <td class="wishlist__column wishlist__column--tocart">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carro</button>
+                    <button  [disabled]="product.availability === 'No Disponible'" type="button" class="btn btn-primary btn-sm" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carro</button>
                 </td>
                 <td class="wishlist__column wishlist__column--remove">
                     <button type="button" class="btn btn-light btn-sm btn-svg-icon" (click)="remove(product)" [ngClass]="{'btn-loading': removedProducts.includes(product)}">

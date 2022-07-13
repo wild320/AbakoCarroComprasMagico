@@ -43,6 +43,7 @@ export class PageLoginComponent implements OnInit{
         });
 
         this.registroForm = this.fb.group({
+          tipo: new FormControl('', Validators.compose([Validators.required])),
           identificacion: new FormControl('', Validators.compose([Validators.required])),
           Nombres: new FormControl('', Validators.compose([Validators.required])),
           Apellidos: new FormControl('', Validators.compose([Validators.required])),
@@ -118,6 +119,7 @@ export class PageLoginComponent implements OnInit{
             case 'N':
 
               const usrregistro = {
+                tipo:this.tipo.value,
                 identificacion: this.identificacion.value,
                 nombres: this.Nombres.value,
                 apellidos: this.Apellidos.value
@@ -143,6 +145,10 @@ export class PageLoginComponent implements OnInit{
     }
 
     EsValidoFormularioRegistro(): boolean{
+      if (this.tipo.invalid){
+        this.mensajeerroRegistro = 'Debe ingresar información valida en tipo de identificación';
+        return false;
+      }
 
         // validar que tenga identificacion
         if (this.identificacion.invalid){
@@ -165,6 +171,7 @@ export class PageLoginComponent implements OnInit{
         return true;
 
     }
+    get tipo() { return this.registroForm.get('tipo'); }
 
     get usuario() { return this.ingresoForm.get('usuario'); }
 
