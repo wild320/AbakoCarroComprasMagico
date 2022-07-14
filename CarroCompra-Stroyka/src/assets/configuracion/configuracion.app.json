@@ -1,7 +1,7 @@
 {
     "NombreCliente": "Oficlick.co",
     "Logo": "LOGO.png",
-    "UrlServicioCarroCompras":  "https://oficlickerp.abakoerp.com:9443/",
-    "UrlServicioNegocio":  "https://oficlickerp.abakoerp.com:9443/",
-    "UrlServicioAdministracion":  "https://oficlickerp.abakoerp.com:9443/"
+    "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9496/",
+    "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9496/",
+    "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9496/"
 }

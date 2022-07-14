@@ -1,4 +1,5 @@
 export class CrearClienteCarroRequest {
+        tipoIdentificacion: string;
         Nombres: string;
         Apellidos: string;
         Identificacion: string;

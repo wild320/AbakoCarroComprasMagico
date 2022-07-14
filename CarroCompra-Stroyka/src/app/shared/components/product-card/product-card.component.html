@@ -54,7 +54,7 @@
             </ng-container>
         </div>
         <div class="product-card__buttons">
-            <button class="btn btn-primary product-card__addtocart" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
+            <button class="btn btn-primary product-card__addtocart" type="button" appClick  [disabled]="product.availability === 'No Disponible'" (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
             <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
             <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" aria-label="Agregar a la Lista de Deseos" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist}">
                 <app-icon name="wishlist-16" size="16"></app-icon>

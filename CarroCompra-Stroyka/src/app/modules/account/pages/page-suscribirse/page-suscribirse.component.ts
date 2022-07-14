@@ -55,6 +55,7 @@ export class PageSuscribirseComponent implements OnInit {
     this.loading = false;
 
     this.SuscribirseForm = this.fb.group({
+      tipo: new FormControl('', Validators.compose([Validators.required])),
       Nombres: new FormControl('', Validators.compose([Validators.required])),
       Apellidos: new FormControl('', Validators.compose([Validators.required])),
       Identificacion: new FormControl('', Validators.compose([Validators.required])),
@@ -75,6 +76,8 @@ export class PageSuscribirseComponent implements OnInit {
     // cargar datos quw vienen de la pantalla anterior
     const objectousr = JSON.parse(this.usuarioingresado);
 
+    console.log(objectousr);
+    this.tipo.setValue(objectousr.tipo)
     this.Identificacion.setValue(objectousr.identificacion);
     this.Nombres.setValue(objectousr.nombres);
     this.Apellidos.setValue( objectousr.apellidos);
@@ -118,6 +121,12 @@ export class PageSuscribirseComponent implements OnInit {
   }
 
   EsValidoFormularioRegistro(): boolean{
+
+
+    if (this.tipo.invalid){
+      this.mensajerespuestaerror = 'Debe ingresar información valida en tipo de identificación';
+      return false;
+    }
 
     if (this.Nombres.invalid){
       this.mensajerespuestaerror = 'Debe ingresar información valida en Nombres';
@@ -174,8 +183,8 @@ export class PageSuscribirseComponent implements OnInit {
     this.mensajerespuestaerror = '';
   }
 
-  CargarDatos(){
-
+  CargarDatos(){  
+   this.objCrearCliente.tipoIdentificacion = this.tipo.value;
     this.objCrearCliente.Nombres = this.Nombres.value;
     this.objCrearCliente.Apellidos = this.Apellidos.value;
     this.objCrearCliente.Identificacion = this.Identificacion.value;
@@ -187,7 +196,7 @@ export class PageSuscribirseComponent implements OnInit {
     this.objCrearCliente.Politicas = '1';
 
   }
-
+  get tipo() { return this.SuscribirseForm.get('tipo'); }
   get Identificacion() { return this.SuscribirseForm.get('Identificacion'); }
   get Nombres() { return this.SuscribirseForm.get('Nombres'); }
   get Apellidos() { return this.SuscribirseForm.get('Apellidos'); }

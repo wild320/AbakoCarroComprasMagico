@@ -56,7 +56,7 @@
                 <tr>
                     <th>Agregar al Carrito</th>
                     <td *ngFor="let product of products">
-                        <button class="btn btn-primary" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carrito</button>
+                        <button class="btn btn-primary"  [disabled]="product.availability === 'No Disponible'" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carrito</button>
                     </td>
                 </tr>
                 <tr *ngFor="let feature of features">
