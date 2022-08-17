@@ -41,10 +41,10 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     ) { }
 
     ngOnInit(): void {
-
         // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
+           
         });
     }
 

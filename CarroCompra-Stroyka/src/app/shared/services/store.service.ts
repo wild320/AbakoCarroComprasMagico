@@ -51,6 +51,7 @@ export class StoreService {
         this.configuracionSitio.PasaleraPSE = true;
         this.configuracionSitio.PasarelaTranferenciaBancaria = true;
         this.configuracionSitio.VerBannerInformacion = true;
+        this.configuracionSitio.VerAcordeonInformacion = true;
         
 
         this.redes = [];
@@ -178,6 +179,12 @@ export class StoreService {
             if (element.id === 'A28'){
                 if (element.valor === 'NO'){
                     this.configuracionSitio.VerBannerInformacion = false;
+                }
+            }
+
+            if (element.id === 'A29'){
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.VerAcordeonInformacion = false;
                 }
             }
 

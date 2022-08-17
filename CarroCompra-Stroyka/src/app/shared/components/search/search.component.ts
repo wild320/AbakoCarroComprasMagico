@@ -167,8 +167,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         this.cart.add(product, this.quantity.value).subscribe({
             complete: () => {
                 this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
+                this.quantity.reset(1)
             }
         });
+
+  
     }
  
     private cargarSugerencias(){
