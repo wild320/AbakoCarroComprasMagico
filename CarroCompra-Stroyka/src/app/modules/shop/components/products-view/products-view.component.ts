@@ -27,7 +27,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
     listOptionsForm: FormGroup;
     filtersCount = 0;
-    ProductosSeleccionados = new Products();
+    ProductosSeleccionados ;
     Productos = new Products();
 
     constructor(
@@ -67,7 +67,6 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
         this.SetLIstaOpciones(value);
 
-        console.log(value);
 
         this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
 
@@ -86,6 +85,8 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
         });
 
+
+     
        /* this.listOptionsForm.valueChanges.subscribe(value => {
 
             console.log (value);
@@ -112,7 +113,30 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, {emitEvent: false});
     }
 
+  
+
     SetLIstaOpciones(value: any){
+        const products = this.articulossvc.getArticulos().products.items
+       if(value.sort === 'sku'){
+        if (products != undefined) {
+
+            products.sort(function (a, b) {
+            
+              if (a.sku > b.sku) {
+                return 1;
+              }
+              if (a.sku < b.sku) {
+                return -1;
+              }
+          
+              return 0;
+            });
+      
+          }
+          this.ProductosSeleccionados  = products
+       }
+
+     
 
         const total = this.articulossvc.getAtributosFiltros().total;
         const limit = value.limit;

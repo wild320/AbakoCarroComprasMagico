@@ -48,11 +48,12 @@
                 <div class="suggestions__item-price">
                 </div>
                 <div class="product__actions-item">
-                    <app-input-number  style="width:90px" aria-label="Quantity" class="product__quantity" size="lg" [min]="1" [formControl]="quantity"></app-input-number>
+                    <app-input-number id="product.id" style="width:90px" aria-label="Quantity" class="product__quantity" size="lg" [min]="1" [formControl]="quantity"></app-input-number>
                 </div>
 
                 <div *ngIf="location === 'header'" class="suggestions__item-actions">
                     <button
+                         [disabled]="product.availability === 'No Disponible'" 
                         type="button"
                         title="Add to cart"
                         class="btn btn-primary btn-sm btn-svg-icon"

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { async } from 'rxjs/internal/scheduler/async';
+import { StoreService } from 'src/app/shared/services/store.service';
 import { DirectionService } from '../../../shared/services/direction.service';
 
 // servicio
@@ -29,7 +30,8 @@ export class BlockSlideshowComponent  {
     constructor(
         public sanitizer: DomSanitizer,
         private direction: DirectionService,
-        public pagina: PaginasService
+        public pagina: PaginasService,
+        public StoreSvc: StoreService
     ) {
 
         this. CargarAcordeones();

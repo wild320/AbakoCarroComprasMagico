@@ -48,8 +48,9 @@
                 <div class="view-options__control">
                     <label for="view-options-sort">Ordenar por:</label>
                     <div>
-                        <select class="form-control form-control-sm" id="view-options-sort" formControlName="sort">
+                        <select  (change)="OnCLickOnChange()" class="form-control form-control-sm" id="view-options-sort" formControlName="sort">
                             <option value="default">Defecto</option>
+                            <option value="sku">SKU</option>
                             <option value="name_asc">Nombre (A-Z)</option>
                             <option value="name_desc">Nombre (Z-A)</option>
                         </select>

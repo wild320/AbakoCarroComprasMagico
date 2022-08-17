@@ -13,6 +13,7 @@ export class ConfiguracionSitio {
     VerBLoqueValoradosEspecialesVendidos: boolean;
     VerBannerIntermedio: boolean;
     VerBannerInformacion: boolean;
+    VerAcordeonInformacion :boolean;
     PasaleraContraEntrega: Boolean;
     PasaleraPSE: boolean;
     PasarelaTranferenciaBancaria: boolean;
