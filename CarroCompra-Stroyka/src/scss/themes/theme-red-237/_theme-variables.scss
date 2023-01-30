@@ -18,6 +18,13 @@ $departments-arrow-color:   rgba(#fff, .4)  !default;
 $departments-item-hover-bg: rgba(#fff, .08) !default;
 
 
+//pagination-color
+.pagination .page-item .active{
+    background-image: linear-gradient(to right, #ed3237, #fa5e29, #ff841a, #ffa80f, #ffca1c)!important;
+    color: #fff;
+    cursor: no-drop;
+}
+
 // .mobile-header
 $mobile-header-menu-button-hover-bg:                  $nav-links-item-hover-bg !default;
 // search input default

@@ -1,0 +1,16 @@
+.imagen{
+    filter: gray;
+    filter: grayscale(100%);
+}
+
+.pagination .page-item .page-link{
+    text-decoration: none;
+    color: #848484;
+}
+
+
+
+.pagination .page-item .disabled {
+    background-color: #cfcfcf !important;
+    cursor: no-drop;
+}

@@ -29,6 +29,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     addingToCompare = false;
     showingQuickview = false;
     featuredAttributes: ProductAttribute[] = [];
+    quick
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -113,7 +114,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.showingQuickview = true;
         // tslint:disable-next-line: deprecation
-        this.quickview.show(this.product).subscribe({
+         this.quickview.show(this.product).subscribe({
             complete: () => {
                 this.showingQuickview = false;
                 this.cd.markForCheck();

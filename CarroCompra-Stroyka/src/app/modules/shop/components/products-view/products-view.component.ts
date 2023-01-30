@@ -29,6 +29,12 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     filtersCount = 0;
     ProductosSeleccionados ;
     Productos = new Products();
+    PaginationLocalStorage : any;
+    isPageAuto = false
+
+    private sub: any;
+    private sub2: any;
+    private sub3: any;
 
     constructor(
         private fb: FormBuilder,
@@ -36,28 +42,33 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         public pageService: PageCategoryService,
         public articulossvc: ArticulosService,
     ) {
-
+        //****ShowPageServices From and Page
 
         // recuperar todos los articulos
-        this.articulossvc.getArticulos$().subscribe(articulos => {
-
+        this.sub3 = this.articulossvc.getArticulos$().subscribe(articulos => {
             this.articulossvc.setAtributosFiltros(this.articulossvc.getArticulos().products);
-
         });
 
         // recuperar solo los articulos seleccionados
-        this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+        this.sub2 = this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+            // if (!this.ProductosSeleccionados) {
+                this.Productos = this.articulossvc.getArticulos().products;
+                this.ProductosSeleccionados = this.isPageAuto ? JSON.parse(localStorage.getItem('ProductosSeleccionados')) : this.articulossvc.getArticulosSeleccionados();
+                
+                localStorage.setItem('ProductosSeleccionados',JSON.stringify(this.ProductosSeleccionados))
+                localStorage.setItem('is_page_update','0')
+                this.isPageAuto = false;
 
-            this.Productos = this.articulossvc.getArticulos().products;
-            this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
-
+            // }
         });
 
     }
 
     OnCLickOnChange(){
-
+        this.isPageAuto = false
         const value = this.listOptionsForm.value;
+
+        localStorage.setItem('page', JSON.stringify(value))
 
         value.limit = parseFloat(value.limit);
 
@@ -74,18 +85,31 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.articulossvc.getAtributos$().subscribe(atributos => {
+        this.sub = this.articulossvc.getAtributos$().subscribe(atributos => {
             this.SetAtributos();
         });
+        
+        this.PaginationLocalStorage =  JSON.parse(localStorage.getItem('page'))
+        this.isPageAuto = localStorage.getItem('is_page_update') === '1' ? true : false
 
+        if(this.isPageAuto){
+              
+            this.listOptionsForm = this.fb.group({
+                page:   this.fb.control(this.PaginationLocalStorage.page),
+                limit: this.fb.control(this.PaginationLocalStorage.limit),
+                sort: this.fb.control(this.PaginationLocalStorage.sort),
+            });
+            this.SetLIstaOpciones(this.listOptionsForm.value)
+        }else{
 
-        this.listOptionsForm = this.fb.group({
-            page:   this.fb.control(this.articulossvc.getAtributosFiltros().page),
-            limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
-            sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
-        });
-
-
+            this.listOptionsForm = this.fb.group({
+                page:   this.fb.control(this.articulossvc.getAtributosFiltros().page),
+                limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
+                sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
+            });
+        }
+        
+      
      
        /* this.listOptionsForm.valueChanges.subscribe(value => {
 
@@ -108,38 +132,80 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     SetAtributos(){
-        this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, {emitEvent: false});
-        this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, {emitEvent: false});
-        this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, {emitEvent: false});
+        if (this.isPageAuto) {
+            const total = this.articulossvc.getAtributosFiltros().total;
+            this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / this.limit.value);
+            this.articulossvc.getAtributosFiltros().from = ((this.page.value - 1) * this.limit.value) + 1 ;
+            this.articulossvc.getAtributosFiltros().to = this.page.value   * this.limit.value;
+        }else {
+            this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, {emitEvent: false});
+            this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, {emitEvent: false});
+            this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, {emitEvent: false});
+        }
     }
 
   
 
     SetLIstaOpciones(value: any){
         const products = this.articulossvc.getArticulos().products.items
-       if(value.sort === 'sku'){
-        if (products != undefined) {
+        if(value.sort === 'sku'){
+            if (products != undefined) {
 
-            products.sort(function (a, b) {
+                products.sort(function (a, b) {
+                
+                if (a.sku > b.sku) {
+                    return 1;
+                }
+                if (a.sku < b.sku) {
+                    return -1;
+                }
             
-              if (a.sku > b.sku) {
-                return 1;
-              }
-              if (a.sku < b.sku) {
-                return -1;
-              }
-          
-              return 0;
-            });
-      
-          }
-          this.ProductosSeleccionados  = products
-       }
+                return 0;
+                });
+        
+            }
+            this.ProductosSeleccionados  = products
+        }
+        if(value.sort === 'name_asc'){
+            if (products != undefined) {
 
+                products.sort(function (a, b) {
+                
+                if (a.name > b.name) {
+                    return 1;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
+            
+                return 0;
+                });
+        
+            }
+            this.ProductosSeleccionados  = products
+        }
+        if(value.sort === 'name_desc'){
+            if (products != undefined) {
+
+                products.sort(function (a, b) {
+                
+                if (a.name < b.name) {
+                    return 1;
+                }
+                if (a.name > b.name) {
+                    return -1;
+                }
+            
+                return 0;
+                });
+        
+            }
+            this.ProductosSeleccionados  = products
+        }
      
-
         const total = this.articulossvc.getAtributosFiltros().total;
         const limit = value.limit;
+        this.page.setValue(value.page)
 
         this.articulossvc.getAtributosFiltros().page = value.page;
         this.articulossvc.getAtributosFiltros().limit = limit;
@@ -153,6 +219,9 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.sub.unsubscribe();
+        this.sub2.unsubscribe();
+        this.sub3.unsubscribe();
     }
 
     setLayout(value: Layout): void {

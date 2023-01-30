@@ -1,7 +1,8 @@
 {
-    "NombreCliente": "Oficlick.co",
+    "NombreCliente": "Betel",
     "Logo": "LOGO.png",
-    "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9496/",
-    "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9496/",
-    "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9496/"
+    "UrlServicioCarroCompras":  "https://betelerp.abakoerp.com:9444/",
+    "UrlServicioNegocio":  "https://betelerp.abakoerp.com:9444/",
+    "UrlServicioAdministracion":  "https://betelerp.abakoerp.com:9444/"
 }
+

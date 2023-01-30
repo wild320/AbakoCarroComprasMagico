@@ -29,10 +29,10 @@
     <div class="search__suggestions suggestions suggestions--location--{{ location }}">
         
         <ul class="suggestions__list">
-            <li *ngFor="let product of suggestedProducts" class="suggestions__item">
+            <li *ngFor="let product of suggestedProducts; index as key" class="suggestions__item" [ngClass]="{'d-none' : !(key >= optionPagination.first && key <= optionPagination.last)}">
                 <div class="suggestions__item-image product-image">
                     <div class="product-image__body">
-                        <img class="product-image__img" [src]="product.images[0]" alt="">
+                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible'}">
                     </div>
                 </div>
 
@@ -64,6 +64,40 @@
                     </button>
                 </div>
             </li>
+            <div class="posts-view__pagination">
+                <nav aria-label="Page navigation example" *ngIf="optionPagination.total > optionPagination.totalPage">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item">
+                        <a
+                            class="page-link"
+                            [ngClass]="{'disabled' : optionPagination.page === 1}"
+                            href="#"
+                            (click)="changePageSize($event,'previous')"
+                        >
+                            <
+                        </a>
+                        </li>
+                        <li class="page-item" *ngFor="let i of optionPagination.pageArr">
+                        <a
+                            class="page-link"
+                            [ngClass]="{'active' : optionPagination.page == i}"
+                            href="#"
+                            (click)="changePageSize($event,i)"
+                        >{{ i }}</a>
+                        </li>
+                        <li class="page-item">
+                        <a
+                            class="page-link"
+                            href="#"
+                            [ngClass]="{'disabled' : optionPagination.page == optionPagination.totalPage}"
+                            (click)="changePageSize($event,'next')"
+                        >
+                            >
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </ul>
     </div>
 </div>

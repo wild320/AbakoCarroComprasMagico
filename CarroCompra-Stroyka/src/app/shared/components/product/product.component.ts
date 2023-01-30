@@ -5,6 +5,10 @@ import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { CompareService } from '../../services/compare.service';
 import { RootService } from '../../services/root.service';
+import { ToastrService } from 'ngx-toastr';
+
+// utils
+import {UtilsTexto} from '../../utils/UtilsTexto';
 
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
@@ -34,23 +38,25 @@ export class ProductComponent implements OnInit {
         private wishlist: WishlistService,
         private compare: CompareService,
         public root: RootService,
+        private toastr: ToastrService,
+        private utils: UtilsTexto,
     ) { 
        
      }
 
     ngOnInit(): void {
-    
+        localStorage.setItem('is_page_update','1')
 
     }
 
     addToCart(): void {
     
-        if (!this.addingToCart && this.product && this.quantity.value > 0 ) {
+    
+        if (!this.addingToCart && this.product && this.quantity.value > 0 && this.product.inventario >= this.quantity.value  ) {
             this.addingToCart = true;
-
             this.cart.add(this.product, this.quantity.value).subscribe({complete: () => this.addingToCart = false});
         }else{
-
+            this.toastr.error(`Producto "${this.utils.TitleCase (this.product.name) }" no tiene suficiente inventario, disponible:${ (this.product.inventario) }`);
         }
     }
 

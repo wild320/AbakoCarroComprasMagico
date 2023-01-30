@@ -140,6 +140,12 @@ export class StoreService {
                     this.configuracionSitio.VerBannerIntermedio = true;
                 }
             }
+            if (element.id === 'A30'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.SuperarInventario = true;
+                }
+            }
+
 
             // redes sociales
             if (element.id === 'A20'){

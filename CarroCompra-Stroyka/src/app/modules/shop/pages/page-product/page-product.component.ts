@@ -18,7 +18,6 @@ import { Item } from '../../../../../data/modelos/articulos/Items';
 })
 export class PageProductComponent implements OnInit, OnDestroy {
     relatedProducts: Item[];
-
     product: Item;
     ArticulosSuscribe$: any;
     breadcrumbs: Link[] = [];
@@ -34,14 +33,16 @@ export class PageProductComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-
+      
         this.route.paramMap.subscribe(data => {
-
+            
+       console.log('k pasa', data)
 
               // tomar el articulos seleccionado
         // tslint:disable-next-line: deprecation
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
-
+            console.log('ESTE ', Data)
+            console.log('jaj',this.articulossvc.getArticuloDetalle().item)
             this.product = this.articulossvc.getArticuloDetalle().item;
             this.cadenaString = this.product.name;
             this.valorProductoUnit = this.product.price;
@@ -52,9 +53,10 @@ export class PageProductComponent implements OnInit, OnDestroy {
             const valor = parseInt(this.valorProductoUnit) / parseInt(this.valorUnitario)
             this.product["ValorUnidadV"] = `${valor}`;
             this.product["NombreUnidadV"] = `${valorFinal[1]}`;
-     
+           
 
             // verificar si el articulo seleccioando existe en articulos
+           
             if (this.product === undefined){
                 this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
             }

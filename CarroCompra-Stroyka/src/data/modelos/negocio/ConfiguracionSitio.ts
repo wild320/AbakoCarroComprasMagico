@@ -16,6 +16,7 @@ export class ConfiguracionSitio {
     VerAcordeonInformacion :boolean;
     PasaleraContraEntrega: Boolean;
     PasaleraPSE: boolean;
+    SuperarInventario: boolean;
     PasarelaTranferenciaBancaria: boolean;
     AgenciaDefaul: string;
   }

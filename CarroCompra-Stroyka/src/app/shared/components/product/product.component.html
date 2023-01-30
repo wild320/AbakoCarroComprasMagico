@@ -2,7 +2,8 @@
     <div class="product__content">
         <!-- .product__gallery -->
         <div class="product__gallery">
-            <app-product-gallery [productLayout]="layout" [images]="product.images"></app-product-gallery>
+            <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible'}"
+            [productLayout]="layout" [images]="product.images"></app-product-gallery>
         </div>
         <!-- .product__gallery / end -->
         <!-- .product__info -->

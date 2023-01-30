@@ -12,6 +12,7 @@ export class Item {
     }>;
     compareAtPrice: number;
     images: string[];
+    inventario: number;
     price: number;
     priceunit: number;
     taxes: number;

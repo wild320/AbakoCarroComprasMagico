@@ -169,6 +169,8 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         if (this.EsValidoFormulario()){
 
             // armar detalle pedido
+           
+           
             const detalle = this.cart.items.map(elem => (
                 {
                     IdArt: elem.product.id,
@@ -179,6 +181,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
                     Vr: 0,
                 } 
             ));
+
 
             //Enviar pedido
             this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa, this.usuariosvc.IdPersona, this.Store.configuracionSitio.AgenciaDefaul,
@@ -209,6 +212,10 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         this.mensajerespuestaerror = '';
     }
 
+    
+    validarInventario(){
+        this.mensajerespuestaerror = 'Revise su carrito hay productos sin inventario'     
+    }
     EsValidoFormulario(): boolean{
 
         // debe tener una direccion selecionada

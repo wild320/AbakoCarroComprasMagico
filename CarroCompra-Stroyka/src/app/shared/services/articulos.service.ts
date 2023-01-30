@@ -112,7 +112,7 @@ export class ArticulosService {
 
     }
 
-  setAtributosFiltros(Seleccion: Products){
+  setAtributosFiltros(Seleccion: any){
 
     this.setAtributos$(Seleccion);
     this.ArticulosSeleccionPagina();
@@ -334,14 +334,14 @@ export class ArticulosService {
   }
 
   SetFiltrarArticulos(filtros: SerializedFilterValues){
-
+  
     this.Articulosfiltrados = JSON.parse(JSON.stringify(this.getArticulos().products));
     this.isfiltrado = false;
     const tipoFiltro = [];
 
      // Filtrar por precio;
     if (filtros.price !== undefined) {
-
+       
       tipoFiltro.push( cFiltros.Precio );
 
       const precioInicial = parseFloat (filtros.price.split('-')[0]);
@@ -352,6 +352,7 @@ export class ArticulosService {
           return precio;
         }
       });
+    
 
       this.isfiltrado = true;
 
@@ -426,12 +427,11 @@ export class ArticulosService {
   }
 
   SetRecalcularFiltros(TipoFiltro: any ){
-
+  
     this.FiltroColores = [];
     this.FiltroMarca = [];
     this.FiltroDescuento = [];
     let indexfiltros;
-
     // Total Registros
     const totalDescuentos = this.Articulosfiltrados.items.reduce( (cont, item) => {
       return cont += 1;
