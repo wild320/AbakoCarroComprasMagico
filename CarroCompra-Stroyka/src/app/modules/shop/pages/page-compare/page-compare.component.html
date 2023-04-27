@@ -14,7 +14,7 @@
     </div>
 </div>
 
-<div class="block" *ngIf="products.length">
+<div class="block" *="products.length">
     <div class="container">
         <div class="table-responsive">
             <table class="compare-table">
@@ -25,7 +25,7 @@
                         <a [routerLink]="root.product(product.id)" class="compare-table__product-link">
                             <div *ngIf="product.images?.length" class="compare-table__product-image product-image">
                                 <div class="product-image__body">
-                                    <img class="product-image__img" [src]="product.images[0]" alt=""  [ngClass]="{'imagen' : product.availability === 'No Disponible'}">
+                                    <img class="product-image__img" [src]="product.images[0]" alt=""  [ngClass]="{'imagen' : product.availability === 'No Disponible'  &&  product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
                                 </div>
                             </div>
                             <div class="compare-table__product-name">{{ product.name| titlecase }}</div>
@@ -57,7 +57,7 @@
                 <tr>
                     <th>Agregar al Carrito</th>
                     <td *ngFor="let product of products">
-                        <button class="btn btn-primary"  [disabled]="product.availability === 'No Disponible'" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carrito</button>
+                        <button class="btn btn-primary"  [disabled]=" product.availability === 'No Disponible'  &&  product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carrito</button>
                     </td>
                 </tr>
                 <tr *ngFor="let feature of features">

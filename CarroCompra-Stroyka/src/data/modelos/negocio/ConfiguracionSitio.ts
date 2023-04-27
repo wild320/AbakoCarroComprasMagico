@@ -18,6 +18,12 @@ export class ConfiguracionSitio {
     PasaleraPSE: boolean;
     SuperarInventario: boolean;
     PasarelaTranferenciaBancaria: boolean;
+    MostrarPreciosSinLogueo: boolean;
+    PosicionamientoEnGoogle: string;
+    VerSeguimientoPedidos : boolean;
+    VerCompararProductos : boolean;
+    VerSuscribirse: boolean;
+    scriptRastreo:string;
     AgenciaDefaul: string;
   }
 

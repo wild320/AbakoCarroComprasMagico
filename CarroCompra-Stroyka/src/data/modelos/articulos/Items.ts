@@ -33,6 +33,7 @@ export class Item {
     NombreUnidadV: string;
     caracteristicas: string;
     observaciones: string;
+    favorito: boolean = false;
     attributes: Array <{
         name: string;
         slug: string;

@@ -8,6 +8,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 // constantes
 import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class TopbarComponent {
         public currencyService: CurrencyService,
         public pagina: PaginasService,
         public usuariosvc: UsuarioService,
+        public storeSvc: StoreService,
     ) {
 
         this.EstaLogueadoUsuario();

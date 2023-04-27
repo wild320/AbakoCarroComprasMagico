@@ -247,6 +247,7 @@ export class UsuarioService {
               if(!this.recordar ){
                 this.localService.setJsonValueSession(this.token, this.usuarioStorage);
               } 
+             
               this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
               this.MsgRespuesta.msgStr = 'Usuario exitoso';
         // cambiar estado de logueado
@@ -611,7 +612,7 @@ export class UsuarioService {
   }
 
   private cargarRespuesta(config: any, usrrq: LoguinRequest){
-
+   
     // validar mensaje
     if (config.estado[0].msgId === EstadoRespuestaMensaje.Error) {
 

@@ -8,6 +8,8 @@ import { RootService } from '../../../../shared/services/root.service';
 
 // modelos
 import { Item } from '../../../../../data/modelos/articulos/Items';
+import { StoreService } from 'src/app/shared/services/store.service';
+
 
 interface Feature {
     name: string;
@@ -30,7 +32,8 @@ export class PageCompareComponent implements OnInit, OnDestroy {
     constructor(
         public root: RootService,
         private compare: CompareService,
-        private cart: CartService
+        private cart: CartService,
+        public storeSvc: StoreService,
     ) { }
 
     ngOnInit(): void {

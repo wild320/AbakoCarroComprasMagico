@@ -20,6 +20,10 @@ export class PageProductComponent implements OnInit, OnDestroy {
     relatedProducts: Item[];
     product: Item;
     ArticulosSuscribe$: any;
+    prueba : any;
+    prueba1 : any;
+    prueba2 : any;
+    prueba3 : any;
     breadcrumbs: Link[] = [];
     layout: 'standard'|'columnar'|'sidebar' = 'standard';
     sidebarPosition: 'start'|'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
@@ -36,13 +40,10 @@ export class PageProductComponent implements OnInit, OnDestroy {
       
         this.route.paramMap.subscribe(data => {
             
-       console.log('k pasa', data)
 
               // tomar el articulos seleccionado
         // tslint:disable-next-line: deprecation
         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
-            console.log('ESTE ', Data)
-            console.log('jaj',this.articulossvc.getArticuloDetalle().item)
             this.product = this.articulossvc.getArticuloDetalle().item;
             this.cadenaString = this.product.name;
             this.valorProductoUnit = this.product.price;
@@ -58,7 +59,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
             // verificar si el articulo seleccioando existe en articulos
            
             if (this.product === undefined){
-                this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
+                this.prueba = this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
             }
 
             this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
@@ -66,11 +67,11 @@ export class PageProductComponent implements OnInit, OnDestroy {
         });
             
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
-
             this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
 
             // tslint:disable-next-line: deprecation
-            this.articulossvc.getArticulosRelacionados$().subscribe(data => {
+           
+             this.articulossvc.getArticulosRelacionados$().subscribe(data => {
                 this.relatedProducts = this.articulossvc.getArticulosRelacionados();
             });
 

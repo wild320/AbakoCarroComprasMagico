@@ -1,8 +1,10 @@
 {
     "NombreCliente": "Betel",
     "Logo": "LOGO.png",
-    "UrlServicioCarroCompras":  "https://betelerp.abakoerp.com:9444/",
-    "UrlServicioNegocio":  "https://betelerp.abakoerp.com:9444/",
-    "UrlServicioAdministracion":  "https://betelerp.abakoerp.com:9444/"
+    "UrlServicioCarroCompras":  "https://oficlickerp.abakoerp.com:9443/",
+    "UrlServicioNegocio":  "https://oficlickerp.abakoerp.com:9443/",
+    "UrlServicioAdministracion":  "https://oficlickerp.abakoerp.com:9443/"
 }
+
+
 

@@ -18,7 +18,7 @@
 
     <div class="product-card__image product-image">
         <a appClick [routerLink]="root.product(product.id)" *ngIf="product.images?.length" class="product-image__body">
-            <img class="product-image__img" [lazyLoad]="product.images[0]" alt=""  [ngClass]="{'imagen' : product.availability === 'No Disponible'}">
+            <img class="product-image__img" [lazyLoad]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
         </a>
     </div>
     <div class="product-card__info">
@@ -50,15 +50,15 @@
                 <span class="product-card__old-price">{{ product.compareAtPrice|currencyFormat }}</span>
             </ng-container>
             <ng-container *ngIf="!product.compareAtPrice">
-                {{ product.price|currencyFormat }}
+                {{ product.price|currencyFormat}}
             </ng-container>
         </div>
         <div class="product-card__buttons">
-            <button class="btn btn-primary product-card__addtocart" type="button" appClick  [disabled]="product.availability === 'No Disponible'" (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
+            <button class="btn btn-primary product-card__addtocart" type="button" appClick  [disabled]=" product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
             <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
-            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" aria-label="Agregar a la Lista de Deseos" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist}">
-                <app-icon name="wishlist-16" size="16"></app-icon>
-                <span class="fake-svg-icon fake-svg-icon--wishlist-16"></span>
+            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" aria-label="Agregar a la Lista de Deseos" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist, 'wishlist' : esFavorito}">
+                <app-icon [ngClass]="{'wishlist' : esFavorito}" name="wishlist-16" size="16"></app-icon>
+                <span [ngClass]="{'wishlist' : esFavorito}" class="fake-svg-icon fake-svg-icon--wishlist-16"></span>
             </button>
             <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button" aria-label="Agregar a la Lista para Comparar" appClick (click)="addToCompare()" [ngClass]="{'btn-loading': addingToCompare}">
                 <app-icon name="compare-16" size="16"></app-icon>

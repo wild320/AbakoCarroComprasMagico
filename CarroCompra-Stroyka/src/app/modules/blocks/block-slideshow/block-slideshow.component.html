@@ -6,7 +6,7 @@
             <div class="col-12" [ngClass]="{'col-lg-12': !withDepartments, 'col-lg-9': withDepartments}">
                 <div class="block-slideshow__body">
                     <owl-carousel-o *ngIf="slides?.length" [options]="options" appOwlPreventClick>
-                        <ng-template *ngFor="let slide of slides" carouselSlide>
+                        <ng-template *ngFor="let slide of slides" carouselSlide  [id]="slides?.length">
                             <a class="block-slideshow__slide" [href]="slide?.link" appClick>
                                 <div class="block-slideshow__slide-image block-slideshow__slide-image--desktop" [ngStyle]="{'background-image': 'url('+(withDepartments ? slide.imagenClasica :  slide.imagenFull)+')'}"></div>
                                 <div class="block-slideshow__slide-image block-slideshow__slide-image--mobile" [ngStyle]="{'background-image': 'url('+ slide.imagenMobile+')'}"></div>

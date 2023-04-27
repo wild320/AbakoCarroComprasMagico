@@ -32,7 +32,7 @@
             <li *ngFor="let product of suggestedProducts; index as key" class="suggestions__item" [ngClass]="{'d-none' : !(key >= optionPagination.first && key <= optionPagination.last)}">
                 <div class="suggestions__item-image product-image">
                     <div class="product-image__body">
-                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible'}">
+                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario}">
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@
 
                 <div *ngIf="location === 'header'" class="suggestions__item-actions">
                     <button
-                         [disabled]="product.availability === 'No Disponible'" 
+                         [disabled]="product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario" 
                         type="button"
                         title="Add to cart"
                         class="btn btn-primary btn-sm btn-svg-icon"

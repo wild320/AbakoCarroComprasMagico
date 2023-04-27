@@ -64,6 +64,9 @@ export class AccountMenuComponent implements OnInit{
 
           this.usuariosvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
+            window.location.reload();
+
+            localStorage.setItem("isLogue", "true");
             // si no llega logueado validar mensaje
             if  (config.msgId !== EstadoRespuestaMensaje.exitoso || this.usuariosvc.MensajeError.length > 0 ){
 
@@ -122,6 +125,7 @@ export class AccountMenuComponent implements OnInit{
 
     CerrarSesion(){
         this.usuariosvc.loguout();
+        localStorage.setItem("isLogue", "false");
     }
 
     get usuario() { return this.ingresoForm.get('usuario'); }

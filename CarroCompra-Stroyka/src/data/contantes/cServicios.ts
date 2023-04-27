@@ -28,5 +28,6 @@ export const CServicios = {
     SeguimientoPedido: 'Pedidos/SeguimientoPedido',
     ServicioFechaServidor: 'FechaServidor',
     ServicioBanner: 'Banners/ModificarBanners',
+    ServicioFavoritos: 'Favoritos/GetSet',
 };
 

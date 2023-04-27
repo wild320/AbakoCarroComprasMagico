@@ -36,7 +36,7 @@
                             [routerLink]="root.product(product.id)"
                             class="product-image__body"
                         >
-                            <img class="product-image__img" [src]="product.images[0]"   [ngClass]="{'imagen' : product.availability === 'No Disponible'}" alt="">
+                            <img class="product-image__img" [src]="product.images[0]"   [ngClass]=" product.availability === 'No Disponible'  &&  product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" alt="">
                         </a>
                     </div>
                 </td>
@@ -53,7 +53,7 @@
                 </td>
                 <td class="wishlist__column wishlist__column--price">{{ product.price | currency }}</td>
                 <td class="wishlist__column wishlist__column--tocart">
-                    <button  [disabled]="product.availability === 'No Disponible'" type="button" class="btn btn-primary btn-sm" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carro</button>
+                    <button  [disabled]=" product.availability === 'No Disponible'  &&  product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" type="button" class="btn btn-primary btn-sm" (click)="addToCart(product)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carro</button>
                 </td>
                 <td class="wishlist__column wishlist__column--remove">
                     <button type="button" class="btn btn-light btn-sm btn-svg-icon" (click)="remove(product)" [ngClass]="{'btn-loading': removedProducts.includes(product)}">

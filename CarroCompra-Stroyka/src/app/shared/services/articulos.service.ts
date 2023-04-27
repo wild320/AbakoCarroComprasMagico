@@ -20,8 +20,8 @@ import { NegocioService } from '../../shared/services/negocio.service';
 // Modelos
 import {ArticulosCarroComprasResponse } from '../../../data/modelos/articulos/Articulos';
 import { Products} from '../../../data/modelos/articulos/DetalleArticulos';
+import { Filters } from '../../../data/modelos/articulos/filters';
 import { ItemsFiltros} from '../../../data/modelos/articulos/ItemsFiltros';
-import { Filters } from '../../../data/modelos/articulos/Filters';
 import {Item} from '../../../data/modelos/articulos/Items';
 import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSeleccionado';
 
@@ -236,7 +236,6 @@ export class ArticulosService {
   }
 
   setArticuloDetalle$(newValue){
-
     this.ArticulosDetalle = newValue;
     this.ArticulosDetalle$.next(newValue);
   }
@@ -249,18 +248,17 @@ export class ArticulosService {
 
     // Si el articulo no existe aun debe consultarlo a la api
     if (this.getArticulos()?.products === undefined || SiempreRecuperar){
-
       this.RecuperarArticuloDetalle(idArticulo);
 
+    }else if (this.getArticulos().products.items.findIndex(element =>  element.id ===  idArticulo) == -1 ) {
+      this.RecuperarArticuloDetalle(idArticulo);
+
+
     }else{
-
       const index = this.getArticulos().products.items.findIndex(element =>  element.id ===  idArticulo);
-
       this.seleccionado.item = this.getArticulos().products.items[index];
       this.seleccionado.breadcrumbs = this.getArticulos().breadcrumbs;
-
       this.setArticuloDetalle$(this.seleccionado);
-
     }
 
   }
@@ -613,6 +611,7 @@ export class ArticulosService {
     return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${TipoFiltro}/${Id}`, { responseType: 'text' })
         .toPromise()
         .then((config: any) => {
+          
 
           this.setFitrosCarro$(JSON.parse(config).products.filters);
 
@@ -813,6 +812,7 @@ export class ArticulosService {
   }
 
   public RecuperarArticuloDetalle(Id: number){
+   
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +

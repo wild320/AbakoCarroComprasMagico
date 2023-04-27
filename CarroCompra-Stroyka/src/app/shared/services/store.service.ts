@@ -47,11 +47,16 @@ export class StoreService {
         this.configuracionSitio.VerMarcas = false;
         this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = false;
         this.configuracionSitio.VerBannerIntermedio = false;
+        this.configuracionSitio.SuperarInventario = false;
+        this.configuracionSitio.VerSuscribirse = false;
         this.configuracionSitio.PasaleraContraEntrega  = true;
         this.configuracionSitio.PasaleraPSE = true;
         this.configuracionSitio.PasarelaTranferenciaBancaria = true;
         this.configuracionSitio.VerBannerInformacion = true;
-        this.configuracionSitio.VerAcordeonInformacion = true;
+        this.configuracionSitio.VerAcordeonInformacion  = true;
+        this.configuracionSitio.MostrarPreciosSinLogueo = true;
+        this.configuracionSitio.PosicionamientoEnGoogle = '';
+        this.configuracionSitio.scriptRastreo= '';
         
 
         this.redes = [];
@@ -145,6 +150,36 @@ export class StoreService {
                     this.configuracionSitio.SuperarInventario = true;
                 }
             }
+            if (element.id === 'A31'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.MostrarPreciosSinLogueo = true;
+                }
+            }
+
+            if (element.id === 'A32'){
+                    this.configuracionSitio.PosicionamientoEnGoogle = element.valor;
+            }
+
+            if (element.id === 'A33'){
+                    this.configuracionSitio.scriptRastreo = element.valor;
+                
+            }
+            if (element.id === 'A34'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerSeguimientoPedidos = true;
+                }
+            }
+            if (element.id === 'A35'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerCompararProductos = true;
+                }
+            }
+            if (element.id === 'A36'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerSuscribirse = true;
+                }
+            }
+            
 
 
             // redes sociales

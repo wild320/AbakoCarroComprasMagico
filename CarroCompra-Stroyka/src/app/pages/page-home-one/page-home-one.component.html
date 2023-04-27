@@ -2,6 +2,16 @@
 <!--
     <app-block-features></app-block-features>
 -->
+<app-block-products-carousel
+    *ngIf="StoreSvc.configuracionSitio.VerBLoqueValoradosEspecialesVendidos"
+    header="Ofertas especiales"
+    layout="horizontal"
+    [rows]="2"
+    [loading]="productsOferta?.loading"
+    [products]="productsOferta?.products"
+    [groups]="productsOferta?.groups"
+    (groupChange)=" groupChangeOferta(productsOferta, $event)"
+></app-block-products-carousel>
 
 <app-block-products-carousel
     *ngIf="StoreSvc.configuracionSitio.VerProductosDestacados"
@@ -17,6 +27,7 @@
 
 <app-block-products *ngIf="StoreSvc.configuracionSitio.VerMasVendidos"
 header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-products>
+
 
 <app-block-categories *ngIf="StoreSvc.configuracionSitio.VerCategoriasPopulares" header="Categorias más Populares" layout="classic" [categories]="popularCategories"></app-block-categories>
 
@@ -37,6 +48,5 @@ header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-
 
 <app-block-product-columns *ngIf="StoreSvc.configuracionSitio.VerBLoqueValoradosEspecialesVendidos" >
     <app-block-product-columns-item header="Productos Mejor Valorados" [products]="columnTopRated"></app-block-product-columns-item>
-    <app-block-product-columns-item header="Ofertas Especiales" [products]="columnSpecialOffers"></app-block-product-columns-item>
     <app-block-product-columns-item header="Mas Vendidos" [products]="columnBestsellers"></app-block-product-columns-item>
 </app-block-product-columns>

@@ -2,7 +2,7 @@
     <div class="product__content">
         <!-- .product__gallery -->
         <div class="product__gallery">
-            <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible'}"
+            <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}"
             [productLayout]="layout" [images]="product.images"></app-product-gallery>
         </div>
         <!-- .product__gallery / end -->
@@ -133,13 +133,13 @@
                             <app-input-number aria-label="Quantity" class="product__quantity" size="lg" [min]="1" [formControl]="quantity"></app-input-number>
                         </div>
                         <div class="product__actions-item product__actions-item--addtocart" >
-                            <button  [disabled]="product.availability === 'No Disponible'" type="button" class="btn btn-primary btn-lg"
+                            <button  [disabled]="product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" type="button" class="btn btn-primary btn-lg"
                                     [ngClass]="{'btn-loading': addingToCart}"
                                     appClick (click)="addToCart()">Agregar al Carro</button>
                         </div>
                         <div class="product__actions-item product__actions-item--wishlist">
                             <button type="button" class="btn btn-secondary btn-svg-icon btn-lg" data-toggle="tooltip" title="Lista de Deseos"
-                                    [ngClass]="{'btn-loading': addingToWishlist}"
+                            [ngClass]="{'btn-loading': addingToWishlist, 'wishlist' : esFavorito}"
                                     appClick (click)="addToWishlist()">
                                 <app-icon name="wishlist-16" size="16"></app-icon>
                             </button>

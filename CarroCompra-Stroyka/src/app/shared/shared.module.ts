@@ -43,6 +43,7 @@ import { AbsoluteUrlPipe } from './pipes/absolute-url.pipe';
 import { ColorTypePipe } from './pipes/color-type.pipe';
 import { CurrencyFormatPipe } from './pipes/currency-format.pipe';
 import { ProductGalleryComponent } from './components/product-gallery/product-gallery.component';
+import { SafePipePipe } from './pipes/safe-pipe.pipe';
 
 
 @NgModule({
@@ -77,7 +78,9 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         AbsoluteUrlPipe,
         ColorTypePipe,
         CurrencyFormatPipe,
+        SafePipePipe,
         ProductGalleryComponent,
+       
     ],
     imports: [
         // modules (angular)
@@ -123,6 +126,7 @@ import { ProductGalleryComponent } from './components/product-gallery/product-ga
         ColorTypePipe,
         CurrencyFormatPipe,
         ShareButtonsComponent,
+        SafePipePipe,
     ]
 })
 export class SharedModule { }

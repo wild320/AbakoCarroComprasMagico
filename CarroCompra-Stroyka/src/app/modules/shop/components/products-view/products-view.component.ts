@@ -93,11 +93,10 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         this.isPageAuto = localStorage.getItem('is_page_update') === '1' ? true : false
 
         if(this.isPageAuto){
-              
             this.listOptionsForm = this.fb.group({
-                page:   this.fb.control(this.PaginationLocalStorage.page),
-                limit: this.fb.control(this.PaginationLocalStorage.limit),
-                sort: this.fb.control(this.PaginationLocalStorage.sort),
+                page:   this.fb.control(this.PaginationLocalStorage?.page || 1) ,
+                limit: this.fb.control(this.PaginationLocalStorage?.limit || 12),
+                sort: this.fb.control(this.PaginationLocalStorage?.sort  || 'sku'),
             });
             this.SetLIstaOpciones(this.listOptionsForm.value)
         }else{
@@ -109,26 +108,6 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             });
         }
         
-      
-     
-       /* this.listOptionsForm.valueChanges.subscribe(value => {
-
-            console.log (value);
-
-            value.limit = parseFloat(value.limit);
-
-            if (value.page  == null || value.limit == null || value.sort == null  ){
-                return;
-            }
-
-            this.SetLIstaOpciones(value);
-
-            console.log('suscribe', value);
-
-            // this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
-
-        }); */
-
     }
 
     SetAtributos(){

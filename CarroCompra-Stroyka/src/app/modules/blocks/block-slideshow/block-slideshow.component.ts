@@ -19,6 +19,15 @@ export class BlockSlideshowComponent  {
         nav: false,
         dots: true,
         loop: true,
+        mouseDrag: true,
+        touchDrag: true,
+        pullDrag: false,
+        autoplay: true,
+        animateIn: 'fadeIn',
+        animateOut: 'fadeOut',
+        autoplaySpeed: 800,
+        autoplayTimeout: 5000,
+        navSpeed: 700,
         responsive: {
             0: {items: 1}
         },

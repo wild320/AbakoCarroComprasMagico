@@ -41,7 +41,8 @@ import { BlockHeaderComponent } from './components/block-header/block-header.com
         BlockProductsComponent,
         BlockSlideshowComponent,
         // components
-        BlockHeaderComponent
+        BlockHeaderComponent,
+    
     ],
     imports: [
         // modules (angular)

@@ -29,6 +29,7 @@ import { Item } from '../../../../data/modelos/articulos/Items';
 
 // Servicios
 import { ArticulosService} from '../../../shared/services/articulos.service'
+import { StoreService } from '../../services/store.service';
 
 export type SearchLocation = 'header' | 'indicator' | 'mobile-header';
 
@@ -103,6 +104,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         public articulossvc: ArticulosService,
         private toastr: ToastrService,
         private utils: UtilsTexto,
+        public StoreSvc: StoreService,
     ) { 
         this.cargarSugerencias();
     }
@@ -112,7 +114,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-
         this.form = this.fb.group({
             query: [''],
         });
@@ -182,27 +183,32 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
 
     addToCart(product: Item): void {
+
         if (this.addedToCartProducts.includes(product)) {
             return;
         }
 
-      
-        
-        if (product.inventario >= this.quantity.value  ) {
-            this.cart.add(product, this.quantity.value).subscribe({
-                complete: () => {
-                    this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
-                    this.quantity.reset(1)
-                }
-            });
-            this.addedToCartProducts.push(product);
-    
-        }else{
-            this.toastr.error(`Producto "${this.utils.TitleCase (product.name) }" no tiene suficiente inventario, disponible:${ (product.inventario) }`);
-            this.quantity.reset(1)
-        }
+       if(this.StoreSvc.configuracionSitio.SuperarInventario){
+        this.cart.add(product, this.quantity.value).subscribe({
+            complete: () => {
+                this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
+                this.quantity.reset(1)
+            }
+        });
    
-  
+       } else if ( product.inventario >= this.quantity.value  ) {
+        this.cart.add(product, this.quantity.value).subscribe({
+            complete: () => {
+                this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
+                this.quantity.reset(1)
+            }
+        });
+        this.addedToCartProducts.push(product);
+
+    }else{
+        this.toastr.error(`Producto "${this.utils.TitleCase (product.name) }" no tiene suficiente inventario, disponible:${ (product.inventario) }`);
+        this.quantity.reset(1)
+    }
     }
  
     private cargarSugerencias(){
@@ -256,7 +262,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     updatePagination(leng:number){
         this.accUPagination++
-        console.log('updatePagination',this.accUPagination);
         this.optionPagination.pageArr = [];
         if (this.optionPagination.page > this.optionPagination.total) {
             this.optionPagination.page = 1;
