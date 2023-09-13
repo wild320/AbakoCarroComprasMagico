@@ -33,6 +33,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     esFavorito : boolean = false;
     featuredAttributes: ProductAttribute[] = [];
     quick
+    islogged
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -46,10 +47,11 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     ) { }
 
     ngOnInit(): void {
+        this.islogged = localStorage.getItem("isLogue");
         // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
-           
+
         });
 
         this.cargarFavoritos();
@@ -86,10 +88,10 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
                     this.addingToWishlist = false
                 }
                 });
-        
-            
+
+
         }
-    } 
+    }
 
     addToCompare(): void {
         if (this.addingToCompare) {
@@ -123,9 +125,9 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
 
     cargarFavoritos(){
-     this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos")) 
-     const product =  this.productosFavoritos?.findIndex(element =>  element.id ===  this.product.id) 
-     this.esFavorito = product != -1 
+     this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos"))
+     const product =  this.productosFavoritos?.findIndex(element =>  element.id ===  this.product.id)
+     this.esFavorito = product != -1
     }
 
 

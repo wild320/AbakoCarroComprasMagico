@@ -65,8 +65,6 @@ export class AccountMenuComponent implements OnInit{
           this.usuariosvc.Loguin(this.ingresoForm.value).then((config: any) => {
 
             window.location.reload();
-
-            localStorage.setItem("isLogue", "true");
             // si no llega logueado validar mensaje
             if  (config.msgId !== EstadoRespuestaMensaje.exitoso || this.usuariosvc.MensajeError.length > 0 ){
 
@@ -79,6 +77,7 @@ export class AccountMenuComponent implements OnInit{
             }else{
 
                // direccionar al home
+               localStorage.setItem("isLogue", "false");
                this.router.navigate(['/']);
 
             }
@@ -100,6 +99,7 @@ export class AccountMenuComponent implements OnInit{
 
           this.loading = false;
 
+
         }
       }
 
@@ -117,9 +117,11 @@ export class AccountMenuComponent implements OnInit{
 
         if (this.usuariologueado) {
 
+            localStorage.setItem("isLogue", "true");
             this.UsrLogin = this.usuariosvc.getUsrLoguin();
 
-            this.UsrLogin.subscribe((value) => { });
+            this.UsrLogin.subscribe((value) => {
+            });
         }
     }
 

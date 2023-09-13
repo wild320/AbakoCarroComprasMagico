@@ -20,7 +20,8 @@ export class FooterComponent {
     linksMicuenta: Link[];
 
     constructor(public storeService: StoreService,
-                public usuariosvc: UsuarioService
+                public usuariosvc: UsuarioService,
+                public storeSvc: StoreService,
         ) {
 
         this.CargarMenuMicuenta();

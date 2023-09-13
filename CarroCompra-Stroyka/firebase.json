@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/abakoCarroCompras",
+    "public": "dist/AbakoCarroCompras",
     "ignore": [
       "firebase.json",
       "**/.*",

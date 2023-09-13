@@ -41,7 +41,6 @@ export class ShopService {
     constructor(
         private root: RootService,
     ) {
-
         this.inicializarBreadcrumbs();
     }
 
@@ -63,7 +62,6 @@ export class ShopService {
             br.url = `${this.root.shop()}/${br.url}`
 
         );
-
         this.breadcrumbs.push(...breadcrumbs);
 
     }
@@ -147,7 +145,6 @@ export class ShopService {
      * @param options.filterValues - An object whose keys are filter slugs and values ​​are filter values (optional).
      */
     getProductsList(categorySlug: string|null, options: ListOptions): Observable<ProductsList> {
-
         return getProductsList(categorySlug, options);
 
     }

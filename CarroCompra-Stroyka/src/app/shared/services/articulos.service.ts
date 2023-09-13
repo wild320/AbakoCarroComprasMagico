@@ -245,7 +245,6 @@ export class ArticulosService {
   }
 
   SetSeleccionarArticuloDetalle(idArticulo: number, SiempreRecuperar: boolean ){
-
     // Si el articulo no existe aun debe consultarlo a la api
     if (this.getArticulos()?.products === undefined || SiempreRecuperar){
       this.RecuperarArticuloDetalle(idArticulo);
@@ -332,14 +331,14 @@ export class ArticulosService {
   }
 
   SetFiltrarArticulos(filtros: SerializedFilterValues){
-  
+
     this.Articulosfiltrados = JSON.parse(JSON.stringify(this.getArticulos().products));
     this.isfiltrado = false;
     const tipoFiltro = [];
 
      // Filtrar por precio;
     if (filtros.price !== undefined) {
-       
+
       tipoFiltro.push( cFiltros.Precio );
 
       const precioInicial = parseFloat (filtros.price.split('-')[0]);
@@ -350,7 +349,7 @@ export class ArticulosService {
           return precio;
         }
       });
-    
+
 
       this.isfiltrado = true;
 
@@ -425,7 +424,7 @@ export class ArticulosService {
   }
 
   SetRecalcularFiltros(TipoFiltro: any ){
-  
+
     this.FiltroColores = [];
     this.FiltroMarca = [];
     this.FiltroDescuento = [];
@@ -605,14 +604,11 @@ export class ArticulosService {
     const TipoFiltro  = slug.split('|')[0];
     const Id          = this.GetIdFiltro(TipoFiltro, slug);
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
-
     this.setIsLoading(true);
 
     return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${TipoFiltro}/${Id}`, { responseType: 'text' })
         .toPromise()
         .then((config: any) => {
-          
-
           this.setFitrosCarro$(JSON.parse(config).products.filters);
 
           const articulos = JSON.parse(config);
@@ -642,13 +638,13 @@ export class ArticulosService {
 
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
 
-    this.setIsLoading(true);
 
     return this.httpClient.get(`${this.UrlServicio}/${Tipo}/${IdEmpresa}`, { responseType: 'text' })
         .toPromise()
         .then((art: any) => {
-
           const {items} = JSON.parse(art);
+
+
 
           switch (Tipo) {
             case CArticulos.ArticulosEspecialesMasVendidos:
@@ -812,7 +808,7 @@ export class ArticulosService {
   }
 
   public RecuperarArticuloDetalle(Id: number){
-   
+
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +

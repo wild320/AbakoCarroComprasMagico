@@ -10,4 +10,6 @@ export interface CartItem {
         value: string;
     }[];
     quantity: number;
+    quantityError: boolean;
+    quantityErrorMessage:string;
 }

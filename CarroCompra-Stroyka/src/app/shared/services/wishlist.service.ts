@@ -120,7 +120,7 @@ export class WishlistService implements OnDestroy {
   }
 
 
-  
+
     private load() {
         this.CargarUsuario();
         if (!this.usr) {
@@ -157,11 +157,11 @@ export class WishlistService implements OnDestroy {
                                 localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
                                 }
                             });
-                            
+
                     })
                     this.itemsSubject$.next(this.itemsFavoritos);
-                    
-                    
+
+
                 })
                 .catch((err: any) => {
                     console.error(err);
@@ -169,7 +169,7 @@ export class WishlistService implements OnDestroy {
         }
 
         // const items = localStorage.getItem('wishlistItems');
-        /* 
+        /*
                 if (items) {
                     this.data.items = JSON.parse(items);
                     this.itemsSubject$.next(this.data.items);
@@ -178,7 +178,7 @@ export class WishlistService implements OnDestroy {
     }
 
 
-  
+
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();

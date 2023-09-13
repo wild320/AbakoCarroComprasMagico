@@ -36,6 +36,7 @@ export class ProductComponent implements OnInit {
     productosFavoritos = [];
     esFavorito : boolean = false;
     url: string;
+    islogged
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
@@ -46,27 +47,28 @@ export class ProductComponent implements OnInit {
         private toastr: ToastrService,
         private utils: UtilsTexto,
         public storeSvc: StoreService,
-    ) { 
-       
+    ) {
+
      }
 
     ngOnInit(): void {
         localStorage.setItem('is_page_update','1')
+        this.islogged = localStorage.getItem("isLogue");
         this.cargarFavoritos();
 
     }
 
     addToCart(): void {
-    
+
         if(this.storeSvc.configuracionSitio.SuperarInventario){
             this.addingToCart = true;
-            this.cart.add(this.product, this.quantity.value).subscribe({complete: () => this.addingToCart = false}); 
+            this.cart.add(this.product, this.quantity.value).subscribe({complete: () => this.addingToCart = false});
         }
-         else if(!this.addingToCart && this.product && this.quantity.value > 0 && this.product.inventario >= this.quantity.value) {
+         else if(!this.addingToCart && this.product && this.quantity.value > 0 && (this.product.inventario - this.product.inventarioPedido) >= this.quantity.value) {
             this.addingToCart = true;
             this.cart.add(this.product, this.quantity.value).subscribe({complete: () => this.addingToCart = false});
         }else{
-            this.toastr.error(`Producto "${this.utils.TitleCase (this.product.name) }" no tiene suficiente inventario, disponible:${ (this.product.inventario) }`);
+            this.toastr.error(`Producto "${this.utils.TitleCase (this.product.name) }" no tiene suficiente inventario, disponible:${  (this.product.inventario - this.product.inventarioPedido) }`);
         }
     }
 
@@ -75,21 +77,21 @@ export class ProductComponent implements OnInit {
         if (!this.addingToWishlist && this.product) {
             this.addingToWishlist = true;
 
-                this.wishlist.add(this.product).then(data=>{   
+                this.wishlist.add(this.product).then(data=>{
                     this.addingToWishlist = false
 
                 });
-        
-            
+
+
         }
     }
 
     cargarFavoritos(){
-        this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos")) 
-        const product =  this.productosFavoritos.findIndex(element =>  element.id ===  this.product.id) 
-        this.esFavorito = product != -1 
+        this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos"))
+        const product =  this.productosFavoritos.findIndex(element =>  element.id ===  this.product?.id)
+        this.esFavorito = product != -1
        }
-   
+
 
     addToCompare(): void {
         if (!this.addingToCompare && this.product) {

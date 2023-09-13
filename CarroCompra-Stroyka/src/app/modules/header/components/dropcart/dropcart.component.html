@@ -24,7 +24,7 @@
                         <a
                             *ngIf="item.product.images?.length"
                             class="product-image__body"
-                            [routerLink]="root.product(item.product.id)"
+                            [routerLink]="root.product(item.product.id,item.product.urlAmigable)"
                             (click)="closeMenu.emit()"
                         >
                             <img class="product-image__img" [src]="item.product.images[0]"  alt="">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="dropcart__product-info">
                         <div class="dropcart__product-name">
-                            <a [routerLink]="root.product(item.product.id)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
+                            <a [routerLink]="root.product(item.product.id,item.product.urlAmigable)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
                         </div>
 
                         <ul *ngIf="item.options.length" class="dropcart__product-options">
@@ -73,8 +73,7 @@
             </div>
 
             <div class="dropcart__buttons">
-                <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Ver Carro</a>
-                <a class="btn btn-primary" [routerLink]="root.checkout()" (click)="closeMenu.emit()">Pagar</a>
+                <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Pagar</a>
             </div>
         </ng-container>
     </div>

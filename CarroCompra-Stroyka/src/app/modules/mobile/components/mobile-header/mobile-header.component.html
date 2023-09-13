@@ -7,7 +7,7 @@
                 </button>
                 <a class="mobile-header__logo" routerLink="/">
                     <img [src]="logo" alt="Logo - Carro de Compras" style="width: 120px; height: 40px">
-                </a> 
+                </a>
                 <app-search
                     appDropdown="mobile-header__search--open"
                     class="mobile-header__search"
@@ -44,6 +44,9 @@
                         </a>
                     </div>
 
+                <app-indicator link="./account" icon="person-20" trigger="click" #indicator="appIndicator">
+                    <app-account-menu (closeMenu)="indicator.close(true)"></app-account-menu>
+                </app-indicator>
                 </div>
             </div>
         </div>

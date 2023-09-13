@@ -7,24 +7,29 @@ import { RouterModule } from '@angular/router';
 // modules
 import { SharedModule } from '../../shared/shared.module';
 
+
 // components
 import { MobileHeaderComponent } from './components/mobile-header/mobile-header.component';
 import { MobileLinksComponent } from './components/mobile-links/mobile-links.component';
 import { MobileMenuComponent } from './components/mobile-menu/mobile-menu.component';
+import { HeaderModule } from '../header/header.module';
+
 
 @NgModule({
     declarations: [
         // components
         MobileHeaderComponent,
         MobileLinksComponent,
-        MobileMenuComponent
+        MobileMenuComponent,
+
     ],
     imports: [
         // modules (angular)
         CommonModule,
         RouterModule,
         // modules
-        SharedModule
+        SharedModule,
+        HeaderModule
     ],
     exports: [
         // components

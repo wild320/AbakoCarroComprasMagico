@@ -14,11 +14,14 @@ export class ConfiguracionSitio {
     VerBannerIntermedio: boolean;
     VerBannerInformacion: boolean;
     VerAcordeonInformacion :boolean;
+    VerWppIcono: boolean;
+    NumeroWpp: number;
     PasaleraContraEntrega: Boolean;
     PasaleraPSE: boolean;
     SuperarInventario: boolean;
     PasarelaTranferenciaBancaria: boolean;
     MostrarPreciosSinLogueo: boolean;
+    CreacionDirectaClientes : boolean;
     PosicionamientoEnGoogle: string;
     VerSeguimientoPedidos : boolean;
     VerCompararProductos : boolean;

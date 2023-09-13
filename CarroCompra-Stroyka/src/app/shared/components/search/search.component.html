@@ -27,7 +27,7 @@
     </form>
 
     <div class="search__suggestions suggestions suggestions--location--{{ location }}">
-        
+
         <ul class="suggestions__list">
             <li *ngFor="let product of suggestedProducts; index as key" class="suggestions__item" [ngClass]="{'d-none' : !(key >= optionPagination.first && key <= optionPagination.last)}">
                 <div class="suggestions__item-image product-image">
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="suggestions__item-info">
-                    <a [routerLink]="root.product(product.id)" class="suggestions__item-name" (click)="closeSuggestion()">
+                    <a [routerLink]="root.product(product.id,product.urlAmigable)" class="suggestions__item-name" (click)="closeSuggestion()">
                     {{ product.name | titlecase }}
                     </a>
                     <div class="suggestions__item-meta">SKU: {{ product.sku }}</div>
@@ -53,7 +53,7 @@
 
                 <div *ngIf="location === 'header'" class="suggestions__item-actions">
                     <button
-                         [disabled]="product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario" 
+                         [disabled]="product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario"
                         type="button"
                         title="Add to cart"
                         class="btn btn-primary btn-sm btn-svg-icon"

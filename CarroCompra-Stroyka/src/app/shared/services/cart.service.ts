@@ -95,7 +95,7 @@ export class CartService {
             if (item) {
                 item.quantity += quantity;
             } else {
-                item = {product, quantity, options};
+                item = {...item,product, quantity, options};
 
                 this.data.items.push(item);
             }

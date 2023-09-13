@@ -14,8 +14,10 @@ import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
 
 // modelos
 import {CrearClienteCarroRequest} from '../../../../../data/modelos/seguridad/CrearClienteCarroRequest';
+import {CrearClienteCarroRequestv1} from '../../../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
 import {Mensaje} from '../../../../../data/modelos/negocio/Mensaje';
 import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 @Component({
   selector: 'app-page-suscribirse',
@@ -33,6 +35,7 @@ export class PageSuscribirseComponent implements OnInit {
   public RutaPoliticas = Crutas.politicasPrivacidad;
   public RutaTerminos = Crutas.terminosCondiciones;
   private objCrearCliente = new CrearClienteCarroRequest();
+  private objCrearClientev1 = new CrearClienteCarroRequestv1();
   private MsgRespuesta = new Mensaje();
   private usuarioingresado: string;
 
@@ -42,9 +45,10 @@ export class PageSuscribirseComponent implements OnInit {
               private negociosvc: NegocioService,
               private utils: UtilsTexto,
               private rutaActiva: ActivatedRoute,
+              public storeSvc: StoreService,
               private router: Router) {
 
-      this.usuarioingresado = atob (this.rutaActiva.snapshot.params.usrsuscribir);
+      //this.usuarioingresado = atob (this.rutaActiva.snapshot.params.usrsuscribir);
 
       this.SetiarMensajes();
 
@@ -53,6 +57,7 @@ export class PageSuscribirseComponent implements OnInit {
   ngOnInit(): void {
 
     this.loading = false;
+
 
     this.SuscribirseForm = this.fb.group({
       tipo: new FormControl('', Validators.compose([Validators.required])),
@@ -92,24 +97,7 @@ export class PageSuscribirseComponent implements OnInit {
 
       this.CargarDatos();
 
-      this.usuariossvc.CrearClienteCarroCompras(this.objCrearCliente).then((config: any) => {
-
-        this.MsgRespuesta = config;
-        this.loading = false;
-
-        if (this.MsgRespuesta.msgId === EstadoRespuestaMensaje.Error){
-          this.error = true;
-          this.mensajerespuestaerror = this.MsgRespuesta.msgStr;
-        }else{
-          this.error = false;
-          this.mensajerespuestaexito = 'Ingreso exitoso';
-
-          // direccionar al home
-          this.router.navigate(['/']);
-
-        }
-
-      });
+      this.manejarCreacionCliente()
 
     } else{
 
@@ -120,6 +108,24 @@ export class PageSuscribirseComponent implements OnInit {
 
   }
 
+
+  async manejarCreacionCliente() {
+    try {
+      const config = !this.storeSvc.configuracionSitio.CreacionDirectaClientes
+        ? await this.usuariossvc.CrearEditarClienteV1(this.objCrearClientev1)
+        : await this.usuariossvc.CrearClienteCarroCompras(this.objCrearCliente);
+
+      this.MsgRespuesta = config;
+      this.loading = false;
+      this.error = this.MsgRespuesta.msgId === EstadoRespuestaMensaje.Error;
+      this.mensajerespuestaerror = this.error ? this.MsgRespuesta.msgStr : '';
+      this.mensajerespuestaexito = this.error ? '' : 'Ingreso exitoso';
+      this.router.navigate(['/']);
+    } catch (error) {
+      // Manejar el error en caso de que ocurra
+      console.error(error);
+    }
+  }
   EsValidoFormularioRegistro(): boolean{
 
 
@@ -183,7 +189,7 @@ export class PageSuscribirseComponent implements OnInit {
     this.mensajerespuestaerror = '';
   }
 
-  CargarDatos(){  
+  CargarDatos(){
    this.objCrearCliente.tipoIdentificacion = this.tipo.value;
     this.objCrearCliente.Nombres = this.Nombres.value;
     this.objCrearCliente.Apellidos = this.Apellidos.value;
@@ -196,6 +202,15 @@ export class PageSuscribirseComponent implements OnInit {
     this.objCrearCliente.Politicas = '1';
 
   }
+
+  CargarDatosv1(){
+   this.objCrearClientev1.mail = this.Correo.value;
+   this.objCrearClientev1.tel =  this.Telefono.value;
+   this.objCrearClientev1.idTpdoc = this.tipo.value
+   this.objCrearClientev1.nmbCmn = this.Nombres.value
+   this.objCrearClientev1.aplCtt = this.Apellidos.value;
+   }
+
   get tipo() { return this.SuscribirseForm.get('tipo'); }
   get Identificacion() { return this.SuscribirseForm.get('Identificacion'); }
   get Nombres() { return this.SuscribirseForm.get('Nombres'); }

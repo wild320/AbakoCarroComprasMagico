@@ -14,6 +14,7 @@ import { Address } from '../interfaces/address';
 // modelos
 import { VerificarExistenciaClienteRequest } from '../../../data/modelos/negocio/VerificarExistenciaCliente';
 import {CrearClienteCarroRequest} from '../../../data/modelos/seguridad/CrearClienteCarroRequest';
+import {CrearClienteCarroRequestv1} from '../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
 import {UsuarioStorage} from '../../../data/modelos/seguridad/UsuarioStorage';
 import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
 
@@ -34,6 +35,7 @@ import {EnviarUsuarioRequest} from '../../../data/modelos/seguridad/EnviarUsuari
 import { Persona } from '../../../data/modelos/seguridad/CRUDPersonaExistente';
 import { MaestroCiudad } from '../../../data/modelos/negocio/Ciudades';
 import { GuardarDireccion } from '../../../data/modelos/negocio/GuardarDireccion';
+import { StoreService } from './store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +73,7 @@ export class UsuarioService {
         private servicehelper: ServiceHelper<any, any>,
         private negocio: NegocioService,
         private httpClient: HttpClient,
-        private localService: LocalService
+        private localService: LocalService,
         ) {
 
         this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
@@ -81,9 +83,10 @@ export class UsuarioService {
         // tslint:disable-next-line: deprecation
         this.getEstadoLoguin$().subscribe(value => {});
 
+
   }
 
-  
+
   setdireccionesCargadas$(newValue): void {
     this.DireccionesCargadas$.next(newValue);
   }
@@ -246,8 +249,8 @@ export class UsuarioService {
             if (this.MensajeError.length === 0){
               if(!this.recordar ){
                 this.localService.setJsonValueSession(this.token, this.usuarioStorage);
-              } 
-             
+              }
+
               this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
               this.MsgRespuesta.msgStr = 'Usuario exitoso';
         // cambiar estado de logueado
@@ -320,6 +323,7 @@ export class UsuarioService {
 
   }
 
+
   CrearClienteCarroCompras(request: CrearClienteCarroRequest ){
 
     this.UrlServicioLoguin =
@@ -362,6 +366,33 @@ export class UsuarioService {
 
   }
 
+
+  CrearEditarClienteV1(request: CrearClienteCarroRequestv1){
+
+    this.UrlServicioLoguin =
+    this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearEditarClienteV1;
+
+
+    return this.servicehelper
+        .PostData(this.UrlServicioLoguin, request)
+        .toPromise()
+        .then((config: any) => {
+
+            this.MsgRespuesta = config.mensaje;
+
+            return this.MsgRespuesta;
+
+        })
+        .catch((err: any) => {
+
+          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+
+          return this.MsgRespuesta;
+
+        });
+
+  }
   EnviarUsuarioGenerado(request: EnviarUsuarioRequest ){
 
     this.UrlServicioLoguin =
@@ -574,9 +605,9 @@ export class UsuarioService {
   cargarUsuarioStorage(){
 
     // validar que tenga usuario en el storage y lo logueamos
-   
+
     const usrlogueado = this.localService.getJsonValue(this.token)??this.localService.getJsonValueSession(this.token);
-  
+
     if (usrlogueado)   {
 
       const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
@@ -586,6 +617,7 @@ export class UsuarioService {
     }
     else{
       this.setEstadoLoguin$(false);
+      localStorage.setItem("isLogue", "false");
     }
 
   }
@@ -612,7 +644,7 @@ export class UsuarioService {
   }
 
   private cargarRespuesta(config: any, usrrq: LoguinRequest){
-   
+
     // validar mensaje
     if (config.estado[0].msgId === EstadoRespuestaMensaje.Error) {
 

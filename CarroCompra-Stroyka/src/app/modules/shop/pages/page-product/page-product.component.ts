@@ -37,9 +37,8 @@ export class PageProductComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-      
+
         this.route.paramMap.subscribe(data => {
-            
 
               // tomar el articulos seleccionado
         // tslint:disable-next-line: deprecation
@@ -54,23 +53,21 @@ export class PageProductComponent implements OnInit, OnDestroy {
             const valor = parseInt(this.valorProductoUnit) / parseInt(this.valorUnitario)
             this.product["ValorUnidadV"] = `${valor}`;
             this.product["NombreUnidadV"] = `${valorFinal[1]}`;
-           
+
 
             // verificar si el articulo seleccioando existe en articulos
-           
+
             if (this.product === undefined){
                 this.prueba = this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
             }
 
             this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
-
         });
-            
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
             this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
 
             // tslint:disable-next-line: deprecation
-           
+
              this.articulossvc.getArticulosRelacionados$().subscribe(data => {
                 this.relatedProducts = this.articulossvc.getArticulosRelacionados();
             });

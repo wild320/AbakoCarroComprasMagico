@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "web-betel"
-  }
+    "default": "magico-mundo",
+    "magico": "magico-mundo"
+  },
+  "targets": {}
 }

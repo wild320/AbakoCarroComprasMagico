@@ -48,6 +48,7 @@ export class StoreService {
         this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = false;
         this.configuracionSitio.VerBannerIntermedio = false;
         this.configuracionSitio.SuperarInventario = false;
+        this.configuracionSitio.CreacionDirectaClientes = false;
         this.configuracionSitio.VerSuscribirse = false;
         this.configuracionSitio.PasaleraContraEntrega  = true;
         this.configuracionSitio.PasaleraPSE = true;
@@ -57,7 +58,8 @@ export class StoreService {
         this.configuracionSitio.MostrarPreciosSinLogueo = true;
         this.configuracionSitio.PosicionamientoEnGoogle = '';
         this.configuracionSitio.scriptRastreo= '';
-        
+        this.configuracionSitio.VerWppIcono= false;
+
 
         this.redes = [];
 
@@ -72,7 +74,6 @@ export class StoreService {
             .toPromise()
             .then((config: any) => {
                 this.SetiarInformacion (config);
-                console.log('cpmfig', config);
 
             })
             .catch((err: any) => {
@@ -151,8 +152,8 @@ export class StoreService {
                 }
             }
             if (element.id === 'A31'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.MostrarPreciosSinLogueo = true;
+                if (element.valor === 'NO'){
+                    this.configuracionSitio.MostrarPreciosSinLogueo = false;
                 }
             }
 
@@ -162,7 +163,7 @@ export class StoreService {
 
             if (element.id === 'A33'){
                     this.configuracionSitio.scriptRastreo = element.valor;
-                
+
             }
             if (element.id === 'A34'){
                 if (element.valor === 'SI'){
@@ -179,7 +180,18 @@ export class StoreService {
                     this.configuracionSitio.VerSuscribirse = true;
                 }
             }
-            
+
+            if (element.id === 'A37'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.CreacionDirectaClientes = true;
+                }
+            }
+            if (element.id === 'A38'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerWppIcono= true;
+                }
+            }
+
 
 
             // redes sociales
@@ -244,10 +256,15 @@ export class StoreService {
             if (element.id === 'B3'){
                 this.configuracionSitio.email =  element.valor;
             }
-            
+
             // agencia
             if (element.id === 'B4'){
                 this.configuracionSitio.AgenciaDefaul =  element.valor;
+            }
+
+            // wpp
+            if (element.id === 'A39'){
+                this.configuracionSitio.NumeroWpp =  element.valor;
             }
 
 
@@ -265,22 +282,40 @@ export class StoreService {
 
         this.navigation = [];
 
-        this.navigation = [
-            {label: 'Inicio', url: '/'},
-            {label: 'Comprar', url: '/shop/catalog', menu: {
-                type: 'menu',
-                items: [
-                    {label: 'Artículos', url: '/shop/catalog'},
-                    {label: 'Lista de Deseos', url: '/shop/wishlist'},
-                    {label: 'Comparar', url: '/shop/compare'},
-                ]
-            }},
-            {label: 'Sitios', url: '/site', menu: {
-                type: 'menu',
-                items: [ ]
-            }},
+        if (!this.configuracionSitio.VerCompararProductos) {
+            this.navigation = [
+                {label: 'Inicio', url: '/'},
+                {label: 'Comprar', url: '/shop/catalog', menu: {
+                    type: 'menu',
+                    items: [
+                        {label: 'Artículos', url: '/shop/catalog'},
+                        {label: 'Lista de Deseos', url: '/shop/wishlist'},
+                    ]
+                }},
+                {label: 'Sitios', url: '/site', menu: {
+                    type: 'menu',
+                    items: [ ]
+                }},
 
-        ];
+            ];
+        }else{
+            this.navigation = [
+                {label: 'Inicio', url: '/'},
+                {label: 'Comprar', url: '/shop/catalog', menu: {
+                    type: 'menu',
+                    items: [
+                        {label: 'Artículos', url: '/shop/catalog'},
+                        {label: 'Lista de Deseos', url: '/shop/wishlist'},
+                        {label: 'Comparar', url: '/shop/compare'},
+                    ]
+                }},
+                {label: 'Sitios', url: '/site', menu: {
+                    type: 'menu',
+                    items: [ ]
+                }},
+
+            ];
+        }
 
         if (CargarUsuario) {
 

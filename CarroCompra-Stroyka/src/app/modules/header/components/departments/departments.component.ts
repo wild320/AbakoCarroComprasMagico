@@ -23,6 +23,7 @@ import { NavigationLink } from '../../../../../app/shared/interfaces/navigation-
 
 // constantes
 import {Crutas } from '../../../../../data/contantes/cRutas';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header-departments',
@@ -58,6 +59,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         private header: HeaderService,
         private zone: NgZone,
         public articulossvc: ArticulosService,
+        private router: Router
     ) {
         this.RutaShop = Crutas.shop;
     }
@@ -158,6 +160,8 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.hoveredItem
+        this.Menu
     }
 
     ngAfterViewInit(): void {

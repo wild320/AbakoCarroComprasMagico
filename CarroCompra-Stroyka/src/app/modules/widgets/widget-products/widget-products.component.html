@@ -4,14 +4,14 @@
         <div *ngFor="let product of products" class="widget-products__item">
             <div class="widget-products__image">
                 <div *ngIf="product.images?.length" class="product-image">
-                    <a [routerLink]="root.product(product.id)" class="product-image__body">
+                    <a [routerLink]="root.product(product.id,product.urlAmigable)" class="product-image__body">
                         <img class="product-image__img" [src]="product.images[0]" alt="">
                     </a>
                 </div>
             </div>
             <div class="widget-products__info">
                 <div class="widget-products__name">
-                    <a [routerLink]="root.product(product.id)">{{ product.name | titlecase }}</a>
+                    <a [routerLink]="root.product(product.id,product.urlAmigable)">{{ product.name | titlecase }}</a>
                 </div>
                 <div class="widget-products__prices">
                     <ng-container *ngIf="product.compareAtPrice">

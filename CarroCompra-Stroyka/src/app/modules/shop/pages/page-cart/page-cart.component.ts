@@ -23,6 +23,7 @@ export class PageCartComponent implements OnInit, OnDestroy {
     removedItems: CartItem[] = [];
     items: Item[] = [];
     updating = false;
+    disableProceedToPay: boolean = false;
 
     constructor(
         public root: RootService,
@@ -31,17 +32,25 @@ export class PageCartComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.cart.items$.pipe(
-            takeUntil(this.destroy$),
-            map(cartItems => cartItems.map(cartItem => {
-                return {
-                    cartItem,
-                    quantity: cartItem.quantity,
-                    quantityControl: new FormControl(cartItem.quantity, Validators.required)
-                };
-            }))
-        // tslint:disable-next-line: deprecation
-        ).subscribe(items => this.items = items);
-    }
+          takeUntil(this.destroy$),
+          map(cartItems => cartItems.map(cartItem => {
+            return {
+              cartItem,
+              quantity: cartItem.quantity,
+              quantityControl: new FormControl(cartItem.quantity, Validators.required),
+              quantityError: false, // Inicializar quantityError como falso
+              quantityErrorMessage: null
+            };
+          }))
+          // tslint:disable-next-line: deprecation
+        ).subscribe(items => {
+          this.items = items;
+          this.cart.items.forEach(item => {
+            this.checkQuantity(item);
+          });
+        });
+      }
+
 
     ngOnDestroy(): void {
         this.destroy$.next();
@@ -59,6 +68,28 @@ export class PageCartComponent implements OnInit, OnDestroy {
         this.cart.remove(item).subscribe({complete: () => this.removedItems = this.removedItems.filter(eachItem => eachItem !== item)});
     }
 
+
+    checkQuantity(item: any) {
+        const inventory = item.product.inventario;
+        const inventoryRequest = item.product.inventarioPedido;
+        const quantity = item.quantity;
+
+        // Verificar si la cantidad es válida
+        if (quantity > inventory - inventoryRequest) {
+          // Cantidad no válida, establecer quantityError en true
+          item.quantityError = true;
+          item.quantityErrorMessage = `Se súpero el inventario, disponible: ${(inventory - inventoryRequest)} unidades`;
+          this.disableProceedToPay = true; // Mantener deshabilitado el botón de pago
+        } else {
+          // Cantidad válida, establecer quantityError en false
+          item.quantityError = false;
+          item.quantityErrorMessage = null;
+          this.disableProceedToPay = false;
+        }
+      }
+
+
+
     update(): void {
         this.updating = true;
         this.cart.update(
@@ -66,7 +97,9 @@ export class PageCartComponent implements OnInit, OnDestroy {
                 .filter(item => item.quantityControl.value !== item.quantity)
                 .map(item => ({
                     item: item.cartItem,
-                    quantity: item.quantityControl.value
+                    quantity: item.quantityControl.value,
+                    quantityError: false, // Inicializar quantityError como falso
+                    quantityErrorMessage: null
                 }))
         // tslint:disable-next-line: deprecation
         ).subscribe({complete: () => this.updating = false});

@@ -68,6 +68,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     addedToCartProducts: Item[] = [];
 
+    islogged
+
     quantity: FormControl = new FormControl(1);
 
     @Input() location: SearchLocation;
@@ -105,8 +107,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         private toastr: ToastrService,
         private utils: UtilsTexto,
         public StoreSvc: StoreService,
-    ) { 
+    ) {
         this.cargarSugerencias();
+        this.islogged = localStorage.getItem("isLogue");
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -127,11 +130,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                 this.articulossvc.RecuperarArticulosBusqueda(query)
 
                 if (!this.articulossvc.SuscribirBusquedaArticulos) {
-                    this.suscribirBusqueda();  
-                } 
+                    this.suscribirBusqueda();
+                }
 
             }
-            
+
           });
 
         this.zone.runOutsideAngular(() => {
@@ -168,6 +171,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         });
     }
 
+
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
@@ -195,8 +199,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                 this.quantity.reset(1)
             }
         });
-   
-       } else if ( product.inventario >= this.quantity.value  ) {
+
+       } else if ( (product.inventario - product.inventarioPedido)  >= this.quantity.value  ) {
         this.cart.add(product, this.quantity.value).subscribe({
             complete: () => {
                 this.addedToCartProducts = this.addedToCartProducts.filter(eachProduct => eachProduct !== product);
@@ -206,11 +210,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         this.addedToCartProducts.push(product);
 
     }else{
-        this.toastr.error(`Producto "${this.utils.TitleCase (product.name) }" no tiene suficiente inventario, disponible:${ (product.inventario) }`);
+        this.toastr.error(`Producto "${this.utils.TitleCase (product.name) }" no tiene suficiente inventario, disponible:${ (product.inventario - product.inventarioPedido)}`);
         this.quantity.reset(1)
     }
     }
- 
+
     private cargarSugerencias(){
 
         if (this.suggestedProducts.length === 0 ){

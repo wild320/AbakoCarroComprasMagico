@@ -63,7 +63,7 @@
                 Inventario: <span class="text-success">{{product.availability}}</span>
             </div>
 
-            <div class="product__prices">
+            <div class="product__prices" *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged==='true'">
                 <ng-container *ngIf="product.compareAtPrice">
                     <span class="product__new-price">{{ product.price|currencyFormat }}</span>{{ ' ' }}
                     <span class="product__old-price">{{ product.compareAtPrice|currencyFormat }}</span>
@@ -79,10 +79,10 @@
                     <div class="input-radio-color">
                         <div class="input-radio-color__list">
 
-                           
+
                             <label class="input-radio-color__item input-radio-color__item--white" [ngStyle]="{'color': product.colorhx}"  data-toggle="tooltip" title={{product.color}}>
 
-           
+
 
                                 <span></span>
                             </label>
@@ -91,7 +91,6 @@
                                 <input type="radio" name="color">
                                 <span></span>
                             </label>
-
                             <label class="input-radio-color__item" style="color: #ff4040;" data-toggle="tooltip" title="Red">
                                 <input type="radio" name="color">
                                 <span></span>
@@ -105,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- 
+                <!--
                 <div class="form-group product__option">
                     <label class="product__option-label">Material</label>
                     <div class="input-radio-label">
@@ -171,7 +170,7 @@
             <app-share-buttons
                 class="product__share-buttons"
                 [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'pinterest']"
-                [pageUrl]="root.product(product.id)|absoluteUrl:'angular'"
+                [pageUrl]="root.product(product.id,product.urlAmigable)|absoluteUrl:'angular'"
                 [pageTitle]="product.name"
                 [pageImage]="product.images[0] | absoluteUrl:'html'"
             ></app-share-buttons>
