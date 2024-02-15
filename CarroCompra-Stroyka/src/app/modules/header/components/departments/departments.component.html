@@ -1,7 +1,7 @@
 <!-- .departments -->
 <div class="departments">
     <div class="departments__body" #bodyElement>
-        <div class="departments__links-wrapper" (mouseleave)="onMouseLeave()">
+        <div class="departments__links-wrapper"  (mouseenter)="onMouseEnterMenu()" (mouseleave)="onMouseLeaveMenu()">
             <div class="departments__submenus-container" #containerElement>
                 <ng-container *ngFor="let item of Menu">
                     <div

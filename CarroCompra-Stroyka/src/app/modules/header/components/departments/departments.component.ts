@@ -42,7 +42,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     isOpen = false;
     fixed = false;
-
+    isMenuHovered = false;
     RutaShop: string;
     Menu: NavigationLink[] = null;
 
@@ -271,8 +271,31 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
 
     onMouseLeave(): void {
-        this.hoveredItem = null;
-    }
+        if (!this.isMenuHovered) {
+          this.hoveredItem = null;
+        }
+      }
+
+      onMouseEnter(item: NavigationLink): void {
+        if (!this.isMenuHovered || this.hoveredItem === item) {
+          return;
+        }
+    
+        this.hoveredItem = item;
+    
+        if (item.menu) {
+          this.reCalcSubmenuPosition = true;
+        }
+      }
+    
+    
+      onMouseEnterMenu(): void {
+        this.isMenuHovered = true;
+      }
+    
+      onMouseLeaveMenu(): void {
+        this.isMenuHovered = false;
+      }
 
     onTouchClick(event, item: NavigationLink): void {
 

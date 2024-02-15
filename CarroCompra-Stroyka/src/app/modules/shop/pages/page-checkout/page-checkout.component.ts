@@ -184,7 +184,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
 
             //Enviar pedido
-            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa, this.usuariosvc.IdPersona, this.Store.configuracionSitio.AgenciaDefaul,
+            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa, Number(this.Store.configuracionSitio.AsesorPredeterminado), this.Store.configuracionSitio.AgenciaDefaul,
                 this.Observaciones.value, this.seldireccion.value, detalle).then((ret: any) => {
 
                 if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error ){

@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "selec-pets",
-    "magico": "magico-mundo"
+    "magico": "Selec Pets"
   },
   "targets": {}
 }

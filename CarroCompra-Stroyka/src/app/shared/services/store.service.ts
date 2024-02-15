@@ -50,6 +50,8 @@ export class StoreService {
         this.configuracionSitio.SuperarInventario = false;
         this.configuracionSitio.CreacionDirectaClientes = false;
         this.configuracionSitio.VerSuscribirse = false;
+        this.configuracionSitio.VerNoticias = false;
+        this.configuracionSitio.VerContacto = false;
         this.configuracionSitio.PasaleraContraEntrega  = true;
         this.configuracionSitio.PasaleraPSE = true;
         this.configuracionSitio.PasarelaTranferenciaBancaria = true;
@@ -191,6 +193,16 @@ export class StoreService {
                     this.configuracionSitio.VerWppIcono= true;
                 }
             }
+            if (element.id === 'A41'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerContacto = true;
+                }
+            }
+            if (element.id === 'A43'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerNoticias = true;
+                }
+            }
 
 
 
@@ -260,6 +272,11 @@ export class StoreService {
             // agencia
             if (element.id === 'B4'){
                 this.configuracionSitio.AgenciaDefaul =  element.valor;
+            }
+
+             //asesor
+             if (element.id === 'B5'){
+                this.configuracionSitio.AsesorPredeterminado =  element.valor;
             }
 
             // wpp

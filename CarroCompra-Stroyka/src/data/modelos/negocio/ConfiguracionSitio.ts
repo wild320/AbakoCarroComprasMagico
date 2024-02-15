@@ -25,9 +25,12 @@ export class ConfiguracionSitio {
     PosicionamientoEnGoogle: string;
     VerSeguimientoPedidos : boolean;
     VerCompararProductos : boolean;
+    VerContacto:boolean;
+    VerNoticias: boolean;
     VerSuscribirse: boolean;
     scriptRastreo:string;
     AgenciaDefaul: string;
+    AsesorPredeterminado: number;
   }
 
 

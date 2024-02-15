@@ -49,6 +49,7 @@
                     <span *ngIf="product.availability === 'No Disponible'" class="text-danger">{{product.availability}}</span>
 
                 </li>
+                <li>Descuento:{{ product.discountPerc | percentPipe }}</li>
                 <li>Marca: <a href="" appClick>{{product.marca | titlecase}}</a></li>
                 <li>SKU: {{product.sku}}</li>
                 <li>Presentación: {{product.descUM | titlecase}}</li>

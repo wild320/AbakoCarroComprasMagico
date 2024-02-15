@@ -55,6 +55,7 @@ export class ProductComponent implements OnInit {
         localStorage.setItem('is_page_update','1')
         this.islogged = localStorage.getItem("isLogue");
         this.cargarFavoritos();
+        console.log("asc", this.product)
 
     }
 

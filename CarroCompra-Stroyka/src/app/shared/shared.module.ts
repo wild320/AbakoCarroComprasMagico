@@ -44,6 +44,7 @@ import { ColorTypePipe } from './pipes/color-type.pipe';
 import { CurrencyFormatPipe } from './pipes/currency-format.pipe';
 import { ProductGalleryComponent } from './components/product-gallery/product-gallery.component';
 import { SafePipePipe } from './pipes/safe-pipe.pipe';
+import { PercentPipe } from './pipes/percent.pipe';
 
 
 @NgModule({
@@ -79,6 +80,7 @@ import { SafePipePipe } from './pipes/safe-pipe.pipe';
         ColorTypePipe,
         CurrencyFormatPipe,
         SafePipePipe,
+        PercentPipe,
         ProductGalleryComponent,
        
     ],

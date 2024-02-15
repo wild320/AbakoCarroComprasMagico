@@ -12,7 +12,8 @@ export class CurrencyFormatPipe implements PipeTransform {
     constructor(
         @Inject(LOCALE_ID) private locale: string,
         private service: CurrencyService
-    ) { }
+    ) {
+    }
 
      transform(
         value: any,
@@ -25,6 +26,6 @@ export class CurrencyFormatPipe implements PipeTransform {
         display = display || this.service.options.display;
         digitsInfo = digitsInfo || this.service.options.digitsInfo;
         locale = locale || this.service.options.locale;
-        return this.currencyPipe.transform(value, currencyCode, display, digitsInfo, locale);
+        return this.currencyPipe.transform(value, 'COP ', display, digitsInfo, locale);
     }
 }
