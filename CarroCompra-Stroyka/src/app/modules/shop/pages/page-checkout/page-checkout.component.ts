@@ -182,9 +182,12 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
                 } 
             ));
 
+            const idAsesor = Number(this.Store.configuracionSitio.AsesorPredeterminado) != 0
+                ?  Number(this.Store.configuracionSitio.AsesorPredeterminado)
+                : this.usuariosvc.IdPersona;
 
             //Enviar pedido
-            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa, Number(this.Store.configuracionSitio.AsesorPredeterminado), this.Store.configuracionSitio.AgenciaDefaul,
+            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa,this.usuariosvc.IdPersona, idAsesor, this.Store.configuracionSitio.AgenciaDefaul,
                 this.Observaciones.value, this.seldireccion.value, detalle).then((ret: any) => {
 
                 if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error ){

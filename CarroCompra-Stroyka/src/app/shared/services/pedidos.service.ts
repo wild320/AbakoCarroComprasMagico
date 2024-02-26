@@ -188,7 +188,7 @@ export class PedidosService {
 
   }
 
-  public async CrearPedido(idempresa: number, idpersona: number, agencia: string, observacion: string, direccion: number, detalle: any){
+  public async CrearPedido(idempresa: number, idpersona: number, idAsesor: number, agencia: string, observacion: string, direccion: number, detalle: any){
 
     // recuperar la hora y fecha la servidor
     const fecha = await  this.ServiciosnegocioSVC.RecuperarFechayHora()
@@ -197,7 +197,7 @@ export class PedidosService {
     if (fecha !== undefined ){
 
         // armar pedido
-        this.ArmarObjectoPedido(idempresa, idpersona, agencia, observacion, direccion, fecha, detalle);
+        this.ArmarObjectoPedido(idempresa, idpersona, idAsesor, agencia, observacion, direccion, fecha, detalle);
 
         return this.EnviarPedido(this.pedidorequest).then((ret: any) => {
     
@@ -208,14 +208,15 @@ export class PedidosService {
    
   }
 
-  private ArmarObjectoPedido(idempresa: number, idpersona: number, agencia: string, observacion: string, direccion: number, fecha: string, detalle: any){
+  private ArmarObjectoPedido(idempresa: number, idpersona: number, idAsesor: number, 
+    agencia: string, observacion: string, direccion: number, fecha: string, detalle: any){
 
     this.pedidorequest.IdEmp = idempresa ;
     this.pedidorequest.Tp = this.TIPOPEDIDOCOMERCIAL;
     this.pedidorequest.OtDcto = 0;
     this.pedidorequest.Obs = observacion;
     this.pedidorequest.cnt = idpersona;
-    this.pedidorequest.Usr = idpersona;
+    this.pedidorequest.Usr = idAsesor;
     this.pedidorequest.Fnt = this.FUENTECARROCOMPRAS;
     this.pedidorequest.Dir = direccion;
     this.pedidorequest.Fcent = fecha;
