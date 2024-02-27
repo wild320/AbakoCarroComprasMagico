@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        eval(this.StoreSvc.configuracionSitio.scriptRastreo)
+        eval(this.StoreSvc?.configuracionSitio?.scriptRastreo)
         // properties of the CurrencyFormatOptions interface fully complies
         // with the arguments of the built-in pipe "currency"
         // https://angular.io/api/common/CurrencyPipe

@@ -5,6 +5,7 @@ import { CartItem } from '../../../../shared/interfaces/cart-item';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { RootService } from '../../../../shared/services/root.service';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 interface Item {
     cartItem: CartItem;
@@ -27,7 +28,8 @@ export class PageCartComponent implements OnInit, OnDestroy {
 
     constructor(
         public root: RootService,
-        public cart: CartService
+        public cart: CartService,
+        public storeSvc: StoreService,
     ) { }
 
     ngOnInit(): void {
@@ -70,23 +72,25 @@ export class PageCartComponent implements OnInit, OnDestroy {
 
 
     checkQuantity(item: any) {
-        const inventory = item.product.inventario;
-        const inventoryRequest = item.product.inventarioPedido;
-        const quantity = item.quantity;
-
-        // Verificar si la cantidad es válida
-        if (quantity > inventory - inventoryRequest) {
-          // Cantidad no válida, establecer quantityError en true
+      const inventory = item.product.inventario;
+      const inventoryRequest = item.product.inventarioPedido;
+      const quantity = item.quantity;
+      const allowExceedInventory = this.storeSvc.configuracionSitio.SuperarInventario;
+  
+      if (!allowExceedInventory && quantity > inventory - inventoryRequest) {
+          // Verificar si la cantidad solicitada excede el inventario disponible
           item.quantityError = true;
-          item.quantityErrorMessage = `Se súpero el inventario, disponible: ${(inventory - inventoryRequest)} unidades`;
+          item.quantityErrorMessage = `Se superó el inventario, disponible: ${inventory - inventoryRequest} unidades`;
           this.disableProceedToPay = true; // Mantener deshabilitado el botón de pago
-        } else {
-          // Cantidad válida, establecer quantityError en false
+      } else {
+          // La cantidad solicitada es válida o se permite exceder el inventario
           item.quantityError = false;
           item.quantityErrorMessage = null;
-          this.disableProceedToPay = false;
-        }
+          this.disableProceedToPay = !allowExceedInventory; // Si no se permite exceder el inventario, deshabilitar el botón de proceder al pago
       }
+  }
+  
+  
 
 
 
