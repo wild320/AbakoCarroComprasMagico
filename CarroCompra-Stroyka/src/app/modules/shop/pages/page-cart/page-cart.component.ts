@@ -47,9 +47,7 @@ export class PageCartComponent implements OnInit, OnDestroy {
           // tslint:disable-next-line: deprecation
         ).subscribe(items => {
           this.items = items;
-          this.cart.items.forEach(item => {
-            this.checkQuantity(item);
-          });
+          this.checkQuantity(this.items);
         });
       }
 
@@ -71,28 +69,34 @@ export class PageCartComponent implements OnInit, OnDestroy {
     }
 
 
-    checkQuantity(item: any) {
-      const inventory = item.product.inventario;
-      const inventoryRequest = item.product.inventarioPedido;
-      const quantity = item.quantity;
-      const allowExceedInventory = this.storeSvc.configuracionSitio.SuperarInventario;
-  
-      if (!allowExceedInventory && quantity > inventory - inventoryRequest) {
-          // Verificar si la cantidad solicitada excede el inventario disponible
-          item.quantityError = true;
-          item.quantityErrorMessage = `Se superó el inventario, disponible: ${inventory - inventoryRequest} unidades`;
-          this.disableProceedToPay = true; // Mantener deshabilitado el botón de pago
-      } else {
-          // La cantidad solicitada es válida o se permite exceder el inventario
-          item.quantityError = false;
-          item.quantityErrorMessage = null;
-          this.disableProceedToPay = !allowExceedInventory; // Si no se permite exceder el inventario, deshabilitar el botón de proceder al pago
-      }
-  }
-  
-  
-
-
+    checkQuantity(items: Item[]) {
+        const allowExceedInventory = this.storeSvc.configuracionSitio.SuperarInventario;
+    
+        if (!allowExceedInventory) {
+            items.forEach(item => {
+                const inventory = item.cartItem.product.inventario;
+                const inventoryRequest = item.cartItem.product.inventarioPedido;
+                const quantity = item.quantity;
+    
+                const exceedsInventory = quantity > inventory - inventoryRequest;
+    
+                if (exceedsInventory) {
+                    item.cartItem.quantityError = true;
+                    item.cartItem.quantityErrorMessage = `Se superó el inventario, disponible: ${inventory - inventoryRequest} unidades`;
+                } else {
+                    item.cartItem.quantityError = false;
+                    item.cartItem.quantityErrorMessage = null;
+                }
+            });
+    
+            const hasExceededInventory = items.some(item => item.cartItem.quantityError);
+            this.disableProceedToPay = hasExceededInventory;
+        } else {
+            this.disableProceedToPay = false;
+        }
+    }
+    
+    
 
     update(): void {
         this.updating = true;
