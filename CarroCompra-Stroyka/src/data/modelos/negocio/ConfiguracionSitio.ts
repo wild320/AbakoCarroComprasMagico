@@ -31,6 +31,7 @@ export class ConfiguracionSitio {
     scriptRastreo:string;
     AgenciaDefaul: string;
     AsesorPredeterminado: number;
+    VerBontonAplicarCupon: boolean;
   }
 
 

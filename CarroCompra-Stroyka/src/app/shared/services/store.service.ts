@@ -61,6 +61,7 @@ export class StoreService {
         this.configuracionSitio.PosicionamientoEnGoogle = '';
         this.configuracionSitio.scriptRastreo= '';
         this.configuracionSitio.VerWppIcono= false;
+        this.configuracionSitio.VerBontonAplicarCupon = false;
 
 
         this.redes = [];
@@ -201,6 +202,12 @@ export class StoreService {
             if (element.id === 'A43'){
                 if (element.valor === 'SI'){
                     this.configuracionSitio.VerNoticias = true;
+                }
+            }
+
+            if (element.id === 'A44'){
+                if (element.valor === 'SI'){
+                    this.configuracionSitio.VerBontonAplicarCupon = true;
                 }
             }
 

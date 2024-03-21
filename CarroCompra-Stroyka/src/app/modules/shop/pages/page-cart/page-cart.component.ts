@@ -25,12 +25,15 @@ export class PageCartComponent implements OnInit, OnDestroy {
     items: Item[] = [];
     updating = false;
     disableProceedToPay: boolean = false;
+    showCoupon!: boolean;
 
     constructor(
         public root: RootService,
         public cart: CartService,
         public storeSvc: StoreService,
-    ) { }
+    ) { 
+        this.showCoupon = this.storeSvc.configuracionSitio.VerBontonAplicarCupon;
+    }
 
     ngOnInit(): void {
         this.cart.items$.pipe(

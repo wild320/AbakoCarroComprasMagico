@@ -60,8 +60,8 @@
         <div class="cart__actions">
             <form class="cart__coupon-form" novalidate>
                 <label for="input-coupon-code" class="sr-only">Contraseña</label>
-                <input type="text" class="form-control" id="input-coupon-code" placeholder="Código del Cupon">
-                <button type="submit" class="btn btn-primary">Aplicar Cupón</button>
+                <input type="text" class="form-control" id="input-coupon-code" placeholder="Código del Cupon" *ngIf="showCoupon">
+                <button type="submit" class="btn btn-primary" *ngIf="showCoupon">Aplicar Cupón</button>
             </form>
             <div class="cart__buttons">
                 <a routerLink="/" class="btn btn-light">Continue Comprando</a>
