@@ -295,6 +295,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     
       onMouseLeaveMenu(): void {
         this.isMenuHovered = false;
+        this.hoveredItem = null
       }
 
     onTouchClick(event, item: NavigationLink): void {
