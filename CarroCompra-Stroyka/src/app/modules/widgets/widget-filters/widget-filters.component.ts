@@ -20,12 +20,12 @@ import { PageCategoryService } from '../../shop/services/page-category.service';
 import { ArticulosService } from '../../../shared/services/articulos.service';
 
 // Modelos
-import { Products} from '../../../../data/modelos/articulos/DetalleArticulos';
+import { Products } from '../../../../data/modelos/articulos/DetalleArticulos';
 import { Filters } from '../../../../data/modelos/articulos/filters';
 
 
 interface FormFilterValues {
-    [filterSlug: string]: [number, number] | {[itemSlug: string]: boolean} | string;
+    [filterSlug: string]: [number, number] | { [itemSlug: string]: boolean } | string;
 }
 
 @Component({
@@ -34,7 +34,7 @@ interface FormFilterValues {
     styleUrls: ['./widget-filters.component.scss']
 })
 export class WidgetFiltersComponent implements OnInit, OnDestroy {
-    @Input() offcanvas: 'always'|'mobile' = 'mobile';
+    @Input() offcanvas: 'always' | 'mobile' = 'mobile';
 
     destroy$: Subject<void> = new Subject<void>();
 
@@ -75,13 +75,16 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     }
 
-    ChangeForm(values: any ) {
-
-        this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
-        this.articulossvc.SetFiltrarArticulos (this.filtrosValores);
+    restoreOtherFilters() {
+        this.ChangeForm()
     }
 
-    UpdateValuesSeleted(){
+    ChangeForm() {
+        this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
+        this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
+    }
+
+    UpdateValuesSeleted() {
 
         const formValues = {};
         let filtrosMarcasSeleccionadas = [];
@@ -102,7 +105,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
                 case 'range':
                     if (this.filtrosValores.price) {
                         formValues[filter.slug] = this.filtrosValores.price.split('-').map(pr => Number(pr));
-                    }else{
+                    } else {
                         formValues[filter.slug] = [filter.min, filter.max];
                     }
                     break;
@@ -112,9 +115,9 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
                     filter.items.forEach(item => {
 
-                        if ( filtrosMarcasSeleccionadas.includes(item.slug)){
+                        if (filtrosMarcasSeleccionadas.includes(item.slug)) {
                             formValues[filter.slug][item.slug] = true;
-                        }else{
+                        } else {
                             formValues[filter.slug][item.slug] = false;
                         }
 
@@ -127,9 +130,9 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
                     filter.items.forEach(item => {
 
-                        if ( filtrosColorSeleccionados.includes(item.slug)){
+                        if (filtrosColorSeleccionados.includes(item.slug)) {
                             formValues[filter.slug][item.slug] = true;
-                        }else{
+                        } else {
                             formValues[filter.slug][item.slug] = false;
                         }
 
@@ -139,7 +142,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
                 case 'radio':
                     if (this.filtrosValores.discount) {
                         formValues[filter.slug] = this.filtrosValores.discount;
-                    }else{
+                    } else {
                         formValues[filter.slug] = filter.items[0].slug;
                     }
 
@@ -157,7 +160,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         this.ArticulosSuscribe$.unsubscribe();
     }
 
-    trackBySlug(index: number, item: {slug: string}): any {
+    trackBySlug(index: number, item: { slug: string }): any {
         return item.slug;
     }
 
@@ -189,9 +192,9 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
             // A timeout is needed because sometimes a state change is ignored if performed immediately.
             setTimeout(() => {
                 if (this.isItemDisabled(filter, item)) {
-                    control.disable({emitEvent: false});
+                    control.disable({ emitEvent: false });
                 } else {
-                    control.enable({emitEvent: false});
+                    control.enable({ emitEvent: false });
                 }
             }, 0);
 
@@ -201,7 +204,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return this.fb.group(group);
     }
 
-    isItemDisabled(filter: CheckFilter|RadioFilter|ColorFilter, item: FilterItem|ColorFilterItem): boolean {
+    isItemDisabled(filter: CheckFilter | RadioFilter | ColorFilter, item: FilterItem | ColorFilterItem): boolean {
         return item.count === 0 && (filter.type === 'radio' || !filter.value.includes(item.slug));
     }
 
@@ -248,7 +251,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     reset(): void {
 
         this.filtrosValores = {};
-        this.articulossvc.SetFiltrarArticulos (this.filtrosValores);
+        this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
 
         const formValues = {};
 

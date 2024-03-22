@@ -38,7 +38,7 @@
                         <ul *ngIf="item.options.length" class="dropcart__product-options">
                             <li *ngFor="let option of item.options">{{ option.name  }}: {{ option.value }}</li>
                         </ul>
-                        <div class="dropcart__product-meta">
+                        <div class="dropcart__product-meta" *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged ==='true'">
                             <span class="dropcart__product-quantity">{{ item.quantity }}</span> ×
                             <span class="dropcart__product-price">{{ item.product.price|currency }}</span>
                         </div>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="dropcart__totals">
-                <table>
+                <table *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged ==='true'">
                     <tr *ngIf="(cart.totals$|async).length">
                         <th>Subtotal</th>
                         <td>{{ cart.subtotal$|async|currency }}</td>

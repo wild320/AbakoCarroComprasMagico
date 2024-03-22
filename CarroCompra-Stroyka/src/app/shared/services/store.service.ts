@@ -164,7 +164,7 @@ export class StoreService {
                     this.configuracionSitio.PosicionamientoEnGoogle = element.valor;
             }
 
-            if (element.id === 'A33'){
+            if (element.id === 'A33' && element.valor.length > 3){
                     this.configuracionSitio.scriptRastreo = element.valor;
 
             }

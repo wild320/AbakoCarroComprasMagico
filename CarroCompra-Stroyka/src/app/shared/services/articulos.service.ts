@@ -47,7 +47,7 @@ export class ArticulosService {
   private ArticulosRelacionados: Item[];
   private ArticulosBusqueda$ = new Subject<Item[]>();
   private ArticulosBusqueda: Item[];
-  private Articulosfiltrados = new Products();
+  private Articulosfiltrados: Products = new Products();
   private AtributosFiltros = new Products();
   private AtributosFiltros$ = new Subject<Products>();
   private AtributosMasVendidos: Item[];
@@ -330,182 +330,148 @@ export class ArticulosService {
     return this.Articulos;
   }
 
-  SetFiltrarArticulos(filtros: SerializedFilterValues){
+  SetFiltrarArticulos(filtros: SerializedFilterValues): void {
 
     this.Articulosfiltrados = JSON.parse(JSON.stringify(this.getArticulos().products));
     this.isfiltrado = false;
     const tipoFiltro = [];
 
-     // Filtrar por precio;
     if (filtros.price !== undefined) {
-
-      tipoFiltro.push( cFiltros.Precio );
-
-      const precioInicial = parseFloat (filtros.price.split('-')[0]);
-      const precioFinal = parseFloat (filtros.price.split('-')[1]);
-
-      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((precio) => {
-        if (precio.price >= precioInicial && precio.price <=  precioFinal){
-          return precio;
-        }
-      });
-
-
-      this.isfiltrado = true;
-
+      this.filtrarPorPrecio(filtros);
+      tipoFiltro.push(cFiltros.Precio);
     }
 
-    // filtra por las marcas
     if (filtros.brand !== undefined) {
-
-      tipoFiltro.push( cFiltros.Marca);
-
-      const filtrosMarcasSeleccionadas = filtros.brand.split(',');
-
-      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((marca) => {
-
-        if ( filtrosMarcasSeleccionadas.includes(marca.marca)){
-          return (marca);
-        }
-
-        this.isfiltrado = true;
-
-      });
-
+      this.filtrarPorMarca(filtros);
+      tipoFiltro.push(cFiltros.Marca);
     }
 
-    // filtrar por descuentos
-    if (filtros.discount !== undefined && filtros.discount.length)  {
+    if (filtros.discount !== undefined && filtros.discount.length) {
+      this.filtrarPorDescuento(filtros);
+      tipoFiltro.push(cFiltros.Descuento);
+    }
 
-      tipoFiltro.push( cFiltros.Descuento );
+    if (filtros.color !== undefined) {
+      this.filtrarPorColor(filtros);
+      tipoFiltro.push(cFiltros.Color);
+    }
 
-      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulos) => {
-        if (articulos.tieneDescuento === filtros.discount){
-          return articulos;
-        }
-      });
+    this.actualizarFiltros(tipoFiltro);
+  }
 
+  filtrarPorPrecio(filtros: SerializedFilterValues): void {
+    const [precioInicial, precioFinal] = filtros.price.split('-').map(parseFloat);
+    this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulo) => {
+      return articulo.price >= precioInicial && articulo.price <= precioFinal;
+    });
+    this.isfiltrado = true;
+  }
+
+  filtrarPorMarca(filtros: SerializedFilterValues): void {
+    const filtrosMarcasSeleccionadas = filtros.brand.split(',');
+    this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulo) => {
+      return filtrosMarcasSeleccionadas.includes(articulo.marca);
+    });
+    this.isfiltrado = true;
+  }
+
+  filtrarPorDescuento(filtros: SerializedFilterValues): void {
+    this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulo) => {
+      return articulo.tieneDescuento === filtros.discount;
+    });
+      this.isfiltrado = true;
       this.isfiltrado = true;
 
-    }
+    this.isfiltrado = true;
 
-    // filtrar por los colores
-    if (filtros.color !== undefined) {
+  }
 
-      tipoFiltro.push( cFiltros.Color );
+  filtrarPorColor(filtros: SerializedFilterValues): void {
+    const filtrosColoresSeleccionadas = filtros.color.split(',');
+    this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((articulo) => {
+      return filtrosColoresSeleccionadas.includes(articulo.color);
+    });
+    this.isfiltrado = true;
+  }
 
-      const filtrosColoresSeleccionadas = filtros.color.split(',');
-
-      this.Articulosfiltrados.items = this.Articulosfiltrados.items.filter((color) => {
-
-        if ( filtrosColoresSeleccionadas.includes(color.color)){
-          return (color);
-        }
-
-        this.isfiltrado = true;
-
-      });
-    }
-
-    // cambiar los filtros
+  actualizarFiltros(tipoFiltro: string[]): void {
     const total = this.Articulosfiltrados.items.length;
+    const productos = this.getArticulos().products;
+    const limit = productos.limit;
 
     this.Articulosfiltrados.page = 1;
-    this.Articulosfiltrados.limit = this.Articulos.products.limit;
-    this.Articulosfiltrados.pages = Math.ceil(total / this.Articulos.products.limit);
+    this.Articulosfiltrados.limit = limit;
+    this.Articulosfiltrados.pages = Math.ceil(total / limit);
     this.Articulosfiltrados.total = total;
     this.Articulosfiltrados.from = 1;
-    this.Articulosfiltrados.to = this.Articulos.products.limit;
+    this.Articulosfiltrados.to = limit;
 
     this.SetRecalcularFiltros(tipoFiltro);
     this.setAtributos$(this.Articulosfiltrados);
     this.ArticulosSeleccionPagina();
-
   }
 
-  SetRecalcularFiltros(TipoFiltro: any ){
+  SetRecalcularFiltros(tipoFiltro: string[]): void {
+    
+    const filtroMarca = this.calculateMarcaFilters(this.Articulosfiltrados.items);
+    const filtroColores = this.calculateColorFilters(this.Articulosfiltrados.items);
+    const filtroDescuento = this.calculateDescuentoFilters(this.Articulosfiltrados.items);
 
-    this.FiltroColores = [];
-    this.FiltroMarca = [];
-    this.FiltroDescuento = [];
-    let indexfiltros;
-    // Total Registros
-    const totalDescuentos = this.Articulosfiltrados.items.reduce( (cont, item) => {
-      return cont += 1;
-    }, 0);
-
-    // Agregar total descuento
-    this.FiltroDescuento.push(Object.assign({id: 0 , name: 'Todos' , slug: 'Todos', count: totalDescuentos }));
-
-    // armas de nuevo los objectos de los filtros
-    this.Articulosfiltrados.items.forEach(articulo => {
-
-      // Armar los item filtro marca
-      const indexMarca = this.FiltroMarca.findIndex(element =>  element.name ===  articulo.marca);
-
-      if  (indexMarca >= 0) {
-        this.FiltroMarca[indexMarca].count += 1;
-      }else{
-        this.FiltroMarca.push(Object.assign({id: articulo.idMarca , name: articulo.marca  , slug: articulo.marca ,
-          count: 1 }));
-      }
-
-      // Armar los item filtro colores
-      const indexColores = this.FiltroColores.findIndex(element =>  element.name ===  articulo.color);
-
-      if  (indexColores >= 0) {
-        this.FiltroColores[indexColores].count += 1;
-      }else{
-        this.FiltroColores.push(Object.assign({id: 0 , name: articulo.color , slug: articulo.color ,
-          count: 1 , color: articulo.colorhx}));
-      }
-
-      // Armar los item filtro descuento
-      const indexdesc = this.FiltroDescuento.findIndex(element =>  element.name ===  articulo.tieneDescuento);
-
-      if  (indexdesc >= 0) {
-        this.FiltroDescuento[indexdesc].count += 1;
-      }else{
-        this.FiltroDescuento.push(Object.assign({id: 0 , name: articulo.tieneDescuento , slug: articulo.tieneDescuento , count: 1 }));
-      }
-
-    });
-
-    // asignar los objecto a los articulos filtros
-    // marcas
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Marca);
-
-    if (TipoFiltro.findIndex(ft => ft === cFiltros.Marca) === -1) {
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroMarca;
-    }else{
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Marca).items;
-    }
-
-    // Colores
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Color);
-
-    if (TipoFiltro.findIndex(ft => ft === cFiltros.Color) === -1) {
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroColores;
-    }else{
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Color).items;
-    }
-
-    // Descuentos
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Descuento);
-
-    if (TipoFiltro.findIndex(ft => ft === cFiltros.Descuento) === -1) {
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroDescuento;
-    }else{
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Descuento).items;
-    }
-
-
-    // console.log ('filtros normales', this.Articulosfiltrados.filters);
+    this.updateFilters(filtroMarca, 'Marca', tipoFiltro);
+    this.updateFilters(filtroColores, 'Color', tipoFiltro);
+    this.updateFilters(filtroDescuento, 'Descuento', tipoFiltro);
+    
     this.setFitrosCarro$(this.Articulosfiltrados.filters);
+  }
+  
+  private calculateMarcaFilters(items: any[]): any[] {
+    const filtroMarca = [];
+    items.forEach(articulo => {
+      const indexMarca = filtroMarca.findIndex(element => element.name === articulo.marca);
+      if (indexMarca >= 0) {
+        filtroMarca[indexMarca].count += 1;
+      } else {
+        filtroMarca.push({ id: articulo.idMarca, name: articulo.marca, slug: articulo.marca, count: 1 });
+      }
+    });
+    return filtroMarca;
+  }
 
+  private calculateColorFilters(items: any[]): any[] {
+    const filtroColores = [];
+    items.forEach(articulo => {
+      const indexColores = filtroColores.findIndex(element => element.name === articulo.color);
+      if (indexColores >= 0) {
+        filtroColores[indexColores].count += 1;
+      } else {
+        filtroColores.push({ id: 0, name: articulo.color, slug: articulo.color, count: 1, color: articulo.colorhx });
+      }
+    });
+    return filtroColores;
+  }
+
+  private calculateDescuentoFilters(items: any[]): any[] {
+
+    const totalDescuentos = items.length;
+    const filters = [{ id: 0, name: 'Todos', slug: 'Todos', count: totalDescuentos }];
+
+    items.forEach(articulo => {
+      const indexdesc = filters.findIndex(element => element.name === articulo.tieneDescuento);
+      if (indexdesc >= 0) {
+        filters[indexdesc].count += 1;
+      } else {
+        filters.push({ id: 0, name: articulo.tieneDescuento, slug: articulo.tieneDescuento, count: 1 });
+      }
+    });
+    return filters;
+  }
+
+  private updateFilters(filtroToUpdate: any[], filtroSlug: string, tipoFiltro: string[]): void {
+    const indexfiltros = this.Articulosfiltrados.filters.findIndex(element => element.slug === filtroSlug);
+    if (tipoFiltro.findIndex(ft => ft === filtroSlug) >= 0) {
+      this.Articulosfiltrados.filters[indexfiltros].items = filtroToUpdate;
+    } 
+    
   }
 
   setArticulosSeleccionados$(newValue): void {

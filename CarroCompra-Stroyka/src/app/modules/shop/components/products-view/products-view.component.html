@@ -1,11 +1,12 @@
-<div class="products-view" [ngClass]="{'products-view--loading': this.articulossvc.isLoading$|async}" [formGroup]="listOptionsForm">
+<div class="products-view" [ngClass]="{'products-view--loading': articulossvc.isLoading$|async}"
+    [formGroup]="listOptionsForm">
     <div class="products-view__loader"></div>
 
     <div style="justify-content: center; display: flex;">
-        <div class="loader" *ngIf="this.articulossvc.isLoadingState"></div>
+        <div class="loader" *ngIf="articulossvc.isLoadingState"></div>
     </div>
 
-    <div *ngIf="this.Productos.items?.length" class="products-view__content">
+    <div *ngIf="Productos.items?.length" class="products-view__content">
         <div class="products-view__options">
             <div class="view-options" [ngClass]="{
                 'view-options--offcanvas--always': offcanvas === 'always',
@@ -22,17 +23,20 @@
                     <div class="layout-switcher">
                         <div class="layout-switcher__list">
                             <button title="Grid" type="button" class="layout-switcher__button"
-                                    [ngClass]="{'layout-switcher__button--active': layout === 'grid'}" (click)="setLayout('grid')">
+                                [ngClass]="{'layout-switcher__button--active': layout === 'grid'}"
+                                (click)="setLayout('grid')">
 
                                 <app-icon name="layout-grid-16x16" size="16"></app-icon>
                             </button>
                             <button title="Grid With Features" type="button" class="layout-switcher__button"
-                                    [ngClass]="{'layout-switcher__button--active': layout === 'grid-with-features'}" (click)="setLayout('grid-with-features')">
+                                [ngClass]="{'layout-switcher__button--active': layout === 'grid-with-features'}"
+                                (click)="setLayout('grid-with-features')">
 
                                 <app-icon name="layout-grid-with-details-16x16" size="16"></app-icon>
                             </button>
                             <button title="List" type="button" class="layout-switcher__button"
-                                    [ngClass]="{'layout-switcher__button--active': layout === 'list'}" (click)="setLayout('list')">
+                                [ngClass]="{'layout-switcher__button--active': layout === 'list'}"
+                                (click)="setLayout('list')">
 
                                 <app-icon name="layout-list-16x16" size="16"></app-icon>
                             </button>
@@ -40,15 +44,17 @@
                     </div>
                 </div>
                 <div class="view-options__legend">
-                    Viendo {{ this.articulossvc.getAtributosFiltros().from }}–{{ this.articulossvc.getAtributosFiltros().to }}
-                    de {{ this.articulossvc.getAtributosFiltros().total }}
+                    Viendo {{ articulossvc.getAtributosFiltros().from }}–{{
+                    articulossvc.getAtributosFiltros().to }}
+                    de {{ articulossvc.getAtributosFiltros().total }}
                     resultados
                 </div>
                 <div class="view-options__divider"></div>
                 <div class="view-options__control">
                     <label for="view-options-sort">Ordenar por:</label>
                     <div>
-                        <select  (change)="OnCLickOnChange()" class="form-control form-control-sm" id="view-options-sort" formControlName="sort">
+                        <select (change)="OnCLickOnChange()" class="form-control form-control-sm" id="view-options-sort"
+                            formControlName="sort">
                             <option value="default">Defecto</option>
                             <option value="sku">SKU</option>
                             <option value="name_asc">Nombre (A-Z)</option>
@@ -59,7 +65,8 @@
                 <div class="view-options__control">
                     <label for="view-options-limit">Ver</label>
                     <div>
-                        <select  (change)="OnCLickOnChange()" class="form-control form-control-sm" id="view-options-limit" formControlName="limit">
+                        <select (change)="OnCLickOnChange()" class="form-control form-control-sm"
+                            id="view-options-limit" formControlName="limit">
                             <option value="12">12</option>
                             <option value="24">24</option>
                         </select>
@@ -68,7 +75,8 @@
             </div>
         </div>
 
-        <div class="products-view__list products-list" [attr.data-layout]="layout != 'list' ? grid : layout" [attr.data-with-features]="layout == 'grid-with-features' ? 'true' : 'false'">
+        <div class="products-view__list products-list" [attr.data-layout]="layout != 'list' ? grid : layout"
+            [attr.data-with-features]="layout == 'grid-with-features' ? 'true' : 'false'">
             <div class="products-list__body">
                 <div *ngFor="let product of ProductosSeleccionados" class="products-list__item">
                     <app-product-card [product]="product"></app-product-card>
@@ -77,12 +85,13 @@
         </div>
 
         <div class="products-view__pagination">
-            <app-pagination formControlName="page" (click)="OnCLickOnChange()"  [siblings]="2" [total]="this.articulossvc.getAtributosFiltros().pages"></app-pagination>
+            <app-pagination formControlName="page" (click)="OnCLickOnChange()" [siblings]="2"
+                [total]="articulossvc.getAtributosFiltros().pages"></app-pagination>
         </div>
     </div>
 
-    <div *ngIf="!this.articulossvc.isLoadingState" >
-        <div *ngIf="!this.Productos.items?.length" class="products-view__empty">
+    <div *ngIf="!articulossvc.isLoadingState">
+        <div *ngIf="!Productos.items?.length" class="products-view__empty">
             <div class="products-view__empty-title">No hay elementos coincidentes</div>
             <div class="products-view__empty-subtitle">Intente restablecer los filtros</div>
             <button type="button" class="btn btn-primary btn-sm" (click)="resetFilters()">Restablecer filtros</button>

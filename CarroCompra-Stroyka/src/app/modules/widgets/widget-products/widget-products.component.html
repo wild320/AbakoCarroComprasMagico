@@ -13,7 +13,8 @@
                 <div class="widget-products__name">
                     <a [routerLink]="root.product(product.id,product.urlAmigable)">{{ product.name | titlecase }}</a>
                 </div>
-                <div class="widget-products__prices">
+                <div class="widget-products__prices"
+                    *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged==='true'">
                     <ng-container *ngIf="product.compareAtPrice">
                         <span class="widget-products__new-price">{{ product.price|currencyFormat }}</span>{{ ' ' }}
                         <span class="widget-products__old-price">{{ product.compareAtPrice|currencyFormat }}</span>

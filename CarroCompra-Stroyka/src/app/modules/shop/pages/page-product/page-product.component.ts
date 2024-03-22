@@ -53,6 +53,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
             const valor = parseInt(this.valorProductoUnit) / parseInt(this.valorUnitario)
             this.product["ValorUnidadV"] = `${valor}`;
             this.product["NombreUnidadV"] = `${valorFinal[1]}`;
+           
 
 
             // verificar si el articulo seleccioando existe en articulos

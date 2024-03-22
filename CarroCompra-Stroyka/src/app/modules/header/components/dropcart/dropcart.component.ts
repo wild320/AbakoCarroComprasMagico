@@ -3,6 +3,7 @@ import { CartService } from '../../../../shared/services/cart.service';
 import { CartItem } from '../../../../shared/interfaces/cart-item';
 import { RootService } from '../../../../shared/services/root.service';
 import { OffcanvasCartService } from '../../../../shared/services/offcanvas-cart.service';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 export type DropcartType = 'dropdown' | 'offcanvas';
 
@@ -18,11 +19,17 @@ export class DropcartComponent {
 
     @Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
 
+    
+    public islogged: string = '';
+
     constructor(
         public state: OffcanvasCartService,
         public cart: CartService,
-        public root: RootService,
-    ) { }
+        public root: RootService,        
+        public storeSvc: StoreService
+    ) { 
+        this.islogged = localStorage.getItem("isLogue");
+    }
 
     remove(item: CartItem): void {
         if (this.removedItems.includes(item)) {

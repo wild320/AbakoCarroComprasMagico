@@ -2,13 +2,14 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { PageCategoryService } from '../../services/page-category.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 // Servicios
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // modelos
 import { Products } from '../../../../../data/modelos/articulos/DetalleArticulos';
+import { Item } from 'src/data/modelos/articulos/Items';
 
 
 export type Layout = 'grid' | 'grid-with-features' | 'list';
@@ -19,6 +20,7 @@ export type Layout = 'grid' | 'grid-with-features' | 'list';
     styleUrls: ['./products-view.component.scss']
 })
 export class ProductsViewComponent implements OnInit, OnDestroy {
+
     @Input() layout: Layout = 'grid';
     @Input() grid: 'grid-3-sidebar' | 'grid-4-full' | 'grid-5-full' = 'grid-3-sidebar';
     @Input() offcanvas: 'always' | 'mobile' = 'mobile';
@@ -26,15 +28,15 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     destroy$: Subject<void> = new Subject<void>();
 
     listOptionsForm: FormGroup;
-    filtersCount = 0;
-    ProductosSeleccionados;
-    Productos = new Products();
+    filtersCount: number = 0;
+    ProductosSeleccionados: Item[] | Products;
+    Productos: Products = new Products();
     PaginationLocalStorage: any;
-    isPageAuto = false
+    isPageAuto: boolean = false
 
-    private sub: any;
-    private sub2: any;
-    private sub3: any;
+    private sub: Subscription;
+    private sub2: Subscription;
+    private sub3: Subscription;
 
     constructor(
         private fb: FormBuilder,
@@ -44,7 +46,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef
     ) {
         //****ShowPageServices From and Page
-
+        
         // recuperar todos los articulos
         this.sub3 = this.articulossvc.getArticulos$().subscribe(articulos => {
             this.articulossvc.setAtributosFiltros(this.articulossvc.getArticulos().products);
@@ -52,15 +54,13 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
         // recuperar solo los articulos seleccionados
         this.sub2 = this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
-            // if (!this.ProductosSeleccionados) {
-           this.Productos = this.articulossvc.getArticulos().products;
+            
+            this.Productos = this.articulossvc.getArticulos().products;
             this.ProductosSeleccionados =  this.articulossvc.getArticulosSeleccionados();
-
+ 
             localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
             localStorage.setItem('is_page_update', '0')
             this.isPageAuto = false;
-
-            // }
         });
 
     }
@@ -129,7 +129,9 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
 
     SetLIstaOpciones(value: any) {
-        const products = this.articulossvc.getArticulos().products.items
+        
+        const products = this.articulossvc.getArticulos()?.products?.items;
+
         if (value.sort === 'sku') {
             if (products != undefined) {
 
@@ -211,7 +213,9 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     resetFilters(): void {
-        //
+        this.articulossvc.setAtributosFiltros([]);
+        this.articulossvc.SetFiltrarArticulos({});
+        
     }
 
     get page() { return this.listOptionsForm.get('page'); }
