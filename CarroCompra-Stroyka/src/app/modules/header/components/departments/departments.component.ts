@@ -22,7 +22,7 @@ import { ArticulosService } from '../../../../shared/services/articulos.service'
 import { NavigationLink } from '../../../../../app/shared/interfaces/navigation-link';
 
 // constantes
-import {Crutas } from '../../../../../data/contantes/cRutas';
+import { Crutas } from '../../../../../data/contantes/cRutas';
 import { Router } from '@angular/router';
 
 @Component({
@@ -38,7 +38,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     @ViewChildren('submenuElement') submenuElements: QueryList<ElementRef>;
     @ViewChildren('itemElement') itemElements: QueryList<ElementRef>;
 
-     hoveredItem: NavigationLink = null;
+    hoveredItem: NavigationLink = null;
 
     isOpen = false;
     fixed = false;
@@ -272,31 +272,37 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     onMouseLeave(): void {
         if (!this.isMenuHovered) {
-          this.hoveredItem = null;
+            this.hoveredItem = null;
         }
-      }
+    }
 
-      onMouseEnter(item: NavigationLink): void {
+    onMouseEnter(item: NavigationLink): void {
         if (!this.isMenuHovered || this.hoveredItem === item) {
-          return;
+            return;
         }
-    
+
         this.hoveredItem = item;
-    
+
         if (item.menu) {
-          this.reCalcSubmenuPosition = true;
+            this.reCalcSubmenuPosition = true;
         }
-      }
-    
-    
-      onMouseEnterMenu(): void {
+    }
+
+
+    onMouseEnterMenu(): void {
         this.isMenuHovered = true;
-      }
-    
-      onMouseLeaveMenu(): void {
+    }
+
+    onMouseLeaveMenu(): void {
         this.isMenuHovered = false;
         this.hoveredItem = null
-      }
+    }
+    onMouseLeaveMenuDepartment(): void {
+        setTimeout(() => {
+            this.isMenuHovered = false;
+            this.hoveredItem = null
+        }, 7000);
+    }
 
     onTouchClick(event, item: NavigationLink): void {
 
@@ -337,9 +343,9 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         const paddingBottom = 20;
 
         if (this.hoveredItem.menu.type === 'megamenu') {
-           const submenuTop = submenuElement.getBoundingClientRect().top;
+            const submenuTop = submenuElement.getBoundingClientRect().top;
 
-           submenuElement.style.maxHeight = `${viewportHeight - submenuTop - paddingBottom}px`;
+            submenuElement.style.maxHeight = `${viewportHeight - submenuTop - paddingBottom}px`;
         }
 
         if (this.hoveredItem.menu.type === 'menu') {
@@ -368,7 +374,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             return null;
         }
 
-        const index =  this.Menu.indexOf(this.hoveredItem);
+        const index = this.Menu.indexOf(this.hoveredItem);
         const elements = this.itemElements.toArray();
 
         if (index === -1 || !elements[index]) {
@@ -395,7 +401,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     }
 
-    suscribirMenu(){
+    suscribirMenu() {
 
         this.articulossvc.getMegaMenu$().subscribe(menu => {
 

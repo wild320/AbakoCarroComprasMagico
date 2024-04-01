@@ -46,18 +46,18 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef
     ) {
         //****ShowPageServices From and Page
-        
+
         // recuperar todos los articulos
         this.sub3 = this.articulossvc.getArticulos$().subscribe(articulos => {
-            this.articulossvc.setAtributosFiltros(this.articulossvc.getArticulos().products);
+            this.articulossvc.setAtributosFiltros(articulos.products);
         });
 
         // recuperar solo los articulos seleccionados
-        this.sub2 = this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+        this.sub2 = this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {            
             
             this.Productos = this.articulossvc.getArticulos().products;
-            this.ProductosSeleccionados =  this.articulossvc.getArticulosSeleccionados();
- 
+            this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();                       
+
             localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
             localStorage.setItem('is_page_update', '0')
             this.isPageAuto = false;
@@ -126,79 +126,41 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-    SetLIstaOpciones(value: any) {
-        
+    SetLIstaOpciones(value: any): void {
         const products = this.articulossvc.getArticulos()?.products?.items;
-
-        if (value.sort === 'sku') {
-            if (products != undefined) {
-
-                products.sort(function (a, b) {
-
-                    if (a.sku > b.sku) {
-                        return 1;
-                    }
-                    if (a.sku < b.sku) {
-                        return -1;
-                    }
-
-                    return 0;
-                });
-
-            }
-            this.ProductosSeleccionados = products
+    
+        if (!products) {
+            return;
         }
-        if (value.sort === 'name_asc') {
-            if (products != undefined) {
-
-                products.sort(function (a, b) {
-
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-
-                    return 0;
-                });
-
-            }
-            this.ProductosSeleccionados = products
+    
+        const sortFunctions = {
+            'sku': (a: any, b: any) => a.sku.localeCompare(b.sku),
+            'name_asc': (a: any, b: any) => a.name.localeCompare(b.name),
+            'name_desc': (a: any, b: any) => b.name.localeCompare(a.name)
+        };
+    
+        const sortFunction = sortFunctions[value.sort];
+        if (sortFunction) {
+            products.sort(sortFunction);
         }
-        if (value.sort === 'name_desc') {
-            if (products != undefined) {
-
-                products.sort(function (a, b) {
-
-                    if (a.name < b.name) {
-                        return 1;
-                    }
-                    if (a.name > b.name) {
-                        return -1;
-                    }
-
-                    return 0;
-                });
-
-            }
-            this.ProductosSeleccionados = products
-        }
-
+    
+        this.ProductosSeleccionados = products;
+    
         const total = this.articulossvc.getAtributosFiltros().total;
         const limit = value.limit;
-        this.page.setValue(value.page)
-
-        this.articulossvc.getAtributosFiltros().page = value.page;
-        this.articulossvc.getAtributosFiltros().limit = limit;
-        this.articulossvc.getAtributosFiltros().sort = value.sort;
-        this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / limit);
-        this.articulossvc.getAtributosFiltros().from = ((value.page - 1) * value.limit) + 1;
-        this.articulossvc.getAtributosFiltros().to = value.page * limit;
-
+        const page = value.page;
+    
+        const atributosFiltros = this.articulossvc.getAtributosFiltros();
+        atributosFiltros.page = page;
+        atributosFiltros.limit = limit;
+        atributosFiltros.sort = value.sort;
+        atributosFiltros.pages = Math.ceil(total / limit);
+        atributosFiltros.from = ((page - 1) * limit) + 1;
+        atributosFiltros.to = page * limit;
+    
+        this.page.setValue(page);
     }
+    
 
     ngOnDestroy(): void {
         this.destroy$.next();
@@ -213,8 +175,6 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     resetFilters(): void {
-        this.articulossvc.setAtributosFiltros([]);
-        this.articulossvc.SetFiltrarArticulos({});
         
     }
 

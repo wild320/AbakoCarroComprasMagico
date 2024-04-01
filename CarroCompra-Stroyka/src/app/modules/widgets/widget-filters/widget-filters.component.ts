@@ -65,9 +65,9 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         // recuperar todos los filtros
         this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().subscribe(filtros => {
 
-            this.filters = this.articulossvc.getFiltrosCarro();
+            this.filters = filtros;            
 
-            this.filtersForm = this.makeFiltersForm(this.articulossvc.getFiltrosCarro());
+            this.filtersForm = this.makeFiltersForm(filtros);
 
             this.UpdateValuesSeleted();
 
