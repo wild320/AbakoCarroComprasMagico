@@ -42,7 +42,7 @@
                     </a>
                     <div class="suggestions__item-meta">SKU: {{ product.sku }}</div>
                 </div>
-                <div class="suggestions__item-price">
+                <div class="suggestions__item-price" *ngIf="StoreSvc.configuracionSitio.MostrarPreciosSinLogueo">
                     {{ product.price|currencyFormat }}
                 </div>
                 <div class="suggestions__item-price">
