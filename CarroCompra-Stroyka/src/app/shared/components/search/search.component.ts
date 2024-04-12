@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
     Component,
     ElementRef, EventEmitter,
@@ -11,15 +12,13 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { RootService } from '../../services/root.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { fromEvent, Subject } from 'rxjs';
-import { Category } from '../../interfaces/category';
-import { DOCUMENT } from '@angular/common';
-import { CartService } from '../../services/cart.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, Subscription, fromEvent } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { Category } from '../../interfaces/category';
+import { CartService } from '../../services/cart.service';
+import { RootService } from '../../services/root.service';
 
 // utils
 import { UtilsTexto } from '../../utils/UtilsTexto';
@@ -28,8 +27,9 @@ import { UtilsTexto } from '../../utils/UtilsTexto';
 import { Item } from '../../../../data/modelos/articulos/Items';
 
 // Servicios
-import { ArticulosService } from '../../../shared/services/articulos.service'
+import { ArticulosService } from '../../../shared/services/articulos.service';
 import { StoreService } from '../../services/store.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 export type SearchLocation = 'header' | 'indicator' | 'mobile-header';
 
@@ -68,8 +68,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     addedToCartProducts: Item[] = [];
 
-    islogged
-
 
     quantity: FormControl = new FormControl(1);
 
@@ -96,6 +94,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     get element(): HTMLElement { return this.elementRef.nativeElement; }
 
     get inputElement(): HTMLElement { return this.inputElementRef.nativeElement; }
+    
+    public islogged: boolean = false;
+
+    private usuarioLogueadoSubscription: Subscription;
 
     constructor(
         @Inject(DOCUMENT) private document: Document,
@@ -107,10 +109,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         public articulossvc: ArticulosService,
         private toastr: ToastrService,
         private utils: UtilsTexto,
-        public StoreSvc: StoreService,
+        public StoreSvc: StoreService,        
+        private usuarioService: UsuarioService
     ) {
         this.cargarSugerencias();
-        this.islogged = localStorage.getItem("isLogue");
+        
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -171,6 +174,12 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             });
         });
         
+        this.updateIsLogged();
+
+        // Suscribirse a los cambios en el estado de inicio de sesión
+        this.usuarioLogueadoSubscription = this.usuarioService.getEstadoLoguin$().subscribe((value) => {
+            this.islogged = value;
+        });
 
     }
 
@@ -178,6 +187,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        if (this.usuarioLogueadoSubscription) {
+            this.usuarioLogueadoSubscription.unsubscribe();
+        }
     }
 
     openSuggestion(): void {
@@ -307,5 +319,17 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             }
         }
     }
+
+    updateIsLogged() {
+        // Actualizar el estado de inicio de sesión
+        this.islogged = localStorage.getItem("isLogue") === "true";
+    }
+
+    showPrice(): boolean {
+        const mostrarPreciosSinLogueo = this.StoreSvc.configuracionSitio.MostrarPreciosSinLogueo;
+        return mostrarPreciosSinLogueo || (this.islogged && !mostrarPreciosSinLogueo);
+    }
+    
+    
 }
 

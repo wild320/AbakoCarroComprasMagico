@@ -36,13 +36,24 @@
                     </div>
 
                     <div class="indicator indicator--mobile">
-                        <a routerLink="./shop/cart" class="indicator__button">
-                            <span class="indicator__area">
-                                <app-icon name="cart-20" size="20"></app-icon>
-                                <span class="indicator__value">{{ cart.quantity$|async }}</span>
-                            </span>
-                        </a>
+                        <ng-container *ngIf="showPrice(); else showAlert">
+                            <a routerLink="./shop/cart" class="indicator__button">
+                                <span class="indicator__area">
+                                    <app-icon name="cart-20" size="20"></app-icon>
+                                    <span class="indicator__value">{{ cart.quantity$ | async }}</span>
+                                </span>
+                            </a>
+                        </ng-container>
+                        <ng-template #showAlert>
+                            <button class="indicator__button" (touchstart)="showLoginAlert()">
+                                <span class="indicator__area">
+                                    <app-icon name="cart-20" size="20"></app-icon>
+                                    <span class="indicator__value">{{ cart.quantity$ | async }}</span>
+                                </span>
+                            </button>
+                        </ng-template>
                     </div>
+                    
 
                 <app-indicator link="./account" icon="person-20" trigger="click" #indicator="appIndicator">
                     <app-account-menu (closeMenu)="indicator.close(true)"></app-account-menu>

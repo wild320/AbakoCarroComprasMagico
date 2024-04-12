@@ -32,7 +32,7 @@
             <li *ngFor="let product of suggestedProducts; index as key" class="suggestions__item" [ngClass]="{'d-none' : !(key >= optionPagination.first && key <= optionPagination.last)}">
                 <div class="suggestions__item-image product-image">
                     <div class="product-image__body">
-                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario}">
+                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !StoreSvc.configuracionSitio.SuperarInventario}">
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@
                     </a>
                     <div class="suggestions__item-meta">SKU: {{ product.sku }}</div>
                 </div>
-                <div class="suggestions__item-price" *ngIf="StoreSvc.configuracionSitio.MostrarPreciosSinLogueo">
+                <div class="suggestions__item-price" *ngIf="showPrice()">
                     {{ product.price|currencyFormat }}
                 </div>
                 <div class="suggestions__item-price">
@@ -53,7 +53,7 @@
 
                 <div *ngIf="location === 'header'" class="suggestions__item-actions">
                     <button
-                         [disabled]="product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario"
+                         [disabled]="product.availability === 'No Disponible' && !StoreSvc.configuracionSitio.SuperarInventario"
                         type="button"
                         title="Add to cart"
                         class="btn btn-primary btn-sm btn-svg-icon"
