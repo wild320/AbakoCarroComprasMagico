@@ -32,6 +32,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
     public loading: boolean;
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
+    public formSubmitted: boolean = false;
 
     constructor(
         private fb: FormBuilder,
@@ -160,55 +161,59 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
 
     }
 
-    submitForm(){
-
+    submitForm() {
+        if (this.formSubmitted) return; // Si el formulario ya se ha enviado, salir
+    
         this.loading = true;
-
+        this.formSubmitted = true; // Establece formSubmitted en true al enviar el formulario
+    
         this.SetiarMensajes();
-
-        if (this.EsValidoFormulario()){
-
+        if (this.EsValidoFormulario()) {
             // armar detalle pedido
-           
-           
-            const detalle = this.cart.items.map(elem => (
-                {
-                    IdArt: elem.product.id,
-                    Cant: elem.quantity,
-                    UM: elem.product.um,
-                    Desc: elem.product.discountPerc,
-                    Dct: 0,
-                    Vr: 0,
-                } 
-            ));
-
-            const idAsesor = Number(this.Store.configuracionSitio.AsesorPredeterminado) != 0
-                ?  Number(this.Store.configuracionSitio.AsesorPredeterminado)
-                : this.usuariosvc.IdPersona;
-
+            const detalle = this.cart.items.map(elem => ({
+                IdArt: elem.product.id,
+                Cant: elem.quantity,
+                UM: elem.product.um,
+                Desc: elem.product.discountPerc,
+                Dct: 0,
+                Vr: 0,
+            }));
+    
+            const idAsesor =
+                Number(this.Store.configuracionSitio.AsesorPredeterminado) !== 0
+                    ? Number(this.Store.configuracionSitio.AsesorPredeterminado)
+                    : this.usuariosvc.IdPersona;
+    
             //Enviar pedido
-            this.Pedidosvc.CrearPedido(this.usuariosvc.Idempresa,this.usuariosvc.IdPersona, idAsesor, this.Store.configuracionSitio.AgenciaDefaul,
-                this.Observaciones.value, this.seldireccion.value, detalle).then((ret: any) => {
-
-                if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error ){
+            this.Pedidosvc.CrearPedido(
+                this.usuariosvc.Idempresa,
+                this.usuariosvc.IdPersona,
+                idAsesor,
+                this.Store.configuracionSitio.AgenciaDefaul,
+                this.Observaciones.value,
+                this.seldireccion.value,
+                detalle
+            ).then((ret: any) => {
+                if (ret.estado[0].msgId === EstadoRespuestaMensaje.Error) {
                     this.mensajerespuestaerror = ret.estado[0].msgStr;
-
-                }else{
-
-                    this.mensajerespuestaexito = 'Se ha generado el pedido ' + ret.ped.toString() + ' exitosamente.'  ;
-
+                } else {
+                    this.mensajerespuestaexito =
+                        'Se ha generado el pedido ' + ret.ped.toString() + ' exitosamente.';
                     this.cart.clearAll();
-
                     this.Pedidosvc.CargarUltimoPedido(ret.idPed);
-   
                 }
-
+                this.loading = false;
+            }).finally(() => {
+                console.log('finalizo')
+                this.formSubmitted = false;
+                this.loading = false;
             });
-
+        } else {
+            this.loading = false;
+            this.formSubmitted = false; 
         }
-
-        this.loading = false;
     }
+    
 
     SetiarMensajes(){
         this.mensajerespuestaexito = '';
