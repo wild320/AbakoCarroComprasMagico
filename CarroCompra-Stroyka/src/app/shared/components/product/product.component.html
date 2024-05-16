@@ -1,7 +1,14 @@
 <div class="product product--layout--{{ layout }}" *ngIf="product">
     <div class="product__content">
         <!-- .product__gallery -->
+        
+        
         <div class="product__gallery">
+            <div *ngIf="product.badges.length" class="product-card__badges-list2">
+                <div *ngIf="product.badges.includes('Oferta')" class="product-card__badge product-card__badge--sale">Oferta</div>
+                <div *ngIf="product.badges.includes('Mas Vendidos')" class="product-card__badge product-card__badge--hot">Mas Vendidos</div>
+                <div *ngIf="product.badges.includes('Nuevo')" class="product-card__badge product-card__badge--new">Nuevo</div>
+            </div>
             <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}"
             [productLayout]="layout" [images]="product.images"></app-product-gallery>
         </div>
@@ -65,6 +72,10 @@
             </div>
 
             <div class="product__prices" *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged==='true'">
+                <div *ngIf="product.discountPerc > 0" >
+                    <div class="product-card__badge product-card__badge--sale tag-sale">- {{ product.discountPerc | percentPipe }}</div>
+                </div>
+                
                 <ng-container *ngIf="product.compareAtPrice">
                     <span class="product__new-price">{{ product.price|currencyFormat }}</span>{{ ' ' }}
                     <span class="product__old-price">{{ product.compareAtPrice|currencyFormat }}</span>
@@ -72,6 +83,7 @@
                 <ng-container *ngIf="!product.compareAtPrice">
                     {{ product.price|currencyFormat }}
                 </ng-container>
+         
             </div>
             <!-- .product__options -->
             <form class="product__options" novalidate>

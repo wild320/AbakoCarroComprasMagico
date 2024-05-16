@@ -22,6 +22,9 @@
         </a>
     </div>
     <div class="product-card__info">
+        <div *ngIf="product.discountPerc > 0" >
+            <div class="product-card__badge product-card__badge--sale tag-sale">- {{ product.discountPerc | percentPipe }}</div>
+        </div>
         <div class="product-card__name">
             <a appClick [routerLink]="root.product(product.id,product.urlAmigable)">{{ product.name | titlecase  }}</a>
         </div>
