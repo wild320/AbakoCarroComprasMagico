@@ -1,8 +1,16 @@
 <div class="product product--layout--{{ layout }}" *ngIf="product">
     <div class="product__content">
         <!-- .product__gallery -->
+        
+        
         <div class="product__gallery">
-            <app-product-gallery [productLayout]="layout" [images]="product.images"></app-product-gallery>
+            <div *ngIf="product.badges.length" class="product-card__badges-list2">
+                <div *ngIf="product.badges.includes('Oferta')" class="product-card__badge product-card__badge--sale">Oferta</div>
+                <div *ngIf="product.badges.includes('Mas Vendidos')" class="product-card__badge product-card__badge--hot">Mas Vendidos</div>
+                <div *ngIf="product.badges.includes('Nuevo')" class="product-card__badge product-card__badge--new">Nuevo</div>
+            </div>
+            <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}"
+            [productLayout]="layout" [images]="product.images"></app-product-gallery>
         </div>
         <!-- .product__gallery / end -->
         <!-- .product__info -->
@@ -48,6 +56,7 @@
                     <span *ngIf="product.availability === 'No Disponible'" class="text-danger">{{product.availability}}</span>
 
                 </li>
+                <li>Descuento:{{ product.discountPerc | percentPipe }}</li>
                 <li>Marca: <a href="" appClick>{{product.marca | titlecase}}</a></li>
                 <li>SKU: {{product.sku}}</li>
                 <li>Presentación: {{product.descUM | titlecase}}</li>
@@ -62,7 +71,11 @@
                 Inventario: <span class="text-success">{{product.availability}}</span>
             </div>
 
-            <div class="product__prices">
+            <div class="product__prices" *ngIf="this.storeSvc.configuracionSitio.MostrarPreciosSinLogueo || this.islogged==='true'">
+                <div *ngIf="product.discountPerc > 0" >
+                    <div class="product-card__badge product-card__badge--sale tag-sale">- {{ product.discountPerc | percentPipe }}</div>
+                </div>
+                
                 <ng-container *ngIf="product.compareAtPrice">
                     <span class="product__new-price">{{ product.price|currencyFormat }}</span>{{ ' ' }}
                     <span class="product__old-price">{{ product.compareAtPrice|currencyFormat }}</span>
@@ -70,6 +83,7 @@
                 <ng-container *ngIf="!product.compareAtPrice">
                     {{ product.price|currencyFormat }}
                 </ng-container>
+         
             </div>
             <!-- .product__options -->
             <form class="product__options" novalidate>
@@ -78,10 +92,10 @@
                     <div class="input-radio-color">
                         <div class="input-radio-color__list">
 
-                           
+
                             <label class="input-radio-color__item input-radio-color__item--white" [ngStyle]="{'color': product.colorhx}"  data-toggle="tooltip" title={{product.color}}>
 
-           
+
 
                                 <span></span>
                             </label>
@@ -90,7 +104,6 @@
                                 <input type="radio" name="color">
                                 <span></span>
                             </label>
-
                             <label class="input-radio-color__item" style="color: #ff4040;" data-toggle="tooltip" title="Red">
                                 <input type="radio" name="color">
                                 <span></span>
@@ -104,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- 
+                <!--
                 <div class="form-group product__option">
                     <label class="product__option-label">Material</label>
                     <div class="input-radio-label">
@@ -132,13 +145,13 @@
                             <app-input-number aria-label="Quantity" class="product__quantity" size="lg" [min]="1" [formControl]="quantity"></app-input-number>
                         </div>
                         <div class="product__actions-item product__actions-item--addtocart" >
-                            <button  [disabled]="product.availability === 'No Disponible'" type="button" class="btn btn-primary btn-lg"
+                            <button  [disabled]="product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" type="button" class="btn btn-primary btn-lg"
                                     [ngClass]="{'btn-loading': addingToCart}"
                                     appClick (click)="addToCart()">Agregar al Carro</button>
                         </div>
                         <div class="product__actions-item product__actions-item--wishlist">
                             <button type="button" class="btn btn-secondary btn-svg-icon btn-lg" data-toggle="tooltip" title="Lista de Deseos"
-                                    [ngClass]="{'btn-loading': addingToWishlist}"
+                            [ngClass]="{'btn-loading': addingToWishlist, 'wishlist' : esFavorito}"
                                     appClick (click)="addToWishlist()">
                                 <app-icon name="wishlist-16" size="16"></app-icon>
                             </button>
@@ -170,7 +183,7 @@
             <app-share-buttons
                 class="product__share-buttons"
                 [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'pinterest']"
-                [pageUrl]="root.product(product.id)|absoluteUrl:'angular'"
+                [pageUrl]="root.product(product.id,product.urlAmigable)|absoluteUrl:'angular'"
                 [pageTitle]="product.name"
                 [pageImage]="product.images[0] | absoluteUrl:'html'"
             ></app-share-buttons>

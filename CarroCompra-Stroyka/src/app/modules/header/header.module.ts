@@ -48,7 +48,9 @@ import { NotificationsComponent } from './components/notifications/notifications
     exports: [
         // components
         HeaderComponent,
-        DropcartComponent
+        DropcartComponent,
+        AccountMenuComponent,
+        IndicatorComponent
     ]
 })
 export class HeaderModule { }

@@ -20,8 +20,8 @@ import { NegocioService } from '../../shared/services/negocio.service';
 // Modelos
 import {ArticulosCarroComprasResponse } from '../../../data/modelos/articulos/Articulos';
 import { Products} from '../../../data/modelos/articulos/DetalleArticulos';
+import { Filters } from '../../../data/modelos/articulos/filters';
 import { ItemsFiltros} from '../../../data/modelos/articulos/ItemsFiltros';
-import { Filters } from '../../../data/modelos/articulos/Filters';
 import {Item} from '../../../data/modelos/articulos/Items';
 import {ArticuloSeleccionado} from '../../../data/modelos/articulos/ArticuloSeleccionado';
 
@@ -47,7 +47,7 @@ export class ArticulosService {
   private ArticulosRelacionados: Item[];
   private ArticulosBusqueda$ = new Subject<Item[]>();
   private ArticulosBusqueda: Item[];
-  private Articulosfiltrados = new Products();
+  private Articulosfiltrados: Products = new Products();
   private AtributosFiltros = new Products();
   private AtributosFiltros$ = new Subject<Products>();
   private AtributosMasVendidos: Item[];
@@ -112,7 +112,7 @@ export class ArticulosService {
 
     }
 
-  setAtributosFiltros(Seleccion: Products){
+  setAtributosFiltros(Seleccion: any){
 
     this.setAtributos$(Seleccion);
     this.ArticulosSeleccionPagina();
@@ -236,7 +236,6 @@ export class ArticulosService {
   }
 
   setArticuloDetalle$(newValue){
-
     this.ArticulosDetalle = newValue;
     this.ArticulosDetalle$.next(newValue);
   }
@@ -246,26 +245,24 @@ export class ArticulosService {
   }
 
   SetSeleccionarArticuloDetalle(idArticulo: number, SiempreRecuperar: boolean ){
-
     // Si el articulo no existe aun debe consultarlo a la api
     if (this.getArticulos()?.products === undefined || SiempreRecuperar){
-
       this.RecuperarArticuloDetalle(idArticulo);
 
+    }else if (this.getArticulos().products.items.findIndex(element =>  element.id ===  idArticulo) == -1 ) {
+      this.RecuperarArticuloDetalle(idArticulo);
+
+
     }else{
-
       const index = this.getArticulos().products.items.findIndex(element =>  element.id ===  idArticulo);
-
       this.seleccionado.item = this.getArticulos().products.items[index];
       this.seleccionado.breadcrumbs = this.getArticulos().breadcrumbs;
-
       this.setArticuloDetalle$(this.seleccionado);
-
     }
 
   }
 
-  setFitrosCarro$(newValue){
+  setFiltersCarro$(newValue){
 
    this.FiltrosCarro = newValue;
    this.FiltrosCarro$.next(newValue);
@@ -425,7 +422,7 @@ export class ArticulosService {
 
   }
 
-  SetRecalcularFiltros(TipoFiltro: any ){
+  SetRecalcularFiltros(TipoFiltro: any) {
 
     this.FiltroColores = [];
     this.FiltroMarca = [];
@@ -433,81 +430,89 @@ export class ArticulosService {
     let indexfiltros;
 
     // Total Registros
-    const totalDescuentos = this.Articulosfiltrados.items.reduce( (cont, item) => {
+    const totalDescuentos = this.Articulosfiltrados.items.reduce((cont, item) => {
       return cont += 1;
     }, 0);
 
     // Agregar total descuento
-    this.FiltroDescuento.push(Object.assign({id: 0 , name: 'Todos' , slug: 'Todos', count: totalDescuentos }));
+    this.FiltroDescuento.push(Object.assign({ id: 0, name: 'Todos', slug: 'Todos', count: totalDescuentos }));
 
     // armas de nuevo los objectos de los filtros
     this.Articulosfiltrados.items.forEach(articulo => {
 
       // Armar los item filtro marca
-      const indexMarca = this.FiltroMarca.findIndex(element =>  element.name ===  articulo.marca);
+      const indexMarca = this.FiltroMarca.findIndex(element => element.name === articulo.marca);
 
-      if  (indexMarca >= 0) {
+      if (indexMarca >= 0) {
         this.FiltroMarca[indexMarca].count += 1;
-      }else{
-        this.FiltroMarca.push(Object.assign({id: articulo.idMarca , name: articulo.marca  , slug: articulo.marca ,
-          count: 1 }));
+      } else {
+        this.FiltroMarca.push(Object.assign({
+          id: articulo.idMarca, name: articulo.marca, slug: articulo.marca,
+          count: 1
+        }));
       }
 
       // Armar los item filtro colores
-      const indexColores = this.FiltroColores.findIndex(element =>  element.name ===  articulo.color);
+      const indexColores = this.FiltroColores.findIndex(element => element.name === articulo.color);
 
-      if  (indexColores >= 0) {
+      if (indexColores >= 0) {
         this.FiltroColores[indexColores].count += 1;
-      }else{
-        this.FiltroColores.push(Object.assign({id: 0 , name: articulo.color , slug: articulo.color ,
-          count: 1 , color: articulo.colorhx}));
+      } else {
+        this.FiltroColores.push(Object.assign({
+          id: 0, name: articulo.color, slug: articulo.color,
+          count: 1, color: articulo.colorhx
+        }));
       }
 
       // Armar los item filtro descuento
-      const indexdesc = this.FiltroDescuento.findIndex(element =>  element.name ===  articulo.tieneDescuento);
+      const indexdesc = this.FiltroDescuento.findIndex(element => element.name === articulo.tieneDescuento);
 
-      if  (indexdesc >= 0) {
+      if (indexdesc >= 0) {
         this.FiltroDescuento[indexdesc].count += 1;
-      }else{
-        this.FiltroDescuento.push(Object.assign({id: 0 , name: articulo.tieneDescuento , slug: articulo.tieneDescuento , count: 1 }));
+      } else {
+        this.FiltroDescuento.push(Object.assign({ id: 0, name: articulo.tieneDescuento, slug: articulo.tieneDescuento, count: 1 }));
       }
 
     });
 
     // asignar los objecto a los articulos filtros
     // marcas
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Marca);
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element => element.slug === cFiltros.Marca);
 
     if (TipoFiltro.findIndex(ft => ft === cFiltros.Marca) === -1) {
       this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroMarca;
-    }else{
+    } else {
       this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Marca).items;
+        element.slug === cFiltros.Marca).items;
     }
 
     // Colores
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Color);
-
-    if (TipoFiltro.findIndex(ft => ft === cFiltros.Color) === -1) {
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroColores;
-    }else{
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Color).items;
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element => element.slug === cFiltros.Color);
+    if (indexfiltros !== -1) {
+      if (TipoFiltro.findIndex(ft => ft === cFiltros.Color) === -1) {
+        this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroColores;
+      } else {
+        const filtroColor = this.FiltrosCarro.find(element => element.slug === cFiltros.Color);
+        if (filtroColor) {
+          this.Articulosfiltrados.filters[indexfiltros].items = filtroColor.items;
+        }
+      }
     }
 
     // Descuentos
-    indexfiltros = this.Articulosfiltrados.filters.findIndex(element =>  element.slug ===  cFiltros.Descuento);
-
-    if (TipoFiltro.findIndex(ft => ft === cFiltros.Descuento) === -1) {
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroDescuento;
-    }else{
-      this.Articulosfiltrados.filters[indexfiltros].items = this.FiltrosCarro.find(element =>
-        element.slug ===  cFiltros.Descuento).items;
+    indexfiltros = this.Articulosfiltrados.filters.findIndex(element => element.slug === cFiltros.Descuento);
+    if (indexfiltros !== -1) {
+      if (TipoFiltro.findIndex(ft => ft === cFiltros.Descuento) === -1) {
+        this.Articulosfiltrados.filters[indexfiltros].items = this.FiltroDescuento;
+      } else {
+        const filtroDescuento = this.FiltrosCarro.find(element => element.slug === cFiltros.Descuento);
+        if (filtroDescuento) {
+          this.Articulosfiltrados.filters[indexfiltros].items = filtroDescuento.items;
+        }
+      }
     }
 
-
-    // console.log ('filtros normales', this.Articulosfiltrados.filters);
-    this.setFitrosCarro$(this.Articulosfiltrados.filters);
+    this.setFiltersCarro$(this.Articulosfiltrados.filters);
 
   }
 
@@ -607,14 +612,13 @@ export class ArticulosService {
     const TipoFiltro  = slug.split('|')[0];
     const Id          = this.GetIdFiltro(TipoFiltro, slug);
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
-
     this.setIsLoading(true);
 
     return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${TipoFiltro}/${Id}`, { responseType: 'text' })
         .toPromise()
         .then((config: any) => {
-
-          this.setFitrosCarro$(JSON.parse(config).products.filters);
+        
+          this.setFilters(JSON.parse(config).products.filters);
 
           const articulos = JSON.parse(config);
 
@@ -631,6 +635,33 @@ export class ArticulosService {
 
   }
 
+  setFilters(filters: any[]) {
+    const uniqueFilters = filters.map(filter => {
+        if (filter.slug === 'discount') {
+            const uniqueItems = {};
+            
+
+            filter.items.forEach(item => {
+                if (uniqueItems[item.name]) {                  
+                    // If the item already exists, add its count
+                    uniqueItems[item.name].count += item.count;
+                } else {                  
+                    // Otherwise, add it as a new item
+                    uniqueItems[item.name] = { ...item };
+                }
+            });
+
+            // Convert the object back to an array of items
+            filter.items = Object.values(uniqueItems);
+        }
+
+        return filter;
+    });
+
+    this.setFiltersCarro$(uniqueFilters);
+}
+
+
   public RecuperarArticulosEspeciales(Tipo: string){
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
@@ -643,13 +674,13 @@ export class ArticulosService {
 
     const IdEmpresa   = this.usuariosvc.Idempresa.toString();
 
-    this.setIsLoading(true);
 
     return this.httpClient.get(`${this.UrlServicio}/${Tipo}/${IdEmpresa}`, { responseType: 'text' })
         .toPromise()
         .then((art: any) => {
-
           const {items} = JSON.parse(art);
+
+
 
           switch (Tipo) {
             case CArticulos.ArticulosEspecialesMasVendidos:
@@ -813,6 +844,7 @@ export class ArticulosService {
   }
 
   public RecuperarArticuloDetalle(Id: number){
+
     this.UrlServicio =
         this.negocio.configuracion.UrlServicioCarroCompras +
         CServicios.ApiCarroCompras +

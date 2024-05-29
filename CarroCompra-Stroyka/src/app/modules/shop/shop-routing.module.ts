@@ -34,7 +34,7 @@ const routes: Routes = [
         data: categoryPageData
     },
     {
-        path: 'products/:productSlug',
+        path: 'products/:productSlug/:urlAmigable',
         component: PageProductComponent,
         data: {
             // Product page layout. Possible values: 'standard', 'columnar', 'sidebar'.

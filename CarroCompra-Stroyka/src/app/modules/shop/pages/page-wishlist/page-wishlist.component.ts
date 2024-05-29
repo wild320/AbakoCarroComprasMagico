@@ -5,6 +5,7 @@ import { RootService } from '../../../../shared/services/root.service';
 
 // modelos
 import { Item } from '../../../../../data/modelos/articulos/Items';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 @Component({
     selector: 'app-wishlist',
@@ -15,7 +16,8 @@ export class PageWishlistComponent {
     constructor(
         public root: RootService,
         public wishlist: WishlistService,
-        public cart: CartService
+        public cart: CartService,
+        public storeSvc: StoreService,
     ) { }
 
     addedToCartProducts: Item[] = [];
@@ -45,5 +47,6 @@ export class PageWishlistComponent {
                 this.removedProducts = this.removedProducts.filter(eachProduct => eachProduct !== product);
             }
         });
+       
     }
 }

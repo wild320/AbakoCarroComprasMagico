@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
+import { StoreService } from '../../services/store.service';
 
 @Component({
     selector: 'app-product-card',
@@ -28,7 +29,11 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     addingToWishlist = false;
     addingToCompare = false;
     showingQuickview = false;
+    productosFavoritos = [];
+    esFavorito : boolean = false;
     featuredAttributes: ProductAttribute[] = [];
+    quick
+    islogged
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -37,20 +42,19 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         public wishlist: WishlistService,
         public compare: CompareService,
         public quickview: QuickviewService,
-        public currency: CurrencyService
+        public currency: CurrencyService,
+        public storeSvc: StoreService,
     ) { }
 
     ngOnInit(): void {
+        this.islogged = localStorage.getItem("isLogue");
         // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
-           
-        });
-    }
 
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        });
+
+        this.cargarFavoritos();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -75,20 +79,18 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
-    addToWishlist(): void {
-        if (this.addingToWishlist) {
-            return;
-        }
+    addToWishlist() {
+        this.esFavorito = true;
+        if (!this.addingToWishlist && this.product) {
 
-        // tslint:disable-next-line: deprecation
-        this.addingToWishlist = true;
-        // tslint:disable-next-line: deprecation
-        this.wishlist.add(this.product).subscribe({
-            complete: () => {
-                this.addingToWishlist = false;
-                this.cd.markForCheck();
-            }
-        });
+                this.wishlist.add(this.product).then((data: any)=>{
+                if(data){
+                    this.addingToWishlist = false
+                }
+                });
+
+
+        }
     }
 
     addToCompare(): void {
@@ -113,11 +115,25 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.showingQuickview = true;
         // tslint:disable-next-line: deprecation
-        this.quickview.show(this.product).subscribe({
+         this.quickview.show(this.product).subscribe({
             complete: () => {
                 this.showingQuickview = false;
                 this.cd.markForCheck();
             }
         });
     }
+
+
+    cargarFavoritos(){
+     this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos"))
+     const product =  this.productosFavoritos?.findIndex(element =>  element.id ===  this.product.id)
+     this.esFavorito = product != -1
+    }
+
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
 }

@@ -47,6 +47,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     featuredProducts: ProductsCarouselData;
     latestProducts: ProductsCarouselData;
+    productsOferta: ProductsCarouselData
 
     constructor(
         private shop: ShopService,
@@ -180,6 +181,18 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
+    organizarOfertas(){
+        this.productsOferta= {
+            abort$: new Subject<void>(),
+            loading: false,
+            products: [],
+            groups: this.OrganizarGrupo(this.articulossvc.getArticulosOfertasEspeciales()),
+        };
+
+        this.groupChangeOferta(this.productsOferta, this.productsOferta.groups[0]);
+
+    }
+
     OrganizarGrupo(articulos: Item[]): ProductsCarouselGroup[] {
 
         const marcas: ProductsCarouselGroup[] = [];
@@ -229,7 +242,8 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperarOfertasEspeciales){
-            this.columnSpecialOffers = this.articulossvc.getArticulosOfertasEspeciales().slice(0 , 3);
+          this.articulossvc.getArticulosOfertasEspeciales();
+          this.organizarOfertas()
 
         }else{
 
@@ -237,7 +251,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
             // tslint:disable-next-line: deprecation
             this.articulossvc.getArticulosOfertasEspeciales$().subscribe(data => {
-                this.columnSpecialOffers = this.articulossvc.getArticulosOfertasEspeciales().slice(0 , 3);
+            this.organizarOfertas()
             });
         }
     }
@@ -277,6 +291,17 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
         if (group.products !== null) {
             this.latestProducts.products = group.products;
+        }
+
+        carousel.loading = false;
+    }
+
+    groupChangeOferta(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+
+        carousel.loading = true;
+
+        if (group.products !== null) {
+             this.productsOferta.products = group.products;
         }
 
         carousel.loading = false;

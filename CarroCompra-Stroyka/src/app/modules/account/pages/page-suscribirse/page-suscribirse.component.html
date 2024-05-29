@@ -1,16 +1,13 @@
-<br>
-
-<div class="container"> 
-    <div class="card">
+<div class="card">
         <div class="card-body">
-            
+
             <div class="card-title">
                 <h3>Suscribirse</h3>
             </div>
-            
-            <div class="col-12 col-lg-7 col-xl-6">
-                
-                <form [formGroup]="SuscribirseForm" (ngSubmit)="submitForm()" > 
+
+            <div class="col-12 ">
+
+                <form [formGroup]="SuscribirseForm" (ngSubmit)="submitForm()" >
                     <div class="form-group">
                         <label>Tipo de identificación</label>
                         <select id="checkout-country" formControlName="tipo" class="form-control form-control-select2" >
@@ -42,17 +39,17 @@
                     <div class="form-group">
                         <label for="profile-phone">Numero de Teléfono</label>
                         <input type="text" formControlName="Telefono" class="form-control" id="profile-phone" placeholder="Digite su numero de teléfono">
-                    </div>    
-                    
+                    </div>
+
                     <div class="form-group">
                         <label for="profile-usuario">Usuario</label>
                         <input type="text" formControlName="Usuario" class="form-control" id="profile-usuario" placeholder="Digite su usuario">
-                    </div>  
+                    </div>
 
                     <div class="form-group">
                         <label for="profile-contrasena">Contraseña</label>
                         <input type="text" formControlName="Contrasena" class="form-control" id="profile-contrasena" placeholder="Digite su contraseña">
-                    </div>  
+                    </div>
 
                     <div class="form-group">
                         <div class="form-check">
@@ -81,9 +78,9 @@
                     </div>
 
                     <div class="form-group mt-5 mb-0">
-                        <button 
+                        <button
                             type="submit"
-                            [disabled]="loading" 
+                            [disabled]="loading"
                             class="btn btn-primary">
                             <i *ngIf="!loading"> Guardar </i>
                             <i *ngIf="loading"> Actualizando.... </i>
@@ -96,10 +93,9 @@
                     <div class="alert alert-success" *ngIf="mensajerespuestaexito.length>0" role="alert">
                         {{mensajerespuestaexito}}
                     </div>
-                </form> 
+                </form>
             </div>
         </div>
     </div>
-</div>
 
 

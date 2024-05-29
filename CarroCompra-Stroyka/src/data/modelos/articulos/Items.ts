@@ -12,6 +12,8 @@ export class Item {
     }>;
     compareAtPrice: number;
     images: string[];
+    inventario: number;
+    inventarioPedido:number;
     price: number;
     priceunit: number;
     taxes: number;
@@ -30,8 +32,10 @@ export class Item {
     colorhx: string;
     ValorUnidadV: any;
     NombreUnidadV: string;
+    urlAmigable: string;
     caracteristicas: string;
     observaciones: string;
+    favorito: boolean = false;
     attributes: Array <{
         name: string;
         slug: string;

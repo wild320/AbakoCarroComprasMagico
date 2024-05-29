@@ -1,17 +1,18 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { PageCategoryService } from '../../services/page-category.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 // Servicios
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // modelos
-import { Products} from '../../../../../data/modelos/articulos/DetalleArticulos';
+import { Products } from '../../../../../data/modelos/articulos/DetalleArticulos';
+import { Item } from 'src/data/modelos/articulos/Items';
 
 
-export type Layout = 'grid'|'grid-with-features'|'list';
+export type Layout = 'grid' | 'grid-with-features' | 'list';
 
 @Component({
     selector: 'app-products-view',
@@ -19,140 +20,154 @@ export type Layout = 'grid'|'grid-with-features'|'list';
     styleUrls: ['./products-view.component.scss']
 })
 export class ProductsViewComponent implements OnInit, OnDestroy {
+
     @Input() layout: Layout = 'grid';
-    @Input() grid: 'grid-3-sidebar'|'grid-4-full'|'grid-5-full' = 'grid-3-sidebar';
-    @Input() offcanvas: 'always'|'mobile' = 'mobile';
+    @Input() grid: 'grid-3-sidebar' | 'grid-4-full' | 'grid-5-full' = 'grid-3-sidebar';
+    @Input() offcanvas: 'always' | 'mobile' = 'mobile';
 
     destroy$: Subject<void> = new Subject<void>();
 
     listOptionsForm: FormGroup;
-    filtersCount = 0;
-    ProductosSeleccionados ;
-    Productos = new Products();
+    filtersCount: number = 0;
+    ProductosSeleccionados: Item[] | Products;
+    Productos: Products = new Products();
+    PaginationLocalStorage: any;
+    isPageAuto: boolean = false
+
+    private sub: Subscription;
+    private sub2: Subscription;
+    private sub3: Subscription;
 
     constructor(
         private fb: FormBuilder,
         public sidebar: ShopSidebarService,
         public pageService: PageCategoryService,
         public articulossvc: ArticulosService,
+        private cdr: ChangeDetectorRef
     ) {
-
+        //****ShowPageServices From and Page
 
         // recuperar todos los articulos
-        this.articulossvc.getArticulos$().subscribe(articulos => {
-
-            this.articulossvc.setAtributosFiltros(this.articulossvc.getArticulos().products);
-
+        this.sub3 = this.articulossvc.getArticulos$().subscribe(articulos => {
+            this.articulossvc.setAtributosFiltros(articulos.products);
         });
 
         // recuperar solo los articulos seleccionados
-        this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
-
+        this.sub2 = this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {            
+            
             this.Productos = this.articulossvc.getArticulos().products;
-            this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
+            this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();                       
 
+            localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
+            localStorage.setItem('is_page_update', '0')
+            this.isPageAuto = false;
         });
 
     }
 
-    OnCLickOnChange(){
-
+    OnCLickOnChange() {
+        this.isPageAuto = false
         const value = this.listOptionsForm.value;
+
+        localStorage.setItem('page', JSON.stringify(value))
 
         value.limit = parseFloat(value.limit);
 
-        if (value.page  == null || value.limit == null || value.sort == null  ){
+        if (value.page == null || value.limit == null || value.sort == null) {
             return;
         }
 
         this.SetLIstaOpciones(value);
 
 
-        this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
+        this.articulossvc.setAtributosFiltros(this.articulossvc.getAtributosFiltros());
+        // Agregar detección de cambios
+        this.cdr.detectChanges();
 
     }
 
     ngOnInit(): void {
 
-        this.articulossvc.getAtributos$().subscribe(atributos => {
+        this.sub = this.articulossvc.getAtributos$().subscribe(atributos => {
             this.SetAtributos();
         });
 
+        this.PaginationLocalStorage = JSON.parse(localStorage.getItem('page'))
+        this.isPageAuto = localStorage.getItem('is_page_update') === '1' ? true : false
 
-        this.listOptionsForm = this.fb.group({
-            page:   this.fb.control(this.articulossvc.getAtributosFiltros().page),
-            limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
-            sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
-        });
-
-
-     
-       /* this.listOptionsForm.valueChanges.subscribe(value => {
-
-            console.log (value);
-
-            value.limit = parseFloat(value.limit);
-
-            if (value.page  == null || value.limit == null || value.sort == null  ){
-                return;
-            }
-
-            this.SetLIstaOpciones(value);
-
-            console.log('suscribe', value);
-
-            // this.articulossvc.setAtributosFiltros( this.articulossvc.getAtributosFiltros());
-
-        }); */
-
-    }
-
-    SetAtributos(){
-        this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, {emitEvent: false});
-        this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, {emitEvent: false});
-        this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, {emitEvent: false});
-    }
-
-  
-
-    SetLIstaOpciones(value: any){
-        const products = this.articulossvc.getArticulos().products.items
-       if(value.sort === 'sku'){
-        if (products != undefined) {
-
-            products.sort(function (a, b) {
-            
-              if (a.sku > b.sku) {
-                return 1;
-              }
-              if (a.sku < b.sku) {
-                return -1;
-              }
-          
-              return 0;
+        if (this.isPageAuto) {
+            this.listOptionsForm = this.fb.group({
+                page: this.fb.control(this.PaginationLocalStorage?.page || 1),
+                limit: this.fb.control(this.PaginationLocalStorage?.limit || 12),
+                sort: this.fb.control(this.PaginationLocalStorage?.sort || 'sku'),
             });
-      
-          }
-          this.ProductosSeleccionados  = products
-       }
+            this.SetLIstaOpciones(this.listOptionsForm.value)
+        } else {
 
-     
+            this.listOptionsForm = this.fb.group({
+                page: this.fb.control(this.articulossvc.getAtributosFiltros().page),
+                limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
+                sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
+            });
+        }
 
+    }
+
+    SetAtributos() {
+        if (this.isPageAuto) {
+            const total = this.articulossvc.getAtributosFiltros().total;
+            this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / this.limit.value);
+            this.articulossvc.getAtributosFiltros().from = ((this.page.value - 1) * this.limit.value) + 1;
+            this.articulossvc.getAtributosFiltros().to = this.page.value * this.limit.value;
+        } else {
+            this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, { emitEvent: false });
+            this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, { emitEvent: false });
+            this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, { emitEvent: false });
+        }
+    }
+
+    SetLIstaOpciones(value: any): void {
+        const products = this.articulossvc.getArticulos()?.products?.items;
+    
+        if (!products) {
+            return;
+        }
+    
+        const sortFunctions = {
+            'sku': (a: any, b: any) => a.sku.localeCompare(b.sku),
+            'name_asc': (a: any, b: any) => a.name.localeCompare(b.name),
+            'name_desc': (a: any, b: any) => b.name.localeCompare(a.name)
+        };
+    
+        const sortFunction = sortFunctions[value.sort];
+        if (sortFunction) {
+            products.sort(sortFunction);
+        }
+    
+        this.ProductosSeleccionados = products;
+    
         const total = this.articulossvc.getAtributosFiltros().total;
         const limit = value.limit;
-
-        this.articulossvc.getAtributosFiltros().page = value.page;
-        this.articulossvc.getAtributosFiltros().limit = limit;
-        this.articulossvc.getAtributosFiltros().sort = value.sort;
-        this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / limit);
-        this.articulossvc.getAtributosFiltros().from = ((value.page - 1) * value.limit) + 1 ;
-        this.articulossvc.getAtributosFiltros().to = value.page   * limit;
-
+        const page = value.page;
+    
+        const atributosFiltros = this.articulossvc.getAtributosFiltros();
+        atributosFiltros.page = page;
+        atributosFiltros.limit = limit;
+        atributosFiltros.sort = value.sort;
+        atributosFiltros.pages = Math.ceil(total / limit);
+        atributosFiltros.from = ((page - 1) * limit) + 1;
+        atributosFiltros.to = page * limit;
+    
+        this.page.setValue(page);
     }
+    
 
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.sub.unsubscribe();
+        this.sub2.unsubscribe();
+        this.sub3.unsubscribe();
     }
 
     setLayout(value: Layout): void {
@@ -160,7 +175,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     resetFilters(): void {
-        //
+        
     }
 
     get page() { return this.listOptionsForm.get('page'); }

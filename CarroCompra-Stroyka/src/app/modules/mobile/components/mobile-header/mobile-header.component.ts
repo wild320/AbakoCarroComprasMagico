@@ -1,18 +1,20 @@
+import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, Input, NgZone, OnDestroy, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Observable, Subject, fromEvent, merge } from 'rxjs';
+import { filter, first, shareReplay, takeUntil } from 'rxjs/operators';
+import { fromMatchMedia } from '../../../../shared/functions/rxjs/fromMatchMedia';
+import { CartService } from '../../../../shared/services/cart.service';
 import { MobileMenuService } from '../../../../shared/services/mobile-menu.service';
 import { WishlistService } from '../../../../shared/services/wishlist.service';
-import { CartService } from '../../../../shared/services/cart.service';
-import { fromEvent, merge, Observable, Subject } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
-import { fromMatchMedia } from '../../../../shared/functions/rxjs/fromMatchMedia';
-import { filter, first, shareReplay, takeUntil } from 'rxjs/operators';
 
 // servicios
-import { StoreService } from '../../../../shared/services/store.service';
 import { NegocioService } from '../../../../shared/services/negocio.service';
+import { StoreService } from '../../../../shared/services/store.service';
 
 // constantes
 import { Cconfiguracion } from '../../../../../data/contantes/cConfiguracion';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 export type MobileHeaderMode = 'alwaysOnTop' | 'pullToShow';
@@ -45,6 +47,7 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     logo: string;
 
     media: Observable<MediaQueryList>;
+    public islogged: boolean;
 
     get element(): HTMLDivElement {
         return this.elementRef?.nativeElement;
@@ -62,9 +65,14 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
         public zone: NgZone,
         public store: StoreService,
         public negocio: NegocioService,
+        private usuarioService: UsuarioService,         
+        private toastr: ToastrService,
     ) {
 
         this.logo = Cconfiguracion.urlAssetsConfiguracion + this.negocio.configuracion.Logo ;
+        this.usuarioService.getEstadoLoguin$().subscribe((value) => {
+            this.islogged = value;
+        });
 
      }
 
@@ -183,5 +191,16 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
         this.element.classList.remove('mobile-header--shown');
 
         this.zone.run(() => this.visibility = 'hidden');
+    }
+
+    showPrice(): boolean {
+        const mostrarPreciosSinLogueo = this.store.configuracionSitio.MostrarPreciosSinLogueo;
+        return mostrarPreciosSinLogueo || (this.islogged && !mostrarPreciosSinLogueo);
+    }
+
+    showLoginAlert() {        
+        this.toastr.error(`Debes iniciar sesión para continuar con el pago.`, '', {
+            positionClass: 'toast-bottom-full-width' 
+        });
     }
 }

@@ -54,7 +54,6 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
         // tslint:disable-next-line: deprecation
         this.route.paramMap.subscribe(data => {
-
             if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
                 this.articulossvc.RecuperarArticulos('nn');
             }else{

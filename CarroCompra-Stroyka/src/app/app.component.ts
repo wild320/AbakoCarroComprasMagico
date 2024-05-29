@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone, OnInit, PLATFORM_ID } from '@angular/core';
-import {Title } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { CartService } from './shared/services/cart.service';
 import { CompareService } from './shared/services/compare.service';
@@ -15,6 +15,8 @@ import { NegocioService } from './shared/services/negocio.service';
 
 // utils
 import {UtilsTexto} from '../app/shared/utils/UtilsTexto';
+import { StoreService } from './shared/services/store.service';
+
 
 
 @Component({
@@ -36,6 +38,8 @@ export class AppComponent implements OnInit {
         private currency: CurrencyService,
         private negocio: NegocioService,
         private titleService: Title,
+        public StoreSvc: StoreService,
+        private metaTagService: Meta
     ) {
 
         this.titleService.setTitle( this.negocio.configuracion.NombreCliente);
@@ -58,6 +62,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        eval(this.StoreSvc?.configuracionSitio?.scriptRastreo)
         // properties of the CurrencyFormatOptions interface fully complies
         // with the arguments of the built-in pipe "currency"
         // https://angular.io/api/common/CurrencyPipe
@@ -82,5 +87,13 @@ export class AppComponent implements OnInit {
         this.wishlist.onAdding$.subscribe(product => {
             this.toastr.success(`Producto "${this.utils.TitleCase (product.name)}" Agregado a la Lista de Deseos!`);
         });
+
+        this.metaTagService.addTags([
+            {
+             name: 'description',
+              content: this.StoreSvc.configuracionSitio.PosicionamientoEnGoogle,
+            },
+          ]);
+        }
     }
-}
+

@@ -1,7 +1,7 @@
 <!-- .departments -->
 <div class="departments">
     <div class="departments__body" #bodyElement>
-        <div class="departments__links-wrapper" (mouseleave)="onMouseLeave()">
+        <div class="departments__links-wrapper"  (mouseenter)="onMouseEnterMenu()" (mouseleave)="onMouseLeaveMenuDepartment()">
             <div class="departments__submenus-container" #containerElement>
                 <ng-container *ngFor="let item of Menu">
                     <div
@@ -10,7 +10,7 @@
                         [ngClass]="{'departments__submenu--open': item === hoveredItem}"
                         #submenuElement
                     >
-                        <app-header-megamenu [menu]="item.menu" (itemClick)="onSubItemClick()"></app-header-megamenu>
+                        <app-header-megamenu [menu]="item.menu" (itemClick)="onSubItemClick()" (mouseleave)="onMouseLeaveMenu()"></app-header-megamenu>
                     </div>
                     <div
                         *ngIf="item.menu && item.menu.type == 'menu'"
@@ -18,7 +18,7 @@
                         [ngClass]="{'departments__submenu--open': item === hoveredItem}"
                         #submenuElement
                     >
-                        <app-header-menu [items]="item.menu.items" (itemClick)="onSubItemClick()"></app-header-menu>
+                        <app-header-menu [items]="item.menu.items" (itemClick)="onSubItemClick()" (mouseleave)="onMouseLeaveMenu()"></app-header-menu>
                     </div>
                 </ng-container>
             </div>
@@ -33,7 +33,7 @@
                     (mouseenter)="onItemMouseEnter(item)"
                     #itemElement
                 >
-                     <!-- menu derecho alejo e-->   
+                     <!-- menu derecho alejo e-->
                     <ng-template #link>
                         {{ item.label | titlecase}}
                         <app-icon *ngIf="item.menu" class="departments__item-arrow" name="arrow-rounded-right-6x9" size="6x9"></app-icon>

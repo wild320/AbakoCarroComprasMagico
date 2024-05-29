@@ -13,6 +13,7 @@ import { FooterComponent } from './footer.component';
 import { LinksComponent } from './components/links/links.component';
 import { NewsletterComponent } from './components/newsletter/newsletter.component';
 import { TotopComponent } from './components/totop/totop.component';
+import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-button.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { TotopComponent } from './components/totop/totop.component';
         FooterComponent,
         LinksComponent,
         NewsletterComponent,
-        TotopComponent
+        TotopComponent,
+        WhatsappButtonComponent
     ],
     imports: [
         // modules (angular)

@@ -1,7 +1,8 @@
 {
-    "NombreCliente": "Oficlick.co",
-    "Logo": "LOGO.png",
-    "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9496/",
-    "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9496/",
-    "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9496/"
+  "NombreCliente": "[Abako ERP] - Carro Compras",
+  "Logo": "LOGO.png",
+  "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9480/",
+  "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9480/",
+  "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9480/"
 }
+

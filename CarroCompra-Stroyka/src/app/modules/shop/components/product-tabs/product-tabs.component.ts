@@ -19,7 +19,22 @@ export class ProductTabsComponent {
     @Input() product: Item;
 
     specification: ProductFeaturesSection[] = specification;
-    reviews: Review[] = reviews;
+    reviews: Review[] = [];
+    currentPage = 1;
+    itemsPerPage = 3;
 
     constructor() { }
+
+    get paginatedReviews() {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        return this.reviews.slice(startIndex, startIndex + this.itemsPerPage);
+    }
+
+    get totalPages() {
+        return Math.ceil(this.reviews.length / this.itemsPerPage);
+    }
+
+    changePage(page: number) {
+        this.currentPage = page;
+    }
 }

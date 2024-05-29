@@ -16,11 +16,11 @@ export class RootService {
         return `/shop/catalog`;
     }
 
-    product(Id: number): string {
+    product(id: number,urlAmigable:string): string {
 
         const basePath = '/shop/products';
 
-        return `${basePath}/${Id}`;
+        return `${basePath}/${id}/${urlAmigable}`;
 
     }
 

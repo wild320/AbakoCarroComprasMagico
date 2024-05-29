@@ -2,13 +2,13 @@
 <div class="site-header__topbar topbar">
     <div class="topbar__container container">
         <div class="topbar__row">
-            <div class="topbar__item topbar__item--link" *ngIf="pagina.paginas[0].Activo">
+            <div class="topbar__item topbar__item--link" *ngIf="this.storeSvc.configuracionSitio.VerContacto">
                 <a class="topbar-link"  routerLink="/site/about-us">Nosotros</a>
             </div>
-            <div class="topbar__item topbar__item--link" *ngIf="pagina.paginas[6].Activo">
+            <div class="topbar__item topbar__item--link" *ngIf="this.storeSvc.configuracionSitio.VerContacto">
                 <a class="topbar-link" routerLink="/site/contact-us">Contacto</a>
             </div>
-            <div class="topbar__item topbar__item--link">
+            <div class="topbar__item topbar__item--link" *ngIf="this.storeSvc.configuracionSitio.VerSeguimientoPedidos">
                 <a class="topbar-link" routerLink="/shop/track-order/0">Seguimiento de Pedidos</a>
             </div>
             <div class="topbar__spring"></div>

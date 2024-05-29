@@ -12,6 +12,7 @@ import { RootService } from '../../../../shared/services/root.service';
 
 // constantes
 import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 @Component({
     selector: 'app-mobile-menu',
@@ -28,7 +29,7 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
                 public root: RootService,
                 public usuariosvc: UsuarioService,
                 private paginaService: PaginasService,
-                public articulossvc: ArticulosService,) {
+                public articulossvc: ArticulosService) {
 
         this.UsuarioLogueado();
 
@@ -52,7 +53,7 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
             }else{
                 this.mobilemenu.close();
             }
-            
+
         }
 
     }
@@ -60,7 +61,6 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
     private UsuarioLogueado() {
 
         this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
-
             this.cargarMenu(value);
 
         });
@@ -71,7 +71,7 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
 
         this.links = [
             {type: 'link', label: 'Inicio', url: '/'},
-        
+
             {type: 'link', label: 'Categorias', url: '/shop/catalog', children: [ ]},
 
             {type: 'link', label: 'Comprar', url: '/shop/catalog', children: [
@@ -79,10 +79,11 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
                 {type: 'link',label: 'Lista de Deseos', url: '/shop/wishlist'},
                 {type: 'link',label: 'Comparar', url: '/shop/compare'},
             ]},
-        
+
             {type: 'link', label: 'Sitios', url: '/site', children: []},
-            
+
         ];
+
 
         // cargar categorias
         this.CargarCategorias()
@@ -129,7 +130,7 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
 
         }else{
 
-            this.links.push({type: 'link', label: 'Cuenta', url: '/account', children: [
+            this.links.push({type: 'link', label: 'Cuenta', url: '/account/login', children: [
                 {type: 'link', label: ClabelRutas.loguin ,   url: Crutas.loguin }
             ]});
 
@@ -160,19 +161,19 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
             this.links[index].children = []
 
             this.articulossvc.getMegaMenu().forEach((element) => {
-                
+
                 // llenar detalles categorias
                 let childrens = this.articulossvc.getMegaMenu().filter( x => x.label === element.label).map( map => {
 
                     return map.menu['columns'][0]['items']
 
-                }); 
+                });
 
-                this.links[index].children.push({type: 'link', 
-                                                label: element.label, 
-                                                url: this.root.shop() +'/' + element.slug  , 
+                this.links[index].children.push({type: 'link',
+                                                label: element.label,
+                                                url: this.root.shop() +'/' + element.slug  ,
                                                 children: childrens[0].map( child => { return ({type: 'link', label:  child.label , url: this.root.shop() +'/' + child.slug })})
-            
+
                 })
 
             });

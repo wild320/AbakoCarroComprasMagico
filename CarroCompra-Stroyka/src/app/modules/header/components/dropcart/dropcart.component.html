@@ -24,7 +24,7 @@
                         <a
                             *ngIf="item.product.images?.length"
                             class="product-image__body"
-                            [routerLink]="root.product(item.product.id)"
+                            [routerLink]="root.product(item.product.id,item.product.urlAmigable)"
                             (click)="closeMenu.emit()"
                         >
                             <img class="product-image__img" [src]="item.product.images[0]"  alt="">
@@ -32,13 +32,13 @@
                     </div>
                     <div class="dropcart__product-info">
                         <div class="dropcart__product-name">
-                            <a [routerLink]="root.product(item.product.id)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
+                            <a [routerLink]="root.product(item.product.id,item.product.urlAmigable)" (click)="closeMenu.emit()">{{ item.product.name | titlecase}}</a>
                         </div>
 
                         <ul *ngIf="item.options.length" class="dropcart__product-options">
                             <li *ngFor="let option of item.options">{{ option.name  }}: {{ option.value }}</li>
                         </ul>
-                        <div class="dropcart__product-meta">
+                        <div class="dropcart__product-meta" *ngIf="storeSvc.configuracionSitio.MostrarPreciosSinLogueo || islogged === true">
                             <span class="dropcart__product-quantity">{{ item.quantity }}</span> ×
                             <span class="dropcart__product-price">{{ item.product.price|currency }}</span>
                         </div>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="dropcart__totals">
-                <table>
+                <table *ngIf="storeSvc.configuracionSitio.MostrarPreciosSinLogueo || islogged === true">
                     <tr *ngIf="(cart.totals$|async).length">
                         <th>Subtotal</th>
                         <td>{{ cart.subtotal$|async|currency }}</td>
@@ -73,8 +73,14 @@
             </div>
 
             <div class="dropcart__buttons">
-                <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Ver Carro</a>
-                <a class="btn btn-primary" [routerLink]="root.checkout()" (click)="closeMenu.emit()">Pagar</a>
+                <ng-container *ngIf="islogged === true; else mensajeInicioSesion">
+                    <!-- Si está logueado, muestra el botón de pago -->
+                    <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Pagar</a>
+                </ng-container>
+                <!-- Si no está logueado, muestra un mensaje para iniciar sesión -->
+                <ng-template #mensajeInicioSesion>
+                    <p style="text-align: center;">Debes iniciar sesión para continuar con el pago.</p>
+                </ng-template>
             </div>
         </ng-container>
     </div>

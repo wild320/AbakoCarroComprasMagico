@@ -6,8 +6,8 @@
                     <app-icon name="menu-18x14" size="18x14"></app-icon>
                 </button>
                 <a class="mobile-header__logo" routerLink="/">
-                    <img [src]="logo" alt="Logo - Carro de Compras" style="width: 120px; height: 40px">
-                </a> 
+                    <img [src]="logo" alt="Logo - Carro de Compras" style="max-width: 120px; max-height: 40px">
+                </a>
                 <app-search
                     appDropdown="mobile-header__search--open"
                     class="mobile-header__search"
@@ -26,7 +26,7 @@
                         </button>
                     </div>
 
-                    <div class="indicator indicator--mobile d-sm-flex d-none">
+                    <div class="indicator indicator--mobile ">
                         <a routerLink="./shop/wishlist" class="indicator__button">
                             <span class="indicator__area">
                                 <app-icon name="heart-20" size="20"></app-icon>
@@ -36,14 +36,28 @@
                     </div>
 
                     <div class="indicator indicator--mobile">
-                        <a routerLink="./shop/cart" class="indicator__button">
-                            <span class="indicator__area">
-                                <app-icon name="cart-20" size="20"></app-icon>
-                                <span class="indicator__value">{{ cart.quantity$|async }}</span>
-                            </span>
-                        </a>
+                        <ng-container *ngIf="showPrice(); else showAlert">
+                            <a routerLink="./shop/cart" class="indicator__button">
+                                <span class="indicator__area">
+                                    <app-icon name="cart-20" size="20"></app-icon>
+                                    <span class="indicator__value">{{ cart.quantity$ | async }}</span>
+                                </span>
+                            </a>
+                        </ng-container>
+                        <ng-template #showAlert>
+                            <button class="indicator__button" (touchstart)="showLoginAlert()">
+                                <span class="indicator__area">
+                                    <app-icon name="cart-20" size="20"></app-icon>
+                                    <span class="indicator__value">{{ cart.quantity$ | async }}</span>
+                                </span>
+                            </button>
+                        </ng-template>
                     </div>
+                    
 
+                <app-indicator link="./account" icon="person-20" trigger="click" #indicator="appIndicator">
+                    <app-account-menu (closeMenu)="indicator.close(true)"></app-account-menu>
+                </app-indicator>
                 </div>
             </div>
         </div>
