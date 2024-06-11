@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Página de inicio -->
+  <url>
+    <loc>https://magicomundo.co/</loc>
+    <lastmod>2024-06-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Página "Acerca de nosotros" -->
+  <url>
+    <loc>https://magicomundo.co/site/about-us</loc>
+    <lastmod>2024-06-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Página "Contáctanos" -->
+  <url>
+    <loc>https://magicomundo.co/site/contact-us</loc>
+    <lastmod>2024-06-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

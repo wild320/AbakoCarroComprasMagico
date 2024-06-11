@@ -7,7 +7,7 @@
             <div *ngFor="let category of categories" class="block-categories__item category-card category-card--layout--{{ layout }}">
                 <div class="category-card__body">
                     <div class="category-card__image">
-                        <a [routerLink]="RutaShop +'/' +category.slug"><img [src]="category?.image" alt=""></a>
+                        <a [routerLink]="RutaShop +'/' +category.slug"><img [src]="category?.image" alt="" loading="lazy"></a>
                     </div>
                     <div class="category-card__content">
                         <div class="category-card__name">

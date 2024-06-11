@@ -18,7 +18,7 @@
 
     <div class="product-card__image product-image">
         <a appClick [routerLink]="root.product(product.id,product.urlAmigable)" *ngIf="product.images?.length" class="product-image__body">
-            <img class="product-image__img" [lazyLoad]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
+            <img class="product-image__img" [lazyLoad]="product.images[0]" [alt]="product.name" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
         </a>
     </div>
     <div class="product-card__info">

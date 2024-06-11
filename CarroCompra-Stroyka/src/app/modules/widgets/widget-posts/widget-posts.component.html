@@ -4,7 +4,7 @@
         <div *ngFor="let post of posts" class="widget-posts__item">
             <div class="widget-posts__image">
                 <a [routerLink]="root.post()">
-                    <img [src]="postImage(post)" alt="">
+                    <img [src]="postImage(post)" alt=""  loading="lazy">
                 </a>
             </div>
             <div class="widget-posts__info">
