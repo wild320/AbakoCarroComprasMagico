@@ -1,20 +1,15 @@
-import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, timer } from 'rxjs';
-// import { Product } from '../interfaces/product';
-import { map, takeUntil } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
-// Contantes
-import { CServicios } from '../../../data/contantes/cServicios';
-
-// modelos
-import { Item } from 'src/data/modelos/articulos/Items';
-import { LocalService } from './local-service.service';
-import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
-import { UsuarioService } from './usuario.service';
-import { NegocioService } from './negocio.service';
-import { ServiceHelper } from './ServiceHelper';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Item } from 'src/data/modelos/articulos/Items';
+import { CServicios } from '../../../data/contantes/cServicios';
+import { ServiceHelper } from './ServiceHelper';
+import { LocalService } from './local-service.service';
+import { NegocioService } from './negocio.service';
+import { UsuarioService } from './usuario.service';
 
 interface WishlistData {
     items: Item[];
@@ -29,7 +24,7 @@ export class WishlistService implements OnDestroy {
     };
 
     private destroy$: Subject<void> = new Subject();
-    private itemsSubject$: BehaviorSubject<Item[]> = new BehaviorSubject([]);
+    private itemsSubject$: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     private onAddingSubject$: Subject<Item> = new Subject();
     private UrlServicioFavoritos: string;
     private UrlServicio: string;
@@ -37,10 +32,11 @@ export class WishlistService implements OnDestroy {
     private token = 'token';
     private itemsFavoritos :any =[];
 
-    readonly items$: Observable<Item[]> = this.itemsSubject$.pipe(takeUntil(this.destroy$));
+    readonly items$: Observable<Item[]> = this.itemsSubject$.asObservable().pipe(takeUntil(this.destroy$));
     readonly onAdding$: Observable<Item> = this.onAddingSubject$.asObservable();
     private quantitySubject$: BehaviorSubject<number> = new BehaviorSubject(this.itemsFavoritos.length);
     readonly count$: Observable<number> = this.quantitySubject$.asObservable();
+
     constructor(
         @Inject(PLATFORM_ID)
         private platformId: any,
@@ -55,6 +51,8 @@ export class WishlistService implements OnDestroy {
             this.load();
         }
     }
+
+
 
     CargarUsuario() {
         this.usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);

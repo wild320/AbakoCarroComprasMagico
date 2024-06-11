@@ -4,8 +4,6 @@
 @import '../variables';
 @import '../mixins/direction';
 
-
-.product-gallery {}
 .product-gallery__featured {
     position: relative;
     box-shadow: $product-gallery-item-default-shadow;
@@ -57,7 +55,13 @@
     box-shadow: $product-gallery-item-default-shadow;
     padding: 12px;
     border-radius: $product-gallery-item-border-radius;
+    overflow: hidden;
 }
 .product-gallery__carousel-item--active {
     box-shadow: $product-gallery-item-active-shadow;
+}
+
+
+.ngxImageZoomThumbnail{
+    max-width: 510px;
 }

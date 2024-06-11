@@ -28,6 +28,7 @@
     font-size: 14px;
     font-weight: $font-weight-medium;
     white-space: nowrap;
+    overflow-x: auto;
 
     li + li {
         @include direction {

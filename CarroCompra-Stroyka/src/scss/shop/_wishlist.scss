@@ -24,6 +24,10 @@
     }
 }
 
+.btn-svg-icon-delete:hover {
+    background-color: $price-new-color;
+}
+
 
 @media (min-width: breakpoint(md-start)) {
     .wishlist {
@@ -110,7 +114,8 @@
             #{$padding-inline-start}: 90px;
         }
     }
-    .wishlist__column--tocart {
+    .wishlist__column--tocart,
+    .wishlist__column--quantity {
         white-space: nowrap;
         width: 1px;
 
@@ -128,7 +133,8 @@
         width: 140px;
     }
     .wishlist__column--price,
-    .wishlist__column--tocart {
+    .wishlist__column--tocart,
+    .wishlist__column--quantity {
         @include direction {
             #{$padding-inline-start}: 30px;
         }
@@ -139,6 +145,7 @@
         width: 1px;
     }
     .wishlist__column--tocart,
+    .wishlist__column--quantity,
     .wishlist__column--price,
     .wishlist__column--stock {
         @include direction {
@@ -191,7 +198,8 @@
     .wishlist__column--product,
     .wishlist__column--stock,
     .wishlist__column--price,
-    .wishlist__column--tocart {
+    .wishlist__column--tocart,
+    .wishlist__column--quantity {
         text-align: center;
     }
     .wishlist__column--stock {
@@ -202,8 +210,13 @@
         font-size: 16px;
         font-weight: $font-weight-bold;
     }
-    .wishlist__column--tocart {
+    .wishlist__column--tocart,
+    .wishlist__column--quantity {
         margin-top: 24px;
+    }
+    
+    .wishlist__column--tocart {
+        padding: 0 70px;
     }
     .wishlist__column--remove {
         position: absolute;

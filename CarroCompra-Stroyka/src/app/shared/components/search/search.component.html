@@ -32,7 +32,7 @@
             <li *ngFor="let product of suggestedProducts; index as key" class="suggestions__item" [ngClass]="{'d-none' : !(key >= optionPagination.first && key <= optionPagination.last)}">
                 <div class="suggestions__item-image product-image">
                     <div class="product-image__body">
-                        <img class="product-image__img" [src]="product.images[0]" alt="" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !StoreSvc.configuracionSitio.SuperarInventario}">
+                        <img class="product-image__img" [src]="product.images[0]" [alt]="product.name" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !StoreSvc.configuracionSitio.SuperarInventario}"  loading="lazy">
                     </div>
                 </div>
 
@@ -49,6 +49,19 @@
                 </div>
                 <div class="product__actions-item">
                     <app-input-number id="product.id" style="width:90px" aria-label="Quantity" class="product__quantity" size="lg" [min]="1" [formControl]="quantity"></app-input-number>
+
+                    <div *ngIf="location === 'mobile-header'" class="suggestions__item-actions-mobile">
+                        <button
+                             [disabled]="product.availability === 'No Disponible' && !StoreSvc.configuracionSitio.SuperarInventario"
+                            type="button"
+                            title="Add to cart"
+                            class="btn btn-primary btn-sm btn-svg-icon"
+                            [class.btn-loading]="addedToCartProducts.includes(product)"
+                            (click)="addToCart(product)"
+                        >
+                            <app-icon name="cart-16" size="16"></app-icon>
+                        </button>
+                    </div>
                 </div>
 
                 <div *ngIf="location === 'header'" class="suggestions__item-actions">
