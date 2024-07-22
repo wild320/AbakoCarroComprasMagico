@@ -8,6 +8,7 @@ import { ArticulosService } from '../../../../shared/services/articulos.service'
 
 // modelos
 import { Item } from '../../../../../data/modelos/articulos/Items';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-page-product',
@@ -22,12 +23,13 @@ export class PageProductComponent implements OnInit, OnDestroy {
     layout: 'standard' | 'columnar' | 'sidebar' = 'standard';
     sidebarPosition: 'start' | 'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
     private cadenaString: string = "";    
-    private valorProductoUnit: string = "";
+    private valorProductoUnit: any;
     constructor(
         private shop: ShopService,
         private route: ActivatedRoute,
         public articulossvc: ArticulosService,
-    ) {}
+        private meta: Meta
+    ) { }
 
     ngOnInit(): void {
 
@@ -38,45 +40,36 @@ export class PageProductComponent implements OnInit, OnDestroy {
             this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
                 this.product = this.articulossvc.getArticuloDetalle().item;
                 if (this.product) {
-                    //this.setMetaTags();
+                    this.setMetaTags();
                     this.cadenaString = this.product.name;
-                    this.valorProductoUnit = this.product.price.toString();
+                    this.valorProductoUnit = this.product.price;
 
-                    // Define una expresión regular para encontrar el contenido entre paréntesis
                     const regExp = /\(([^)]+)\)/;
-
-                    // Ejecuta la expresión regular en cadenaString y guarda el resultado en matches
                     const matches = regExp.exec(this.cadenaString);
 
-                    // Verifica si hay coincidencias encontradas por la expresión regular
                     if (matches) {
-                        // Desestructura el contenido encontrado para obtener valorUnitario y nombreUnidadV
                         const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
-
-                        // Calcular el valor por unidad dividiendo valorProductoUnit entre valorUnitario
+    
+                        // Calcular valor por unidad
                         const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
-
-                        // Asigna el valor calculado y el nombre de la unidad al objeto product
                         this.product["ValorUnidadV"] = `${valor}`;
                         this.product["NombreUnidadV"] = nombreUnidadV;
                     }
-
                 } else {
                     this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
                 }
 
-                        if (this.product === undefined) {
-                            this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
-                        }
+                    // Define una expresión regular para encontrar el contenido entre paréntesis
+                    const regExp = /\(([^)]+)\)/;
 
-            this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
-        });
+                this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
+            });
             this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
             this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
 
             // tslint:disable-next-line: deprecation
 
-             this.articulossvc.getArticulosRelacionados$().subscribe(data => {
+            this.articulossvc.getArticulosRelacionados$().subscribe(data => {
                 this.relatedProducts = this.articulossvc.getArticulosRelacionados();
             });
 
@@ -91,7 +84,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
         });
     }
 
-    SetBreadcrumbs(breadcrumbs: any[]){
+    SetBreadcrumbs(breadcrumbs: any[]) {
 
         this.shop.SetBreadcrumbs(breadcrumbs);
         this.shop.SetBreadcrumb(this.product?.name, '');
@@ -104,8 +97,19 @@ export class PageProductComponent implements OnInit, OnDestroy {
         if(this.ArticulosSuscribe$) this.ArticulosSuscribe$.unsubscribe();
     }
 
-    getProductoSlug(): string|null {
+    getProductoSlug(): string | null {
         return this.route.snapshot.params.productSlug || this.route.snapshot.data.productSlug || null;
 
+    }
+
+    setMetaTags(): void {
+        this.meta.updateTag({ name: 'description', content: this.product.caracteristicas });
+        this.meta.updateTag({ property: 'og:title', content: this.product.name });
+        this.meta.updateTag({ property: 'og:description', content: this.product.caracteristicas });
+        this.meta.updateTag({ property: 'og:image', content: this.product.images[0] });
+        this.meta.updateTag({ property: 'og:url', content: window.location.href });
+        this.meta.updateTag({ name: 'twitter:title', content: this.product.name });
+        this.meta.updateTag({ name: 'twitter:description', content: this.product.caracteristicas });
+        this.meta.updateTag({ name: 'twitter:image', content: this.product.images[0] });
     }
 }
