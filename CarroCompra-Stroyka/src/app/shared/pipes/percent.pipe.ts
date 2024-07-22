@@ -8,6 +8,11 @@ export class PercentPipe implements PipeTransform {
     if (isNaN(value)) {
       return '';
     }
-    return (value * 100).toFixed(2) + '%';
+    const percentage = value * 100;
+
+    // Verifica si el número tiene una parte fraccionaria significativa.
+    const formattedPercentage = percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(1);
+
+    return formattedPercentage + '%';
   }
 }
