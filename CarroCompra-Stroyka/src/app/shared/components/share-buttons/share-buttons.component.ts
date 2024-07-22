@@ -50,7 +50,7 @@ const shareButtonsDef: Record<string, ShareButtonDef> = {
     whatsapp: {
         url: 'https://wa.me/?text=%URL%',
         icon: 'fab fa-whatsapp',
-        label: 'Share',
+        label: 'Compartir',
     },
     linkedin: {
         url: 'https://www.linkedin.com/shareArticle?title=%TITLE%&url=%URL%',

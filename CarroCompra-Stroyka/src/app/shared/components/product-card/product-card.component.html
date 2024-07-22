@@ -75,7 +75,7 @@
                 <app-icon [ngClass]="{'wishlist' : esFavorito}" name="wishlist-16" size="16"></app-icon>
                 <span [ngClass]="{'wishlist' : esFavorito}" class="fake-svg-icon fake-svg-icon--wishlist-16"></span>
             </button>
-            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button" aria-label="Agregar a la Lista para Comparar" appClick (click)="addToCompare()" [ngClass]="{'btn-loading': addingToCompare}">
+            <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button" aria-label="Agregar a la Lista para Comparar" appClick (click)="addToCompare()" [ngClass]="{'btn-loading': addingToCompare}" *ngIf="storeSvc.configuracionSitio.VerCompararProductos">
                 <app-icon name="compare-16" size="16"></app-icon>
                 <span class="fake-svg-icon fake-svg-icon--compare-16"></span>
             </button>

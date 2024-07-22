@@ -156,8 +156,8 @@
                                 <app-icon name="wishlist-16" size="16"></app-icon>
                             </button>
                         </div>
-                        <div class="product__actions-item product__actions-item--compare">
-                            <button type="button" class="btn btn-secondary btn-svg-icon btn-lg" data-toggle="tooltip" title="Comparar"
+                        <div class="product__actions-item product__actions-item--compare" *ngIf="storeSvc.configuracionSitio.VerCompararProductos">
+                            <button type="button" class="btn btn-secondary btn-svg-icon btn-lg"  title="Comparar"
                                     [ngClass]="{'btn-loading': addingToCompare}"
                                     appClick (click)="addToCompare()">
                                 <app-icon name="compare-16" size="16"></app-icon>
@@ -182,7 +182,7 @@
 
             <app-share-buttons
                 class="product__share-buttons"
-                [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'pinterest']"
+                [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'whatsapp']"
                 [pageUrl]="root.product(product.id,product.urlAmigable)|absoluteUrl:'angular'"
                 [pageTitle]="product.name"
                 [pageImage]="product.images[0] | absoluteUrl:'html'"

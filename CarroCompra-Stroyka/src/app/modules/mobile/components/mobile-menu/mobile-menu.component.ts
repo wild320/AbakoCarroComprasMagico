@@ -26,10 +26,11 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
     links: MobileMenuItem[];
 
     constructor(public mobilemenu: MobileMenuService,
-                public root: RootService,
-                public usuariosvc: UsuarioService,
-                private paginaService: PaginasService,
-                public articulossvc: ArticulosService) {
+        public root: RootService,
+        public usuariosvc: UsuarioService,
+        private paginaService: PaginasService,
+        public articulossvc: ArticulosService,
+        public storeService: StoreService) {
 
         this.UsuarioLogueado();
 
@@ -47,10 +48,10 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
     onItemClick(event: MobileMenuItem): void {
 
         if (event.type === 'link') {
-            if (event.label === ClabelRutas.CerrarSesion){
+            if (event.label === ClabelRutas.CerrarSesion) {
                 this.usuariosvc.loguout();
                 this.mobilemenu.close();
-            }else{
+            } else {
                 this.mobilemenu.close();
             }
 
@@ -67,22 +68,29 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
 
     }
 
-    cargarMenu(CargarUsuario: boolean){
 
-        this.links = [
-            {type: 'link', label: 'Inicio', url: '/'},
+    cargarMenu(CargarUsuario: boolean) {
 
-            {type: 'link', label: 'Categorias', url: '/shop/catalog', children: [ ]},
-
-            {type: 'link', label: 'Comprar', url: '/shop/catalog', children: [
-                {type: 'link', label: 'Artículos', url: '/shop/catalog'},
-                {type: 'link',label: 'Lista de Deseos', url: '/shop/wishlist'},
-                {type: 'link',label: 'Comparar', url: '/shop/compare'},
-            ]},
-
-            {type: 'link', label: 'Sitios', url: '/site', children: []},
-
+        // Estructura base de los enlaces
+        const baseLinks: any[] = [
+            { type: 'link', label: 'Inicio', url: '/' },
+            { type: 'link', label: 'Categorias', url: '/shop/catalog', children: [] },
+            {
+                type: 'link', label: 'Comprar', url: '/shop/catalog', children: [
+                    { type: 'link', label: 'Artículos', url: '/shop/catalog' },
+                    { type: 'link', label: 'Lista de Deseos', url: '/shop/wishlist' }
+                ]
+            },
+            { type: 'link', label: 'Sitios', url: '/site', children: [] }
         ];
+
+        // Añadir enlace "Comparar" si es necesario
+        if (this.storeService.configuracionSitio.VerCompararProductos) {
+            baseLinks[2].children.push({ type: 'link', label: 'Comparar', url: '/shop/compare' });
+        }
+
+        // Asignar los enlaces a la propiedad `links`
+        this.links = baseLinks;
 
 
         // cargar categorias
@@ -95,73 +103,73 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
         // cargar los sitios internos
         this.CargarSitios();
 
-       // cargar adicoonales
-       this.CargarAdicionales()
+        // cargar adicoonales
+        this.CargarAdicionales()
 
     }
 
-    CargarSitios(): void {
-        // Find the index of the 'Sitios' menu item
-        const sitiosIndex = this.links.findIndex(link => link.label === 'Sitios');
-        
-        // Ensure the 'Sitios' menu item exists before modifying it
-        if (sitiosIndex !== -1) {
-            const sitiosMenu = this.links[sitiosIndex];
-            
-            // Clear any existing children if necessary
-            sitiosMenu.children = [];
-    
-            // Populate the menu with active pages
-            this.paginaService.paginas.forEach(page => {
-                if (page.Activo) {
-                    sitiosMenu.children.push({ type: 'link', label: page.label, url: page.url });
-                }
-            });
-        } else {
-            console.error('Menu item with label "Sitios" not found.');
-        }
+    CargarSitios() {
+
+        // asignar los menus de pagisnas dinamicamente
+        const index = this.links.findIndex(x => x.label === 'Sitios');
+
+        this.paginaService.paginas.forEach((element, array) => {
+
+            if (element.Activo) {
+                this.links[index].children.push({ type: 'link', label: element.label, url: element.url });
+            }
+        });
+
     }
     
 
-    CargarCuenta (CargarUsuario: boolean){
+    CargarCuenta(CargarUsuario: boolean) {
 
         if (CargarUsuario) {
 
             //cargar moneda
-            this.links.push({type: 'link', label: 'Cuenta', url: '/account', children: [
-                {type: 'link', label: ClabelRutas.Dashboard,       url: Crutas.Dashboard},
-                {type: 'link', label: ClabelRutas.EditarCuenta,    url: Crutas.EditarCuenta},
-                {type: 'link', label: ClabelRutas.MiHistorial,   url: Crutas.MiHistorial},
-                {type: 'link', label: ClabelRutas.MisDirecciones,    url: Crutas.MisDirecciones},
-                {type: 'link', label: ClabelRutas.Cotrasena,    url: Crutas.Cotrasena},
-                {type: 'link', label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion}
-            ]});
+            this.links.push({
+                type: 'link', label: 'Cuenta', url: '/account', children: [
+                    { type: 'link', label: ClabelRutas.Dashboard, url: Crutas.Dashboard },
+                    { type: 'link', label: ClabelRutas.EditarCuenta, url: Crutas.EditarCuenta },
+                    { type: 'link', label: ClabelRutas.MiHistorial, url: Crutas.MiHistorial },
+                    { type: 'link', label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones },
+                    { type: 'link', label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena },
+                    { type: 'link', label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion }
+                ]
+            });
 
-        }else{
+        } else {
 
-            this.links.push({type: 'link', label: 'Cuenta', url: '/account/login', children: [
-                {type: 'link', label: ClabelRutas.loguin ,   url: Crutas.loguin }
-            ]});
+            this.links.push({
+                type: 'link', label: 'Cuenta', url: '/account/login', children: [
+                    { type: 'link', label: ClabelRutas.loguin, url: Crutas.loguin }
+                ]
+            });
 
         }
 
     }
 
-    CargarAdicionales(){
+    CargarAdicionales() {
 
         //cargar moneda
-        this.links.push({type: 'button', label: 'Moneda', children: [
-            {type: 'button', label: '$ Peso Colombia',  data: {currency: 'COP'}},
-        ]});
+        this.links.push({
+            type: 'button', label: 'Moneda', children: [
+                { type: 'button', label: '$ Peso Colombia', data: { currency: 'COP' } },
+            ]
+        });
 
         //cargar idioma
-        this.links.push({type: 'button', label: 'Idioma', children: [
-            {type: 'button', label: 'Español', data: {language: 'ES'}},
-        ]});
+        this.links.push({
+            type: 'button', label: 'Idioma', children: [
+                { type: 'button', label: 'Español', data: { language: 'ES' } },
+            ]
+        });
 
     }
 
-    CargarCategorias(){
+    CargarCategorias() {
 
         this.articulossvc.getMegaMenu$().subscribe(menu => {
 
@@ -172,16 +180,17 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
             this.articulossvc.getMegaMenu().forEach((element) => {
 
                 // llenar detalles categorias
-                let childrens = this.articulossvc.getMegaMenu().filter( x => x.label === element.label).map( map => {
+                let childrens = this.articulossvc.getMegaMenu().filter(x => x.label === element.label).map(map => {
 
                     return map.menu['columns'][0]['items']
 
                 });
 
-                this.links[index].children.push({type: 'link',
-                                                label: element.label,
-                                                url: this.root.shop() +'/' + element.slug  ,
-                                                children: childrens[0].map( child => { return ({type: 'link', label:  child.label , url: this.root.shop() +'/' + child.slug })})
+                this.links[index].children.push({
+                    type: 'link',
+                    label: element.label,
+                    url: this.root.shop() + '/' + element.slug,
+                    children: childrens[0].map(child => { return ({ type: 'link', label: child.label, url: this.root.shop() + '/' + child.slug }) })
 
                 })
 
