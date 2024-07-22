@@ -5,7 +5,7 @@ import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { CompareService } from '../../services/compare.service';
 import { RootService } from '../../services/root.service';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 
 // utils
 import { UtilsTexto } from '../../utils/UtilsTexto';
@@ -37,6 +37,10 @@ export class ProductComponent implements OnInit {
     esFavorito: boolean = false;
     url: string;
     islogged
+    toastOptions: Partial<IndividualConfig>= {
+        timeOut: 1000,
+        tapToDismiss: true,
+    };
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
@@ -67,12 +71,11 @@ export class ProductComponent implements OnInit {
             this.addingToCart = true;
             this.cart.add(this.product, this.quantity.value).subscribe({ complete: () => this.addingToCart = false });
         } else {
-            this.toastr.error(`Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible:${(this.product.inventario - this.product.inventarioPedido)}`);
+            this.toastr.error(`Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible:${(this.product.inventario - this.product.inventarioPedido)}`, '', this.toastOptions);
         }
     }
 
     addToWishlist() {
-        this.esFavorito = true;
 
         if (!this.addingToWishlist && this.product) {
 
@@ -85,19 +88,24 @@ export class ProductComponent implements OnInit {
     }
 
     cargarFavoritos() {
-        this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos"));
-
-        if (this.productosFavoritos) {
-
+        // Obtiene los favoritos del localStorage o inicializa un arreglo vacío si no hay favoritos
+        this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    
+        // Verifica si hay productos favoritos
+        if (this.productosFavoritos.length > 0) {
+    
+            // Busca el índice del producto actual en la lista de favoritos
             const productIndex = this.productosFavoritos.findIndex(element => element.id === this.product?.id);
-
+    
+            // Determina si el producto es favorito (esFavorito será true si el producto existe en la lista)
             this.esFavorito = productIndex !== -1;
-
+    
         } else {
-
+            // Si no hay productos favoritos, establece esFavorito como false
             this.esFavorito = false;
         }
     }
+    
 
 
 

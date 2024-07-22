@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Item } from 'src/data/modelos/articulos/Items';
@@ -37,6 +37,12 @@ export class WishlistService implements OnDestroy {
     private quantitySubject$: BehaviorSubject<number> = new BehaviorSubject(this.itemsFavoritos.length);
     readonly count$: Observable<number> = this.quantitySubject$.asObservable();
 
+    toastOptions: Partial<IndividualConfig>= {
+        timeOut: 1000,
+        tapToDismiss: true,
+    };
+      
+
     constructor(
         @Inject(PLATFORM_ID)
         private platformId: any,
@@ -62,8 +68,9 @@ export class WishlistService implements OnDestroy {
 
     async add(product: Item) {
         this.CargarUsuario();
+    
         if (!this.usr) {
-            this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión', '');
+            this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión', '', this.toastOptions);
             return;
         }
     
@@ -82,14 +89,14 @@ export class WishlistService implements OnDestroy {
                 this.onAddingSubject$.next(product);
                 this.load();
             } else {
-                this.toastr.error('El producto no fue agregado a la lista de favoritos', '');
+                this.toastr.error('El producto no fue agregado a la lista de favoritos', '', this.toastOptions);
             }
         } catch (err) {
             console.error('Error adding product to wishlist:', err);
-            this.toastr.error('Ocurrió un error al intentar agregar el producto a la lista de favoritos', '');
+            this.toastr.error('Ocurrió un error al intentar agregar el producto a la lista de favoritos', '', this.toastOptions);
         }
-
     }
+    
 
     remove(product: Item) {
     const index =   this.itemsFavoritos.findIndex(item => item.id === product.id);
@@ -107,7 +114,7 @@ export class WishlistService implements OnDestroy {
         ]
     }
     //  this.onAddingSubject$.next(product);
-    this.toastr.error(`El producto fue eliminado correctamente`);
+    this.toastr.error(`El producto fue eliminado correctamente`, '', this.toastOptions);
     this.UrlServicioFavoritos = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioFavoritos;
     return this.httpClient.post(this.UrlServicioFavoritos, productrequest)
   }
@@ -117,7 +124,7 @@ export class WishlistService implements OnDestroy {
     private load() {
         this.CargarUsuario();
         if (!this.usr) {
-            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `);
+            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `, '', this.toastOptions);
 
         } else {
             const productrequest = {

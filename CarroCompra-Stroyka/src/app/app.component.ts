@@ -1,6 +1,6 @@
 import { Component, Inject, NgZone, OnInit, PLATFORM_ID } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { CartService } from './shared/services/cart.service';
 import { CompareService } from './shared/services/compare.service';
 import { WishlistService } from './shared/services/wishlist.service';
@@ -25,6 +25,10 @@ import { StoreService } from './shared/services/store.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+    toastOptions: Partial<IndividualConfig>= {
+        timeOut: 1000,
+        tapToDismiss: true,
+    };
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private router: Router,
@@ -79,13 +83,13 @@ export class AppComponent implements OnInit {
             }
         });
         this.cart.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${this.utils.TitleCase (product.name) }" Agregado al Carrito!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase(product.name)}" Agregado al Carrito!`, '', this.toastOptions);
         });
         this.compare.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${this.utils.TitleCase (product.name)}" Agregado para Comparar!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase(product.name)}" Agregado para Comparar!`, '', this.toastOptions);
         });
         this.wishlist.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${this.utils.TitleCase (product.name)}" Agregado a la Lista de Deseos!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase(product.name)}" Agregado a la Lista de Deseos!`, '', this.toastOptions);
         });
 
         this.metaTagService.addTags([
