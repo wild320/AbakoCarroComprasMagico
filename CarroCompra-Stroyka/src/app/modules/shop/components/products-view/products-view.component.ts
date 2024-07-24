@@ -99,7 +99,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             this.listOptionsForm = this.fb.group({
                 page: this.fb.control(this.PaginationLocalStorage?.page || 1),
                 limit: this.fb.control(this.PaginationLocalStorage?.limit || 12),
-                sort: this.fb.control(this.PaginationLocalStorage?.sort || 'sku'),
+                sort: this.fb.control('sku'),
             });
             this.SetLIstaOpciones(this.listOptionsForm.value)
         } else {
@@ -107,7 +107,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             this.listOptionsForm = this.fb.group({
                 page: this.fb.control(this.articulossvc.getAtributosFiltros().page),
                 limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
-                sort: this.fb.control(this.articulossvc.getAtributosFiltros().sort),
+                sort: this.fb.control('sku'),
             });
         }
 

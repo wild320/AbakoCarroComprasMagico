@@ -75,11 +75,11 @@
             <div class="dropcart__buttons">
                 <ng-container *ngIf="islogged === true; else mensajeInicioSesion">
                     <!-- Si está logueado, muestra el botón de pago -->
-                    <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Pagar</a>
+                    <a class="btn btn-secondary" [routerLink]="root.cart()" (click)="closeMenu.emit()">Finalizar Pedido</a>
                 </ng-container>
                 <!-- Si no está logueado, muestra un mensaje para iniciar sesión -->
                 <ng-template #mensajeInicioSesion>
-                    <p style="text-align: center;">Debes iniciar sesión para continuar con el pago.</p>
+                    <p style="text-align: center;">Debes iniciar sesión para continuar con la finalizacion del pedido.</p>
                 </ng-template>
             </div>
         </ng-container>
