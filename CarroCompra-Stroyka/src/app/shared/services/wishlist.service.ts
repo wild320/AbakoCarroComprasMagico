@@ -56,42 +56,37 @@ export class WishlistService implements OnDestroy {
 
     CargarUsuario() {
         this.usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
-
     }
 
 
 
-    add(product: Item) {
+    async add(product: Item) {
         this.CargarUsuario();
         if (!this.usr) {
-            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `);
-
-        } else {
-            const productrequest = {
-                "proceso": "NEW",
-                "IdPersona": parseInt(this.usr.IdPersona),
-                "dllFavorito": [
-                    {
-                        "idArticulo": product.id
-                    }
-                ]
+            this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión', '');
+            return;
+        }
+    
+        const productRequest = {
+            proceso: 'NEW',
+            IdPersona: parseInt(this.usr.IdEmp),
+            dllFavorito: [{ idArticulo: product.id }]
+        };
+    
+        this.UrlServicioFavoritos = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioFavoritos}`;
+    
+        try {
+            const result = await this.servicehelper.PostData(this.UrlServicioFavoritos, productRequest).toPromise();
+    
+            if (result.mensaje.msgId === 1) {
+                this.onAddingSubject$.next(product);
+                this.load();
+            } else {
+                this.toastr.error('El producto no fue agregado a la lista de favoritos', '');
             }
-            this.UrlServicioFavoritos = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioFavoritos;
-
-            return this.servicehelper
-                .PostData(this.UrlServicioFavoritos, productrequest)
-                .toPromise()
-                .then(result => {
-                    if (result.mensaje.msgId == 1) {
-                        this.onAddingSubject$.next(product);
-                        this.load();
-                    } else {
-                        this.toastr.error(`El producto no fue agregado a la lista de favoritos`);
-                    }
-                })
-                .catch((err: any) => {
-                    console.error(err);
-                });
+        } catch (err) {
+            console.error('Error adding product to wishlist:', err);
+            this.toastr.error('Ocurrió un error al intentar agregar el producto a la lista de favoritos', '');
         }
 
     }
@@ -104,7 +99,7 @@ export class WishlistService implements OnDestroy {
     this.quantitySubject$.next(this.itemsFavoritos.length);
        const productrequest = {
         "proceso": "DEL",
-        "IdPersona": parseInt(this.usr.IdPersona),
+        "IdPersona": parseInt(this.usr.IdEmp),
         "dllFavorito": [
             {
                 "idArticulo": product.id
@@ -127,7 +122,7 @@ export class WishlistService implements OnDestroy {
         } else {
             const productrequest = {
                 "proceso": "GET",
-                "IdPersona": parseInt(this.usr.IdPersona),
+                "IdPersona": parseInt(this.usr.IdEmp),
                 "dllFavorito": [
                     {
                         "idArticulo": 0
