@@ -621,6 +621,12 @@ export class ArticulosService {
           this.setFilters(JSON.parse(config).products.filters);
 
           const articulos = JSON.parse(config);
+          
+          articulos.products.sort = 'sku';
+          
+          articulos.products.items.sort((a: any, b: any) => {
+              return a.sku.localeCompare(b.sku);
+          });
 
           this.setArticulos$(articulos);
           this.setIsLoading(false);
