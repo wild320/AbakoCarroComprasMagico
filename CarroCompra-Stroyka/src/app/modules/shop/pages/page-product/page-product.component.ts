@@ -19,17 +19,12 @@ import { Item } from '../../../../../data/modelos/articulos/Items';
 export class PageProductComponent implements OnInit, OnDestroy {
     relatedProducts: Item[];
     product: Item;
-    ArticulosSuscribe$: any;
-    prueba : any;
-    prueba1 : any;
-    prueba2 : any;
-    prueba3 : any;
+    ArticulosSuscribe$: any;    
     breadcrumbs: Link[] = [];
-    layout: 'standard'|'columnar'|'sidebar' = 'standard';
-    sidebarPosition: 'start'|'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
-    cadenaString : any;
-    valorUnitario: any;
-    valorProductoUnit:any;
+    layout: 'standard' | 'columnar' | 'sidebar' = 'standard';
+    sidebarPosition: 'start' | 'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
+    private cadenaString: string = "";    
+    private valorProductoUnit: string = "";
     constructor(
         private shop: ShopService,
         private route: ActivatedRoute,
@@ -40,27 +35,38 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
         this.route.paramMap.subscribe(data => {
 
-              // tomar el articulos seleccionado
-        // tslint:disable-next-line: deprecation
-        this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe ( Data => {
-            this.product = this.articulossvc.getArticuloDetalle().item;
-            this.cadenaString = this.product.name;
-            this.valorProductoUnit = this.product.price;
-            var regExp = /\(([^)]+)\)/;
-            var matches = regExp.exec(this.cadenaString);
-            const valorFinal = matches[1].split(' ');
-            this.valorUnitario = valorFinal[0];
-            const valor = parseInt(this.valorProductoUnit) / parseInt(this.valorUnitario)
-            this.product["ValorUnidadV"] = `${valor}`;
-            this.product["NombreUnidadV"] = `${valorFinal[1]}`;
-           
+            // tomar el articulos seleccionado
+            // tslint:disable-next-line: deprecation
+            this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
+                this.product = this.articulossvc.getArticuloDetalle().item;
+                if (this.product) {
+                    this.setMetaTags();
+                    this.cadenaString = this.product.name;
+                    this.valorProductoUnit = this.product.price.toString();
 
+                    // Define una expresión regular para encontrar el contenido entre paréntesis
+                    const regExp = /\(([^)]+)\)/;
 
-            // verificar si el articulo seleccioando existe en articulos
+                    // Ejecuta la expresión regular en cadenaString y guarda el resultado en matches
+                    const matches = regExp.exec(this.cadenaString);
 
-            if (this.product === undefined){
-                this.prueba = this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
-            }
+                    // Verifica si hay coincidencias encontradas por la expresión regular
+                    if (matches) {
+                        // Desestructura el contenido encontrado para obtener valorUnitario y nombreUnidadV
+                        const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
+
+                        // Calcular el valor por unidad dividiendo valorProductoUnit entre valorUnitario
+                        const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
+
+                        // Asigna el valor calculado y el nombre de la unidad al objeto product
+                        this.product["ValorUnidadV"] = `${valor}`;
+                        this.product["NombreUnidadV"] = nombreUnidadV;
+                    }
+
+                } else {
+                    this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
+                }
+
 
             this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
         });
@@ -94,7 +100,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.ArticulosSuscribe$.unsubscribe();
+        if(this.ArticulosSuscribe$) this.ArticulosSuscribe$.unsubscribe();
     }
 
     getProductoSlug(): string|null {
