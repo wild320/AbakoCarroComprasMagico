@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Product } from '../../../../shared/interfaces/product';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShopService } from '../../../../shared/api/shop.service';
-import { Observable } from 'rxjs';
 import { Link } from '../../../../shared/interfaces/link';
 
 // servicios
@@ -40,7 +38,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
             this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
                 this.product = this.articulossvc.getArticuloDetalle().item;
                 if (this.product) {
-                    this.setMetaTags();
+                    //this.setMetaTags();
                     this.cadenaString = this.product.name;
                     this.valorProductoUnit = this.product.price.toString();
 
@@ -67,6 +65,9 @@ export class PageProductComponent implements OnInit, OnDestroy {
                     this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
                 }
 
+                        if (this.product === undefined) {
+                            this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
+                        }
 
             this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticuloDetalle().breadcrumbs)));
         });
