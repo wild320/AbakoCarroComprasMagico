@@ -34,6 +34,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     featuredAttributes: ProductAttribute[] = [];
     quick
     islogged
+    quantity : number = 1;
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -71,7 +72,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         this.addingToCart = true;
         // tslint:disable-next-line: deprecation
         // tslint:disable-next-line: deprecation
-        this.cart.add(this.product, 1).subscribe({
+        this.cart.add(this.product, this.quantity).subscribe({
             complete: () => {
                 this.addingToCart = false;
                 this.cd.markForCheck();
@@ -134,6 +135,10 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    get maxCantidad(): (product: Item) => number {
+        return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
 
 }

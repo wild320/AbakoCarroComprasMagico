@@ -57,7 +57,19 @@
             </ng-container>
         </div>
         <div class="product-card__buttons">
-            <button class="btn btn-primary product-card__addtocart" type="button" appClick  [disabled]=" product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
+            <div class="product-card__addtocart btnquantyti">
+                
+                <app-input-number aria-label="Quantity" size="sm" [min]="1" [max]="maxCantidad(product)"
+                    [(ngModel)]="quantity"></app-input-number>
+                <button appClick
+                    [disabled]="product.availability === 'No Disponible' && !storeSvc.configuracionSitio.SuperarInventario"
+                    type="button" title="Add to cart" class="btn btn-primary btn-sm btn-svg-icon" [class.btn-loading]="addingToCart"
+                    (click)="addToCart()">
+                    <app-icon name="cart-16" size="16"></app-icon>
+                </button>
+            </div>
+            
+            <!-- <button class="btn btn-primary product-card__addtocart" type="button" appClick  [disabled]=" product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button> -->
             <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button" appClick (click)="addToCart()" [ngClass]="{'btn-loading': addingToCart}">Agregar al Carro</button>
             <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button" aria-label="Agregar a la Lista de Deseos" appClick (click)="addToWishlist()" [ngClass]="{'btn-loading': addingToWishlist, 'wishlist' : esFavorito}">
                 <app-icon [ngClass]="{'wishlist' : esFavorito}" name="wishlist-16" size="16"></app-icon>
