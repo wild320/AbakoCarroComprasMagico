@@ -10,26 +10,44 @@
                 <form [formGroup]="SuscribirseForm" (ngSubmit)="submitForm()" >
                     <div class="form-group">
                         <label>Tipo de identificación</label>
-                        <select id="checkout-country" formControlName="tipo" class="form-control form-control-select2" >
+                        <select id="checkout-country" formControlName="tipo" class="form-control form-control-select2" (change)="onTipoChange()">
                             <option value="" default selected>Selecciones su tipo de identificación</option>
                             <option value="NIT">Nit</option>
                             <option value="CEDULA">Cédula</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="profile-first-name">Nombres</label>
-                        <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Digite sus nombres">
-                    </div>
-
-                    <div class="form-group" >
-                        <label for="profile-last-name">Apellidos</label>
-                        <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Digite sus apellidos">
-                    </div>
+                    
 
                     <div class="form-group">
                         <label for="profile-identificacion">Identificación:</label>
                         <input type="text" formControlName="Identificacion" class="form-control" id="profile-identificacion" placeholder="Digite su identificación">
                     </div>
+
+                    <div *ngIf="tipo.value === 'CEDULA'">
+                        
+                        <div class="form-group">
+                            <label for="profile-first-name">Nombres</label>
+                            <input type="text" formControlName="Nombres" class="form-control" id="profile-first-name" placeholder="Digite sus nombres">
+                        </div>
+
+                        <div class="form-group" >
+                            <label for="profile-last-name">Apellidos</label>
+                            <input type="text" formControlName="Apellidos" class="form-control" id="profile-last-name" placeholder="Digite sus apellidos">
+                        </div>
+                    </div>
+
+                    <div *ngIf="tipo.value === 'NIT'">
+                        <div class="form-group">
+                          <label for="profile-razon-social">Razón Social</label>
+                          <input
+                            type="text"
+                            formControlName="RazonSocial"
+                            class="form-control"
+                            id="profile-razon-social"
+                            placeholder="Digite su razón social"
+                          />
+                        </div>
+                      </div>
 
                     <div class="form-group">
                         <label for="profile-email">Correo Electrónico</label>
@@ -43,12 +61,12 @@
 
                     <div class="form-group">
                         <label for="profile-usuario">Usuario</label>
-                        <input type="text" formControlName="Usuario" class="form-control" id="profile-usuario" placeholder="Digite su usuario">
+                        <input type="text" formControlName="Usuario" class="form-control" id="profile-usuario" placeholder="Digite su usuario (3 caracteres min.)">
                     </div>
 
                     <div class="form-group">
                         <label for="profile-contrasena">Contraseña</label>
-                        <input type="text" formControlName="Contrasena" class="form-control" id="profile-contrasena" placeholder="Digite su contraseña">
+                        <input type="text" formControlName="Contrasena" class="form-control" id="profile-contrasena" placeholder="Digite su contraseña (3 caracteres min.)">
                     </div>
 
                     <div class="form-group">

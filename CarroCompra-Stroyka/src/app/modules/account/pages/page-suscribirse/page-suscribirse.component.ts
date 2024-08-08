@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
-import {  ActivatedRoute, Router,  Params } from '@angular/router';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // servicios
 import { NegocioService } from '../../../../shared/services/negocio.service';
-import {UsuarioService} from '../../../../shared/services/usuario.service';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
 
 // constantes
 import { Crutas } from 'src/data/contantes/cRutas';
 
 // utils
-import {UtilsTexto} from 'src/app/shared/utils/UtilsTexto';
+import { UtilsTexto } from 'src/app/shared/utils/UtilsTexto';
 
 // modelos
-import {CrearClienteCarroRequest} from '../../../../../data/modelos/seguridad/CrearClienteCarroRequest';
-import {CrearClienteCarroRequestv1} from '../../../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
-import {Mensaje} from '../../../../../data/modelos/negocio/Mensaje';
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 import { StoreService } from 'src/app/shared/services/store.service';
+import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
+import { Mensaje } from '../../../../../data/modelos/negocio/Mensaje';
+import { CrearClienteCarroRequest } from '../../../../../data/modelos/seguridad/CrearClienteCarroRequest';
+import { CrearClienteCarroRequestv1 } from '../../../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
 
 @Component({
   selector: 'app-page-suscribirse',
@@ -38,21 +38,22 @@ export class PageSuscribirseComponent implements OnInit {
   private objCrearClientev1 = new CrearClienteCarroRequestv1();
   private MsgRespuesta = new Mensaje();
   private usuarioingresado: string;
+  private clienteDirecto: boolean = false;
 
 
   constructor(private fb: UntypedFormBuilder,
-              private usuariossvc: UsuarioService,
-              private negociosvc: NegocioService,
-              private utils: UtilsTexto,
-              private rutaActiva: ActivatedRoute,
-              public storeSvc: StoreService,
-              private router: Router) {
+    private usuariossvc: UsuarioService,
+    private negociosvc: NegocioService,
+    private utils: UtilsTexto,
+    private rutaActiva: ActivatedRoute,
+    public storeSvc: StoreService,
+    private router: Router) {
 
-      //this.usuarioingresado = atob (this.rutaActiva.snapshot.params.usrsuscribir);
+    //this.usuarioingresado = atob (this.rutaActiva.snapshot.params.usrsuscribir);
 
-      this.SetiarMensajes();
+    this.SetiarMensajes();
 
-   }
+  }
 
   ngOnInit(): void {
 
@@ -63,43 +64,51 @@ export class PageSuscribirseComponent implements OnInit {
       tipo: new UntypedFormControl('', Validators.compose([Validators.required])),
       Nombres: new UntypedFormControl('', Validators.compose([Validators.required])),
       Apellidos: new UntypedFormControl('', Validators.compose([Validators.required])),
+      RazonSocial: new UntypedFormControl(''),
       Identificacion: new UntypedFormControl('', Validators.compose([Validators.required])),
       Correo: new UntypedFormControl('', Validators.compose([Validators.required])),
       Telefono: new UntypedFormControl('', Validators.compose([Validators.required])),
-      Usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
-      Contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Usuario: new UntypedFormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
+      Contrasena: new UntypedFormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
       recibirpromociones: new UntypedFormControl(true, []),
       aceptopoliticas: new UntypedFormControl(false, []),
-     });
+    });
 
     this.SuscribirseForm.valueChanges.subscribe(query => {
-      if (this.error){ this.error = false; }
+      if (this.error) { this.error = false; }
     });
 
     this.titulo = this.negociosvc.configuracion.NombreCliente;
 
     // cargar datos quw vienen de la pantalla anterior
     const objectousr = JSON.parse(this.usuarioingresado);
-
-    console.log(objectousr);
     this.tipo.setValue(objectousr.tipo)
     this.Identificacion.setValue(objectousr.identificacion);
     this.Nombres.setValue(objectousr.nombres);
-    this.Apellidos.setValue( objectousr.apellidos);
+    this.Apellidos.setValue(objectousr.apellidos);
+    
+    this.clienteDirecto = this.storeSvc.configuracionSitio.CreacionDirectaClientes;
 
   }
 
-  submitForm(){
+  submitForm() {
 
     this.loading = true;
+    this.SetiarMensajes();
 
-    if (this.EsValidoFormularioRegistro()){
+    if (this.EsValidoFormularioRegistro()) {
 
-      this.CargarDatos();
+      if(!this.clienteDirecto) {
+        this.CargarDatos();
+
+      } else {
+        this.CargarDatosv1();
+      }
+
 
       this.manejarCreacionCliente()
 
-    } else{
+    } else {
 
       this.error = true;
       this.loading = false;
@@ -111,7 +120,7 @@ export class PageSuscribirseComponent implements OnInit {
 
   async manejarCreacionCliente() {
     try {
-      const config = !this.storeSvc.configuracionSitio.CreacionDirectaClientes
+      const config = !this.clienteDirecto
         ? await this.usuariossvc.CrearEditarClienteV1(this.objCrearClientev1)
         : await this.usuariossvc.CrearClienteCarroCompras(this.objCrearCliente);
 
@@ -126,73 +135,69 @@ export class PageSuscribirseComponent implements OnInit {
       console.error(error);
     }
   }
-  EsValidoFormularioRegistro(): boolean{
-
-
-    if (this.tipo.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en tipo de identificación';
-      return false;
+  EsValidoFormularioRegistro(): boolean {
+    // Validaciones específicas según el tipo de identificación
+    if (this.tipo.value === 'CEDULA') {
+      if (this.Nombres.invalid) {
+        this.mensajerespuestaerror = 'Debe ingresar información válida en Nombres';
+        return false;
+      }
+      if (this.Apellidos.invalid) {
+        this.mensajerespuestaerror = 'Debe ingresar información válida en Apellidos';
+        return false;
+      }
+    } else if (this.tipo.value === 'NIT') {
+      if (this.RazonSocial.invalid) {
+        this.mensajerespuestaerror = 'Debe ingresar información válida en Razón Social';
+        return false;
+      }
     }
 
-    if (this.Nombres.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Nombres';
+    // Validaciones generales
+    if (this.tipo.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en tipo de identificación';
       return false;
     }
-
-    if (this.Apellidos.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Apellidos';
+    if (this.Identificacion.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en identificación';
       return false;
     }
-
-    if (this.Identificacion.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en identificación';
+    if (this.Correo.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en Correo Electrónico';
       return false;
     }
-
-    if (this.Correo.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Correo Electrónico';
+    if (this.Telefono.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en Teléfono';
       return false;
     }
-
-    if (this.Telefono.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Telefono';
+    if (this.Usuario.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en Usuario';
       return false;
     }
-
-    if (this.Usuario.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Usuario';
+    if (this.Contrasena.invalid) {
+      this.mensajerespuestaerror = 'Debe ingresar información válida en Contraseña';
       return false;
     }
-
-    if (this.Contrasena.invalid){
-      this.mensajerespuestaerror = 'Debe ingresar información valida en Contrasena';
+    if (this.aceptopoliticas.value === false) {
+      this.mensajerespuestaerror = 'Debe aceptar términos y condiciones';
       return false;
     }
-
-    // validar Terminos y condiciones
-    if (this.aceptopoliticas.value === false){
-      this.mensajerespuestaerror = 'Debe aceptar terminos y condiciones';
+    if (!this.utils.EsCorreoValido(this.Correo.value)) {
+      this.mensajerespuestaerror = 'El Correo Electrónico es inválido';
       return false;
     }
-
-    if (!this.utils.EsCorreoValido(this.Correo.value) ){
-      this.mensajerespuestaerror = 'El Correo Electrónico es invalido';
-      return false;
-    }
-
     return true;
-
   }
 
-  SetiarMensajes(){
+  SetiarMensajes() {
     this.mensajerespuestaexito = '';
     this.mensajerespuestaerror = '';
   }
 
-  CargarDatos(){
-   this.objCrearCliente.tipoIdentificacion = this.tipo.value;
-    this.objCrearCliente.Nombres = this.Nombres.value;
-    this.objCrearCliente.Apellidos = this.Apellidos.value;
+  CargarDatos() {
+    this.objCrearCliente.tipoIdentificacion = this.tipo.value;
+    this.objCrearCliente.Nombres = this.tipo.value == 'CEDULA' ? this.Nombres.value : this.RazonSocial.value;
+    this.objCrearCliente.Apellidos = this.tipo.value == 'CEDULA' ? this.Apellidos.value : '';
     this.objCrearCliente.Identificacion = this.Identificacion.value;
     this.objCrearCliente.Correo = this.Correo.value;
     this.objCrearCliente.Telefono = this.Telefono.value;
@@ -203,13 +208,29 @@ export class PageSuscribirseComponent implements OnInit {
 
   }
 
-  CargarDatosv1(){
-   this.objCrearClientev1.mail = this.Correo.value;
-   this.objCrearClientev1.tel =  this.Telefono.value;
-   this.objCrearClientev1.idTpdoc = this.tipo.value
-   this.objCrearClientev1.nmbCmn = this.Nombres.value
-   this.objCrearClientev1.aplCtt = this.Apellidos.value;
-   }
+  CargarDatosv1() {
+    this.objCrearClientev1.mail = this.Correo.value;
+    this.objCrearClientev1.tel = this.Telefono.value;
+    this.objCrearClientev1.idTpdoc = this.tipo.value
+    this.objCrearClientev1.nmbCmn = this.Nombres.value
+    this.objCrearClientev1.aplCtt = this.Apellidos.value;
+  }
+
+  onTipoChange(): void {
+    const tipoValue = this.tipo.value;
+    if (tipoValue === 'CEDULA') {
+      this.SuscribirseForm.get('Nombres').setValidators([Validators.required]);
+      this.SuscribirseForm.get('Apellidos').setValidators([Validators.required]);
+      this.SuscribirseForm.get('RazonSocial').clearValidators();
+    } else if (tipoValue === 'NIT') {
+      this.SuscribirseForm.get('Nombres').clearValidators();
+      this.SuscribirseForm.get('Apellidos').clearValidators();
+      this.SuscribirseForm.get('RazonSocial').setValidators([Validators.required]);
+    }
+    this.SuscribirseForm.get('Nombres').updateValueAndValidity();
+    this.SuscribirseForm.get('Apellidos').updateValueAndValidity();
+    this.SuscribirseForm.get('RazonSocial').updateValueAndValidity();
+  }
 
   get tipo() { return this.SuscribirseForm.get('tipo'); }
   get Identificacion() { return this.SuscribirseForm.get('Identificacion'); }
@@ -221,6 +242,7 @@ export class PageSuscribirseComponent implements OnInit {
   get Contrasena() { return this.SuscribirseForm.get('Contrasena'); }
   get recibirpromociones() { return this.SuscribirseForm.get('recibirpromociones'); }
   get aceptopoliticas() { return this.SuscribirseForm.get('aceptopoliticas'); }
+  get RazonSocial() { return this.SuscribirseForm.get('RazonSocial'); }
 
 
 }
