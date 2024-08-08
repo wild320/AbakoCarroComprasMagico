@@ -21,7 +21,9 @@ import { ArticulosService } from '../../../shared/services/articulos.service';
 
 // Modelos
 import { Products } from '../../../../data/modelos/articulos/DetalleArticulos';
-import { Filters } from '../../../../data/modelos/articulos/filters';
+import { Filters } from '../../../../data/modelos/articulos/Filters';
+import { StoreService } from 'src/app/shared/services/store.service';
+import { map, tap } from 'rxjs/operators';
 
 
 interface FormFilterValues {
@@ -46,6 +48,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     ArticulosSuscribe$: any;
     rightToLeft = false;
     Productos = new Products();
+    showFilterMarcas: boolean = false;
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
@@ -54,24 +57,25 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         public root: RootService,
         public pageCategory: PageCategoryService,
         public articulossvc: ArticulosService,
+        public storeSv: StoreService
     ) {
 
         this.rightToLeft = this.direction.isRTL();
+        this.showFilterMarcas = this.storeSv.configuracionSitio.VerFiltroMarcas
 
     }
 
     ngOnInit(): void {
 
         // recuperar todos los filtros
-        this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().subscribe(filtros => {
-
-            this.filters = filtros;            
-
-            this.filtersForm = this.makeFiltersForm(filtros);
-
-            this.UpdateValuesSeleted();
-
-        });
+        this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().pipe(
+            map(filtros => this.showFilterMarcas ? filtros : filtros.filter(filtro => filtro.name !== 'Marca')),
+            tap(filtros => {
+                this.filters = filtros;
+                this.filtersForm = this.makeFiltersForm(filtros);
+                this.UpdateValuesSeleted();
+            })
+        ).subscribe();       
 
     }
 
@@ -155,8 +159,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.destroy$.next();        this.destroy$.complete();
         this.ArticulosSuscribe$.unsubscribe();
     }
 

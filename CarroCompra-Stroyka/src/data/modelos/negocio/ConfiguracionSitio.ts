@@ -32,6 +32,9 @@ export class ConfiguracionSitio {
     AgenciaDefaul: string;
     AsesorPredeterminado: number;
     VerBontonAplicarCupon: boolean;
+    VerFiltroMarcas: boolean;
+    VerMarcaDetalleProducto: boolean;
+    MensajePersonalizadoPago: string;
   }
 
 

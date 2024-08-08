@@ -16,6 +16,7 @@ import {UtilsTexto} from '../../../../shared/utils/UtilsTexto';
 
 // Contantes
 import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
 
@@ -33,6 +34,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
     public formSubmitted: boolean = false;
+    paymenthText: SafeHtml;
 
     constructor(
         private fb: UntypedFormBuilder,
@@ -43,7 +45,8 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         private router: Router,
         public usuariosvc: UsuarioService,
         public Store: StoreService,
-        private Pedidosvc: PedidosService 
+        private Pedidosvc: PedidosService ,
+        private sanitizer: DomSanitizer
     ) {
 
         this.loading = false;
@@ -82,6 +85,8 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
                 this.router.navigate(['../cart'], {relativeTo: this.route}).then();
             }
         });
+
+        this.paymenthText = this.sanitizer.bypassSecurityTrustHtml(this.Store.configuracionSitio.MensajePersonalizadoPago);
     }
 
     ngOnDestroy(): void {

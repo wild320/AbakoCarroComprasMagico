@@ -57,7 +57,7 @@
 
                 </li>
                 <li>Descuento:{{ product.discountPerc | percentPipe }}</li>
-                <li>Marca: <a href="" appClick>{{product.marca | titlecase}}</a></li>
+                <li *ngIf="storeSvc.configuracionSitio.VerMarcaDetalleProducto">Marca: <a href="" appClick>{{product.marca | titlecase}}</a></li>
                 <li>SKU: {{product.sku}}</li>
                 <li>Presentación: {{product.descUM | titlecase}}</li>
                 <li *ngIf="product.ValorUnidadV"> Valor por {{product.NombreUnidadV}}: {{product.ValorUnidadV | currencyFormat:'$'}}
