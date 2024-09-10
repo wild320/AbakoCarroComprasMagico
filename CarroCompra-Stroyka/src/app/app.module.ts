@@ -1,4 +1,4 @@
-import { /*LOCALE_ID, */NgModule, APP_INITIALIZER } from '@angular/core';
+import { /*LOCALE_ID, */NgModule, APP_INITIALIZER, PLATFORM_ID } from '@angular/core';
 // import { registerLocaleData } from '@angular/common';
 // import localeIt from '@angular/common/locales/it';
 //
@@ -45,6 +45,7 @@ import { BannerService } from './shared/services/banner.service';
 import {UtilsTexto} from './shared/utils/UtilsTexto';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 // Configuracion inicial
 export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService, banner:  BannerService) {
@@ -105,13 +106,16 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
             multi: true,
             deps: [NegocioService, StoreService, UsuarioService, BannerService]
             },
-            { provide: 'BASE_URL', useFactory: getBaseUrl },
+            { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [PLATFORM_ID] },
         ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
 
-export function getBaseUrl() {
-
-    return document.getElementsByTagName('base')[0].href;
-}
+export function getBaseUrl(platformId: Object) {
+    if (isPlatformBrowser(platformId)) {
+      return document.getElementsByTagName('base')[0]?.href || '/';
+    } else {
+      return '/'; // Provide a default value or handle it as needed for server-side
+    }
+  }

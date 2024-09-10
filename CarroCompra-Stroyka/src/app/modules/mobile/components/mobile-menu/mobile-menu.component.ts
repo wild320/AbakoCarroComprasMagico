@@ -100,19 +100,28 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
 
     }
 
-    CargarSitios(){
-
-        // asignar los menus de pagisnas dinamicamente
-        const index = this.links.findIndex(x => x.label === 'Sitios');
-
-        this.paginaService.paginas.forEach((element,  array) => {
-
-            if (element.Activo){
-                this.links[index].children.push({type: 'link', label: element.label,  url:  element.url});
-            }
-        });
-
+    CargarSitios(): void {
+        // Find the index of the 'Sitios' menu item
+        const sitiosIndex = this.links.findIndex(link => link.label === 'Sitios');
+        
+        // Ensure the 'Sitios' menu item exists before modifying it
+        if (sitiosIndex !== -1) {
+            const sitiosMenu = this.links[sitiosIndex];
+            
+            // Clear any existing children if necessary
+            sitiosMenu.children = [];
+    
+            // Populate the menu with active pages
+            this.paginaService.paginas.forEach(page => {
+                if (page.Activo) {
+                    sitiosMenu.children.push({ type: 'link', label: page.label, url: page.url });
+                }
+            });
+        } else {
+            console.error('Menu item with label "Sitios" not found.');
+        }
     }
+    
 
     CargarCuenta (CargarUsuario: boolean){
 

@@ -1,58 +1,45 @@
-import { Injectable } from '@angular/core';
-import * as CryptoJS from 'crypto-js';
-
-const SecureStorage = require('secure-web-storage');
-const SECRET_KEY = '4b4k001';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  private platformId: Object;
+  secureStorage: Storage;
+  secureStorageSession: Storage;
 
-  constructor() { }
-
-  public secureStorage = new SecureStorage(localStorage, {
-    hash: function hash(key) {
-      key = CryptoJS.SHA256(key, SECRET_KEY);
-
-      return key.toString();
-    },
-    encrypt: function encrypt(data) {
-      data = CryptoJS.AES.encrypt(data, SECRET_KEY);
-
-      data = data.toString();
-
-      return data;
-    },
-    decrypt: function decrypt(data) {
-      data = CryptoJS.AES.decrypt(data, SECRET_KEY);
-
-      data = data.toString(CryptoJS.enc.Utf8);
-
-      return data;
+  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+    this.platformId = platformId;
+    if (isPlatformBrowser(this.platformId)) {
+      this.secureStorage = localStorage;
+      this.secureStorageSession = sessionStorage;
     }
-  });
+  }
 
-  public secureStorageSession = new SecureStorage(sessionStorage, {
-    hash: function hash(key) {
-      key = CryptoJS.SHA256(key, SECRET_KEY);
-
-      return key.toString();
-    },
-    encrypt: function encrypt(data) {
-      data = CryptoJS.AES.encrypt(data, SECRET_KEY);
-
-      data = data.toString();
-
-      return data;
-    },
-    decrypt: function decrypt(data) {
-      data = CryptoJS.AES.decrypt(data, SECRET_KEY);
-
-      data = data.toString(CryptoJS.enc.Utf8);
-
-      return data;
+  setItem(key: string, value: any) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.secureStorage.setItem(key, JSON.stringify(value));
     }
-  });
+  }
 
+  getItem(key: string): any {
+    if (isPlatformBrowser(this.platformId)) {
+      const item = this.secureStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    }
+    return null;
+  }
+
+  removeItem(key: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.secureStorage.removeItem(key);
+    }
+  }
+
+  clear() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.secureStorage.clear();
+    }
+  }
 }

@@ -8,29 +8,27 @@ export class LocalService {
 
   constructor(private storageService: StorageService) { }
 
-  // Set the json data to local
+  // Set the JSON data to local
   setJsonValue(key: string, value: any) {
-    this.storageService.secureStorage.setItem(key, value);
+    this.storageService.setItem(key, value);
   }
-  // Get the json value from local
-  getJsonValue(key: string) {
-    return this.storageService.secureStorage.getItem(key);
 
+  // Get the JSON value from local
+  getJsonValue(key: string) {
+    return this.storageService.getItem(key);
   }
 
   setJsonValueSession(key: string, value: any) {
-    this.storageService.secureStorageSession.setItem(key, value);
+    this.storageService.setItem(key, value);
   }
-  // Get the json value from local
+
+  // Get the JSON value from session
   getJsonValueSession(key: string) {
-    return this.storageService.secureStorageSession.getItem(key);
-
+    return this.storageService.getItem(key);
   }
 
-
-  
-  // Clear the local
+  // Clear the local storage
   clearToken() {
-    return this.storageService.secureStorage.clear();
+    this.storageService.clear();
   }
 }

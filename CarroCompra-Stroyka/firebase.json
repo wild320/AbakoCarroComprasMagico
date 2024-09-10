@@ -1,32 +1,14 @@
 {
   "hosting": {
-    "public": "dist/AbakoCarroCompras",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "dist/stroyka/browser",
     "rewrites": [
       {
-        "source": "/sitemap1.xml",
-        "destination": "/assets/sitemaps/sitemap1.xml"
-      },
-      {
-        "source": "/sitemap2.xml",
-        "destination": "/assets/sitemaps/sitemap2.xml"
-      },
-      {
-        "source": "/sitemap3.xml",
-        "destination": "/assets/sitemaps/sitemap3.xml"
-      },
-      {
-        "source": "/sitemapindex.xml",
-        "destination": "/assets/sitemaps/sitemapindex.xml"
-      },
-      {
         "source": "**",
-        "destination": "/index.html"
+        "function": "ssr"
       }
     ]
+  },
+  "functions": {
+    "source": "functions"
   }
 }
