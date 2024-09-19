@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
@@ -17,7 +17,7 @@ import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 })
 export class PageProfileComponent implements OnInit {
 
-    public EditarPerfilForm: FormGroup;
+    public EditarPerfilForm: UntypedFormGroup;
     private correo: string;
     private telefono: string;
     public mensajerespuestaexito: string;
@@ -26,7 +26,7 @@ export class PageProfileComponent implements OnInit {
 
     constructor(public usuariosvc: UsuarioService,
                 private utils: UtilsTexto,
-                private fb: FormBuilder) {
+                private fb: UntypedFormBuilder) {
 
         this.loading = false;
 
@@ -38,11 +38,11 @@ export class PageProfileComponent implements OnInit {
     ngOnInit() {
 
         this.EditarPerfilForm = this.fb.group({
-         Nombres: new FormControl('', Validators.compose([Validators.required])),
-         Apellidos: new FormControl('', Validators.compose([Validators.required])),
-         Identificacion: new FormControl('', Validators.compose([Validators.required])),
-         Correo: new FormControl('', Validators.compose([Validators.required])),
-         Telefono: new FormControl('', Validators.compose([Validators.required])),
+         Nombres: new UntypedFormControl('', Validators.compose([Validators.required])),
+         Apellidos: new UntypedFormControl('', Validators.compose([Validators.required])),
+         Identificacion: new UntypedFormControl('', Validators.compose([Validators.required])),
+         Correo: new UntypedFormControl('', Validators.compose([Validators.required])),
+         Telefono: new UntypedFormControl('', Validators.compose([Validators.required])),
         });
 
         this.EstaLogueadoUsuario();

@@ -12,7 +12,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, Subscription, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export type CategoryWithDepth = Category & { depth: number };
 export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     private destroy$: Subject<void> = new Subject<void>();
 
-    form: FormGroup;
+    form: UntypedFormGroup;
 
     p: number = 1;
 
@@ -69,7 +69,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     addedToCartProducts: Item[] = [];
 
 
-    quantity: FormControl = new FormControl(1);
+    quantity: UntypedFormControl = new UntypedFormControl(1);
 
     @Input() location: SearchLocation;
 
@@ -101,7 +101,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     constructor(
         @Inject(DOCUMENT) private document: Document,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private elementRef: ElementRef,
         private zone: NgZone,
         private cart: CartService,

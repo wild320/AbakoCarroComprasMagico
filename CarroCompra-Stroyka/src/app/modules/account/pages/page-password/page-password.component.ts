@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
@@ -14,13 +14,13 @@ import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 })
 export class PagePasswordComponent implements OnInit {
 
-    public EditarContrasenaForm: FormGroup;
+    public EditarContrasenaForm: UntypedFormGroup;
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
     public loading: boolean;
 
     constructor(public usuariosvc: UsuarioService,
-                private fb: FormBuilder) {
+                private fb: UntypedFormBuilder) {
 
         this.loading = false;
 
@@ -31,9 +31,9 @@ export class PagePasswordComponent implements OnInit {
     ngOnInit() {
 
         this.EditarContrasenaForm = this.fb.group({
-            ContrasenaActual: new FormControl('', Validators.compose([Validators.required])),
-            ContrasenaNueva: new FormControl('', Validators.compose([Validators.required])),
-            ContrasenaRepetir: new FormControl('', Validators.compose([Validators.required])),
+            ContrasenaActual: new UntypedFormControl('', Validators.compose([Validators.required])),
+            ContrasenaNueva: new UntypedFormControl('', Validators.compose([Validators.required])),
+            ContrasenaRepetir: new UntypedFormControl('', Validators.compose([Validators.required])),
 
         });
 

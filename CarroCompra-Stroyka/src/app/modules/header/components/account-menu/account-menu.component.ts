@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import { Router } from '@angular/router';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
@@ -21,7 +21,7 @@ import { Crutas } from 'src/data/contantes/cRutas';
 export class AccountMenuComponent implements OnInit{
     @Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
 
-    public ingresoForm: FormGroup;
+    public ingresoForm: UntypedFormGroup;
     usuariologueado = false;
     UsrLogin: Observable<LoginClienteResponse>;
     public mensajeerror: string;
@@ -29,7 +29,7 @@ export class AccountMenuComponent implements OnInit{
     public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
 
     constructor(public usuariosvc: UsuarioService,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private router: Router
                 ) {
 
@@ -39,9 +39,9 @@ export class AccountMenuComponent implements OnInit{
     ngOnInit() {
 
         this.ingresoForm = this.fb.group({
-          usuario: new FormControl('', Validators.compose([Validators.required])),
-          contrasena: new FormControl('', Validators.compose([Validators.required])),
-          recordar: new FormControl(false, [])
+          usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
+          contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
+          recordar: new UntypedFormControl(false, [])
         });
 
         this.InicializarValores();

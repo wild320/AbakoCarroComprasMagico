@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 import {  ActivatedRoute, Router,  Params } from '@angular/router';
 
 // servicios
@@ -26,7 +26,7 @@ import { StoreService } from 'src/app/shared/services/store.service';
 })
 export class PageSuscribirseComponent implements OnInit {
 
-  public SuscribirseForm: FormGroup;
+  public SuscribirseForm: UntypedFormGroup;
   public mensajerespuestaerror: string;
   public mensajerespuestaexito: string;
   public loading: boolean;
@@ -40,7 +40,7 @@ export class PageSuscribirseComponent implements OnInit {
   private usuarioingresado: string;
 
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private usuariossvc: UsuarioService,
               private negociosvc: NegocioService,
               private utils: UtilsTexto,
@@ -60,16 +60,16 @@ export class PageSuscribirseComponent implements OnInit {
 
 
     this.SuscribirseForm = this.fb.group({
-      tipo: new FormControl('', Validators.compose([Validators.required])),
-      Nombres: new FormControl('', Validators.compose([Validators.required])),
-      Apellidos: new FormControl('', Validators.compose([Validators.required])),
-      Identificacion: new FormControl('', Validators.compose([Validators.required])),
-      Correo: new FormControl('', Validators.compose([Validators.required])),
-      Telefono: new FormControl('', Validators.compose([Validators.required])),
-      Usuario: new FormControl('', Validators.compose([Validators.required])),
-      Contrasena: new FormControl('', Validators.compose([Validators.required])),
-      recibirpromociones: new FormControl(true, []),
-      aceptopoliticas: new FormControl(false, []),
+      tipo: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Nombres: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Apellidos: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Identificacion: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Correo: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Telefono: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
+      recibirpromociones: new UntypedFormControl(true, []),
+      aceptopoliticas: new UntypedFormControl(false, []),
      });
 
     this.SuscribirseForm.valueChanges.subscribe(query => {
