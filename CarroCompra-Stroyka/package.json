@@ -36,7 +36,6 @@
     "bootstrap": "^4.5.0",
     "crypto-js": "^4.2.0",
     "express": "^4.19.2",
-    "ng upda": "^11.2.1",
     "ng-lazyload-image": "^9.1.0",
     "ngx-bootstrap": "^5.6.1",
     "ngx-image-zoom": "^0.6.0",
