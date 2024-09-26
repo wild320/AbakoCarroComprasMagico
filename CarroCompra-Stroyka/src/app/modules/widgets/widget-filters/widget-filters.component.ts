@@ -21,9 +21,9 @@ import { ArticulosService } from '../../../shared/services/articulos.service';
 
 // Modelos
 import { Products } from '../../../../data/modelos/articulos/DetalleArticulos';
-import { Filters } from '../../../../data/modelos/articulos/Filters';
 import { StoreService } from 'src/app/shared/services/store.service';
 import { map, tap } from 'rxjs/operators';
+import { Filters } from 'src/data/modelos/articulos/filters';
 
 
 interface FormFilterValues {
