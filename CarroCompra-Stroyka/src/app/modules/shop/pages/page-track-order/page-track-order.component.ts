@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import { UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -21,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PageTrackOrderComponent {
 
     public showSteps: boolean = false;
-    public TrakingForm: FormGroup;
+    public TrakingForm: UntypedFormGroup;
     public loading: boolean;
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
@@ -31,7 +31,7 @@ export class PageTrackOrderComponent {
 
     public Seguimiento: PedidoSeguimientoResponse[];
 
-    constructor(private fb: FormBuilder,
+    constructor(private fb: UntypedFormBuilder,
         private Pedidosvc: PedidosService, 
         private activatedRoute: ActivatedRoute,
           private router: Router
@@ -81,8 +81,8 @@ export class PageTrackOrderComponent {
     private inicializarFormulario(){
 
         this.TrakingForm = this.fb.group({
-            Pedido: new FormControl('', Validators.compose([Validators.required])),
-            Mail: new FormControl('', Validators.compose([Validators.required])),
+            Pedido: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Mail: new UntypedFormControl('', Validators.compose([Validators.required])),
 
           });
   

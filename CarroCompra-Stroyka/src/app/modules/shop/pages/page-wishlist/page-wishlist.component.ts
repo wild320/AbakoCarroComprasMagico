@@ -6,7 +6,7 @@ import { RootService } from '../../../../shared/services/root.service';
 // modelos
 import { Item } from '../../../../../data/modelos/articulos/Items';
 import { StoreService } from 'src/app/shared/services/store.service';
-import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,7 +17,7 @@ import { Observable } from 'rxjs';
 export class PageWishlistComponent implements OnInit {
     addedToCartProducts: Item[] = [];
     removedProducts: Item[] = [];
-    form: FormGroup;
+    form: UntypedFormGroup;
     items$: Observable<Item[]>;
 
     constructor(
@@ -25,7 +25,7 @@ export class PageWishlistComponent implements OnInit {
         public wishlist: WishlistService,
         public cart: CartService,
         public storeSvc: StoreService,
-        private fb: FormBuilder
+        private fb: UntypedFormBuilder
     ) { }
 
     ngOnInit() {
@@ -69,7 +69,7 @@ export class PageWishlistComponent implements OnInit {
         return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
 
-    get items(): FormArray {
-        return this.form.get('items') as FormArray;
+    get items(): UntypedFormArray {
+        return this.form.get('items') as UntypedFormArray;
     }
 }

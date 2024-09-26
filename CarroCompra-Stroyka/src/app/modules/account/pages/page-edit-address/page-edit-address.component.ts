@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
@@ -21,7 +21,7 @@ import { GuardarDireccion } from 'src/data/modelos/negocio/GuardarDireccion';
 })
 export class PageEditAddressComponent implements OnInit  {
 
-    public EditarDireccionForm: FormGroup;
+    public EditarDireccionForm: UntypedFormGroup;
     public mensajerespuestaexito: string;
     public mensajerespuestaerror: string;
     public loading: boolean;
@@ -33,7 +33,7 @@ export class PageEditAddressComponent implements OnInit  {
     constructor(public usuariosvc: UsuarioService,
                 private rutaActiva: ActivatedRoute,
                 private router: Router,
-                private fb: FormBuilder){
+                private fb: UntypedFormBuilder){
 
         this.loading = false;
         this.ciudadesDepartamento = [];
@@ -45,15 +45,15 @@ export class PageEditAddressComponent implements OnInit  {
     ngOnInit() {
 
         this.EditarDireccionForm = this.fb.group({
-            Pais: new FormControl('', Validators.compose([Validators.required])),
-            Departamento: new FormControl('', Validators.compose([Validators.required])),
-            Ciudad: new FormControl('', Validators.compose([Validators.required])),
-            Barrio: new FormControl('', Validators.compose([Validators.required])),
-            Prefijo: new FormControl('', Validators.compose([Validators.required])),
-            CalleCarrera: new FormControl('', Validators.compose([Validators.required])),
-            Direccion: new FormControl('', Validators.compose([Validators.required])),
-            Interior: new FormControl(''),
-            CodigoPostal: new FormControl(''),
+            Pais: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Departamento: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Ciudad: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Barrio: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Prefijo: new UntypedFormControl('', Validators.compose([Validators.required])),
+            CalleCarrera: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Direccion: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Interior: new UntypedFormControl(''),
+            CodigoPostal: new UntypedFormControl(''),
 
         });
 

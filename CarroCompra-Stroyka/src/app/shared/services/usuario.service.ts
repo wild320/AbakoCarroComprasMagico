@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -36,6 +36,7 @@ import { Persona } from '../../../data/modelos/seguridad/CRUDPersonaExistente';
 import { MaestroCiudad } from '../../../data/modelos/negocio/Ciudades';
 import { GuardarDireccion } from '../../../data/modelos/negocio/GuardarDireccion';
 import { StoreService } from './store.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,7 @@ export class UsuarioService {
         private negocio: NegocioService,
         private httpClient: HttpClient,
         private localService: LocalService,
+        @Inject(PLATFORM_ID) private platformId: Object,
         ) {
 
         this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
@@ -602,24 +604,22 @@ export class UsuarioService {
     }
   }
 
-  cargarUsuarioStorage(){
+  cargarUsuarioStorage() {
+    // if (isPlatformBrowser(this.platformId)) {
+    //   // Only execute this code on the browser
+    //   const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
 
-    // validar que tenga usuario en el storage y lo logueamos
-
-    const usrlogueado = this.localService.getJsonValue(this.token)??this.localService.getJsonValueSession(this.token);
-
-    if (usrlogueado)   {
-
-      const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
-      this.Idempresa = usrlogueado.IdEmp;
-      this.Loguin(RestaurarSesion);
-
-    }
-    else{
-      this.setEstadoLoguin$(false);
-      localStorage.setItem("isLogue", "false");
-    }
-
+    //   if (usrlogueado) {
+    //     const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
+    //     this.Idempresa = usrlogueado.IdEmp;
+    //     this.Loguin(RestaurarSesion);
+    //   } else {
+    //     this.setEstadoLoguin$(false);
+    //     localStorage.setItem("isLogue", "false");
+    //   }
+    // } else {
+    //   // Handle server-side logic if necessary
+    // }
   }
 
   loguout(){

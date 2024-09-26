@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 import {  Router } from '@angular/router';
 
 // servicios
@@ -22,7 +22,7 @@ import {EnviarUsuarioRequest} from '../../../../../data/modelos/seguridad/Enviar
 })
 export class PageRecuperarContrasenaComponent implements OnInit {
 
-  public RecuperarForm: FormGroup;
+  public RecuperarForm: UntypedFormGroup;
   public mensajerespuestaerror: string;
   public mensajerespuestaexito: string;
   public loading: boolean;
@@ -33,7 +33,7 @@ export class PageRecuperarContrasenaComponent implements OnInit {
   private EnviarUsuario = new EnviarUsuarioRequest();
 
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private usuariossvc: UsuarioService,
               private utils: UtilsTexto,
               private router: Router) {
@@ -48,9 +48,9 @@ export class PageRecuperarContrasenaComponent implements OnInit {
     this.loadingEnviado = false;
 
     this.RecuperarForm = this.fb.group({
-      Correo: new FormControl('', Validators.compose([Validators.required])),
-      Identificacion: new FormControl('', Validators.compose([Validators.required])),
-      CodigoSeguridad: new FormControl('', Validators.compose([Validators.required]))
+      Correo: new UntypedFormControl('', Validators.compose([Validators.required])),
+      Identificacion: new UntypedFormControl('', Validators.compose([Validators.required])),
+      CodigoSeguridad: new UntypedFormControl('', Validators.compose([Validators.required]))
 
     });
 

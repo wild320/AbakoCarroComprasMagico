@@ -1,6 +1,6 @@
 import { Component, OnInit  } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import { UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // servicios
 import {UsuarioService} from '../../../../shared/services/usuario.service';
@@ -15,8 +15,8 @@ import { Crutas } from 'src/data/contantes/cRutas';
 })
 export class PageLoginComponent implements OnInit{
 
-    public ingresoForm: FormGroup;
-    public registroForm: FormGroup;
+    public ingresoForm: UntypedFormGroup;
+    public registroForm: UntypedFormGroup;
     public error = false;
     public errorRegistro = false;
     public mensajeerror: string;
@@ -26,7 +26,7 @@ export class PageLoginComponent implements OnInit{
     public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
 
     constructor(
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private usuariossvc: UsuarioService,
         private router: Router ) {
 
@@ -37,16 +37,16 @@ export class PageLoginComponent implements OnInit{
 
        
         this.ingresoForm = this.fb.group({
-          usuario: new FormControl('', Validators.compose([Validators.required])),
-          contrasena: new FormControl('', Validators.compose([Validators.required])),
-          recordar: new FormControl(false, [])
+          usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
+          contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
+          recordar: new UntypedFormControl(false, [])
         });
 
         this.registroForm = this.fb.group({
-          tipo: new FormControl('', Validators.compose([Validators.required])),
-          identificacion: new FormControl('', Validators.compose([Validators.required])),
-          Nombres: new FormControl('', Validators.compose([Validators.required])),
-          Apellidos: new FormControl('', Validators.compose([Validators.required])),
+          tipo: new UntypedFormControl('', Validators.compose([Validators.required])),
+          identificacion: new UntypedFormControl('', Validators.compose([Validators.required])),
+          Nombres: new UntypedFormControl('', Validators.compose([Validators.required])),
+          Apellidos: new UntypedFormControl('', Validators.compose([Validators.required])),
         });
 
         this.ingresoForm.valueChanges.subscribe(query => {

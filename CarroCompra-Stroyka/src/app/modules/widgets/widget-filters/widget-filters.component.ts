@@ -2,7 +2,7 @@
 import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { DirectionService } from '../../../shared/services/direction.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 
 import {
@@ -40,7 +40,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
 
     filters: Filters[];
-    filtersForm: FormGroup;
+    filtersForm: UntypedFormGroup;
     filtrosValores: SerializedFilterValues = {};
     isPlatformBrowser = isPlatformBrowser(this.platformId);
     ArticulosSuscribe$: any;
@@ -50,7 +50,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private direction: DirectionService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         public root: RootService,
         public pageCategory: PageCategoryService,
         public articulossvc: ArticulosService,
@@ -164,7 +164,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return item.slug;
     }
 
-    makeFiltersForm(filtro: Filters[]): FormGroup {
+    makeFiltersForm(filtro: Filters[]): UntypedFormGroup {
         const filtersFromGroup = {};
 
         filtro.forEach(filter => {
@@ -183,7 +183,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return this.fb.group(filtersFromGroup);
     }
 
-    makeListFilterForm(filter: any): FormGroup {
+    makeListFilterForm(filter: any): UntypedFormGroup {
         const group = {};
 
         filter.items.forEach(item => {
