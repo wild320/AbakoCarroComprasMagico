@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RootService } from '../../../../shared/services/root.service';
-import { FormGroup , FormBuilder, Validators , FormControl} from '@angular/forms';
+import { UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // Servicios
 import { UsuarioService } from '../../../../../app/shared/services/usuario.service';
@@ -27,7 +27,7 @@ import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes'
 export class PageCheckoutComponent implements OnInit, OnDestroy {
     private destroy$: Subject<void> = new Subject();
 
-    public ClientePedidoForm: FormGroup;
+    public ClientePedidoForm: UntypedFormGroup;
     public EsUsuarioLogueado = false;
     public loading: boolean;
     public mensajerespuestaexito: string;
@@ -35,7 +35,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
     public formSubmitted: boolean = false;
 
     constructor(
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         public root: RootService,
         public cart: CartService,
         private utils: UtilsTexto,
@@ -94,18 +94,18 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
     private inicializarFormulario(){
 
         this.ClientePedidoForm = this.fb.group({
-            cliente: new FormControl('', Validators.compose([Validators.required])),
-            seldireccion: new FormControl('', Validators.compose([Validators.required])),
-            Pais: new FormControl('', Validators.compose([Validators.required])),
-            Departamento: new FormControl('', Validators.compose([Validators.required])),
-            Ciudad: new FormControl('', Validators.compose([Validators.required])),
-            Direccion: new FormControl('', Validators.compose([Validators.required])),
-            Telefono: new FormControl('', Validators.compose([Validators.required])),
-            Correo: new FormControl('', Validators.compose([Validators.required])),
-            Observaciones: new FormControl('', Validators.compose([Validators.required])),
+            cliente: new UntypedFormControl('', Validators.compose([Validators.required])),
+            seldireccion: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Pais: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Departamento: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Ciudad: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Direccion: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Telefono: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Correo: new UntypedFormControl('', Validators.compose([Validators.required])),
+            Observaciones: new UntypedFormControl('', Validators.compose([Validators.required])),
 
-            Terminos: new FormControl('', Validators.compose([Validators.required])),    
-            Pasarela: new FormControl('', Validators.compose([Validators.required]))     
+            Terminos: new UntypedFormControl('', Validators.compose([Validators.required])),    
+            Pasarela: new UntypedFormControl('', Validators.compose([Validators.required]))     
 
           });
   

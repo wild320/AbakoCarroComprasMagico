@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 import { PageCategoryService } from '../../services/page-category.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
 // Servicios
@@ -27,7 +27,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
     destroy$: Subject<void> = new Subject<void>();
 
-    listOptionsForm: FormGroup;
+    listOptionsForm: UntypedFormGroup;
     filtersCount: number = 0;
     ProductosSeleccionados: Item[] | Products;
     Productos: Products = new Products();
@@ -39,7 +39,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     private sub3: Subscription;
 
     constructor(
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         public sidebar: ShopSidebarService,
         public pageService: PageCategoryService,
         public articulossvc: ArticulosService,
