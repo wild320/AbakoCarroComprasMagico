@@ -100,7 +100,6 @@ export class WishlistService implements OnDestroy {
        const productrequest = {
         "proceso": "DEL",
         "IdPersona": parseInt(this.usr.IdEmp),
-        "IdPersona": parseInt(this.usr.IdEmp),
         "dllFavorito": [
             {
                 "idArticulo": product.id
@@ -123,7 +122,6 @@ export class WishlistService implements OnDestroy {
         } else {
             const productrequest = {
                 "proceso": "GET",
-                "IdPersona": parseInt(this.usr.IdEmp),
                 "IdPersona": parseInt(this.usr.IdEmp),
                 "dllFavorito": [
                     {
