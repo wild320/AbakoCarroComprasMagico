@@ -1,137 +1,129 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
+import { Observable } from 'rxjs';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 // Modelos
 import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 
 // constantes
 import { Crutas } from 'src/data/contantes/cRutas';
 
 @Component({
-    selector: 'app-account-menu',
-    templateUrl: './account-menu.component.html',
-    styleUrls: ['./account-menu.component.scss']
+  selector: 'app-account-menu',
+  templateUrl: './account-menu.component.html',
+  styleUrls: ['./account-menu.component.scss']
 })
-export class AccountMenuComponent implements OnInit{
-    @Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
+export class AccountMenuComponent implements OnInit {
+  @Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
 
-    public ingresoForm: UntypedFormGroup;
-    usuariologueado = false;
-    UsrLogin: Observable<LoginClienteResponse>;
-    public mensajeerror: string;
-    public loading = false;
-    public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
+  public ingresoForm: UntypedFormGroup;
+  usuariologueado = false;
+  UsrLogin: Observable<LoginClienteResponse>;
+  public mensajeerror: string;
+  public loading = false;
+  public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
 
-    constructor(public usuariosvc: UsuarioService,
-                private fb: UntypedFormBuilder,
-                private router: Router
-                ) {
+  constructor(public usuariosvc: UsuarioService,
+    private fb: UntypedFormBuilder,
+    private router: Router
+  ) {
 
-      this.InicializarValores();
-    }
+    this.InicializarValores();
+  }
 
-    ngOnInit() {
+  ngOnInit() {
 
-        this.ingresoForm = this.fb.group({
-          usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
-          contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
-          recordar: new UntypedFormControl(false, [])
-        });
+    this.ingresoForm = this.fb.group({
+      usuario: new UntypedFormControl('', Validators.compose([Validators.required])),
+      contrasena: new UntypedFormControl('', Validators.compose([Validators.required])),
+      recordar: new UntypedFormControl(false, [])
+    });
 
-        this.InicializarValores();
+    this.InicializarValores();
 
-        this.EstaLogueadoUsuario();
+    this.EstaLogueadoUsuario();
 
-    }
+  }
 
-    InicializarValores(){
-      this.mensajeerror = '';
-    }
+  InicializarValores() {
+    this.mensajeerror = '';
+  }
 
-    submitForm() {
+  submitForm(): void {
+    this.loading = true;
 
-        this.loading = true;
-
-        this.InicializarValores();
-
-        if (this.ingresoForm.valid){
-
-          this.usuariosvc.Loguin(this.ingresoForm.value).then((config: any) => {
-
-            window.location.reload();
-            // si no llega logueado validar mensaje
-            if  (config.msgId !== EstadoRespuestaMensaje.exitoso || this.usuariosvc.MensajeError.length > 0 ){
-
-              if (config.msgId === EstadoRespuestaMensaje.Error){
-                this.mensajeerror = config.msgStr;
-              }else{
-                this.mensajeerror = this.usuariosvc.MensajeError;
-              }
-
-            }else{
-
-               // direccionar al home
-               localStorage.setItem("isLogue", "false");
-               this.router.navigate(['/']);
-
-            }
-
-            this.loading = false;
-
-          });
-        }else{
-
-          // validar que tenga contraseña
-          if (this.contrasena.invalid){
-            this.mensajeerror = 'Debe ingresar información valida en contraseña';
+    if (this.ingresoForm.valid) {
+      this.usuariosvc.Loguin(this.ingresoForm.value)
+        .then((config: any) => {
+          if (!this.usuariosvc.getEstadoLoguin()) {
+            this.handleLoginError(this.usuariosvc.MensajeError);
+          } else {
+            this.router.navigate(['/']);
           }
-
-          // validar que tenga usuario
-          if (this.usuario.invalid){
-            this.mensajeerror = 'Debe ingresar información valida en usuario';
-          }
-
           this.loading = false;
-
-
-        }
-      }
-
-    EstaLogueadoUsuario(){
-
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
-
-            this.usuariologueado = value;
-
-            this.CargarUsuario();
+        })
+        .catch((err: any) => {
+          this.handleLoginError('Error al intentar loguear. Por favor intente nuevamente.');
+          console.error('Login error:', err);
+          this.loading = false;
         });
+    } else {
+      this.handleFormErrors();
+      this.loading = false;
+    }
+  }
+
+  private handleLoginError(mensaje: string): void {
+    this.mensajeerror = mensaje;
+  }
+
+  private handleFormErrors(): void {
+    const formErrors: string[] = [];
+
+    if (this.contrasena.invalid) {
+      formErrors.push('Debe ingresar información válida en contraseña.');
     }
 
-    CargarUsuario(){
-
-        if (this.usuariologueado) {
-
-            localStorage.setItem("isLogue", "true");
-            this.UsrLogin = this.usuariosvc.getUsrLoguin();
-
-            this.UsrLogin.subscribe((value) => {
-            });
-        }
+    if (this.usuario.invalid) {
+      formErrors.push('Debe ingresar información válida en usuario.');
     }
 
-    CerrarSesion(){
-        this.usuariosvc.loguout();
-        localStorage.setItem("isLogue", "false");
+    this.mensajeerror = formErrors.join(' ');
+  }
+
+  EstaLogueadoUsuario() {
+
+    this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+
+      this.usuariologueado = value;
+
+      this.CargarUsuario();
+    });
+  }
+
+  CargarUsuario() {
+
+    if (this.usuariologueado) {
+
+      localStorage.setItem("isLogue", "true");
+      this.UsrLogin = this.usuariosvc.getUsrLoguin();
+
+      this.UsrLogin.subscribe((value) => {
+      });
     }
+  }
 
-    get usuario() { return this.ingresoForm.get('usuario'); }
+  CerrarSesion() {
+    this.usuariosvc.loguout();
+    localStorage.setItem("isLogue", "false");
+  }
 
-    get contrasena() { return this.ingresoForm.get('contrasena'); }
+  get usuario() { return this.ingresoForm.get('usuario'); }
+
+  get contrasena() { return this.ingresoForm.get('contrasena'); }
 
 }

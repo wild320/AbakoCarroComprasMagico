@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {NavigationLink} from '../interfaces/navigation-link';
+import { Injectable } from '@angular/core';
+import { NavigationLink } from '../interfaces/navigation-link';
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
 import { PaginasService } from './paginas.service';
 
 // Contantes
-import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { ClabelRutas, Crutas } from 'src/data/contantes/cRutas';
 import { CServicios } from '../../../data/contantes/cServicios';
 
 // modelos
-import {ConfiguracionSitio} from '../../../data/modelos/negocio/ConfiguracionSitio';
-import {SocialLinksItem} from '../../../data/modelos/negocio/RedesSociales';
+import { ConfiguracionSitio } from '../../../data/modelos/negocio/ConfiguracionSitio';
+import { SocialLinksItem } from '../../../data/modelos/negocio/RedesSociales';
 
 @Injectable({
     providedIn: 'root'
@@ -21,285 +21,172 @@ export class StoreService {
     UrlServicioCarroCompras: string;
     public navigation: NavigationLink[];
     public configuracionSitio = new ConfiguracionSitio();
-    public redes: SocialLinksItem[];
+    public redes: SocialLinksItem[] = [];
 
     constructor(private httpClient: HttpClient,
-                private negocio: NegocioService,
-                private paginaService: PaginasService) {
+        private negocio: NegocioService,
+        private paginaService: PaginasService) {}
 
-        this.Iniciarlizarconfigurcion();
+    async cargarConfiguracionGeneral() {
+        try {
+            this.UrlServicioCarroCompras = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
 
+            const config = await this.httpClient.get(`${this.UrlServicioCarroCompras}/1`).toPromise();
+            this.SetiarInformacion(config);
+
+        } catch (err) {
+            console.error('Error fetching configuration:', err);
+        }
     }
 
-    private Iniciarlizarconfigurcion(){
-
-        this.configuracionSitio.address = '',
-        this.configuracionSitio.email = '';
-        this.configuracionSitio.phone = '';
-        this.configuracionSitio.hours = '';
-        this.configuracionSitio.scrmapa = '';
-        this.configuracionSitio.AgenciaDefaul = '';
-        this.configuracionSitio.VerProductosDestacados = false;
-        this.configuracionSitio.VerMasVendidos = false;
-        this.configuracionSitio.VerCategoriasPopulares = false;
-        this.configuracionSitio.VerRecienllegados = false;
-        this.configuracionSitio.VerUltimasNoticias = false;
-        this.configuracionSitio.VerMarcas = false;
-        this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = false;
-        this.configuracionSitio.VerBannerIntermedio = false;
-        this.configuracionSitio.SuperarInventario = false;
-        this.configuracionSitio.CreacionDirectaClientes = false;
-        this.configuracionSitio.VerSuscribirse = false;
-        this.configuracionSitio.VerNoticias = false;
-        this.configuracionSitio.VerContacto = false;
-        this.configuracionSitio.PasaleraContraEntrega  = true;
-        this.configuracionSitio.PasaleraPSE = true;
-        this.configuracionSitio.PasarelaTranferenciaBancaria = true;
-        this.configuracionSitio.VerBannerInformacion = true;
-        this.configuracionSitio.VerAcordeonInformacion  = true;
-        this.configuracionSitio.MostrarPreciosSinLogueo = true;
-        this.configuracionSitio.PosicionamientoEnGoogle = '';
-        this.configuracionSitio.scriptRastreo= '';
-        this.configuracionSitio.VerWppIcono= false;
-        this.configuracionSitio.VerBontonAplicarCupon = false;
-
-
-        this.redes = [];
-
-    }
-
-    cargarConfiguracionGeneral() {
-
-        this.UrlServicioCarroCompras = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-        CServicios.ServicioConfiguracionCC;
-
-        return this.httpClient.get(this.UrlServicioCarroCompras + '/1')
-            .toPromise()
-            .then((config: any) => {
-                this.SetiarInformacion (config);
-
-            })
-            .catch((err: any) => {
-                console.error(err);
-            });
-    }
-
-    private SetiarInformacion(configuracion: any){
+    private SetiarInformacion(configuracion: any) {
 
         // las sesiones siempre inician apagagas, la configuracion trae cuales quedan activas
         this.paginaService.iniciarPaginas();
 
-        configuracion.forEach(element => {
+        configuracion.forEach(({ id, valor }) => {
 
-            // Hora de servicio
-            if (element.id === 'A1'){
-                this.configuracionSitio.hours =  element.valor;
+            switch (id) {
+                // Hora de servicio
+                case 'A1':
+                    this.configuracionSitio.hours = valor;
+                    break;
+                // src mapa google
+                case 'A4':
+                    this.configuracionSitio.scrmapa = valor;
+                    break;
+                // Configuración de visualización (elementos con valor 'SI')
+                case 'A6':
+                case 'A7':
+                case 'A8':
+                case 'A9':
+                case 'A10':
+                case 'A11':
+                case 'A12':
+                case 'A13':
+                case 'A30':
+                case 'A34':
+                case 'A35':
+                case 'A36':
+                case 'A37':
+                case 'A38':
+                case 'A41':
+                case 'A43':
+                case 'A44':
+                    this.setConfigBooleanOption(id, valor);
+                    break;
+                // Mostrar precios sin logueo (condición con valor 'NO')
+                case 'A31':
+                    this.configuracionSitio.MostrarPreciosSinLogueo = valor !== 'NO';
+                    break;
+                // Posicionamiento en Google
+                case 'A32':
+                    this.configuracionSitio.PosicionamientoEnGoogle = valor;
+                    break;
+                // Script de rastreo
+                case 'A33':
+                    if (valor.length > 3) {
+                        this.configuracionSitio.scriptRastreo = valor;
+                    }
+                    break;
+                // Redes sociales
+                case 'A20':
+                    this.addSocialMedia('facebook', valor, 'fab fa-facebook-f');
+                    break;
+                case 'A21':
+                    this.addSocialMedia('twitter', valor, 'fab fa-twitter');
+                    break;
+                case 'A22':
+                    this.addSocialMedia('youtube', valor, 'fab fa-youtube');
+                    break;
+                case 'A23':
+                    this.addSocialMedia('instagram', valor, 'fab fa-instagram');
+                    break;
+                // Pasarelas
+                case 'A24':
+                case 'A25':
+                case 'A26':
+                case 'A28':
+                case 'A29':
+                    this.setPasarelaOption(id, valor);
+                    break;
+                // Mensaje personalizado en el pago
+                case 'A49':
+                    this.configuracionSitio.MensajePersonalizadoPago = valor;
+                    break;
+                // Dirección, teléfono, correo, agencia, asesor, número de WhatsApp
+                case 'B1':
+                    this.configuracionSitio.address = valor;
+                    break;
+                case 'B2':
+                    this.configuracionSitio.phone = valor;
+                    break;
+                case 'B3':
+                    this.configuracionSitio.email = valor;
+                    break;
+                case 'B4':
+                    this.configuracionSitio.AgenciaDefaul = valor;
+                    break;
+                case 'B5':
+                    this.configuracionSitio.AsesorPredeterminado = valor;
+                    break;
+                case 'A39':
+                    this.configuracionSitio.NumeroWpp = valor;
+                    break;
+                // Activar o desactivar páginas
+                default:
+                    if (id[0] === 'S') {
+                        this.ActicarPaginas(valor);
+                    } else if (id === 'A47') {
+                        this.configuracionSitio.VerFiltroMarcas = valor !== 'NO';
+                    } else if (id === 'A48') {
+                        this.configuracionSitio.VerMarcaDetalleProducto = valor !== 'NO';
+                    }
+                    break;
             }
-
-            // src mapa google
-            if (element.id === 'A4'){
-                this.configuracionSitio.scrmapa =   element.valor;
-            }
-
-            if (element.id === 'A6'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerProductosDestacados = true;
-                }
-
-            }
-
-            if (element.id === 'A7'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerMasVendidos = true;
-                }
-            }
-
-            if (element.id === 'A8'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerCategoriasPopulares = true;
-                }
-            }
-
-            if (element.id === 'A9'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerRecienllegados = true;
-                }
-            }
-
-            if (element.id === 'A10'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerUltimasNoticias = true;
-                }
-            }
-
-            if (element.id === 'A11'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerMarcas = true;
-                }
-            }
-
-            if (element.id === 'A12'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerBLoqueValoradosEspecialesVendidos = true;
-                }
-            }
-
-            if (element.id === 'A13'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerBannerIntermedio = true;
-                }
-            }
-            if (element.id === 'A30'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.SuperarInventario = true;
-                }
-            }
-            if (element.id === 'A31'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.MostrarPreciosSinLogueo = false;
-                }
-            }
-
-            if (element.id === 'A32'){
-                    this.configuracionSitio.PosicionamientoEnGoogle = element.valor;
-            }
-
-            if (element.id === 'A33' && element.valor.length > 3){
-                    this.configuracionSitio.scriptRastreo = element.valor;
-
-            }
-            if (element.id === 'A34'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerSeguimientoPedidos = true;
-                }
-            }
-            if (element.id === 'A35'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerCompararProductos = true;
-                }
-            }
-            if (element.id === 'A36'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerSuscribirse = true;
-                }
-            }
-
-            if (element.id === 'A37'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.CreacionDirectaClientes = true;
-                }
-            }
-            if (element.id === 'A38'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerWppIcono= true;
-                }
-            }
-            if (element.id === 'A41'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerContacto = true;
-                }
-            }
-            if (element.id === 'A43'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerNoticias = true;
-                }
-            }
-
-            if (element.id === 'A44'){
-                if (element.valor === 'SI'){
-                    this.configuracionSitio.VerBontonAplicarCupon = true;
-                }
-            }
-
-
-
-            // redes sociales
-            if (element.id === 'A20'){
-                this.redes.push({type: 'facebook', url: element.valor, icon: 'fab fa-facebook-f'});
-            }
-
-            if (element.id === 'A21'){
-                this.redes.push({type: 'twitter', url: element.valor, icon: 'fab fa-twitter'});
-            }
-
-            if (element.id === 'A22'){
-                this.redes.push({type: 'youtube', url: element.valor, icon: 'fab fa-youtube'});
-            }
-
-            if (element.id === 'A23'){
-                this.redes.push({type: 'instagram', url: element.valor, icon: 'fab fa-instagram'});
-            }
-
-            // pasarelas
-            if (element.id === 'A24'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.PasaleraPSE = false;
-                }
-            }
-
-            if (element.id === 'A25'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.PasarelaTranferenciaBancaria = false;
-                }
-            }
-
-            if (element.id === 'A26'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.PasaleraContraEntrega = false;
-                }
-            }
-            if (element.id === 'A28'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.VerBannerInformacion = false;
-                }
-            }
-
-            if (element.id === 'A29'){
-                if (element.valor === 'NO'){
-                    this.configuracionSitio.VerAcordeonInformacion = false;
-                }
-            }
-
-
-            // Direccion
-            if (element.id === 'B1'){
-                this.configuracionSitio.address =  element.valor;
-            }
-
-            // telefono
-            if (element.id === 'B2'){
-                this.configuracionSitio.phone =  element.valor;
-            }
-
-            // correo
-            if (element.id === 'B3'){
-                this.configuracionSitio.email =  element.valor;
-            }
-
-            // agencia
-            if (element.id === 'B4'){
-                this.configuracionSitio.AgenciaDefaul =  element.valor;
-            }
-
-             //asesor
-             if (element.id === 'B5'){
-                this.configuracionSitio.AsesorPredeterminado =  element.valor;
-            }
-
-            // wpp
-            if (element.id === 'A39'){
-                this.configuracionSitio.NumeroWpp =  element.valor;
-            }
-
-
-            // activar o desactivar paginas
-            if (element.id[0]   === 'S'){
-                this.ActicarPaginas(element.valor);
-            }
-
         });
 
         this.CargarMenu(false);
+    }
+
+    private setConfigBooleanOption(id: string, valor: string): void {
+        const optionsMap = {
+            'A6': 'VerProductosDestacados',
+            'A7': 'VerMasVendidos',
+            'A8': 'VerCategoriasPopulares',
+            'A9': 'VerRecienllegados',
+            'A10': 'VerUltimasNoticias',
+            'A11': 'VerMarcas',
+            'A12': 'VerBLoqueValoradosEspecialesVendidos',
+            'A13': 'VerBannerIntermedio',
+            'A30': 'SuperarInventario',
+            'A34': 'VerSeguimientoPedidos',
+            'A35': 'VerCompararProductos',
+            'A36': 'VerSuscribirse',
+            'A37': 'CreacionDirectaClientes',
+            'A38': 'VerWppIcono',
+            'A41': 'VerContacto',
+            'A43': 'VerNoticias',
+            'A44': 'VerBontonAplicarCupon',
+        };
+        if (valor === 'SI') {
+            this.configuracionSitio[optionsMap[id]] = true;
+        }
+    }
+
+    private addSocialMedia(type: string, url: string, icon: string): void {
+        this.redes.push({ type, url, icon });
+    }
+
+    private setPasarelaOption(id: string, valor: string): void {
+        const pasarelaMap = {
+            'A24': 'PasaleraPSE',
+            'A25': 'PasarelaTranferenciaBancaria',
+            'A26': 'PasaleraContraEntrega',
+            'A28': 'VerBannerInformacion',
+            'A29': 'VerAcordeonInformacion',
+        };
+        this.configuracionSitio[pasarelaMap[id]] = valor !== 'NO';
     }
 
     public CargarMenu(CargarUsuario: boolean) {
@@ -308,35 +195,43 @@ export class StoreService {
 
         if (!this.configuracionSitio.VerCompararProductos) {
             this.navigation = [
-                {label: 'Inicio', url: '/'},
-                {label: 'Comprar', url: '/shop/catalog', menu: {
-                    type: 'menu',
-                    items: [
-                        {label: 'Artículos', url: '/shop/catalog'},
-                        {label: 'Lista de Deseos', url: '/shop/wishlist'},
-                    ]
-                }},
-                {label: 'Sitios', url: '/site', menu: {
-                    type: 'menu',
-                    items: [ ]
-                }},
+                { label: 'Inicio', url: '/' },
+                {
+                    label: 'Comprar', url: '/shop/catalog', menu: {
+                        type: 'menu',
+                        items: [
+                            { label: 'Artículos', url: '/shop/catalog' },
+                            { label: 'Lista de Deseos', url: '/shop/wishlist' },
+                        ]
+                    }
+                },
+                {
+                    label: 'Sitios', url: '/site', menu: {
+                        type: 'menu',
+                        items: []
+                    }
+                },
 
             ];
-        }else{
+        } else {
             this.navigation = [
-                {label: 'Inicio', url: '/'},
-                {label: 'Comprar', url: '/shop/catalog', menu: {
-                    type: 'menu',
-                    items: [
-                        {label: 'Artículos', url: '/shop/catalog'},
-                        {label: 'Lista de Deseos', url: '/shop/wishlist'},
-                        {label: 'Comparar', url: '/shop/compare'},
-                    ]
-                }},
-                {label: 'Sitios', url: '/site', menu: {
-                    type: 'menu',
-                    items: [ ]
-                }},
+                { label: 'Inicio', url: '/' },
+                {
+                    label: 'Comprar', url: '/shop/catalog', menu: {
+                        type: 'menu',
+                        items: [
+                            { label: 'Artículos', url: '/shop/catalog' },
+                            { label: 'Lista de Deseos', url: '/shop/wishlist' },
+                            { label: 'Comparar', url: '/shop/compare' },
+                        ]
+                    }
+                },
+                {
+                    label: 'Sitios', url: '/site', menu: {
+                        type: 'menu',
+                        items: []
+                    }
+                },
 
             ];
         }
@@ -344,17 +239,19 @@ export class StoreService {
         if (CargarUsuario) {
 
             this.navigation.push(
-            {label: 'Cuenta', url: '/account', menu: {
-                type: 'menu',
-                items: [
-                    {label: ClabelRutas.Dashboard, url: Crutas.Dashboard},
-                    {label: ClabelRutas.EditarCuenta,    url: Crutas.EditarCuenta},
-                    {label: ClabelRutas.MiHistorial,   url: Crutas.MiHistorial},
-                    {label: ClabelRutas.MisDirecciones,    url: Crutas.MisDirecciones},
-                    {label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena},
-                    {label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion}
-                ]
-            }});
+                {
+                    label: 'Cuenta', url: '/account', menu: {
+                        type: 'menu',
+                        items: [
+                            { label: ClabelRutas.Dashboard, url: Crutas.Dashboard },
+                            { label: ClabelRutas.EditarCuenta, url: Crutas.EditarCuenta },
+                            { label: ClabelRutas.MiHistorial, url: Crutas.MiHistorial },
+                            { label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones },
+                            { label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena },
+                            { label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion }
+                        ]
+                    }
+                });
 
         }
 
@@ -367,16 +264,16 @@ export class StoreService {
         const index = this.navigation.findIndex(x => x.label === 'Sitios');
         const item = 'items';
 
-        this.paginaService.paginas.forEach((element,  array) => {
+        this.paginaService.paginas.forEach((element, array) => {
 
-            if (element.Activo){
-                this.navigation[index].menu[item].push({label: element.label,  url:  element.url});
+            if (element.Activo) {
+                this.navigation[index].menu[item].push({ label: element.label, url: element.url });
             }
         });
 
     }
 
-    private ActicarPaginas(ses: string){
+    private ActicarPaginas(ses: string) {
 
         const index = this.paginaService.paginas.findIndex(x => x.Id === parseInt(ses, 10));
 

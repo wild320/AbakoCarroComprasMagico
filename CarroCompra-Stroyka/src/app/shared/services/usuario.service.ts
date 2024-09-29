@@ -1,41 +1,40 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 
 // Servicios
 import { NegocioService } from '../../shared/services/negocio.service';
-import { ServiceHelper } from '../services/ServiceHelper';
 import { LocalService } from '../services/local-service.service';
+import { ServiceHelper } from '../services/ServiceHelper';
 
 // interfaces
 import { Address } from '../interfaces/address';
 
 // modelos
+import { Mensaje } from '../../../data/modelos/negocio/Mensaje';
 import { VerificarExistenciaClienteRequest } from '../../../data/modelos/negocio/VerificarExistenciaCliente';
-import {CrearClienteCarroRequest} from '../../../data/modelos/seguridad/CrearClienteCarroRequest';
-import {CrearClienteCarroRequestv1} from '../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
-import {UsuarioStorage} from '../../../data/modelos/seguridad/UsuarioStorage';
-import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
+import { CrearClienteCarroRequest } from '../../../data/modelos/seguridad/CrearClienteCarroRequest';
+import { CrearClienteCarroRequestv1 } from '../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
+import { UsuarioStorage } from '../../../data/modelos/seguridad/UsuarioStorage';
 
 // Contantes
-import { CServicios } from '../../../data/contantes/cServicios';
 import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
 import { cOperaciones } from '../../../data/contantes/COperaciones';
+import { CServicios } from '../../../data/contantes/cServicios';
 
 
 // modelos
-import {LoguinRequest} from '../../../data/modelos/seguridad/LoguinRequest';
-import {LoginClienteResponse} from '../../../data/modelos/seguridad/LoginClienteResponse';
-import {CRUDPersonaExistenteRequest} from '../../../data/modelos/seguridad/CRUDPersonaExistenteRequest';
-import {MaestrosLocalizacionResponse} from '../../../data/modelos/negocio/MaestrosLocalizacionResponse';
-import {MaestrosLocalizacionRequest} from '../../../data/modelos/negocio/MaestrosLocalizacionRequest';
-import {RecuperarUsuarioResponse} from '../../../data/modelos/seguridad/RecuperarUsuarioResponse';
-import {EnviarUsuarioRequest} from '../../../data/modelos/seguridad/EnviarUsuarioRequest';
-import { Persona } from '../../../data/modelos/seguridad/CRUDPersonaExistente';
 import { MaestroCiudad } from '../../../data/modelos/negocio/Ciudades';
 import { GuardarDireccion } from '../../../data/modelos/negocio/GuardarDireccion';
-import { StoreService } from './store.service';
+import { MaestrosLocalizacionRequest } from '../../../data/modelos/negocio/MaestrosLocalizacionRequest';
+import { MaestrosLocalizacionResponse } from '../../../data/modelos/negocio/MaestrosLocalizacionResponse';
+import { Persona } from '../../../data/modelos/seguridad/CRUDPersonaExistente';
+import { CRUDPersonaExistenteRequest } from '../../../data/modelos/seguridad/CRUDPersonaExistenteRequest';
+import { EnviarUsuarioRequest } from '../../../data/modelos/seguridad/EnviarUsuarioRequest';
+import { LoginClienteResponse } from '../../../data/modelos/seguridad/LoginClienteResponse';
+import { LoguinRequest } from '../../../data/modelos/seguridad/LoguinRequest';
+import { RecuperarUsuarioResponse } from '../../../data/modelos/seguridad/RecuperarUsuarioResponse';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
@@ -71,19 +70,19 @@ export class UsuarioService {
   public UsrLogin: LoginClienteResponse;
 
   constructor(
-        private servicehelper: ServiceHelper<any, any>,
-        private negocio: NegocioService,
-        private httpClient: HttpClient,
-        private localService: LocalService,
-        @Inject(PLATFORM_ID) private platformId: Object,
-        ) {
+    private servicehelper: ServiceHelper<any, any>,
+    private negocio: NegocioService,
+    private httpClient: HttpClient,
+    private localService: LocalService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
 
-        this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
-        this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
-        this.addresses = [];
+    this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
+    this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
+    this.addresses = [];
 
-        // tslint:disable-next-line: deprecation
-        this.getEstadoLoguin$().subscribe(value => {});
+    // tslint:disable-next-line: deprecation
+    this.getEstadoLoguin$().subscribe(value => { });
 
 
   }
@@ -103,7 +102,7 @@ export class UsuarioService {
     this.UsuarioLogueado$.next(newValue);
   }
 
-  getEstadoLoguin(){
+  getEstadoLoguin() {
     return this.UsuarioLogueado;
   }
 
@@ -119,11 +118,11 @@ export class UsuarioService {
     return this.UsrLogin$.asObservable();
   }
 
-  private CRUDPersonaExistente(accion: string, persona: Persona ): Promise<void> {
+  private CRUDPersonaExistente(accion: string, persona: Persona): Promise<void> {
     this.UrlServicioLoguin =
-        this.negocio.configuracion.UrlServicioAdministracion +
-        CServicios.ApiAdministracion +
-        CServicios.ServivioCRUDPersonaExistente;
+      this.negocio.configuracion.UrlServicioAdministracion +
+      CServicios.ApiAdministracion +
+      CServicios.ServivioCRUDPersonaExistente;
 
     // cargar los datos del usaurios
     this.DatosPersonaRequest.accion = accion;
@@ -142,19 +141,19 @@ export class UsuarioService {
       })
       .catch((err: any) => {
 
-          this.DatosPersona.estado[0].msgId = EstadoRespuestaMensaje.Error;
-          this.DatosPersona.estado[0].msgStr = 'Error conectando el api: ' + err;
+        this.DatosPersona.estado[0].msgId = EstadoRespuestaMensaje.Error;
+        this.DatosPersona.estado[0].msgStr = 'Error conectando el api: ' + err;
 
-          return this.DatosPersona;
+        return this.DatosPersona;
 
       });
   }
 
   private MaestrosLocalizacion(): Promise<void> {
     this.UrlServicioLocalizacion =
-        this.negocio.configuracion.UrlServicioCarroCompras +
-        CServicios.ApiNegocio +
-        CServicios.ServivioMaestrosLocalizacion;
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiNegocio +
+      CServicios.ServivioMaestrosLocalizacion;
 
     // cargar los datos del usaurios
     this.MaestrosLocalizacionRequest.fecha = '2020-01-01';
@@ -175,13 +174,13 @@ export class UsuarioService {
         this.objMaestrosLocalizacion.barrios.forEach((value) => {
 
           // departamentos
-          if (this.departamentos.indexOf(value.departamento.toUpperCase()) === -1){
+          if (this.departamentos.indexOf(value.departamento.toUpperCase()) === -1) {
             this.departamentos.push(value.departamento.toUpperCase());
           }
 
           // ciudades
-          if (this.ciudad.findIndex(obj => obj.ciudad === value.ciudad && obj.departamento === value.departamento  ) === -1){
-            this.ciudad.push({ciudad: value.ciudad.toUpperCase(), departamento: value.departamento.toUpperCase()});
+          if (this.ciudad.findIndex(obj => obj.ciudad === value.ciudad && obj.departamento === value.departamento) === -1) {
+            this.ciudad.push({ ciudad: value.ciudad.toUpperCase(), departamento: value.departamento.toUpperCase() });
           }
 
           this.departamentos.sort();
@@ -234,194 +233,194 @@ export class UsuarioService {
 
   Loguin(usrrq: LoguinRequest) {
     this.UrlServicioLoguin =
-        this.negocio.configuracion.UrlServicioCarroCompras +
-        CServicios.ApiNegocio +
-        CServicios.ServivioLoguinCLiente;
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiNegocio +
+      CServicios.ServivioLoguinCLiente;
 
-    this.recordar     = usrrq.recordar;
+    this.recordar = usrrq.recordar;
     this.MensajeError = '';
 
     return this.servicehelper
-        .PostData(this.UrlServicioLoguin, usrrq)
-        .toPromise()
-        .then((config: any) => {
+      .PostData(this.UrlServicioLoguin, usrrq)
+      .toPromise()
+      .then((config: any) => {
 
-            this.cargarRespuesta(config, usrrq);
+        this.cargarRespuesta(config, usrrq);
 
-            if (this.MensajeError.length === 0){
-              if(!this.recordar ){
-                this.localService.setJsonValueSession(this.token, this.usuarioStorage);
-              }
+        if (this.MensajeError.length === 0) {
+          if (!this.recordar) {
+            this.localService.setJsonValueSession(this.token, this.usuarioStorage);
+          }
 
-              this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
-              this.MsgRespuesta.msgStr = 'Usuario exitoso';
-        // cambiar estado de logueado
-              this.setEstadoLoguin$(true);
-
-              return this.MsgRespuesta;
-            }
-
-            this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-            this.MsgRespuesta.msgStr = this.MensajeError;
-
-            this.setEstadoLoguin$(false);
-
-            return this.MsgRespuesta;
-
-
-        })
-        .catch((err: any) => {
-
-          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.exitoso;
+          this.MsgRespuesta.msgStr = 'Usuario exitoso';
+          // cambiar estado de logueado
+          this.setEstadoLoguin$(true);
 
           return this.MsgRespuesta;
-        });
+        }
+
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = this.MensajeError;
+
+        this.setEstadoLoguin$(false);
+
+        return this.MsgRespuesta;
+
+
+      })
+      .catch((err: any) => {
+
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+
+        return this.MsgRespuesta;
+      });
 
   }
 
   VerificarExistenciaCliente(identificacion: string) {
     this.UrlServicioLoguin =
-        this.negocio.configuracion.UrlServicioCarroCompras +
-        CServicios.ApiNegocio +
-        CServicios.ServivioExistenciaCLiente;
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiNegocio +
+      CServicios.ServivioExistenciaCLiente;
 
     // carga datos
     this.VerificarExistencia.identificacion = identificacion;
 
     return this.httpClient.get(this.UrlServicioLoguin + '/' + identificacion.toString(), { responseType: 'text' })
-        .toPromise()
-        .then((config: any) => {
-            return config;
-        })
-        .catch((err: any) => {
-          console.error(err.message);
-          return err.message;
-        });
+      .toPromise()
+      .then((config: any) => {
+        return config;
+      })
+      .catch((err: any) => {
+        console.error(err.message);
+        return err.message;
+      });
 
   }
 
   GenerarCodigoUsurio(correo: string, identificacion: string) {
     this.UrlServicioLoguin =
-        this.negocio.configuracion.UrlServicioCarroCompras +
-        CServicios.ApiNegocio +
-        CServicios.ServivioRecuperarCodigoSeguridad;
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiNegocio +
+      CServicios.ServivioRecuperarCodigoSeguridad;
 
     return this.httpClient.get(this.UrlServicioLoguin + '/' + correo.toString() + '/' + identificacion.toString(), { responseType: 'text' })
-        .toPromise()
-        .then((config: any) => {
+      .toPromise()
+      .then((config: any) => {
 
-          this.RecuperarUsuario = JSON.parse(config);
+        this.RecuperarUsuario = JSON.parse(config);
 
-          return this.RecuperarUsuario.estado;
-        })
-        .catch((err: any) => {
+        return this.RecuperarUsuario.estado;
+      })
+      .catch((err: any) => {
 
-          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
 
-          return this.MsgRespuesta;
-        });
+        return this.MsgRespuesta;
+      });
 
   }
 
 
-  CrearClienteCarroCompras(request: CrearClienteCarroRequest ){
+  CrearClienteCarroCompras(request: CrearClienteCarroRequest) {
 
     this.UrlServicioLoguin =
-    this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearCliente;
+      this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearCliente;
 
 
     return this.servicehelper
-        .PostData(this.UrlServicioLoguin, request)
-        .toPromise()
-        .then((config: any) => {
+      .PostData(this.UrlServicioLoguin, request)
+      .toPromise()
+      .then((config: any) => {
 
-            this.MsgRespuesta = config.mensaje;
+        this.MsgRespuesta = config.mensaje;
 
-            // cargar datos del usuarios
-            if (this.MsgRespuesta.msgId === EstadoRespuestaMensaje.exitoso){
+        // cargar datos del usuarios
+        if (this.MsgRespuesta.msgId === EstadoRespuestaMensaje.exitoso) {
 
-              const logueo = new LoguinRequest();
+          const logueo = new LoguinRequest();
 
-              logueo.usuario = request.Usuario;
-              logueo.contrasena = request.Contrasena;
-              logueo.recordar = true;
+          logueo.usuario = request.Usuario;
+          logueo.contrasena = request.Contrasena;
+          logueo.recordar = true;
 
-              this.Loguin(logueo).then((configlogueo: any) => {
-                return this.MsgRespuesta;
-              });
-
-            }
-
+          this.Loguin(logueo).then((configlogueo: any) => {
             return this.MsgRespuesta;
+          });
 
-        })
-        .catch((err: any) => {
+        }
 
-          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+        return this.MsgRespuesta;
 
-          return this.MsgRespuesta;
+      })
+      .catch((err: any) => {
 
-        });
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+
+        return this.MsgRespuesta;
+
+      });
 
   }
 
 
-  CrearEditarClienteV1(request: CrearClienteCarroRequestv1){
+  CrearEditarClienteV1(request: CrearClienteCarroRequestv1) {
 
     this.UrlServicioLoguin =
-    this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearEditarClienteV1;
+      this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearEditarClienteV1;
 
 
     return this.servicehelper
-        .PostData(this.UrlServicioLoguin, request)
-        .toPromise()
-        .then((config: any) => {
+      .PostData(this.UrlServicioLoguin, request)
+      .toPromise()
+      .then((config: any) => {
 
-            this.MsgRespuesta = config.mensaje;
+        this.MsgRespuesta = config.mensaje;
 
-            return this.MsgRespuesta;
+        return this.MsgRespuesta;
 
-        })
-        .catch((err: any) => {
+      })
+      .catch((err: any) => {
 
-          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
 
-          return this.MsgRespuesta;
+        return this.MsgRespuesta;
 
-        });
+      });
 
   }
-  EnviarUsuarioGenerado(request: EnviarUsuarioRequest ){
+  EnviarUsuarioGenerado(request: EnviarUsuarioRequest) {
 
     this.UrlServicioLoguin =
-    this.negocio.configuracion.UrlServicioCarroCompras +
-    CServicios.ApiNegocio +
-    CServicios.ServivioEnviarUsuarioGenerado;
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiNegocio +
+      CServicios.ServivioEnviarUsuarioGenerado;
 
     return this.servicehelper
-        .PostData(this.UrlServicioLoguin, request)
-        .toPromise()
-        .then((config: any) => {
+      .PostData(this.UrlServicioLoguin, request)
+      .toPromise()
+      .then((config: any) => {
 
-            return config;
+        return config;
 
-        })
-        .catch((err: any) => {
+      })
+      .catch((err: any) => {
 
-          this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
-          this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
+        this.MsgRespuesta.msgId = EstadoRespuestaMensaje.Error;
+        this.MsgRespuesta.msgStr = 'Error al consumir servicio:' + err.message;
 
-          return this.MsgRespuesta;
+        return this.MsgRespuesta;
 
-        });
+      });
 
   }
 
-  GuardarActualizarUsuario(Nombres: string, Apellidos: string, Identificacion: string, Correo: string, telefono: string ){
+  GuardarActualizarUsuario(Nombres: string, Apellidos: string, Identificacion: string, Correo: string, telefono: string) {
 
     // cambiar datos del objecto
     this.DatosPersona.nombres = Nombres;
@@ -429,7 +428,7 @@ export class UsuarioService {
     this.DatosPersona.identificacion = Identificacion;
 
     // datos de empresa
-    const nombrecompleto = Nombres.toUpperCase() + ' ' + Apellidos.toUpperCase() ;
+    const nombrecompleto = Nombres.toUpperCase() + ' ' + Apellidos.toUpperCase();
 
     this.DatosPersona.empresaUsuario[0].identificacion = Identificacion;
     this.DatosPersona.empresaUsuario[0].nombre_Comun = nombrecompleto;
@@ -439,7 +438,7 @@ export class UsuarioService {
     this.ActualizarCorreo(Correo);
 
     // Telefono
-    this.ActualizarTelefono (telefono);
+    this.ActualizarTelefono(telefono);
 
 
     return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
@@ -460,10 +459,10 @@ export class UsuarioService {
       this.addresses[0].nombres = Nombres.toUpperCase();
       this.addresses[0].apellidos = Apellidos.toUpperCase();
       this.addresses[0].telefono = telefono;
-      this.addresses[0].correo  = Correo;
+      this.addresses[0].correo = Correo;
 
       // actualizar el id de telefono
-      this.DatosPersona.dllTelefono[0].idTelefono =  ret.dllTelefono[0].idTelefono;
+      this.DatosPersona.dllTelefono[0].idTelefono = ret.dllTelefono[0].idTelefono;
       this.DatosPersona.dllMail[0].idMail = ret.dllMail[0].idMail;
 
       return ret;
@@ -472,29 +471,29 @@ export class UsuarioService {
 
   }
 
-  async CargarMaestrosLocalizacion(){
+  async CargarMaestrosLocalizacion() {
 
-    if (this.objMaestrosLocalizacion.barrios === undefined){
+    if (this.objMaestrosLocalizacion.barrios === undefined) {
       return await this.MaestrosLocalizacion().then((ret: any) => { });
     }
 
   }
 
-  GuardarActualizarContrasena(Contrasena: string ){
+  GuardarActualizarContrasena(Contrasena: string) {
 
     // cambiar datos del objecto
     this.DatosPersona.dllUsuario[0].contrasena = Contrasena;
 
     return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
-      if (this.getEstadoLoguin()){
+      if (this.getEstadoLoguin()) {
 
         // actualizamos datos del storage
         let UsuarioSesion = new LoguinRequest();
         UsuarioSesion = this.localService.getJsonValue(this.token);
         UsuarioSesion.contrasena = Contrasena;
 
-        this.guardarStorage(UsuarioSesion, this.DatosPersona.empresaUsuario.idEmpresa, this.DatosPersona.idPersona, this.DatosPersona.identificacion );
+        this.guardarStorage(UsuarioSesion, this.DatosPersona.empresaUsuario.idEmpresa, this.DatosPersona.idPersona, this.DatosPersona.identificacion);
 
       }
 
@@ -504,14 +503,14 @@ export class UsuarioService {
 
   }
 
-  GuardarActualizarDireccion(objGuardar: GuardarDireccion ){
+  GuardarActualizarDireccion(objGuardar: GuardarDireccion) {
 
     // cambiar datos del objecto
-    if (objGuardar.Id > 0){
+    if (objGuardar.Id > 0) {
 
-      const index = this.DatosPersona.dllDireccion.findIndex( x => x.idDireccion === objGuardar.Id);
+      const index = this.DatosPersona.dllDireccion.findIndex(x => x.idDireccion === objGuardar.Id);
 
-      if (index >= 0){
+      if (index >= 0) {
 
         this.DatosPersona.dllDireccion[0].idBarrio = objGuardar.Barrio;
         this.DatosPersona.dllDireccion[0].idPrefijoDireccionUno = objGuardar.Prefijo;
@@ -528,35 +527,37 @@ export class UsuarioService {
 
       }
 
-    }else{
+    } else {
 
-       this.DatosPersona.dllDireccion
-       .push({idDireccion: 0 , idTipoDireccion: 1,  idBarrio: objGuardar.Barrio, idEstrato: 1,
-        idPrefijoDireccionUno: objGuardar.Prefijo, parteUno: objGuardar.CalleCarrera, parteDos: objGuardar.Direccion,
-        parteTres: objGuardar.Interior, predeterminado: 1, codigoPostal: objGuardar.CodigoPostal, operacion: cOperaciones.Ingresar,
-        barrio: objGuardar.Strbarrio, ciudad: objGuardar.ciudad, departamento: objGuardar.departamento,
-        pais: objGuardar.pais, direccion: objGuardar.direccion });
+      this.DatosPersona.dllDireccion
+        .push({
+          idDireccion: 0, idTipoDireccion: 1, idBarrio: objGuardar.Barrio, idEstrato: 1,
+          idPrefijoDireccionUno: objGuardar.Prefijo, parteUno: objGuardar.CalleCarrera, parteDos: objGuardar.Direccion,
+          parteTres: objGuardar.Interior, predeterminado: 1, codigoPostal: objGuardar.CodigoPostal, operacion: cOperaciones.Ingresar,
+          barrio: objGuardar.Strbarrio, ciudad: objGuardar.ciudad, departamento: objGuardar.departamento,
+          pais: objGuardar.pais, direccion: objGuardar.direccion
+        });
     }
 
     return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
-        // Direcciones
-        this.CargarDirecciones();
+      // Direcciones
+      this.CargarDirecciones();
 
-        return ret;
+      return ret;
 
     });
 
   }
 
-  EliminarDireccion(idDireccion: number ){
+  EliminarDireccion(idDireccion: number) {
 
     // cambiar datos del objecto
-    if (idDireccion > 0){
+    if (idDireccion > 0) {
 
-      const index = this.DatosPersona.dllDireccion.findIndex( x => x.idDireccion === idDireccion);
+      const index = this.DatosPersona.dllDireccion.findIndex(x => x.idDireccion === idDireccion);
 
-      if (index >= 0){
+      if (index >= 0) {
 
         this.DatosPersona.dllDireccion[0].operacion = cOperaciones.Borrar;
 
@@ -565,64 +566,66 @@ export class UsuarioService {
 
     return this.CRUDPersonaExistente('UPD', this.DatosPersona).then((ret: any) => {
 
-        // Direcciones
-        this.CargarDirecciones();
+      // Direcciones
+      this.CargarDirecciones();
 
-        return ret;
+      return ret;
 
     });
 
   }
 
-  ActualizarCorreo(correo: string){
+  ActualizarCorreo(correo: string) {
 
-    if (this.DatosPersona.dllMail.length > 0){
+    if (this.DatosPersona.dllMail.length > 0) {
 
       this.DatosPersona.dllMail[0].mail = correo;
       this.DatosPersona.dllMail[0].operacion = cOperaciones.Actualizar;
 
-    }else{
+    } else {
 
-      this.DatosPersona.dllMail.push({idMail: 0 , idTipoEmail: 1,  mail: correo, predeterminado: 1, operacion: cOperaciones.Ingresar  });
+      this.DatosPersona.dllMail.push({ idMail: 0, idTipoEmail: 1, mail: correo, predeterminado: 1, operacion: cOperaciones.Ingresar });
 
     }
   }
 
-  ActualizarTelefono(tel: string){
+  ActualizarTelefono(tel: string) {
 
-    if (this.DatosPersona.dllTelefono.length > 0){
+    if (this.DatosPersona.dllTelefono.length > 0) {
 
       this.DatosPersona.dllTelefono[0].telefono = tel;
       this.DatosPersona.dllTelefono[0].operacion = cOperaciones.Actualizar;
 
-    }else{
+    } else {
 
       this.DatosPersona.dllTelefono.push(
-          {idTelefono: 0 , idTipoTelefono: 1, indicativoPais: '', indicativoArea: '' ,
-            telefono: tel, extension: '', predeterminado: 1, operacion: cOperaciones.Ingresar   });
+        {
+          idTelefono: 0, idTipoTelefono: 1, indicativoPais: '', indicativoArea: '',
+          telefono: tel, extension: '', predeterminado: 1, operacion: cOperaciones.Ingresar
+        });
 
     }
   }
 
   cargarUsuarioStorage() {
-    // if (isPlatformBrowser(this.platformId)) {
-    //   // Only execute this code on the browser
-    //   const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+    if (isPlatformBrowser(this.platformId)) {
+      // Only execute this code on the browser
+      const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
 
-    //   if (usrlogueado) {
-    //     const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
-    //     this.Idempresa = usrlogueado.IdEmp;
-    //     this.Loguin(RestaurarSesion);
-    //   } else {
-    //     this.setEstadoLoguin$(false);
-    //     localStorage.setItem("isLogue", "false");
-    //   }
-    // } else {
-    //   // Handle server-side logic if necessary
-    // }
+      if (usrlogueado) {
+        const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
+        this.Idempresa = usrlogueado.IdEmp;
+        this.Loguin(RestaurarSesion);
+      } else {
+        this.setEstadoLoguin$(false);
+        localStorage.setItem("isLogue", "false");
+      }
+    } else {
+      // Handle server-side logic if necessary
+    }
   }
 
-  loguout(){
+  loguout() {
 
     // colocar datos en cero
     this.razonsocial = '';
@@ -643,7 +646,7 @@ export class UsuarioService {
 
   }
 
-  private cargarRespuesta(config: any, usrrq: LoguinRequest){
+  private cargarRespuesta(config: any, usrrq: LoguinRequest) {
 
     // validar mensaje
     if (config.estado[0].msgId === EstadoRespuestaMensaje.Error) {
@@ -651,18 +654,18 @@ export class UsuarioService {
       this.setEstadoLoguin$(false);
       this.MensajeError = config.estado[0].msgStr;
 
-    }else{
+    } else {
 
       // guardar storage
-      this.guardarStorage(usrrq, config.usuario[0].idEmp, config.usuario[0].idnt, config.usuario[0].idPersona );
+      this.guardarStorage(usrrq, config.usuario[0].idEmp, config.usuario[0].idnt, config.usuario[0].idPersona);
 
-      this.setUsrLoguin (config);
+      this.setUsrLoguin(config);
 
       this.razonsocial = config.usuario[0].rzScl;
       this.correo = config.usuario[0].mail.toLowerCase();
       this.Idempresa = config.usuario[0].idEmp;
       this.IdPersona = config.usuario[0].idPersona;
-      this.cedula= config.usuario[0].idnt
+      this.cedula = config.usuario[0].idnt
 
       this.UsrLogin = config;
 
@@ -677,7 +680,7 @@ export class UsuarioService {
 
   }
 
-  private guardarStorage(usrrq: LoguinRequest, idempresa: number, idPersona: number, cedula: any){
+  private guardarStorage(usrrq: LoguinRequest, idempresa: number, idPersona: number, cedula: any) {
 
     this.usuarioStorage.loguin = usrrq;
     this.usuarioStorage.IdEmp = idempresa;
@@ -687,21 +690,21 @@ export class UsuarioService {
 
     if (this.recordar) {
       this.localService.setJsonValue(this.token, this.usuarioStorage);
-    }else{
+    } else {
       this.localService.clearToken();
     }
   }
 
-  private CargarDirecciones(){
+  private CargarDirecciones() {
 
     if (Array.isArray(this.UsrLogin.usuario) && this.UsrLogin.usuario.length
-      && this.DatosPersona.dllDireccion.length ){
+      && this.DatosPersona.dllDireccion.length) {
 
       this.addresses = [];
 
       this.DatosPersona.dllDireccion.forEach((direccion, index) => {
 
-        let predeterminado =  true;
+        let predeterminado = true;
 
         if (index > 0) {
           predeterminado = false;
@@ -726,7 +729,7 @@ export class UsuarioService {
     }
 
     // llenar con lo basico si no iene ningn direccion
-    if (this.addresses.length === 0){
+    if (this.addresses.length === 0) {
       this.addresses.push({
         default: true,
         Id: 0,
