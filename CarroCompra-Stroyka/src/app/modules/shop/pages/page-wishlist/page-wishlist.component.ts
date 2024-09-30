@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { WishlistService } from '../../../../shared/services/wishlist.service';
 import { CartService } from '../../../../shared/services/cart.service';
 import { RootService } from '../../../../shared/services/root.service';
+import { WishlistService } from '../../../../shared/services/wishlist.service';
 
 // modelos
-import { Item } from '../../../../../data/modelos/articulos/Items';
-import { StoreService } from 'src/app/shared/services/store.service';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, FormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { StoreService } from 'src/app/shared/services/store.service';
+import { UtilsTexto } from 'src/app/shared/utils/UtilsTexto';
+import { Item } from '../../../../../data/modelos/articulos/Items';
 
 @Component({
     selector: 'app-wishlist',
@@ -19,14 +21,20 @@ export class PageWishlistComponent implements OnInit {
     removedProducts: Item[] = [];
     form: UntypedFormGroup;
     items$: Observable<Item[]>;
+    cantOutStock: boolean = true;
 
     constructor(
         public root: RootService,
         public wishlist: WishlistService,
         public cart: CartService,
         public storeSvc: StoreService,
-        private fb: UntypedFormBuilder
-    ) { }
+        private fb: UntypedFormBuilder,
+        private toastr: ToastrService,
+        private utils: UtilsTexto,
+
+    ) {
+        this.cantOutStock = this.storeSvc.configuracionSitio.SuperarInventario;
+    }
 
     ngOnInit() {
         this.items$ = this.wishlist.items$;
@@ -41,6 +49,13 @@ export class PageWishlistComponent implements OnInit {
         const quantity = this.items.at(index).value;
 
         if (this.addedToCartProducts.includes(product)) {
+            return;
+        }
+
+        if (!this.cantOutStock && quantity > product.inventario) {
+            const stockAvailable = (product.inventario - product.inventarioPedido)
+            this.toastr.error(`Producto "${this.utils.TitleCase(product.name)}" no tiene suficiente inventario, disponible:${stockAvailable}`);
+            this.items.at(index).setValue(stockAvailable);
             return;
         }
 

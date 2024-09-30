@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { CartService } from '../../services/cart.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ProductAttribute } from '../../interfaces/product';
-import { WishlistService } from '../../services/wishlist.service';
+import { CartService } from '../../services/cart.service';
 import { CompareService } from '../../services/compare.service';
+import { CurrencyService } from '../../services/currency.service';
 import { QuickviewService } from '../../services/quickview.service';
 import { RootService } from '../../services/root.service';
-import { CurrencyService } from '../../services/currency.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { WishlistService } from '../../services/wishlist.service';
 
 // modelos
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { StoreService } from '../../services/store.service';
+import { UtilsTexto } from '../../utils/UtilsTexto';
 
 @Component({
     selector: 'app-product-card',
@@ -23,18 +25,25 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     private destroy$: Subject<void> = new Subject();
 
     @Input() product: Item;
-    @Input() layout: 'grid-sm'|'grid-nl'|'grid-lg'|'list'|'horizontal'|null = null;
+    @Input() layout: 'grid-sm' | 'grid-nl' | 'grid-lg' | 'list' | 'horizontal' | null = null;
 
     addingToCart = false;
     addingToWishlist = false;
     addingToCompare = false;
     showingQuickview = false;
     productosFavoritos = [];
-    esFavorito : boolean = false;
+    esFavorito: boolean = false;
     featuredAttributes: ProductAttribute[] = [];
     quick
     islogged
-    quantity : number = 1;
+    quantity: number = 1;
+    cantOutStock: boolean = true;
+
+
+    toastOptions: Partial<IndividualConfig> = {
+        timeOut: 1000,
+        tapToDismiss: true,
+    };
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -45,7 +54,12 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         public quickview: QuickviewService,
         public currency: CurrencyService,
         public storeSvc: StoreService,
-    ) { }
+        private toastr: ToastrService,
+        private utils: UtilsTexto,
+    ) {
+        this.cantOutStock = this.storeSvc.configuracionSitio.SuperarInventario;
+
+    }
 
     ngOnInit(): void {
         this.islogged = localStorage.getItem("isLogue");
@@ -69,6 +83,13 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
+        if (!this.cantOutStock && this.quantity > this.product.inventario) {
+            const stockAvailable = (this.product.inventario - this.product.inventarioPedido)
+            this.toastr.error(`Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible:${stockAvailable}`, '', this.toastOptions);
+            this.quantity = stockAvailable;
+            return;
+        }
+
         this.addingToCart = true;
         // tslint:disable-next-line: deprecation
         // tslint:disable-next-line: deprecation
@@ -84,11 +105,11 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         this.esFavorito = true;
         if (!this.addingToWishlist && this.product) {
 
-                this.wishlist.add(this.product).then((data: any)=>{
-                if(data){
+            this.wishlist.add(this.product).then((data: any) => {
+                if (data) {
                     this.addingToWishlist = false
                 }
-                });
+            });
 
 
         }
@@ -116,7 +137,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.showingQuickview = true;
         // tslint:disable-next-line: deprecation
-         this.quickview.show(this.product).subscribe({
+        this.quickview.show(this.product).subscribe({
             complete: () => {
                 this.showingQuickview = false;
                 this.cd.markForCheck();
@@ -125,10 +146,10 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
-    cargarFavoritos(){
-     this.productosFavoritos= JSON.parse(localStorage.getItem("favoritos"))
-     const product =  this.productosFavoritos?.findIndex(element =>  element.id ===  this.product.id)
-     this.esFavorito = product != -1
+    cargarFavoritos() {
+        this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos"))
+        const product = this.productosFavoritos?.findIndex(element => element.id === this.product.id)
+        this.esFavorito = product != -1
     }
 
 

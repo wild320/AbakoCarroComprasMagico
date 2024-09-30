@@ -1,11 +1,10 @@
-import { Component, Inject, Input, PLATFORM_ID, OnInit } from '@angular/core';
-import { Product } from '../../interfaces/product';
+import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { CartService } from '../../services/cart.service';
-import { WishlistService } from '../../services/wishlist.service';
 import { CompareService } from '../../services/compare.service';
 import { RootService } from '../../services/root.service';
-import { IndividualConfig, ToastrService } from 'ngx-toastr';
+import { WishlistService } from '../../services/wishlist.service';
 
 // utils
 import { UtilsTexto } from '../../utils/UtilsTexto';
@@ -37,7 +36,7 @@ export class ProductComponent implements OnInit {
     esFavorito: boolean = false;
     url: string;
     islogged
-    toastOptions: Partial<IndividualConfig>= {
+    toastOptions: Partial<IndividualConfig> = {
         timeOut: 1000,
         tapToDismiss: true,
     };
@@ -62,18 +61,32 @@ export class ProductComponent implements OnInit {
     }
 
     addToCart(): void {
-
-        if (this.storeSvc.configuracionSitio.SuperarInventario) {
-            this.addingToCart = true;
-            this.cart.add(this.product, this.quantity.value).subscribe({ complete: () => this.addingToCart = false });
+        
+        console.log(this.product)
+        const availableStock = this.product.inventario - this.product.inventarioPedido;
+        const requestedQuantity = this.quantity.value;
+    
+        // If already adding to cart, prevent further actions
+        if (this.addingToCart) {
+            return;
         }
-        else if (!this.addingToCart && this.product && this.quantity.value > 0 && (this.product.inventario - this.product.inventarioPedido) >= this.quantity.value) {
+    
+        // Check if the product can be added based on stock policy
+        if (this.storeSvc.configuracionSitio.SuperarInventario || (requestedQuantity > 0 && requestedQuantity <= availableStock)) {
             this.addingToCart = true;
-            this.cart.add(this.product, this.quantity.value).subscribe({ complete: () => this.addingToCart = false });
+            this.cart.add(this.product, requestedQuantity).subscribe({
+                complete: () => this.addingToCart = false
+            });
         } else {
-            this.toastr.error(`Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible:${(this.product.inventario - this.product.inventarioPedido)}`, '', this.toastOptions);
+            this.quantity.setValue(availableStock);
+            this.toastr.error(
+                `Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible: ${availableStock}`,
+                '',
+                this.toastOptions
+            );
         }
     }
+    
 
     addToWishlist() {
 
@@ -90,22 +103,22 @@ export class ProductComponent implements OnInit {
     cargarFavoritos() {
         // Obtiene los favoritos del localStorage o inicializa un arreglo vacío si no hay favoritos
         this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    
+
         // Verifica si hay productos favoritos
         if (this.productosFavoritos.length > 0) {
-    
+
             // Busca el índice del producto actual en la lista de favoritos
             const productIndex = this.productosFavoritos.findIndex(element => element.id === this.product?.id);
-    
+
             // Determina si el producto es favorito (esFavorito será true si el producto existe en la lista)
             this.esFavorito = productIndex !== -1;
-    
+
         } else {
             // Si no hay productos favoritos, establece esFavorito como false
             this.esFavorito = false;
         }
     }
-    
+
 
 
 
