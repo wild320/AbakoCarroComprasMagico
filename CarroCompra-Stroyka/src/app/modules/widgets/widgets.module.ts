@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // modules (third-party)
-import { NgxSliderModule } from '@m0t0r/ngx-slider';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 // modules
 import { SharedModule } from '../../shared/shared.module';
