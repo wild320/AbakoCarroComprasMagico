@@ -33,7 +33,7 @@ $stroyka-theme: mat-light-theme((
 // that you are using.
 @include angular-material-theme($stroyka-theme);
 
-@import '~ngx-toastr/toastr';
+@import 'ngx-toastr/toastr'; 
 @import 'scss/style';
 
 html, body { height: 100%; }

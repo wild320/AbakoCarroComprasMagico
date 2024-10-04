@@ -3,7 +3,6 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app-server",
-    "target": "es2020",
     "types": [
       "node"
     ]

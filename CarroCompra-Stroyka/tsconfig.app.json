@@ -4,7 +4,6 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "allowJs": true,
-    "target": "es2020",
     "outDir": "./out-tsc/app",
     "types": [
       "node"
