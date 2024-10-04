@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Params, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Params, Router, RouterStateSnapshot } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { ProductsList } from '../../../shared/interfaces/list';
 import { catchError } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export function parseProductsListParams(params: Params): ListOptions {
 @Injectable({
     providedIn: 'root'
 })
-export class ProductsListResolverService implements Resolve<ProductsList> {
+export class ProductsListResolverService  {
     constructor(
         private root: RootService,
         private router: Router,

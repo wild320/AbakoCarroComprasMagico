@@ -1,26 +1,28 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { EventManager } from '@angular/platform-browser';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, HostListener } from '@angular/core';
 
 @Directive({
     selector: '[appFakeSlides]',
     exportAs: 'appFakeSlides'
 })
 export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
-    @Input() options;
+    @Input() options: any; // Especifica el tipo según tu configuración
     @Input() appFakeSlides = 0;
 
-    private resizeHandler;
-
-    slides = [];
+    slides: number[] = [];
     slidesCount = 0;
 
-    constructor(
-        private eventManager: EventManager,
-        private el: ElementRef
-    ) { }
+    private resizeHandler: () => void;
+
+    constructor(private el: ElementRef) { }
 
     ngOnInit(): void {
-        this.resizeHandler = this.eventManager.addGlobalEventListener('window', 'resize', () => this.calc());
+        this.calc();
+        // Usamos el evento de resize directamente en el objeto window
+        this.resizeHandler = this.onResize.bind(this);
+        window.addEventListener('resize', this.resizeHandler);
+    }
+
+    private onResize(): void {
         this.calc();
     }
 
@@ -61,12 +63,13 @@ export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.calc();
+        if (changes.options || changes.appFakeSlides) {
+            this.calc();
+        }
     }
 
     ngOnDestroy(): void {
-        if (this.resizeHandler) {
-            this.resizeHandler();
-        }
+        // Eliminar el listener al destruir el componente
+        window.removeEventListener('resize', this.resizeHandler);
     }
 }
