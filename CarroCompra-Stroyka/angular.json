@@ -273,42 +273,42 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "stroyka:build"
+            "buildTarget": "stroyka:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "stroyka:build:production"
+              "buildTarget": "stroyka:build:production"
             },
             "theme-blue": {
-              "browserTarget": "stroyka:build:theme-blue"
+              "buildTarget": "stroyka:build:theme-blue"
             },
             "theme-blue-production": {
-              "browserTarget": "stroyka:build:theme-blue-production"
+              "buildTarget": "stroyka:build:theme-blue-production"
             },
             "theme-red": {
-              "browserTarget": "stroyka:build:theme-red"
+              "buildTarget": "stroyka:build:theme-red"
             },
             "theme-red-production": {
-              "browserTarget": "stroyka:build:theme-red-production"
+              "buildTarget": "stroyka:build:theme-red-production"
             },
             "theme-green": {
-              "browserTarget": "stroyka:build:theme-green"
+              "buildTarget": "stroyka:build:theme-green"
             },
             "theme-green-production": {
-              "browserTarget": "stroyka:build:theme-green-production"
+              "buildTarget": "stroyka:build:theme-green-production"
             },
             "theme-black": {
-              "browserTarget": "stroyka:build:theme-black"
+              "buildTarget": "stroyka:build:theme-black"
             },
             "theme-black-production": {
-              "browserTarget": "stroyka:build:theme-black-production"
+              "buildTarget": "stroyka:build:theme-black-production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "stroyka:build"
+            "buildTarget": "stroyka:build"
           }
         },
         "test": {
@@ -372,7 +372,7 @@
           "defaultConfiguration": ""
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "options": {
             "browserTarget": "stroyka:build",
             "serverTarget": "stroyka:server"
@@ -385,7 +385,7 @@
           }
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "browserTarget": "stroyka:build:production",
             "serverTarget": "stroyka:server:production",
