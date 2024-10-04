@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./departments.component.scss']
 })
 export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
-    private destroy$: Subject<any> = new Subject();
+    private destroy$: Subject<void> = new Subject();
 
     @ViewChild('bodyElement') bodyElementRef: ElementRef;
     @ViewChild('containerElement') containerElementRef: ElementRef;
@@ -53,7 +53,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private renderer: Renderer2,
         private el: ElementRef,
         private header: HeaderService,

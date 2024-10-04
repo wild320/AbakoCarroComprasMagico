@@ -9,7 +9,7 @@ export type AbsoluteUrlScope = 'angular' | 'html';
 })
 export class AbsoluteUrlPipe implements PipeTransform {
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private router: Router,
         private route: ActivatedRoute,
     ) { }

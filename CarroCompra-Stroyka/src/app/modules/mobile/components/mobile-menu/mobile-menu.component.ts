@@ -20,7 +20,7 @@ import { StoreService } from 'src/app/shared/services/store.service';
     styleUrls: ['./mobile-menu.component.scss']
 })
 export class MobileMenuComponent implements OnDestroy, OnInit {
-    private destroy$: Subject<any> = new Subject();
+    private destroy$: Subject<void> = new Subject();
 
     isOpen = false;
     links: MobileMenuItem[];

@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
     selector: '[appClick]'
 })
 export class ClickDirective implements OnInit, OnDestroy {
-    private destroy$: Subject<any> = new Subject();
+    private destroy$: Subject<void> = new Subject();
 
     private get element(): HTMLElement {
         return this.el.nativeElement;

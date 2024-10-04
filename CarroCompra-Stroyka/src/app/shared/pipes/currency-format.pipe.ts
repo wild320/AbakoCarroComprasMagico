@@ -7,12 +7,13 @@ import { CurrencyService } from '../services/currency.service';
     pure: false
 })
 export class CurrencyFormatPipe implements PipeTransform {
-    currencyPipe: CurrencyPipe = new CurrencyPipe(this.locale);
+    currencyPipe: CurrencyPipe;
 
     constructor(
         @Inject(LOCALE_ID) private locale: string,
         private service: CurrencyService
     ) {
+        this.currencyPipe = new CurrencyPipe(this.locale);
     }
 
      transform(

@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
         tapToDismiss: true,
     };
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private router: Router,
         private toastr: ToastrService,
         private cart: CartService,

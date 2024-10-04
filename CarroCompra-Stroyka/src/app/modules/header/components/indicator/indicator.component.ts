@@ -51,7 +51,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     isOpen = false;
 
-    private destroy$: Subject<any> = new Subject();
+    private destroy$: Subject<void> = new Subject();
 
     private get element(): HTMLElement {
         return this.elementRef.nativeElement;
@@ -62,7 +62,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private elementRef: ElementRef,
         private zone: NgZone,
         private header: HeaderService,

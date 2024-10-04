@@ -42,7 +42,7 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private route: ActivatedRoute,
         private offcanvasCart: OffcanvasCartService,
         public root: RootService,

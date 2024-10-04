@@ -17,7 +17,7 @@ export class OwlPreventClickDirective implements OnInit {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private elementRef: ElementRef,
         private zone: NgZone
     ) { }

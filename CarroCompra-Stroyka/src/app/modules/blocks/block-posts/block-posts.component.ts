@@ -11,13 +11,7 @@ export class BlockPostsComponent {
     @Input() layout: 'list-sm'|'grid-nl' = 'list-sm';
     @Input() posts: any[] = [];
 
-    carouselDefaultOptions = {
-        margin: 30,
-        nav: false,
-        dots: false,
-        loop: true,
-        rtl: this.direction.isRTL()
-    };
+    carouselDefaultOptions
 
     carouselOptionsByLayout = {
         'grid-nl': {
@@ -41,5 +35,13 @@ export class BlockPostsComponent {
 
     constructor(
         private direction: DirectionService
-    ) { }
+    ) { 
+        this.carouselDefaultOptions  = {
+            margin: 30,
+            nav: false,
+            dots: false,
+            loop: true,
+            rtl: this.direction.isRTL()
+        };
+    }
 }

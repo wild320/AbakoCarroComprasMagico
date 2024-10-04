@@ -7,7 +7,7 @@ import { RootComponent } from './components/root/root.component';
 import { PageOffcanvasCartComponent } from './pages/page-offcanvas-cart/page-offcanvas-cart.component';
 
 
-const routes: Routes = [
+export const routes: Routes = [
     // START / ONLY_FOR_DEMO_YOU_CAN_DELETE_IT
     // {
     //     path: 'home-two',

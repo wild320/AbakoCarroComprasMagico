@@ -42,7 +42,7 @@ export class ProductComponent implements OnInit {
     };
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private cart: CartService,
         private wishlist: WishlistService,
         private compare: CompareService,

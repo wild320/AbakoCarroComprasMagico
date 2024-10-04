@@ -25,7 +25,7 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
     constructor(
         public sidebar: ShopSidebarService,
         @Inject(PLATFORM_ID)
-        private platformId: any
+        private platformId: Object
     ) { }
 
     ngOnInit(): void {

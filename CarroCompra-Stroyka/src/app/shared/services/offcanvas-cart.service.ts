@@ -12,7 +12,7 @@ export class OffcanvasCartService {
 
     constructor(
         @Inject(PLATFORM_ID)
-        private platformId: any
+        private platformId: Object
     ) { }
 
     open(): void {

@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
     selector: '[appCollapseContent]'
 })
 export class CollapseContentDirective implements OnInit, OnDestroy {
-    private destroy$: Subject<any> = new Subject();
+    private destroy$: Subject<void> = new Subject();
 
     get element(): HTMLElement {
         return this.el.nativeElement;

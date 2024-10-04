@@ -102,7 +102,7 @@ export class ShareButtonsComponent implements OnChanges {
 
     @HostBinding('class.share-buttons') classShareLinks = true;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: any) {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
         
 
 

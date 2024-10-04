@@ -14,7 +14,7 @@ import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
     exportAs: 'appDropdown'
 })
 export class DropdownDirective implements OnDestroy {
-    private destroy$: Subject<any> = new Subject();
+    private destroy$ = new Subject<void>();
 
     @Input() appDropdown = '';
 
@@ -27,7 +27,7 @@ export class DropdownDirective implements OnDestroy {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private el: ElementRef,
         private zone: NgZone,
         public usuariosvc: UsuarioService

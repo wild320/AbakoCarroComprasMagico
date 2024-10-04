@@ -13,21 +13,22 @@ import { Cpaginas } from '../../../../../data/contantes/cPaginas';
     styleUrls: ['./page-about-us.component.scss']
 })
 export class PageAboutUsComponent {
-    carouselOptions = {
-        nav: false,
-        dots: true,
-        responsive: {
-            580: {items: 3, margin: 32},
-            280: {items: 2, margin: 24},
-            0: {items: 1}
-        },
-        rtl: this.direction.isRTL()
-    };
+    carouselOptions
 
     constructor(
         private direction: DirectionService,
         public pagina: PaginasService
     ) {
+        this.carouselOptions = {
+            nav: false,
+            dots: true,
+            responsive: {
+                580: {items: 3, margin: 32},
+                280: {items: 2, margin: 24},
+                0: {items: 1}
+            },
+            rtl: this.direction.isRTL()
+        };
 
         if (this.pagina.AcercaNosotros === '' ||  this.pagina.AcercaNosotros === null
             || this.pagina.AcercaNosotros === undefined ){

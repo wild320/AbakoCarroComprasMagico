@@ -44,14 +44,14 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     filters: Filters[];
     filtersForm: UntypedFormGroup;
     filtrosValores: SerializedFilterValues = {};
-    isPlatformBrowser = isPlatformBrowser(this.platformId);
+    isPlatformBrowser: boolean;
     ArticulosSuscribe$: any;
     rightToLeft = false;
     Productos = new Products();
     showFilterMarcas: boolean = false;
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private direction: DirectionService,
         private fb: UntypedFormBuilder,
         public root: RootService,
@@ -59,6 +59,8 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         public articulossvc: ArticulosService,
         public storeSv: StoreService
     ) {
+        this.platformId = platformId;
+        this.isPlatformBrowser = isPlatformBrowser(this.platformId);
 
         this.rightToLeft = this.direction.isRTL();
         this.showFilterMarcas = this.storeSv.configuracionSitio.VerFiltroMarcas

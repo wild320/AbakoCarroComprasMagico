@@ -63,7 +63,7 @@ export class CartService {
 
     constructor(
         @Inject(PLATFORM_ID)
-        private platformId: any
+        private platformId: Object
     ) {
         if (isPlatformBrowser(this.platformId)) {
             this.load();

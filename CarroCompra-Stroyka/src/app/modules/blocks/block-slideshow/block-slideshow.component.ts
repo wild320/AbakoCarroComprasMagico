@@ -15,24 +15,7 @@ import { PaginasService } from '../../../shared/services/paginas.service';
 export class BlockSlideshowComponent  {
     @Input() withDepartments = false;
 
-    options = {
-        nav: false,
-        dots: true,
-        loop: true,
-        mouseDrag: true,
-        touchDrag: true,
-        pullDrag: false,
-        autoplay: true,
-        animateIn: 'fadeIn',
-        animateOut: 'fadeOut',
-        autoplaySpeed: 800,
-        autoplayTimeout: 5000,
-        navSpeed: 700,
-        responsive: {
-            0: {items: 1}
-        },
-        rtl: this.direction.isRTL()
-    };
+    options;
 
     slides = [];
 
@@ -43,6 +26,24 @@ export class BlockSlideshowComponent  {
         public StoreSvc: StoreService
     ) {
 
+        this.options = {
+            nav: false,
+            dots: true,
+            loop: true,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: false,
+            autoplay: true,
+            animateIn: 'fadeIn',
+            animateOut: 'fadeOut',
+            autoplaySpeed: 800,
+            autoplayTimeout: 5000,
+            navSpeed: 700,
+            responsive: {
+                0: {items: 1}
+            },
+            rtl: this.direction.isRTL()
+        };
         this. CargarAcordeones();
 
     }

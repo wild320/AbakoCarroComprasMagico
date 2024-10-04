@@ -18,7 +18,7 @@ export class TotopComponent implements OnInit, OnDestroy {
     @HostBinding('class.totop--show') get classTotopShow(): boolean { return this.show; }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private zone: NgZone,
     ) { }
 

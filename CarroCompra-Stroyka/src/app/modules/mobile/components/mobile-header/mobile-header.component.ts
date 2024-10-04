@@ -58,7 +58,7 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         public menu: MobileMenuService,
         public wishlist: WishlistService,
         public cart: CartService,

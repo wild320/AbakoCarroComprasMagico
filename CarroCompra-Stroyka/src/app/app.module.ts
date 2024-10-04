@@ -76,7 +76,11 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
         FormsModule,
         // modules (third-party)
         CarouselModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+          timeOut: 3000, 
+          positionClass: 'toast-top-right',
+          preventDuplicates: true,
+        }),
         // modules
         AppRoutingModule,
         BlocksModule,

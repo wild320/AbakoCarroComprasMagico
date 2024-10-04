@@ -27,27 +27,9 @@ export class ProductGalleryComponent implements OnInit {
     items: ProductGalleryItem[] = [];
     currentItem: ProductGalleryItem | null = null;
 
-    carouselOptions: Partial<OwlCarouselOConfig> = {
-        dots: false,
-        autoplay: false,
-        responsive: {
-            0: { items: 1 }
-        },
-        rtl: this.direction.isRTL()
-    };
+    carouselOptions: Partial<OwlCarouselOConfig>;
 
-    thumbnailsCarouselOptions: Partial<OwlCarouselOConfig> = {
-        dots: false,
-        autoplay: false,
-        margin: 10,
-        items: 5,
-        responsive: {
-            480: { items: 5 },
-            380: { items: 4 },
-            0: { items: 3 }
-        },
-        rtl: this.direction.isRTL()
-    };
+    thumbnailsCarouselOptions: Partial<OwlCarouselOConfig>;
 
     @HostBinding('class.product-gallery') classProductGallery = true;
 
@@ -56,10 +38,31 @@ export class ProductGalleryComponent implements OnInit {
     @ViewChildren('imageElement', { read: ElementRef }) imageElements: QueryList<ElementRef>;
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private photoSwipe: PhotoSwipeService,
         private direction: DirectionService
-    ) { }
+    ) { 
+        this.carouselOptions = {
+            dots: false,
+            autoplay: false,
+            responsive: {
+                0: { items: 1 }
+            },
+            rtl: this.direction.isRTL()
+        };
+        this.thumbnailsCarouselOptions  = {
+            dots: false,
+            autoplay: false,
+            margin: 10,
+            items: 5,
+            responsive: {
+                480: { items: 5 },
+                380: { items: 4 },
+                0: { items: 3 }
+            },
+            rtl: this.direction.isRTL()
+        };
+    }
 
     ngOnInit(): void {
         if (this.productLayout !== 'quickview' && isPlatformBrowser(this.platformId)) {

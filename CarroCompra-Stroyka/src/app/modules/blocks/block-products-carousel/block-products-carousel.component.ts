@@ -24,15 +24,7 @@ export class BlockProductsCarouselComponent implements OnChanges {
 
     columns: Item[][] = [];
 
-    carouselDefaultOptions: any = {
-        items: 4,
-        margin: 14,
-        nav: false,
-        dots: false,
-        loop: true,
-        stagePadding: 1,
-        rtl: this.direction.isRTL()
-    };
+    carouselDefaultOptions: any;
 
     carouselOptionsByLayout: any = {
         'grid-4': {
@@ -78,7 +70,17 @@ export class BlockProductsCarouselComponent implements OnChanges {
 
     constructor(
         private direction: DirectionService
-    ) {  }
+    ) {  
+        this.carouselDefaultOptions = {
+            items: 4,
+            margin: 14,
+            nav: false,
+            dots: false,
+            loop: true,
+            stagePadding: 1,
+            rtl: this.direction.isRTL()
+        };
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         const properties = Object.keys(changes);

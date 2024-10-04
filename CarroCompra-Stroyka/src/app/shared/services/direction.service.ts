@@ -22,7 +22,7 @@ export class DirectionService {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {
         if (isPlatformBrowser(this.platformId)) {
             this.direction = getComputedStyle(document.body).direction as Direction;

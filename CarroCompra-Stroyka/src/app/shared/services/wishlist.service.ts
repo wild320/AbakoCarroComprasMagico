@@ -45,7 +45,7 @@ export class WishlistService implements OnDestroy {
 
     constructor(
         @Inject(PLATFORM_ID)
-        private platformId: any,
+        private platformId: Object,
         private toastr: ToastrService,
         public usuariosvc: UsuarioService,
         private localService: LocalService,
