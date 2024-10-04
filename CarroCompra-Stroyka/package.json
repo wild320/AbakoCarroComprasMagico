@@ -32,7 +32,7 @@
     "express": "^4.19.2",
     "ng-lazyload-image": "^9.1.0",
     "ngx-bootstrap": "^5.6.1",
-    "ngx-image-zoom": "^0.6.0",
+    "ngx-image-zoom": "^3.0.0",
     "ngx-owl-carousel-o": "^3.0.1",
     "ngx-toastr": "^12.1.0",
     "photoswipe": "^4.1.3",
