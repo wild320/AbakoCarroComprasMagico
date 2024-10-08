@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { StoreService } from 'src/app/shared/services/store.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { StoreService } from '../../../../shared/services/store.service';
 
 @Component({
   selector: 'app-whatsapp-button',
@@ -8,7 +8,7 @@ import { StoreService } from 'src/app/shared/services/store.service';
 })
 export class WhatsappButtonComponent implements OnInit {
 
-  constructor(public store: StoreService) { }
+  constructor(@Inject(StoreService) public store: StoreService) { }
 
   ngOnInit(): void {
   }

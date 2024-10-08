@@ -1,6 +1,6 @@
 import {Item} from './Items';
-import {Filters} from './filters';
 import {filterValues} from './filterValues';
+import { Filters }  from './Filters';
 
 export class Products {
     page: number;

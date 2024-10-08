@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { MobileMenuItem } from '../../../../shared/interfaces/mobile-menu-item';
 
 @Component({
@@ -12,14 +13,16 @@ export class MobileLinksComponent implements OnInit {
 
     @Output() itemClick: EventEmitter<MobileMenuItem> = new EventEmitter();
 
-    constructor() {
-    }
+    constructor( @Inject(PLATFORM_ID) private platformId: Object,) {}
 
     ngOnInit(): void {
-        // Se olbiga a usar setTimeout porque los links de categorias se demora en llegar
-        setTimeout(() => {
-            this.sortGrandchildrenAlphabetically();
-        }, 6000);
+        if(isPlatformBrowser(this.platformId)) {
+
+            // Se olbiga a usar setTimeout porque los links de categorias se demora en llegar
+            setTimeout(() => {
+                this.sortGrandchildrenAlphabetically();
+            }, 6000);
+        }
     }
 
     onItemClick(item: MobileMenuItem): void {

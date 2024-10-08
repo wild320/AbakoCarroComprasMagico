@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, OnInit, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ProductAttribute } from '../../interfaces/product';
+import { Product, ProductAttribute } from '../../interfaces/product';
 import { CartService } from '../../services/cart.service';
 import { CompareService } from '../../services/compare.service';
 import { CurrencyService } from '../../services/currency.service';
@@ -14,6 +14,7 @@ import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { StoreService } from '../../services/store.service';
 import { UtilsTexto } from '../../utils/UtilsTexto';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-product-card',
@@ -24,7 +25,7 @@ import { UtilsTexto } from '../../utils/UtilsTexto';
 export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     private destroy$: Subject<void> = new Subject();
 
-    @Input() product: Item;
+    @Input() product: Item | Product;
     @Input() layout: 'grid-sm' | 'grid-nl' | 'grid-lg' | 'list' | 'horizontal' | null = null;
 
     addingToCart = false;
@@ -46,6 +47,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     };
 
     constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
         private cd: ChangeDetectorRef,
         public root: RootService,
         public cart: CartService,
@@ -57,19 +59,24 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         private toastr: ToastrService,
         private utils: UtilsTexto,
     ) {
-        this.cantOutStock = this.storeSvc.configuracionSitio.SuperarInventario;
+        if(isPlatformBrowser(this.platformId)){
+            this.cantOutStock = this.storeSvc.configuracionSitio.SuperarInventario;
+        }
 
     }
 
     ngOnInit(): void {
-        this.islogged = localStorage.getItem("isLogue");
-        // tslint:disable-next-line: deprecation
-        this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.cd.markForCheck();
+        if(isPlatformBrowser(this.platformId)){
 
-        });
-
-        this.cargarFavoritos();
+            this.islogged = localStorage.getItem("isLogue");
+            // tslint:disable-next-line: deprecation
+            this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+                this.cd.markForCheck();
+                
+            });
+            
+            this.cargarFavoritos();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -83,8 +90,8 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        if (!this.cantOutStock && this.quantity > this.product.inventario) {
-            const stockAvailable = (this.product.inventario - this.product.inventarioPedido)
+        if (!this.cantOutStock && this.quantity > this.product['inventario']) {
+            const stockAvailable = (this.product['inventario'] - this.product['inventarioPedido'])
             this.toastr.error(`Producto "${this.utils.TitleCase(this.product.name)}" no tiene suficiente inventario, disponible:${stockAvailable}`, '', this.toastOptions);
             this.quantity = stockAvailable;
             return;
@@ -93,7 +100,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         this.addingToCart = true;
         // tslint:disable-next-line: deprecation
         // tslint:disable-next-line: deprecation
-        this.cart.add(this.product, this.quantity).subscribe({
+        this.cart.add(this.product as Item, this.quantity).subscribe({
             complete: () => {
                 this.addingToCart = false;
                 this.cd.markForCheck();
@@ -105,7 +112,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         this.esFavorito = true;
         if (!this.addingToWishlist && this.product) {
 
-            this.wishlist.add(this.product).then((data: any) => {
+            this.wishlist.add(this.product as Item).then((data: any) => {
                 if (data) {
                     this.addingToWishlist = false
                 }
@@ -122,7 +129,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.addingToCompare = true;
         // tslint:disable-next-line: deprecation
-        this.compare.add(this.product).subscribe({
+        this.compare.add(this.product as Item).subscribe({
             complete: () => {
                 this.addingToCompare = false;
                 this.cd.markForCheck();
@@ -137,7 +144,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.showingQuickview = true;
         // tslint:disable-next-line: deprecation
-        this.quickview.show(this.product).subscribe({
+        this.quickview.show(this.product as Item).subscribe({
             complete: () => {
                 this.showingQuickview = false;
                 this.cd.markForCheck();
@@ -158,7 +165,7 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         this.destroy$.complete();
     }
 
-    get maxCantidad(): (product: Item) => number {
+    get maxCantidad(): (product: any) => number {
         return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
 

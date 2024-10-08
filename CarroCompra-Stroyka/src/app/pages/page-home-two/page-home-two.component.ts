@@ -36,8 +36,8 @@ export class PageHomeTwoComponent implements OnInit, OnDestroy {
 
     posts = posts;
 
-    featuredProducts: ProductsCarouselData;
-    latestProducts: ProductsCarouselData;
+    featuredProducts: ProductsCarouselData | any;
+    latestProducts: ProductsCarouselData | any;
 
     constructor(
         private shop: ShopService,

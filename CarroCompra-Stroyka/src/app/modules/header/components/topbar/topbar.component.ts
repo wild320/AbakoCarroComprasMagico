@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { Link } from '../../../../shared/interfaces/link';
 
@@ -9,6 +9,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 // constantes
 import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
 import { StoreService } from 'src/app/shared/services/store.service';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -37,6 +38,8 @@ export class TopbarComponent {
     ];
 
     constructor(
+        @Inject(PLATFORM_ID)
+        private platformId: Object,
         public currencyService: CurrencyService,
         public pagina: PaginasService,
         public usuariosvc: UsuarioService,
@@ -59,12 +62,15 @@ export class TopbarComponent {
     }
 
     EstaLogueadoUsuario(){
+        if (isPlatformBrowser(this.platformId)) {
 
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+            this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+    
+                this.usuariologueado = value;
+    
+            });
+        }
 
-            this.usuariologueado = value;
-
-        });
 
     }
 

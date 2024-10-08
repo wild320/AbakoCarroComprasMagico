@@ -4,12 +4,12 @@ import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Item } from 'src/data/modelos/articulos/Items';
 import { CServicios } from '../../../data/contantes/cServicios';
 import { ServiceHelper } from './ServiceHelper';
 import { LocalService } from './local-service.service';
 import { NegocioService } from './negocio.service';
 import { UsuarioService } from './usuario.service';
+import { Item } from '../../../data/modelos/articulos/Items';
 
 interface WishlistData {
     items: Item[];
@@ -30,18 +30,15 @@ export class WishlistService implements OnDestroy {
     private UrlServicio: string;
     usr
     private token = 'token';
-    private itemsFavoritos :any =[];
+    private itemsFavoritos: any = [];
 
     readonly items$: Observable<Item[]> = this.itemsSubject$.asObservable().pipe(takeUntil(this.destroy$));
     readonly onAdding$: Observable<Item> = this.onAddingSubject$.asObservable();
     private quantitySubject$: BehaviorSubject<number> = new BehaviorSubject(this.itemsFavoritos.length);
     readonly count$: Observable<number> = this.quantitySubject$.asObservable();
 
-    toastOptions: Partial<IndividualConfig>= {
-        timeOut: 1000,
-        tapToDismiss: true,
-    };
-      
+
+
 
     constructor(
         @Inject(PLATFORM_ID)
@@ -61,75 +58,78 @@ export class WishlistService implements OnDestroy {
 
 
     CargarUsuario() {
-        this.usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        if (isPlatformBrowser(this.platformId)) {
+            this.usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        }
     }
 
 
 
     async add(product: Item) {
         this.CargarUsuario();
-    
+
         if (!this.usr) {
-            this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión', '', this.toastOptions);
+            this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión');
             return;
         }
-    
+
         const productRequest = {
             proceso: 'NEW',
             IdPersona: parseInt(this.usr.IdEmp),
             dllFavorito: [{ idArticulo: product.id }]
         };
-    
+
         this.UrlServicioFavoritos = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioFavoritos}`;
-    
+
         try {
             const result = await this.servicehelper.PostData(this.UrlServicioFavoritos, productRequest).toPromise();
-    
+
             if (result.mensaje.msgId === 1) {
                 this.onAddingSubject$.next(product);
                 this.load();
             } else {
-                this.toastr.error('El producto no fue agregado a la lista de favoritos', '', this.toastOptions);
+                this.toastr.error('El producto no fue agregado a la lista de favoritos');
             }
         } catch (err) {
             console.error('Error adding product to wishlist:', err);
-            this.toastr.error('Ocurrió un error al intentar agregar el producto a la lista de favoritos', '', this.toastOptions);
+            this.toastr.error('Ocurrió un error al intentar agregar el producto a la lista de favoritos');
         }
     }
-    
+
 
     remove(product: Item) {
-    const index =   this.itemsFavoritos.findIndex(item => item.id === product.id);
-    this.itemsFavoritos.splice(index, 1)
-    this.itemsSubject$.next(this.itemsFavoritos);
-    localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
-    this.quantitySubject$.next(this.itemsFavoritos.length);
-       const productrequest = {
-        "proceso": "DEL",
-        "IdPersona": parseInt(this.usr.IdEmp),
-        "dllFavorito": [
-            {
-                "idArticulo": product.id
-            }
-        ]
+        const index = this.itemsFavoritos.findIndex(item => item.id === product.id);
+        this.itemsFavoritos.splice(index, 1)
+        this.itemsSubject$.next(this.itemsFavoritos);
+        localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
+        this.quantitySubject$.next(this.itemsFavoritos.length);
+        const productrequest = {
+            "proceso": "DEL",
+            "IdPersona": parseInt(this.usr.IdEmp),
+            "dllFavorito": [
+                {
+                    "idArticulo": product.id
+                }
+            ]
+        }
+        //  this.onAddingSubject$.next(product);
+        this.toastr.error(`El producto fue eliminado correctamente`);
+        this.UrlServicioFavoritos = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioFavoritos;
+        return this.httpClient.post(this.UrlServicioFavoritos, productrequest)
     }
-    //  this.onAddingSubject$.next(product);
-    this.toastr.error(`El producto fue eliminado correctamente`, '', this.toastOptions);
-    this.UrlServicioFavoritos = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioFavoritos;
-    return this.httpClient.post(this.UrlServicioFavoritos, productrequest)
-  }
 
 
 
     private load() {
         this.CargarUsuario();
+        
         if (!this.usr) {
-            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `, '', this.toastOptions);
+            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `);
 
         } else {
             const productrequest = {
                 "proceso": "GET",
-                "IdPersona": parseInt(this.usr.IdEmp),
+                "IdPersona": parseInt(this.usr?.IdEmp ?? 0),
                 "dllFavorito": [
                     {
                         "idArticulo": 0
@@ -150,11 +150,11 @@ export class WishlistService implements OnDestroy {
                         return this.httpClient.get(`${this.UrlServicio}/${this.usr.IdEmp}/${element.idArticulo}`)
                             .toPromise()
                             .then((config: any) => {
-                              if(this.itemsFavoritos.findIndex(item=>
-                                item.id == config.articulo.id )==-1){
-                                this.itemsFavoritos.push(config.articulo)
-                                this.quantitySubject$.next(this.itemsFavoritos.length);
-                                localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
+                                if (this.itemsFavoritos.findIndex(item =>
+                                    item.id == config.articulo.id) == -1) {
+                                    this.itemsFavoritos.push(config.articulo)
+                                    this.quantitySubject$.next(this.itemsFavoritos.length);
+                                    localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
                                 }
                             });
 

@@ -1,16 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-
-// servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
-// Modelos
-import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
-
-// constantes
-import { Crutas } from 'src/data/contantes/cRutas';
+import { Crutas } from '../../../../../data/contantes/cRutas';
+import { LoginClienteResponse } from '../../../../../data/modelos/seguridad/LoginClienteResponse';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-account-menu',
@@ -27,7 +22,10 @@ export class AccountMenuComponent implements OnInit {
   public loading = false;
   public RutaRecuperarContrasena = Crutas.RecuperarContrasena;
 
-  constructor(public usuariosvc: UsuarioService,
+  constructor(
+    @Inject(PLATFORM_ID)
+    private platformId: Object,
+    public usuariosvc: UsuarioService,
     private fb: UntypedFormBuilder,
     private router: Router
   ) {
@@ -96,18 +94,21 @@ export class AccountMenuComponent implements OnInit {
   }
 
   EstaLogueadoUsuario() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
-    this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+        this.usuariologueado = value;
 
-      this.usuariologueado = value;
+        this.CargarUsuario();
+      });
 
-      this.CargarUsuario();
-    });
+    }
+
   }
 
   CargarUsuario() {
 
-    if (this.usuariologueado) {
+    if (isPlatformBrowser(this.platformId) && this.usuariologueado) {
 
       localStorage.setItem("isLogue", "true");
       this.UsrLogin = this.usuariosvc.getUsrLoguin();
@@ -118,8 +119,11 @@ export class AccountMenuComponent implements OnInit {
   }
 
   CerrarSesion() {
-    this.usuariosvc.loguout();
-    localStorage.setItem("isLogue", "false");
+    if (isPlatformBrowser(this.platformId)) {
+      this.usuariosvc.loguout();
+      localStorage.setItem("isLogue", "false");
+
+    }
   }
 
   get usuario() { return this.ingresoForm.get('usuario'); }

@@ -133,7 +133,9 @@ export function getProductsList(categorySlug: string|null, options: ListOptions)
         filterValues,
     };
 
-    return timer(350).pipe(map(() => JSON.parse(JSON.stringify(response))));
+    console.log(response);
+
+    return timer(350).pipe(map(() => response));
 }
 
 /**

@@ -1,8 +1,9 @@
-import { Component , OnInit} from '@angular/core';
+import { Component , Inject, OnInit, PLATFORM_ID} from '@angular/core';
 
 // servicios
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { PedidosService } from 'src/app/shared/services/pedidos.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-page-orders-list',
@@ -14,7 +15,9 @@ export class PageOrdersListComponent implements OnInit{
     public pagina = 1;
     public Recuperarregistro = false;
 
-    constructor(public usuariosvc: UsuarioService,
+    constructor(
+        @Inject(PLATFORM_ID)
+        private platformId: Object,public usuariosvc: UsuarioService,
                 public pedidosvc: PedidosService) { }
 
 
@@ -24,15 +27,18 @@ export class PageOrdersListComponent implements OnInit{
     }
 
     EstaLogueadoUsuario(){
+        if (isPlatformBrowser(this.platformId)) {
 
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+            this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+    
+                if (value){
+    
+                    this.RecuperarPedidos();
+    
+                }
+            });
+        }
 
-            if (value){
-
-                this.RecuperarPedidos();
-
-            }
-        });
     }
 
     RecuperarPedidos(){

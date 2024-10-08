@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
-// servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
 // utils
 import {UtilsTexto} from '../../../../../app/shared/utils/UtilsTexto';
-
-// Contantes
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
+import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
 
 @Component({
     selector: 'app-page-profile',

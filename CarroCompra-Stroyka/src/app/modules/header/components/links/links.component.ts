@@ -8,9 +8,7 @@ import { HeaderService } from '../../../../shared/services/header.service';
 // Servicios
 import {StoreService } from '../../../../shared/services/store.service';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
-
-// constantes
-import { ClabelRutas } from 'src/data/contantes/cRutas';
+import { ClabelRutas } from '../../../../../data/contantes/cRutas';
 
 @Component({
     selector: 'app-header-links',

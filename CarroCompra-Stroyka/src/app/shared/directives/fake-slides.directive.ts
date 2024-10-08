@@ -63,7 +63,7 @@ export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.options || changes.appFakeSlides) {
+        if (changes['options'] || changes['appFakeSlides']) {
             this.calc();
         }
     }

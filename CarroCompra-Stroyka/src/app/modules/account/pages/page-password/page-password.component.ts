@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
+import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
 
-// servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
-// Contantes
-import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 
 @Component({
     selector: 'app-page-password',

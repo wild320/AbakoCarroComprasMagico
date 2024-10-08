@@ -6,6 +6,7 @@ export interface Order {
     pedido: number ;
     estado: string;
     items: Array<{
+    urlAmigable?: string;
         id: number,
         codigo: string,
         nombre: string,

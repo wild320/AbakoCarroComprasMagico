@@ -4,7 +4,7 @@ import { RootService } from '../../../../shared/services/root.service';
 import { WishlistService } from '../../../../shared/services/wishlist.service';
 
 // modelos
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { StoreService } from 'src/app/shared/services/store.service';
@@ -73,18 +73,18 @@ export class PageWishlistComponent implements OnInit {
         }
 
         this.removedProducts.push(product);
-        this.wishlist.remove(product).subscribe({
-            complete: () => {
-                this.removedProducts = this.removedProducts.filter(eachProduct => eachProduct !== product);
-            }
-        });
+        // this.wishlist.remove(product).subscribe({
+        //     complete: () => {
+        //         this.removedProducts = this.removedProducts.filter(eachProduct => eachProduct !== product);
+        //     }
+        // });
     }
 
     get maxCantidad(): (product: Item) => number {
         return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
 
-    get items(): UntypedFormArray {
-        return this.form.get('items') as UntypedFormArray;
+    get items(): FormArray {
+        return this.form.get('items') as FormArray;
     }
 }

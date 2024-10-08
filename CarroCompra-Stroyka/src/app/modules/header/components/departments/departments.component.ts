@@ -403,10 +403,10 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     suscribirMenu() {
 
-        this.articulossvc.getMegaMenu$().subscribe(menu => {
+        // this.articulossvc.getMegaMenu$().subscribe(menu => {
 
-            this.Menu = menu;
+        //     this.Menu = menu;
 
-        });
+        // });
     }
 }

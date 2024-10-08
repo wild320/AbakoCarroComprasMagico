@@ -14,7 +14,7 @@ import { RootService } from '../../../../shared/services/root.service';
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // Contantes
-import {CArticulos} from '../../../../../data/contantes/CArticulos';
+import {CArticulos} from '../../../../../data/contantes/cArticulosList';
 
 @Component({
     selector: 'app-grid',
@@ -47,40 +47,40 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        // Recuperar los artoculos mas vendidos
-        if (!this.articulossvc.RecuperoMasVendidos){
-            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
-        }
+        // // Recuperar los artoculos mas vendidos
+        // if (!this.articulossvc.RecuperoMasVendidos){
+        //     this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
+        // }
 
-        // tslint:disable-next-line: deprecation
-        this.route.paramMap.subscribe(data => {
-            if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
-                this.articulossvc.RecuperarArticulos('nn');
-            }else{
-                this.articulossvc.RecuperarArticulos(this.getCategorySlug());
-            }
+        // // tslint:disable-next-line: deprecation
+        // this.route.paramMap.subscribe(data => {
+        //     if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
+        //         this.articulossvc.RecuperarArticulos('nn');
+        //     }else{
+        //         this.articulossvc.RecuperarArticulos(this.getCategorySlug());
+        //     }
 
-            // tslint:disable-next-line: deprecation
-            this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
+        //     // tslint:disable-next-line: deprecation
+        //     this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
 
-                // inicializar SetBreadcrumbs
-                this.SetBreadcrumbs(JSON.parse(JSON.stringify(this.articulossvc.getArticulos().breadcrumbs)));
+        //         // inicializar SetBreadcrumbs
+        //         this.SetBreadcrumbs(this.articulossvc.getArticulos().breadcrumbs);
 
-                // titulo o marca seleccionado
-                this.pageHeader = this.articulossvc.getArticulos().seleccion;
+        //         // titulo o marca seleccionado
+        //         this.pageHeader = this.articulossvc.getArticulos().seleccion;
 
-            });
+        //     });
 
-        });
+        // });
 
         // tslint:disable-next-line: deprecation
         this.route.data.subscribe(data => {
 
-            this.pageService.setList(data.products);
+            this.pageService.setList(data['products']);
 
-            this.columns = 'columns' in data ? data.columns : this.columns;
-            this.viewMode = 'viewMode' in data ? data.viewMode : this.viewMode;
-            this.sidebarPosition = 'sidebarPosition' in data ? data.sidebarPosition : this.sidebarPosition;
+            this.columns = 'columns' in data ? data['columns'] : this.columns;
+            this.viewMode = 'viewMode' in data ? data['viewMode'] : this.viewMode;
+            this.sidebarPosition = 'sidebarPosition' in data ? data['sidebarPosition'] : this.sidebarPosition;
 
         });
 
@@ -147,7 +147,6 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
-        this.ArticulosSuscribe$.unsubscribe();
     }
 
     updateUrl(): void {
@@ -162,13 +161,13 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
         const filterValues = options.filterValues;
 
         if ('page' in options && options.page !== 1) {
-            params.page = options.page;
+            params['page'] = options.page;
         }
         if ('limit' in options && options.limit !== 12) {
-            params.limit = options.limit;
+            params['limit'] = options.limit;
         }
         if ('sort' in options && options.sort !== 'default') {
-            params.sort = options.sort;
+            params['sort'] = options.sort;
         }
         if ('filterValues' in options) {
             this.pageService.filters.forEach(filter => {
@@ -203,8 +202,17 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
     }
 
     getCategorySlug(): string|null {
-        return this.route.snapshot.params.label || this.route.snapshot.data.label || null;
+        return this.route.snapshot.params['label'] || this.route.snapshot.data['label'] || null;
 
     }
-
+    
+    getGridLayout(): 'grid-3-sidebar' | 'grid-4-full' | 'grid-5-full' {
+        if (this.columns === 3) {
+            return 'grid-3-sidebar';
+        } else if (this.columns === 4) {
+            return 'grid-4-full';
+        } else {
+            return 'grid-5-full';
+        }
+    }
 }

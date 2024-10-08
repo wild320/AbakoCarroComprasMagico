@@ -15,11 +15,7 @@
                     <div class="posts-view__list posts-list posts-list--layout--{{ layout }}">
                         <div class="posts-list__body">
                             <div *ngFor="let post of posts" class="posts-list__item">
-                                <app-post-card [post]="post" [layout]="{
-                                    classic: 'grid-lg',
-                                    grid: 'grid-nl',
-                                    list: 'list-nl'
-                                }[layout]"></app-post-card>
+                                <app-post-card [post]="post" [layout]="'grid-nl'"></app-post-card>
                             </div>
                         </div>
                     </div>

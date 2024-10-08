@@ -26,9 +26,8 @@ export class StorageService {
   getItem(key: string): any {
     if (isPlatformBrowser(this.platformId)) {
       const item = this.secureStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
+      return item  ?? null;
     }
-    return null;
   }
 
   removeItem(key: string) {

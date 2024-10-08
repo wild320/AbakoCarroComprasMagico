@@ -12,6 +12,7 @@ import { UtilsTexto } from '../../utils/UtilsTexto';
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { StoreService } from '../../services/store.service';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -55,9 +56,11 @@ export class ProductComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        localStorage.setItem('is_page_update', '1')
-        this.islogged = localStorage.getItem("isLogue");
-        this.cargarFavoritos();
+        if(isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('is_page_update', '1')
+            this.islogged = localStorage.getItem("isLogue");
+            this.cargarFavoritos();
+        }
     }
 
     addToCart(): void {

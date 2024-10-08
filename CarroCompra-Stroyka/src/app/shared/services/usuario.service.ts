@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
 
 // Servicios
@@ -20,7 +20,6 @@ import { UsuarioStorage } from '../../../data/modelos/seguridad/UsuarioStorage';
 
 // Contantes
 import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
-import { cOperaciones } from '../../../data/contantes/COperaciones';
 import { CServicios } from '../../../data/contantes/cServicios';
 
 
@@ -36,6 +35,7 @@ import { LoginClienteResponse } from '../../../data/modelos/seguridad/LoginClien
 import { LoguinRequest } from '../../../data/modelos/seguridad/LoguinRequest';
 import { RecuperarUsuarioResponse } from '../../../data/modelos/seguridad/RecuperarUsuarioResponse';
 import { isPlatformBrowser } from '@angular/common';
+import { cOperaciones } from 'src/data/contantes/cOperaciones';
 
 @Injectable({
   providedIn: 'root'
@@ -68,21 +68,24 @@ export class UsuarioService {
   public razonsocial: string;
   public correo: string;
   public UsrLogin: LoginClienteResponse;
+  httpClient = inject(HttpClient);
+  private negocio = inject(NegocioService);
+  private servicehelper = inject(ServiceHelper<any, any>)
 
   constructor(
-    private servicehelper: ServiceHelper<any, any>,
-    private negocio: NegocioService,
-    private httpClient: HttpClient,
-    private localService: LocalService,
     @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
+    private localService: LocalService,
+  )     {
+    if (isPlatformBrowser(this.platformId)) {
+      this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
+      this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
+      this.addresses = [];
+  
+      // tslint:disable-next-line: deprecation
+      this.getEstadoLoguin$().subscribe(value => { });
 
-    this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
-    this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
-    this.addresses = [];
+    }
 
-    // tslint:disable-next-line: deprecation
-    this.getEstadoLoguin$().subscribe(value => { });
 
 
   }
@@ -98,8 +101,10 @@ export class UsuarioService {
 
 
   setEstadoLoguin$(newValue): void {
-    this.UsuarioLogueado = newValue;
-    this.UsuarioLogueado$.next(newValue);
+    if (isPlatformBrowser(this.platformId)) {
+      this.UsuarioLogueado = newValue;
+      this.UsuarioLogueado$.next(newValue);
+    }
   }
 
   getEstadoLoguin() {
@@ -107,7 +112,12 @@ export class UsuarioService {
   }
 
   getEstadoLoguin$(): Observable<boolean> {
-    return this.UsuarioLogueado$.asObservable();
+    if (isPlatformBrowser(this.platformId)) {
+      return this.UsuarioLogueado$.asObservable();
+    } else {
+      return of(false);
+
+    }
   }
 
   setUsrLoguin(usuario: LoginClienteResponse) {
@@ -310,7 +320,7 @@ export class UsuarioService {
       .toPromise()
       .then((config: any) => {
 
-        this.RecuperarUsuario = JSON.parse(config);
+        this.RecuperarUsuario = config;
 
         return this.RecuperarUsuario.estado;
       })
@@ -607,22 +617,24 @@ export class UsuarioService {
     }
   }
 
-  cargarUsuarioStorage() {
+  async cargarUsuarioStorage() {
     if (isPlatformBrowser(this.platformId)) {
-      // Only execute this code on the browser
-      const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+      try {
+        const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
 
-      if (usrlogueado) {
-        const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
-        this.Idempresa = usrlogueado.IdEmp;
-        this.Loguin(RestaurarSesion);
-      } else {
-        this.setEstadoLoguin$(false);
-        localStorage.setItem("isLogue", "false");
+        if (usrlogueado) {
+          const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
+          this.Idempresa = usrlogueado.IdEmp;
+          this.Loguin(RestaurarSesion);
+        } else {
+          this.setEstadoLoguin$(false);
+          localStorage.setItem("isLogue", "false");
+        }
+      } catch (error) {
+        
       }
-    } else {
-      // Handle server-side logic if necessary
-    }
+ 
+    } 
   }
 
   loguout() {

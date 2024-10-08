@@ -9,6 +9,7 @@ import { ProductLayout } from '../product/product.component';
 export interface ProductGalleryItem {
     id: string;
     image: string;
+    name?: string;
 }
 
 @Component({

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
     Component,
     ElementRef, EventEmitter,
@@ -9,6 +9,7 @@ import {
     OnChanges,
     OnDestroy,
     OnInit, Output,
+    PLATFORM_ID,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
@@ -100,7 +101,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     private usuarioLogueadoSubscription: Subscription;
 
     constructor(
-        @Inject(DOCUMENT) private document: Document,
+        @Inject(DOCUMENT) private document: Document,        
+        @Inject(PLATFORM_ID) private platformId: Object,
         private fb: UntypedFormBuilder,
         private elementRef: ElementRef,
         private zone: NgZone,
@@ -131,11 +133,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
             if (query.length > 3) {
 
-                this.articulossvc.RecuperarArticulosBusqueda(query)
+                // this.articulossvc.RecuperarArticulosBusqueda(query)
 
-                if (!this.articulossvc.SuscribirBusquedaArticulos) {
-                    this.suscribirBusqueda();
-                }
+                // if (!this.articulossvc.SuscribirBusquedaArticulos) {
+                //     this.suscribirBusqueda();
+                // }
 
             }
 
@@ -233,11 +235,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     private cargarSugerencias() {
 
         if (this.suggestedProducts.length === 0) {
-            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-                this.suggestedProducts = this.articulossvc.getArticulosMasVendidos();
-                this.updatePagination(this.suggestedProducts.length);
-                this.hasSuggestions = true;
-            });
+            // this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+            //     //this.suggestedProducts = this.articulossvc.getArticulosMasVendidos();
+            //      this.updatePagination(this.suggestedProducts.length);
+            //      this.hasSuggestions = true;
+            // });
         }
 
     }
@@ -246,17 +248,17 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     private suscribirBusqueda() {
 
-        this.articulossvc.getArticulosBusqueda$().subscribe(data => {
+        // this.articulossvc.getArticulosBusqueda$().subscribe(data => {
 
 
-            this.hasSuggestions = this.articulossvc.getArticulosBusqueda().length > 0;
+        //     this.hasSuggestions = this.articulossvc.getArticulosBusqueda().length > 0;
 
-            if (this.articulossvc.getArticulosBusqueda().length > 0) {
-                this.suggestedProducts = []
-                this.suggestedProducts = this.articulossvc.getArticulosBusqueda();
-                this.updatePagination(this.suggestedProducts.length);
-            }
-        });
+        //     if (this.articulossvc.getArticulosBusqueda().length > 0) {
+        //         this.suggestedProducts = []
+        //         this.suggestedProducts = this.articulossvc.getArticulosBusqueda();
+        //         this.updatePagination(this.suggestedProducts.length);
+        //     }
+        // });
 
     }
 
@@ -321,8 +323,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     updateIsLogged() {
-        // Actualizar el estado de inicio de sesión
-        this.islogged = localStorage.getItem("isLogue") === "true";
+        if(isPlatformBrowser(this.platformId)) {
+            this.islogged = localStorage.getItem("isLogue") === "true";
+        }
     }
 
     showPrice(): boolean {

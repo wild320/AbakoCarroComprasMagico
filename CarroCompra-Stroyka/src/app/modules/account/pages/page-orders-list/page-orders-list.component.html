@@ -27,6 +27,6 @@
     </div>
     <div class="card-divider"></div> 
     <div class="card-footer">
-        <app-pagination [total]= pedidosvc.NumeroPaginas (pageChange)= "CambioPagina($event)"></app-pagination>
+        <app-pagination [total]="pedidosvc.NumeroPaginas" (pageChange)= "CambioPagina($event)"></app-pagination>
     </div>
 </div>

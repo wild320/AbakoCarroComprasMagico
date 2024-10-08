@@ -54,7 +54,7 @@
             <div class="md-stepper-horizontal orange">
                 <div *ngFor="let item of  this.Seguimiento;let indice=index" [class]="item.id !=0 ? 'md-step active'  : 'md-step'" >
                     <div class="md-step-circle"><span>{{indice+1}} </span></div>
-                    <div class="md-step-title">{{item.tipo}}</div>
+                    <div class="md-step-title">{{item['tipo']}}</div>
                     <div *ngIf="item.documento !=0" class="md-step-optional">Documento: {{item.documento}}</div>
                     <div *ngIf="item.documento !=0" class="md-step-optional">{{item.fecha}}</div>
                     <div *ngIf="item.observacion.length" class="md-step-optional">{{item.observacion}}</div>

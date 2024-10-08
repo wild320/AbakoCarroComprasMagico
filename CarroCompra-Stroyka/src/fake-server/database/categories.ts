@@ -146,9 +146,9 @@ export function getShopCategory(slug: string): Observable<Category> {
         return throwError(new HttpErrorResponse({status: 404, statusText: 'Sitio no Encontrado'}));
     }
 
-    return of(JSON.parse(JSON.stringify({
+    return of({
         ...category,
         parents: limitDepth(category.parents, 0),
         children: limitDepth(category.children, 0),
-    })));
+    });
 }

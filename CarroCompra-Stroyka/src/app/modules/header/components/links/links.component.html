@@ -35,7 +35,7 @@
         </div>
         <div
             *ngIf="item.menu && item.menu.type == 'megamenu'"
-            class="nav-links__submenu nav-links__submenu--type--megamenu nav-links__submenu--size--{{ item.menu.size }}"
+            class="nav-links__submenu nav-links__submenu--type--megamenu nav-links__submenu--size--{{ item.menu['size'] }}"
             [ngClass]="{'nav-links__submenu--open': hoveredItem === item}"
             #submenuElement
         >

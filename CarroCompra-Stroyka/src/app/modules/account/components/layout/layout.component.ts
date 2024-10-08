@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
-// servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
-// constantes
-import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { ClabelRutas, Crutas } from '../../../../../data/contantes/cRutas';
+import { UsuarioService } from '../../../../shared/services/usuario.service';
 
 
 @Component({

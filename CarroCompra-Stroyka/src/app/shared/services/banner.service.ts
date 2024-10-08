@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { NegocioService } from './negocio.service';
 
 // Contantes
@@ -14,11 +14,9 @@ export class BannerService {
   headers: HttpHeaders = new HttpHeaders();
   infoBanner
   private UrlServicio: string;
-
-
-  constructor(private httpClient: HttpClient,
-              private negocio: NegocioService,
-              private servicehelper: ServiceHelper<any, any>) {  }
+  httpClient = inject(HttpClient);  
+  private negocio = inject(NegocioService);
+  private servicehelper = inject(ServiceHelper<any, any>)
 
   cargarBanner(): Promise<any> {
   this.UrlServicio = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioBanner

@@ -4,9 +4,9 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } 
 
 // servicios
 import { UsuarioService } from '../../../../shared/services/usuario.service';
+import { Crutas } from '../../../../../data/contantes/cRutas';
 
 // constantes
-import { Crutas } from 'src/data/contantes/cRutas';
 
 @Component({
   selector: 'app-login',

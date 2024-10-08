@@ -21,7 +21,7 @@
 <ng-container *ngIf="columns > 3">
     <div class="container">
         <div class="block">
-            <app-products-view [layout]="viewMode" [grid]="'grid-'+columns+'-full'" offcanvas="always"></app-products-view>
+            <app-products-view [layout]="viewMode" [grid]="getGridLayout()" offcanvas="always"></app-products-view>
         </div>
         <app-shop-sidebar offcanvas="always"></app-shop-sidebar>
     </div>

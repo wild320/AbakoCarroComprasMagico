@@ -29,7 +29,7 @@
                                 <div class="form-group">
    
                                     <label for="checkout-country">Dirección</label>
-                                    <select id="checkout-direction" formControlName="seldireccion" (change)="CambiarDireccion($event.target.value)"  class="form-control">
+                                    <select id="checkout-direction" formControlName="seldireccion" (change)="CambiarDireccion($event.target['value'])"  class="form-control">
                                         <option value="" default selected>Selecciona una dirección...</option>
                                         <option *ngFor="let address of this.usuariosvc.addresses" [value]="address.Id" >  {{address.direccion | titlecase}} - {{address.ciudad | titlecase}}  - {{address.estado | titlecase}}  </option>
                                     </select>

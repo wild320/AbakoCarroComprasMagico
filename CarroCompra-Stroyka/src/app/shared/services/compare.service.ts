@@ -3,9 +3,9 @@ import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, timer } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
+import { Item } from '../../../data/modelos/articulos/Items';
 
 // modelos
-import { Item } from 'src/data/modelos/articulos/Items';
 
 interface CompareData {
     items: Item[];

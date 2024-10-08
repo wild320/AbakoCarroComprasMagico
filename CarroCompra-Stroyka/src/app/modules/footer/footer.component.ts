@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { theme } from '../../../data/theme';
 import { Link } from '../../shared/interfaces/link';
 
 // servivios
 import {StoreService } from '../../shared/services/store.service';
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
-// constantes
-import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
+import { Crutas, ClabelRutas } from '../../../data/contantes/cRutas';
+import { UsuarioService } from '../../shared/services/usuario.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-footer',
@@ -19,17 +18,23 @@ export class FooterComponent {
     links: Link[];
     linksMicuenta: Link[];
 
-    constructor(public storeService: StoreService,
+    constructor(
+        @Inject(PLATFORM_ID)
+        private platformId: Object, public storeService: StoreService,
                 public usuariosvc: UsuarioService,
                 public storeSvc: StoreService,
         ) {
+            
+            if(isPlatformBrowser(this.platformId)){
 
-        this.CargarMenuMicuenta();
+                this.CargarMenuMicuenta();
+        
+                const index = this.storeService.navigation.findIndex(x => x.label === 'Sitios');
+                const item = 'items';
+        
+                this.links =  this.storeService.navigation[index].menu[item];
+            }
 
-        const index = this.storeService.navigation.findIndex(x => x.label === 'Sitios');
-        const item = 'items';
-
-        this.links =  this.storeService.navigation[index].menu[item];
 
      }
 

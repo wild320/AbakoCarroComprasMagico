@@ -14,17 +14,17 @@ import { Cconfiguracion } from '../../../data/contantes/cConfiguracion';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent  {
-    @Input() layout: 'classic'|'compact' = 'classic';
+export class HeaderComponent {
+    @Input() layout: 'classic' | 'compact' = 'classic';
 
     logo: string;
 
     constructor(public store: StoreService,
-                public negocio: NegocioService,
-                private ServiciosnegocioSVC: ServiciosnegocioService,
+        public negocio: NegocioService,
+        private ServiciosnegocioSVC: ServiciosnegocioService,
     ) {
 
-        this.logo = Cconfiguracion.urlAssetsConfiguracion + this.negocio.configuracion.Logo ;
+        this.logo = Cconfiguracion.urlAssetsConfiguracion + this.negocio.configuracion.Logo;
 
         this.ServiciosnegocioSVC.getLocation();
 

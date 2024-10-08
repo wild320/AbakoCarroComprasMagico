@@ -8,8 +8,8 @@ import { ListOptions } from '../../../shared/api/shop.service';
 // modelos
 import { Products} from '../../../../data/modelos/articulos/DetalleArticulos';
 import { Item} from '../../../../data/modelos/articulos/Items';
-import { Filters} from '../../../../data/modelos/articulos/filters';
 import { filterValues} from '../../../../data/modelos/articulos/filterValues';
+import { Filters } from 'src/data/modelos/articulos/Filters';
 
 
 /**

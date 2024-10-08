@@ -12,6 +12,6 @@
                 <app-mobile-links [links]="link.children" [level]="level + 1" (itemClick)="itemClick.emit($event)"></app-mobile-links>
             </div>
         </div>
-        <div *ngIf="link.type === 'divider'" class="mobile-links__divider"></div>
+        <div *ngIf="link.type != 'link'" class="mobile-links__divider"></div>
     </li>
 </ul>

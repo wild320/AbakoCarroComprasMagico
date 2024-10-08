@@ -1,4 +1,4 @@
-import { Injectable,  } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID,  } from '@angular/core';
 import { Observable, Subject} from 'rxjs';
 import { HubConnectionBuilder, HubConnection, LogLevel } from '@aspnet/signalr';
 
@@ -14,7 +14,8 @@ import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
 // Contantes
 import { CServicios } from '../../../data/contantes/cServicios';
 import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
-import { CNotificaciones } from '../../../data/contantes/CNotificaciones';
+import { CNotificaciones } from 'src/data/contantes/cNotificaciones';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -30,26 +31,31 @@ export class NotificacionesService {
   private MsgRespuesta = new Mensaje();
   private idpersona: number;
 
-  constructor(private negocio: NegocioService,
+  constructor(
+    @Inject(PLATFORM_ID)
+    private platformId: Object,private negocio: NegocioService,
               private servicehelper: ServiceHelper<any, any>,
               public usuariosvc: UsuarioService,
               ) { 
 
     this.Notificaciones = [];
+    if (isPlatformBrowser(this.platformId)) {
+      
+          // suscribirse al grupo de cliente 
+          this.usuariosvc.getEstadoLoguin$().subscribe(value => {
+            if (value){
+              this.idpersona = this.usuariosvc.IdPersona;
+            }
+          })
+      
+          // cargar la url donde esta el hub
+          this.UrlServicio = this.negocio.configuracion.UrlServicioNegocio + CNotificaciones.UrlHubNotificaciones;
+      
+          this.IniciarConnection();
+      
+          this.IniciarEscuchador();
 
-    // suscribirse al grupo de cliente 
-    this.usuariosvc.getEstadoLoguin$().subscribe(value => {
-      if (value){
-        this.idpersona = this.usuariosvc.IdPersona;
-      }
-    })
-
-    // cargar la url donde esta el hub
-    this.UrlServicio = this.negocio.configuracion.UrlServicioNegocio + CNotificaciones.UrlHubNotificaciones;
-
-    this.IniciarConnection();
-
-    this.IniciarEscuchador();
+    }
    
   }
 

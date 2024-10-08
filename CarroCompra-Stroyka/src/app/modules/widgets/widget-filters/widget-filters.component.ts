@@ -23,7 +23,7 @@ import { ArticulosService } from '../../../shared/services/articulos.service';
 import { Products } from '../../../../data/modelos/articulos/DetalleArticulos';
 import { StoreService } from 'src/app/shared/services/store.service';
 import { map, tap } from 'rxjs/operators';
-import { Filters } from 'src/data/modelos/articulos/filters';
+import { Filters } from 'src/data/modelos/articulos/Filters';
 
 
 interface FormFilterValues {
@@ -69,15 +69,15 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        // recuperar todos los filtros
-        this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().pipe(
-            map(filtros => this.showFilterMarcas ? filtros : filtros.filter(filtro => filtro.name !== 'Marca')),
-            tap(filtros => {
-                this.filters = filtros;
-                this.filtersForm = this.makeFiltersForm(filtros);
-                this.UpdateValuesSeleted();
-            })
-        ).subscribe();       
+        // // recuperar todos los filtros
+        // this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().pipe(
+        //     map(filtros => this.showFilterMarcas ? filtros : filtros.filter(filtro => filtro.name !== 'Marca')),
+        //     tap(filtros => {
+        //         this.filters = filtros;
+        //         this.filtersForm = this.makeFiltersForm(filtros);
+        //         this.UpdateValuesSeleted();
+        //     })
+        // ).subscribe();       
 
     }
 
@@ -87,7 +87,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     ChangeForm() {
         this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
-        this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
+        // this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
     }
 
     UpdateValuesSeleted() {
@@ -97,20 +97,20 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         let filtrosColorSeleccionados = [];
 
         // si tiene filtro de marca lo guarda en un array
-        if (this.filtrosValores.brand) {
-            filtrosMarcasSeleccionadas = this.filtrosValores.brand.split(',');
+        if (this.filtrosValores['brand']) {
+            filtrosMarcasSeleccionadas = this.filtrosValores['brand'].split(',');
         }
 
         // si tiene filtro de color lo guarda en un array
-        if (this.filtrosValores.color) {
-            filtrosColorSeleccionados = this.filtrosValores.color.split(',');
+        if (this.filtrosValores['color']) {
+            filtrosColorSeleccionados = this.filtrosValores['color'].split(',');
         }
 
         this.filters.forEach(filter => {
             switch (filter.type) {
                 case 'range':
-                    if (this.filtrosValores.price) {
-                        formValues[filter.slug] = this.filtrosValores.price.split('-').map(pr => Number(pr));
+                    if (this.filtrosValores['price']) {
+                        formValues[filter.slug] = this.filtrosValores['price'].split('-').map(pr => Number(pr));
                     } else {
                         formValues[filter.slug] = [filter.min, filter.max];
                     }
@@ -146,8 +146,8 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
                     break;
 
                 case 'radio':
-                    if (this.filtrosValores.discount) {
-                        formValues[filter.slug] = this.filtrosValores.discount;
+                    if (this.filtrosValores['discount']) {
+                        formValues[filter.slug] = this.filtrosValores['discount'];
                     } else {
                         formValues[filter.slug] = filter.items[0].slug;
                     }
@@ -155,14 +155,13 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
                     break;
             }
         });
-
         this.filtersForm.setValue(formValues);
 
     }
 
     ngOnDestroy(): void {
-        this.destroy$.next();        this.destroy$.complete();
-        this.ArticulosSuscribe$.unsubscribe();
+        this.destroy$.next();        
+        this.destroy$.complete();
     }
 
     trackBySlug(index: number, item: { slug: string }): any {
@@ -209,7 +208,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
         return this.fb.group(group);
     }
 
-    isItemDisabled(filter: CheckFilter | RadioFilter | ColorFilter, item: FilterItem | ColorFilterItem): boolean {
+    isItemDisabled(filter: CheckFilter | RadioFilter | ColorFilter | any, item: FilterItem | ColorFilterItem): boolean {
         return item.count === 0 && (filter.type === 'radio' || !filter.value.includes(item.slug));
     }
 
@@ -256,7 +255,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     reset(): void {
 
         this.filtrosValores = {};
-        this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
+       // this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
 
         const formValues = {};
 

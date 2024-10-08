@@ -25,6 +25,11 @@ const categoryPageData: Data = {
 
 const routes: Routes = [
     {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'catalog'
+    },
+    {
         path: 'catalog',
         component: PageCategoryComponent
     },
@@ -74,82 +79,82 @@ const routes: Routes = [
 
     // --- START ---
     // The following routes are only needed to demonstrate possible layouts of some pages. You can delete them.
-    {
-        path: 'category-grid-4-columns-full',
-        component: PageCategoryComponent,
-        data: {
-            columns: 4,
-            viewMode: 'grid',
-            categorySlug: 'power-tools',
-        },
-        resolve: {
-            products: ProductsListResolverService
-        },
-    },
-    {
-        path: 'category-grid-5-columns-full',
-        component: PageCategoryComponent,
-        data: {
-            columns: 5,
-            viewMode: 'grid',
-            categorySlug: 'power-tools',
-        },
-        resolve: {
-            products: ProductsListResolverService
-        },
-    },
-    {
-        path: 'category-list',
-        component: PageCategoryComponent,
-        data: {
-            columns: 3,
-            viewMode: 'list',
-            sidebarPosition: 'start',
-            categorySlug: 'power-tools',
-        },
-        resolve: {
-            products: ProductsListResolverService
-        },
-    },
-    {
-        path: 'category-right-sidebar',
-        component: PageCategoryComponent,
-        data: {
-            columns: 3,
-            viewMode: 'grid',
-            sidebarPosition: 'end',
-            categorySlug: 'power-tools',
-        },
-        resolve: {
-            products: ProductsListResolverService
-        },
-    },
-    {
-        path: 'product-standard',
-        component: PageProductComponent,
-        data: {
-            layout: 'standard',
-            sidebarPosition: 'start',
-            productSlug: 'brandix-screwdriver-screw1500acc',
-        }
-    },
-    {
-        path: 'product-columnar',
-        component: PageProductComponent,
-        data: {
-            layout: 'columnar',
-            productSlug: 'brandix-screwdriver-screw1500acc',
-        },
-    },
-    {
-        path: 'product-sidebar',
-        component: PageProductComponent,
-        data: {
-            layout: 'sidebar',
-            sidebarPosition: 'start',
-            productSlug: 'brandix-screwdriver-screw1500acc',
-        },
-    },
+    // {
+    //     path: 'category-grid-4-columns-full',
+    //     component: PageCategoryComponent,
+    //     data: {
+    //         columns: 4,
+    //         viewMode: 'grid',
+    //         categorySlug: 'power-tools',
+    //     },
+    //     resolve: {
+    //         products: ProductsListResolverService
+    //     },
+    // },
+    // {
+    //     path: 'category-grid-5-columns-full',
+    //     component: PageCategoryComponent,
+    //     data: {
+    //         columns: 5,
+    //         viewMode: 'grid',
+    //         categorySlug: 'power-tools',
+    //     },
+    //     resolve: {
+    //         products: ProductsListResolverService
+    //     },
+    // },
+    // {
+    //     path: 'category-list',
+    //     component: PageCategoryComponent,
+    //     data: {
+    //         columns: 3,
+    //         viewMode: 'list',
+    //         sidebarPosition: 'start',
+    //         categorySlug: 'power-tools',
+    //     },
+    //     resolve: {
+    //         products: ProductsListResolverService
+    //     },
+    // },
+    // {
+    //     path: 'category-right-sidebar',
+    //     component: PageCategoryComponent,
+    //     data: {
+    //         columns: 3,
+    //         viewMode: 'grid',
+    //         sidebarPosition: 'end',
+    //         categorySlug: 'power-tools',
+    //     },
+    //     resolve: {
+    //         products: ProductsListResolverService
+    //     },
+    // },
+    // {
+    //     path: 'product-standard',
+    //     component: PageProductComponent,
+    //     data: {
+    //         layout: 'standard',
+    //         sidebarPosition: 'start',
+    //         productSlug: 'brandix-screwdriver-screw1500acc',
+    //     }
+    // },
+    // {
+    //     path: 'product-columnar',
+    //     component: PageProductComponent,
+    //     data: {
+    //         layout: 'columnar',
+    //         productSlug: 'brandix-screwdriver-screw1500acc',
+    //     },
+    // },
+    // {
+    //     path: 'product-sidebar',
+    //     component: PageProductComponent,
+    //     data: {
+    //         layout: 'sidebar',
+    //         sidebarPosition: 'start',
+    //         productSlug: 'brandix-screwdriver-screw1500acc',
+    //     },
+    // },
     // --- END ---
 ];
 

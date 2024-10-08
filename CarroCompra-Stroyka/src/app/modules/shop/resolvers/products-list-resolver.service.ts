@@ -10,14 +10,14 @@ import { ListOptions, ShopService } from '../../../shared/api/shop.service';
 export function parseProductsListParams(params: Params): ListOptions {
     const options: ListOptions = {};
 
-    if (params.page) {
-        options.page = parseFloat(params.page);
+    if (params['page']) {
+        options.page = parseFloat(params['page']);
     }
-    if (params.limit) {
-        options.limit = parseFloat(params.limit);
+    if (params['limit']) {
+        options.limit = parseFloat(params['limit']);
     }
-    if (params.sort) {
-        options.sort = params.sort;
+    if (params['sort']) {
+        options.sort = params['sort'];
     }
 
     for (const param of Object.keys(params)) {
@@ -50,7 +50,7 @@ export class ProductsListResolverService  {
     ) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ProductsList> {
-        const categorySlug = route.params.categorySlug || route.data.categorySlug || null;
+        const categorySlug = route.params['categorySlug'] || route.data['categorySlug'] || null;
 
         return this.shop.getProductsList(categorySlug, parseProductsListParams(route.queryParams)).pipe(
             catchError(error => {

@@ -2,12 +2,9 @@ import { Directive, ElementRef, Inject, Input, OnDestroy, NgZone, PLATFORM_ID } 
 import { fromEvent, Subject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntil } from 'rxjs/operators';
+import { ClabelRutas } from '../../../data/contantes/cRutas';
+import { UsuarioService } from '../services/usuario.service';
 
-// servicios
-import { UsuarioService } from 'src/app/shared/services/usuario.service';
-
-// constantes
-import { Crutas, ClabelRutas } from 'src/data/contantes/cRutas';
 
 @Directive({
     selector: '[appDropdown]',

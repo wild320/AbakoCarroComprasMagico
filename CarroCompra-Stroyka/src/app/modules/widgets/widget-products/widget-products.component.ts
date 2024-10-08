@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Inject, Input, PLATFORM_ID } from '@angular/core';
 import { Product } from '../../../shared/interfaces/product';
 import { RootService } from '../../../shared/services/root.service';
 
@@ -8,6 +8,7 @@ import { ArticulosService } from '../../../shared/services/articulos.service';
 // modelos
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { StoreService } from 'src/app/shared/services/store.service';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -22,23 +23,29 @@ export class WidgetProductsComponent {
     public products: Item[] = [];
 
     constructor(
+        @Inject(PLATFORM_ID)
+        private platformId: Object,
         public root: RootService,
         public articulossvc: ArticulosService,
         public storeSvc: StoreService
-        ) {
+    ) {
+        // if (isPlatformBrowser(this.platformId)) {
 
-        // Recuperar los artoculos mas vendidos
-        if (this.articulossvc.RecuperoMasVendidos) {
-            this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
-        } else {
+        //     // Recuperar los artoculos mas vendidos
+        //     if (this.articulossvc.RecuperoMasVendidos) {
+        //         this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
+        //     } else {
 
-            // tslint:disable-next-line: deprecation
-            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-                this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
-            });
-        }
+        //         // tslint:disable-next-line: deprecation
+        //         this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+        //             console.log("data" , data)
+        //             this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
+        //         });
+        //     }
 
-        this.islogged = localStorage.getItem("isLogue");
+        //     this.islogged = localStorage.getItem("isLogue");
+
+        // }
 
     }
 }

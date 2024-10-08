@@ -14,13 +14,15 @@
             <div class="block-products-carousel__preloader"></div>
 
             <owl-carousel-o [options]="carouselOptions" appOwlPreventClick #carousel>
-                <ng-template *ngFor="let column of columns" carouselSlide>
-                    <div class="block-products-carousel__column">
-                        <div *ngFor="let product of column" class="block-products-carousel__cell">
-                            <app-product-card [product]="product"></app-product-card>
+                <ng-container  *ngFor="let column of columns;  let i = index" >
+                    <ng-template carouselSlide [id]="i.toString()">
+                        <div class="block-products-carousel__column">
+                            <div *ngFor="let product of column" class="block-products-carousel__cell">
+                                <app-product-card [product]="product"></app-product-card>
+                            </div>
                         </div>
-                    </div>
-                </ng-template>
+                    </ng-template>
+                </ng-container>
             </owl-carousel-o>
         </div>
     </div>

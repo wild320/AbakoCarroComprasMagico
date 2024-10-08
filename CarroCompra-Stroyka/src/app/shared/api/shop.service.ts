@@ -21,7 +21,6 @@ import {
     getBrands,
     getProductsList,
 } from '../../../fake-server';
-import { getSuggestions } from 'src/fake-server/database/products';
 
 
 export interface ListOptions {
@@ -316,6 +315,6 @@ export class ShopService {
         // return this.http.get<Product[]>('https://example.com/api/search/suggestions.json', {params});
 
         // This is for demonstration purposes only. Remove it and use the code above.
-        return getSuggestions(query, limit, categorySlug);
+        return this.getSuggestions(query, limit, categorySlug);
     }
 }

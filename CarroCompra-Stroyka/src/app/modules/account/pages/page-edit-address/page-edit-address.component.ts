@@ -57,7 +57,7 @@ export class PageEditAddressComponent implements OnInit  {
 
         });
 
-        this.IdDireccion = Number(this.rutaActiva.snapshot.params.addressId);
+        this.IdDireccion = Number(this.rutaActiva.snapshot.params['addressId']);
 
         this.CargarMaestros(this.IdDireccion);
 

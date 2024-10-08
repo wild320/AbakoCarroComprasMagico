@@ -16,7 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class PaginationComponent implements OnChanges, OnInit, ControlValueAccessor  {
     @Input() siblings = 1;
     @Input() current = 1;
-    @Input() total = 1;
+    @Input() total: number = 1;
 
     @Output() pageChange: EventEmitter<number> = new EventEmitter();
 

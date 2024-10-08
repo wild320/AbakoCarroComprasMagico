@@ -54,7 +54,7 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
         this.route.data.subscribe(data => {
-            this.dropcartType = data.dropcartType || 'dropdown';
+            this.dropcartType = data['dropcartType'] || 'dropdown';
         });
     }
 

@@ -27,7 +27,7 @@ export class PageOrderDetailsComponent implements OnInit {
                 private router: Router,
                 private toastr: ToastrService,) {
 
-        this.RecuperarDetallePedidos (this.rutaActiva.snapshot.params.orderId);
+        this.RecuperarDetallePedidos (this.rutaActiva.snapshot.params['orderId']);
 
      }
 

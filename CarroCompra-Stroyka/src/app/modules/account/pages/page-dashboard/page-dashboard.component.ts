@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {Observable} from 'rxjs';
 
 // servicios
@@ -7,7 +7,7 @@ import { PedidosService } from 'src/app/shared/services/pedidos.service';
 
 // Modelos
 import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteResponse';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-page-dashboard',
@@ -16,31 +16,32 @@ import { LoginClienteResponse } from 'src/data/modelos/seguridad/LoginClienteRes
 })
 export class PageDashboardComponent implements OnInit {
 
-    constructor(public usuariosvc: UsuarioService,
-                public pedidosvc: PedidosService) {
-
+    constructor(
+        public usuariosvc: UsuarioService,
+        public pedidosvc: PedidosService,
+        @Inject(PLATFORM_ID) private platformId: Object
+    ) {
     }
 
     ngOnInit() {
-
-        this.EstaLogueadoUsuario();
+        if (isPlatformBrowser(this.platformId)) {
+            this.EstaLogueadoUsuario();
+        }
     }
 
-    EstaLogueadoUsuario(){
-
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
-
-            if (value){
-
-                const idempresa = this.usuariosvc.Idempresa;
-                const pagina = 1;
-
-                this.pedidosvc.cargarPedidos(idempresa, pagina ).then((resp: any) => {
-                    // console.log(resp);
-
-                }) ;
-            }
-        });
+    EstaLogueadoUsuario() {
+        if(isPlatformBrowser(this.platformId) ) {
+            this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+                if (value) {
+                    const idempresa = this.usuariosvc.Idempresa;
+                    const pagina = 1;
+    
+                    this.pedidosvc.cargarPedidos(idempresa, pagina).then((resp: any) => {
+                        // console.log(resp);
+                    });
+                }
+            });
+        }
 
     }
 

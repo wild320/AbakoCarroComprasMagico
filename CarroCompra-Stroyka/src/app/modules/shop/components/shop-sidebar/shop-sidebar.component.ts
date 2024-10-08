@@ -17,7 +17,7 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
      * - always: https://stroyka.angular.themeforest.scompiler.ru/themes/default-ltr/classic/shop/category-grid-4-columns-full
      * - mobile: https://stroyka.angular.themeforest.scompiler.ru/themes/default-ltr/classic/shop/category-grid-3-columns-sidebar
      */
-    @Input() offcanvas: 'always'|'mobile' = 'mobile';
+    @Input() offcanvas: 'always' | 'mobile' = 'mobile';
 
     destroy$: Subject<void> = new Subject<void>();
     isOpen = false;
@@ -30,29 +30,32 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.sidebar.isOpen$.pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(isOpen => {
-            if (isOpen) {
-                this.open();
-            } else {
-                this.close();
-            }
-        });
 
-        if (isPlatformBrowser(this.platformId)) {
-            fromMatchMedia('(max-width: 991px)').pipe(takeUntil(this.destroy$)).subscribe(media => {
-                if (this.offcanvas === 'mobile' && this.isOpen && !media.matches) {
-                    this.close();
-                }
-            });
-        }
+
+        // if (isPlatformBrowser(this.platformId)) {
+        //     this.sidebar.isOpen$.pipe(
+        //         takeUntil(this.destroy$)
+        //     ).subscribe(isOpen => {
+        //         console.log('isOpen', isOpen);
+        //         if (isOpen) {
+        //             this.open();
+        //         } else {
+        //             this.close();
+        //         }
+        //     });
+
+        //     fromMatchMedia('(max-width: 991px)').pipe(takeUntil(this.destroy$)).subscribe(media => {
+        //         if (this.offcanvas === 'mobile' && this.isOpen && !media.matches) {
+        //             this.close();
+        //         }
+        //     });
+        // }
     }
 
     ngOnDestroy(): void {
-        this.close();
-        this.destroy$.next();
-        this.destroy$.complete();
+        // this.close();
+        // this.destroy$.next();
+        // this.destroy$.complete();
     }
 
     private open(): void {

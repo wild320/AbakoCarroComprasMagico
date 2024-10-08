@@ -11,6 +11,7 @@ import { Paginas } from '../../../data/modelos/negocio/paginas';
 import { CServicios } from '../../../data/contantes/cServicios';
 import { Cpaginas } from '../../../data/contantes/cPaginas';
 import { Crutas, ClabelRutas } from '../../../data/contantes/cRutas';
+import { lastValueFrom } from 'rxjs';
 
 
 @Injectable({
@@ -28,100 +29,97 @@ export class PaginasService {
   public faqs: string;
 
   constructor(
-      private httpClient: HttpClient,
-      private negocio: NegocioService
-    ) {
+    private httpClient: HttpClient,
+    private negocio: NegocioService
+  ) {
 
-   }
+  }
 
-   public iniciarPaginas() {
+  public iniciarPaginas() {
 
-      // ojo no cambiar el orden, con este se recupera en el html
-      this.paginas = [
-        {
-          Id: Cpaginas.acercaNosotros,
-          Pagina: 'Nosotros',
-          label: ClabelRutas.acecaNosotros,
-          url: Crutas.acecaNosotros,
-          Activo: false
-        },
-        {
-          Id: Cpaginas.informacionEnvio,
-          Pagina: 'Envio',
-          label: ClabelRutas.informacionEvio ,
-          url: Crutas.informacionEvio,
-          Activo: false
-        },
-        {
-          Id: Cpaginas.terminosCondiciones,
-          Pagina: 'Terminos',
-          label: ClabelRutas.terminosCondiciones ,
-          url: Crutas.terminosCondiciones,
-          Activo: false
-        },
-        {
-          Id: Cpaginas.politicasPrivacidad,
-          Pagina: 'Politicas',
-          label: ClabelRutas.politicasPrivacidad ,
-          url: Crutas.politicasPrivacidad,
-          Activo: false
-        },
-        {
-          Id: Cpaginas.blog,
-          Pagina: 'Blog',
-          label: '',
-          url: '',
-          Activo: false
-        },
-        {
-          Id: Cpaginas.fag,
-          Pagina: 'FAQ',
-          label: ClabelRutas.faq,
-          url:  Crutas.faq,
-          Activo: false
-        },
-        {
-          Id: Cpaginas.contactenos,
-          Pagina: 'Contactenos',
-          label: ClabelRutas.contactenos,
-          url: Crutas.contactenos,
-          Activo: false
-        },
-      ];
+    // ojo no cambiar el orden, con este se recupera en el html
+    this.paginas = [
+      {
+        Id: Cpaginas.acercaNosotros,
+        Pagina: 'Nosotros',
+        label: ClabelRutas.acecaNosotros,
+        url: Crutas.acecaNosotros,
+        Activo: false
+      },
+      {
+        Id: Cpaginas.informacionEnvio,
+        Pagina: 'Envio',
+        label: ClabelRutas.informacionEvio,
+        url: Crutas.informacionEvio,
+        Activo: false
+      },
+      {
+        Id: Cpaginas.terminosCondiciones,
+        Pagina: 'Terminos',
+        label: ClabelRutas.terminosCondiciones,
+        url: Crutas.terminosCondiciones,
+        Activo: false
+      },
+      {
+        Id: Cpaginas.politicasPrivacidad,
+        Pagina: 'Politicas',
+        label: ClabelRutas.politicasPrivacidad,
+        url: Crutas.politicasPrivacidad,
+        Activo: false
+      },
+      {
+        Id: Cpaginas.blog,
+        Pagina: 'Blog',
+        label: '',
+        url: '',
+        Activo: false
+      },
+      {
+        Id: Cpaginas.fag,
+        Pagina: 'FAQ',
+        label: ClabelRutas.faq,
+        url: Crutas.faq,
+        Activo: false
+      },
+      {
+        Id: Cpaginas.contactenos,
+        Pagina: 'Contactenos',
+        label: ClabelRutas.contactenos,
+        url: Crutas.contactenos,
+        Activo: false
+      },
+    ];
 
-   }
+  }
 
-  public cargarPagina(tipoPagina: number ) {
+  public cargarPagina(tipoPagina: number) {
 
-    this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-    CServicios.ServicioPaginas;
+    this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras +
+      CServicios.ServicioPaginas;
 
 
     return this.httpClient.get(this.UrlServicioPaginas + '/' + tipoPagina.toString(), { responseType: 'text' })
-        .toPromise()
-        .then((resp: any) => {
-            return resp;
+      .toPromise()
+      .then((resp: any) => {
+        return resp;
 
-        })
-        .catch((err: any) => {
-            console.error(err);
-        });
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
 
-    }
-
-  public cargarAcordeon() {
-
-    this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-    CServicios.ServicioAcordeon;
-
-    return this.httpClient.get(this.UrlServicioPaginas, { responseType: 'text' }).toPromise().then((resp: any) => {
-
-      return  JSON.parse(resp);
-
-    }).catch((err: any) => {
-      console.error(err);
-    });
   }
 
+
+  public async cargarAcordeon(): Promise<any> {
+    try {
+      const url = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioAcordeon}`;
+      const response = await lastValueFrom(this.httpClient.get(url));
+      return response;
+    } catch (error) {
+      console.error('Error al cargar el acordeón:', error);
+      throw null;
+    }
+  }
 
 }

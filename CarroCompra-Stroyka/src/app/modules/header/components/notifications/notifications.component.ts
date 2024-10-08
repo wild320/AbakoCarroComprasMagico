@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 
-import { NotificacionesService } from '../../../../shared/services/Notificaciones.service';
 
 // Modelos
 import {Notifications} from '../../../../../data/modelos/negocio/notifications';
 import {Mensaje} from '../../../../../data/modelos/negocio/Mensaje';
+import { NotificacionesService } from 'src/app/shared/services/notificaciones.service';
 
 @Component({
   selector: 'app-notifications',

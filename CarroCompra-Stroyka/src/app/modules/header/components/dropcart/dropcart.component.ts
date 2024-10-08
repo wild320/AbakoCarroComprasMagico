@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { CartService } from '../../../../shared/services/cart.service';
 import { CartItem } from '../../../../shared/interfaces/cart-item';
 import { RootService } from '../../../../shared/services/root.service';
@@ -6,6 +6,7 @@ import { OffcanvasCartService } from '../../../../shared/services/offcanvas-cart
 import { StoreService } from 'src/app/shared/services/store.service';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Subscription } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 export type DropcartType = 'dropdown' | 'offcanvas';
 
@@ -26,6 +27,8 @@ export class DropcartComponent implements OnInit, OnDestroy {
     private usuarioLogueadoSubscription: Subscription;
 
     constructor(
+        @Inject(PLATFORM_ID)
+        private platformId: Object,
         public state: OffcanvasCartService,
         public cart: CartService,
         public root: RootService,        
@@ -51,8 +54,11 @@ export class DropcartComponent implements OnInit, OnDestroy {
     }
 
     updateIsLogged() {
-        // Actualizar el estado de inicio de sesión
-        this.islogged = localStorage.getItem("isLogue") === "true";
+        if (isPlatformBrowser(this.platformId)) {
+
+            // Actualizar el estado de inicio de sesión
+            this.islogged = localStorage.getItem("isLogue") === "true";
+        }
     }
 
     remove(item: CartItem): void {

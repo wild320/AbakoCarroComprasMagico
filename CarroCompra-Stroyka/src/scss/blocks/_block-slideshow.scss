@@ -63,6 +63,11 @@ $local-dot-size: $local-dots-height - $local-dots-padding * 2;
 
     &:hover {
         color: inherit;
+        
+        .block-slideshow__slide-content{
+            opacity: 1;
+            transition: all 1s .2s;
+        }
     }
 }
 .block-slideshow__slide-image {
@@ -80,6 +85,7 @@ $local-dot-size: $local-dots-height - $local-dots-padding * 2;
 .block-slideshow__slide-content {
     position: absolute;
     bottom: 46px;
+    opacity: 0;
 
     @include direction {
         #{$inset-inline-start}: 46px;
@@ -209,7 +215,8 @@ $local-dot-size: $local-dots-height - $local-dots-padding * 2;
         left: 5%;
         right: 5%;
         top: 30px;
-        text-align: center;
+        text-align: center;        
+        opacity: 1;
     }
     .block-slideshow__slide-title {
         font-size: 26px;

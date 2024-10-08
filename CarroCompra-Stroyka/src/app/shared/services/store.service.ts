@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NavigationLink } from '../interfaces/navigation-link';
 
 // Servicios
@@ -7,12 +7,13 @@ import { NegocioService } from '../../shared/services/negocio.service';
 import { PaginasService } from './paginas.service';
 
 // Contantes
-import { ClabelRutas, Crutas } from 'src/data/contantes/cRutas';
 import { CServicios } from '../../../data/contantes/cServicios';
 
 // modelos
 import { ConfiguracionSitio } from '../../../data/modelos/negocio/ConfiguracionSitio';
 import { SocialLinksItem } from '../../../data/modelos/negocio/RedesSociales';
+import { ClabelRutas, Crutas } from '../../../data/contantes/cRutas';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -23,20 +24,25 @@ export class StoreService {
     public configuracionSitio = new ConfiguracionSitio();
     public redes: SocialLinksItem[] = [];
 
-    constructor(private httpClient: HttpClient,
+    constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private httpClient: HttpClient,
         private negocio: NegocioService,
         private paginaService: PaginasService) {}
 
     async cargarConfiguracionGeneral() {
-        try {
-            this.UrlServicioCarroCompras = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
-
-            const config = await this.httpClient.get(`${this.UrlServicioCarroCompras}/1`).toPromise();
-            this.SetiarInformacion(config);
-
-        } catch (err) {
-            console.error('Error fetching configuration:', err);
+        if (isPlatformBrowser(this.platformId)) {
+            try {
+                this.UrlServicioCarroCompras = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
+    
+                const config = await this.httpClient.get(`${this.UrlServicioCarroCompras}/1`).toPromise();
+                this.SetiarInformacion(config);
+    
+            } catch (err) {
+                console.error('Error fetching configuration:', err);
+            }
         }
+    
     }
 
     private SetiarInformacion(configuracion: any) {
@@ -192,70 +198,74 @@ export class StoreService {
     public CargarMenu(CargarUsuario: boolean) {
 
         this.navigation = [];
-
-        if (!this.configuracionSitio.VerCompararProductos) {
-            this.navigation = [
-                { label: 'Inicio', url: '/' },
-                {
-                    label: 'Comprar', url: '/shop/catalog', menu: {
-                        type: 'menu',
-                        items: [
-                            { label: 'Artículos', url: '/shop/catalog' },
-                            { label: 'Lista de Deseos', url: '/shop/wishlist' },
-                        ]
-                    }
-                },
-                {
-                    label: 'Sitios', url: '/site', menu: {
-                        type: 'menu',
-                        items: []
-                    }
-                },
-
-            ];
-        } else {
-            this.navigation = [
-                { label: 'Inicio', url: '/' },
-                {
-                    label: 'Comprar', url: '/shop/catalog', menu: {
-                        type: 'menu',
-                        items: [
-                            { label: 'Artículos', url: '/shop/catalog' },
-                            { label: 'Lista de Deseos', url: '/shop/wishlist' },
-                            { label: 'Comparar', url: '/shop/compare' },
-                        ]
-                    }
-                },
-                {
-                    label: 'Sitios', url: '/site', menu: {
-                        type: 'menu',
-                        items: []
-                    }
-                },
-
-            ];
+        if (isPlatformBrowser(this.platformId)) {
+            if (!this.configuracionSitio.VerCompararProductos) {
+                this.navigation = [
+                    { label: 'Inicio', url: '/' },
+                    {
+                        label: 'Comprar', url: '/shop/catalog', menu: {
+                            type: 'menu',
+                            items: [
+                                { label: 'Artículos', url: '/shop/catalog' },
+                                { label: 'Lista de Deseos', url: '/shop/wishlist' },
+                            ]
+                        }
+                    },
+                    {
+                        label: 'Sitios', url: '/site', menu: {
+                            type: 'menu',
+                            items: []
+                        }
+                    },
+    
+                ];
+            } else {
+                this.navigation = [
+                    { label: 'Inicio', url: '/' },
+                    {
+                        label: 'Comprar', url: '/shop/catalog', menu: {
+                            type: 'menu',
+                            items: [
+                                { label: 'Artículos', url: '/shop/catalog' },
+                                { label: 'Lista de Deseos', url: '/shop/wishlist' },
+                                { label: 'Comparar', url: '/shop/compare' },
+                            ]
+                        }
+                    },
+                    {
+                        label: 'Sitios', url: '/site', menu: {
+                            type: 'menu',
+                            items: []
+                        }
+                    },
+    
+                ];
+            }
+    
+            if (CargarUsuario) {
+    
+                this.navigation.push(
+                    {
+                        label: 'Cuenta', url: '/account', menu: {
+                            type: 'menu',
+                            items: [
+                                { label: ClabelRutas.Dashboard, url: Crutas.Dashboard },
+                                { label: ClabelRutas.EditarCuenta, url: Crutas.EditarCuenta },
+                                { label: ClabelRutas.MiHistorial, url: Crutas.MiHistorial },
+                                { label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones },
+                                { label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena },
+                                { label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion }
+                            ]
+                        }
+                    });
+    
+            }
+    
+            this.IngresarMenuDinamico();
         }
 
-        if (CargarUsuario) {
 
-            this.navigation.push(
-                {
-                    label: 'Cuenta', url: '/account', menu: {
-                        type: 'menu',
-                        items: [
-                            { label: ClabelRutas.Dashboard, url: Crutas.Dashboard },
-                            { label: ClabelRutas.EditarCuenta, url: Crutas.EditarCuenta },
-                            { label: ClabelRutas.MiHistorial, url: Crutas.MiHistorial },
-                            { label: ClabelRutas.MisDirecciones, url: Crutas.MisDirecciones },
-                            { label: ClabelRutas.Cotrasena, url: Crutas.Cotrasena },
-                            { label: ClabelRutas.CerrarSesion, url: Crutas.CerrarSesion }
-                        ]
-                    }
-                });
 
-        }
-
-        this.IngresarMenuDinamico();
     }
 
     private IngresarMenuDinamico() {

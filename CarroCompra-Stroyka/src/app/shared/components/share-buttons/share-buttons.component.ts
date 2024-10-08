@@ -110,10 +110,10 @@ export class ShareButtonsComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (
-            changes.buttons ||
-            changes.pageUrl ||
-            changes.pageTitle ||
-            changes.pageImage
+            changes['buttons'] ||
+            changes['pageUrl'] ||
+            changes['pageTitle'] ||
+            changes['pageImage']
         ) {
             this.makeItems();
         }

@@ -183,9 +183,9 @@
             <app-share-buttons
                 class="product__share-buttons"
                 [buttons]="['facebook', {type: 'twitter', label: 'Tweet'}, 'whatsapp']"
-                [pageUrl]="root.product(product.id,product.urlAmigable)|absoluteUrl:'angular'"
+                [pageUrl]="root.product(product.id,product.urlAmigable)"
                 [pageTitle]="product.name"
-                [pageImage]="product.images[0] | absoluteUrl:'html'"
+                [pageImage]="product.images[0]"
             ></app-share-buttons>
         </div>
     </div>

@@ -17,7 +17,7 @@
 
                     <div class="form-group">
                         <label for="checkout-state">Estado / Departamento</label>
-                        <select id="checkout-state" formControlName="Departamento" (change)="CambiarCiudadDepartamento($event.target.value)" class="form-control form-control-select2">
+                        <select id="checkout-state" formControlName="Departamento" (change)="CambiarCiudadDepartamento($event.target['value'])" class="form-control form-control-select2">
                             <option value="" default selected>Selecciones su Estado / Departamento</option>
                             <option *ngFor="let Departamento of this.usuariosvc.departamentos" [value]="Departamento" >{{Departamento | titlecase}}</option>
                         </select>
@@ -25,7 +25,7 @@
 
                     <div class="form-group">
                         <label for="checkout-city">Ciudad / Municipio</label>
-                        <select id="checkout-city" formControlName="Ciudad" (change)="CambiarBarrioCiudad($event.target.value)" class="form-control form-control-select2">
+                        <select id="checkout-city" formControlName="Ciudad" (change)="CambiarBarrioCiudad($event.target['value'])" class="form-control form-control-select2">
                             <option value="" default selected>Selecciones su Ciudad / Municipio</option>
                             <option *ngFor="let ciudad of this.ciudadesDepartamento" [value]="ciudad.ciudad" >{{ciudad.ciudad | titlecase}}</option>
                         </select>

@@ -1,21 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Subject } from 'rxjs';
 import { posts } from '../../../data/blog-posts';
-import { Brand } from '../../shared/interfaces/brand';
-import { Observable, Subject, merge } from 'rxjs';
 import { ShopService } from '../../shared/api/shop.service';
-import { Product } from '../../shared/interfaces/product';
-import { Category } from '../../shared/interfaces/category';
 import { BlockHeaderGroup } from '../../shared/interfaces/block-header-group';
+import { Brand } from '../../shared/interfaces/brand';
+import { Category } from '../../shared/interfaces/category';
 
 // Modelos
-import {Item} from '../../../data/modelos/articulos/Items';
+import { Item } from '../../../data/modelos/articulos/Items';
 
 // Servivios
-import { StoreService } from '../../shared/services/store.service';
 import { ArticulosService } from '../../shared/services/articulos.service';
+import { StoreService } from '../../shared/services/store.service';
 
 // Contantes
-import {CArticulos} from '../../../data/contantes/CArticulos';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { BlocksModule } from 'src/app/modules/blocks/blocks.module';
+import { CArticulos } from '../../../data/contantes/cArticulosList';
 
 interface ProductsCarouselGroup extends BlockHeaderGroup {
     products: Item[];
@@ -30,6 +31,8 @@ interface ProductsCarouselData {
 
 @Component({
     selector: 'app-home',
+    standalone: true,
+    imports: [BlocksModule, CommonModule],
     templateUrl: './page-home-one.component.html',
     styleUrls: ['./page-home-one.component.scss']
 })
@@ -39,9 +42,9 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
     brands: Brand[];
     popularCategories: Category[];
 
-    columnTopRated: Item[];
+    columnTopRated: Item[] | any;
     columnSpecialOffers: Item[];
-    columnBestsellers: Item[];
+    columnBestsellers: Item[] | any;
 
     posts = posts;
 
@@ -50,33 +53,37 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
     productsOferta: ProductsCarouselData
 
     constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
         private shop: ShopService,
         private articulossvc: ArticulosService,
         public StoreSvc: StoreService,
     ) { }
 
     ngOnInit(): void {
+        if (isPlatformBrowser(this.platformId)) {
 
-        // Recuperar los artoculos mas vendidos
-        this.recuperarMasVendidos();
 
-        // recuperar si no ha recuperado aun
-        this.recuperarDestacados();
+            // Recuperar los artoculos mas vendidos
+            this.recuperarMasVendidos();
 
-        // recuperar articulos reciete llegados
-        this.recuperarRecienLlegados();
+            // recuperar si no ha recuperado aun
+            this.recuperarDestacados();
 
-        // organziar categorias populares
-        this.CategoriasPopulares();
+            // recuperar articulos reciete llegados
+            this.recuperarRecienLlegados();
 
-        // organizar mascas populares
-        this.MarcasPopulares();
+            // organziar categorias populares
+            this.CategoriasPopulares();
 
-        // REcuperar Ofertas Especiales
-        this.recuperarOfertasEspeciales();
+            // organizar mascas populares
+            this.MarcasPopulares();
 
-        // recuperar mejor valorados
-        this.recuperarMejorValorados();
+            // REcuperar Ofertas Especiales
+            this.recuperarOfertasEspeciales();
+
+            // recuperar mejor valorados
+            this.recuperarMejorValorados();
+        }
 
 
     }
@@ -86,7 +93,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    CategoriasPopulares(){
+    CategoriasPopulares() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperarCategoriasPopulares){
@@ -103,7 +110,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    MarcasPopulares(){
+    MarcasPopulares() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperarMarcasPopulares){
@@ -120,7 +127,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    recuperarDestacados(){
+    recuperarDestacados() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperoDestacados){
@@ -137,7 +144,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    recuperarRecienLlegados(){
+    recuperarRecienLlegados() {
 
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
@@ -155,7 +162,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    organizarArticulosDestacados(){
+    organizarArticulosDestacados() {
 
         this.featuredProducts = {
             abort$: new Subject<void>(),
@@ -168,7 +175,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    organizarArticulosRecienLlegados(){
+    organizarArticulosRecienLlegados() {
 
         this.latestProducts = {
             abort$: new Subject<void>(),
@@ -181,7 +188,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
 
     }
 
-    organizarOfertas(){
+    organizarOfertas() {
         this.productsOferta= {
             abort$: new Subject<void>(),
             loading: false,
@@ -198,7 +205,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         const marcas: ProductsCarouselGroup[] = [];
 
         // agregar el todosp or defecto
-        marcas.push ({
+        marcas.push({
             name: 'Todos',
             current: true,
             products: articulos,
@@ -207,7 +214,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         // agrupar por marca
         articulos.forEach(art => {
 
-            if (marcas.findIndex(i => i.name === art.marca) === -1 ) {
+            if (marcas.findIndex(i => i.name === art.marca) === -1) {
                 marcas.push({
                     name: art.marca,
                     current: false,
@@ -220,7 +227,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         return marcas;
     }
 
-    recuperarMasVendidos(){
+    recuperarMasVendidos() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperoMasVendidos){
@@ -238,25 +245,25 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         }
     }
 
-    recuperarOfertasEspeciales(){
+    recuperarOfertasEspeciales() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
-        if (this.articulossvc.RecuperarOfertasEspeciales){
-          this.articulossvc.getArticulosOfertasEspeciales();
-          this.organizarOfertas()
+        if (this.articulossvc.RecuperarOfertasEspeciales) {
+            this.articulossvc.getArticulosOfertasEspeciales();
+            this.organizarOfertas()
 
-        }else{
+        } else {
 
             this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosOfertasEspeciales);
 
             // tslint:disable-next-line: deprecation
             this.articulossvc.getArticulosOfertasEspeciales$().subscribe(data => {
-            this.organizarOfertas()
+                this.organizarOfertas()
             });
         }
     }
 
-    recuperarMejorValorados(){
+    recuperarMejorValorados() {
 
         // Recuperar los articulos mas vendidos si ya fueron recuperados
         if (this.articulossvc.RecuperarMejorValorados){
@@ -274,7 +281,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
     }
 
 
-    groupChangeDestacados(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+    groupChangeDestacados(carousel: ProductsCarouselData, group: ProductsCarouselGroup | any): void {
 
         carousel.loading = true;
 
@@ -285,7 +292,7 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         carousel.loading = false;
     }
 
-    groupChangeRecienLlegdos(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+    groupChangeRecienLlegdos(carousel: ProductsCarouselData, group: ProductsCarouselGroup | any): void {
 
         carousel.loading = true;
 
@@ -296,12 +303,12 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         carousel.loading = false;
     }
 
-    groupChangeOferta(carousel: ProductsCarouselData, group: ProductsCarouselGroup): void {
+    groupChangeOferta(carousel: ProductsCarouselData, group: ProductsCarouselGroup | any): void {
 
         carousel.loading = true;
 
         if (group.products !== null) {
-             this.productsOferta.products = group.products;
+            this.productsOferta.products = group.products;
         }
 
         carousel.loading = false;

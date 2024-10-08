@@ -45,7 +45,7 @@ export class PedidosService {
   private pedidoseguimiento$ = new Subject<PedidoSeguimientoResponse[]>();
   private pedidoseguimiento: PedidoSeguimientoResponse[];
   private mensaje = new Mensaje();
-  public NumeroPaginas: string;
+  public NumeroPaginas: number = 0;
   public PaginaActual: number;
   public orders: Partial <Order>[];
   public ordenactual: Order;
@@ -71,15 +71,15 @@ export class PedidosService {
       .then((resp: any) => {
 
         // Capturar ordenes
-        this.orders = JSON.parse(resp).resultado;
+        this.orders = (resp).resultado;
 
         // Colocar la pagina en la cual se consulto la ultima vez
         this.PaginaActual = Pagina;
 
         // Capturar numero de ordenes
         if (this.RecuperarRegistros === Cstring.SI) {
-          this.CantidadPedidos =  JSON.parse(resp).registros;
-          this.NumeroPaginas = Math.ceil(this.CantidadPedidos / 5).toString();
+          this.CantidadPedidos =  (resp).registros;
+          this.NumeroPaginas = Math.ceil(this.CantidadPedidos / 5);
         }
 
         // cambiar recuperar registros
@@ -117,12 +117,12 @@ export class PedidosService {
         .then((resp: any) => {
 
           if (index !== -1){
-            this.orders[index] = JSON.parse(resp);
+            this.orders[index] = (resp);
           }
           
-          this.ordenactual = JSON.parse(resp);
+          this.ordenactual = (resp);
 
-          return JSON.parse(resp);
+          return (resp);
 
         })
         .catch((err: any) => {
@@ -191,7 +191,7 @@ export class PedidosService {
   public async CrearPedido(idempresa: number, idpersona: number, idAsesor: number, agencia: string, observacion: string, direccion: number, detalle: any){
 
     // recuperar la hora y fecha la servidor
-    const fecha = await  this.ServiciosnegocioSVC.RecuperarFechayHora()
+    const fecha = await  this.ServiciosnegocioSVC.recuperarFechayHora()
 
       // debe ser un pedido valido
     if (fecha !== undefined ){

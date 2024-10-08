@@ -16,8 +16,8 @@ export class PagePostComponent implements OnDestroy {
 
     constructor(private route: ActivatedRoute) {
         this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
-            this.sidebarPosition = data.sidebarPosition;
-            this.layout = data.layout;
+            this.sidebarPosition = data['sidebarPosition'];
+            this.layout = data['layout'];
         });
     }
 
