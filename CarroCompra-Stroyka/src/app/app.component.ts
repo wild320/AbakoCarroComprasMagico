@@ -7,7 +7,7 @@ import { WishlistService } from './shared/services/wishlist.service';
 
 
 import { CommonModule, isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { filter, first } from 'rxjs/operators';
 import { CurrencyService } from './shared/services/currency.service';
 
@@ -55,10 +55,10 @@ export class AppComponent implements OnInit {
         private negocio: NegocioService,
         private titleService: Title,
         public StoreSvc: StoreService,
-        private metaTagService: Meta
+        private metaTagService: Meta,
+        private route: ActivatedRoute
     ) {
 
-        this.titleService.setTitle(this.negocio.configuracion.NombreCliente);
 
         if (isPlatformBrowser(this.platformId)) {
             eval(this.StoreSvc?.configuracionSitio?.scriptRastreo)
@@ -79,15 +79,24 @@ export class AppComponent implements OnInit {
 
     }
 
-    TitleCase(texto) {
-        texto = texto.toLowerCase().replace(/\b[a-z]/g, txt => {
-            return txt.toUpperCase();
-        });
-
-        return texto;
-    }
-
     ngOnInit(): void {
+        this.route.data.subscribe(data => {
+            console.log(data);
+            const negocio = this.negocio.configuracion;            
+            const StoreSvc = this.StoreSvc.configuracionSitio;
+            if (negocio) {
+                this.titleService.setTitle(negocio.NombreCliente);
+                console.log(negocio)
+
+            }
+            if(StoreSvc) {
+                console.log(StoreSvc)
+                this.metaTagService.addTag({
+                    name: 'description',
+                    content: StoreSvc.PosicionamientoEnGoogle
+                })
+            }
+        });
         // properties of the CurrencyFormatOptions interface fully complies
         // with the arguments of the built-in pipe "currency"
         // https://angular.io/api/common/CurrencyPipe
@@ -110,66 +119,9 @@ export class AppComponent implements OnInit {
             this.toastr.success(`Producto "${this.utils.TitleCase(product.name)}" Agregado para Comparar!`);
         });
         this.wishlist.onAdding$.subscribe(product => {
-            this.toastr.success(`Producto "${this.TitleCase(product.name)}" Agregado a la Lista de Deseos!`);
+            this.toastr.success(`Producto "${this.utils.TitleCase(product.name)}" Agregado a la Lista de Deseos!`);
         });
 
-        this.metaTagService.addTags([
-            {
-                name: 'description',
-                content: this.StoreSvc.configuracionSitio.PosicionamientoEnGoogle,
-            },
-        ]);
-
-        // this.metaTagService.updateTag({
-        //     name: 'keywords',
-        //     content: this.StoreSvc.configuracionSitio.PalabrasClaves,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'robots',
-        //     content: 'index, follow',
-        // })
-
-        // this.metaTagService.updateTag({
-        //     name: 'og:title',
-        //     content: this.StoreSvc.configuracionSitio.NombreCliente,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'og:description',
-        //     content: this.StoreSvc.configuracionSitio.PosicionamientoEnGoogle,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'og:image',
-        //     content: this.StoreSvc.configuracionSitio.LogoUrl,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'og:url',
-        //     content: this.router.url,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'og:site_name',
-        //     content: this.StoreSvc.configuracionSitio.NombreCliente,
-        // })
-
-        // this.metaTagService.updateTag({
-        //     name: 'twitter:card',
-        //     content:'summary_large_image',
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'twitter:title',
-        //     content: this.StoreSvc.configuracionSitio.NombreCliente,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'twitter:description',
-        //     content: this.StoreSvc.configuracionSitio.PosicionamientoEnGoogle,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'twitter:image',
-        //     content: this.StoreSvc.configuracionSitio.LogoUrl,
-        // })
-        // this.metaTagService.updateTag({
-        //     name: 'twitter:url',
-        //     content: this.router.url,
-        // })
     }
 }
 

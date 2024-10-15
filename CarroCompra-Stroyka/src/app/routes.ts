@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { RootComponent } from './components/root/root.component';
 import { PageHomeOneComponent } from './pages/page-home-one/page-home-one.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { appDataResolver } from './providers/appData.resolver';
 
 export const routes: Routes = [
     // START / ONLY_FOR_DEMO_YOU_CAN_DELETE_IT
@@ -42,6 +43,9 @@ export const routes: Routes = [
             headerLayout: 'classic',
             // Dropcart type. Choose one of ['dropdown', 'offcanvas'].
             dropcartType: 'dropdown'
+        },
+        resolve: {
+            appData: appDataResolver // Añadir el resolver aquí
         },
         children: [
             {
