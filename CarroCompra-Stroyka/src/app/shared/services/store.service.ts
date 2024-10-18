@@ -10,10 +10,10 @@ import { PaginasService } from './paginas.service';
 import { CServicios } from '../../../data/contantes/cServicios';
 
 // modelos
+import { isPlatformBrowser } from '@angular/common';
+import { ClabelRutas, Crutas } from '../../../data/contantes/cRutas';
 import { ConfiguracionSitio } from '../../../data/modelos/negocio/ConfiguracionSitio';
 import { SocialLinksItem } from '../../../data/modelos/negocio/RedesSociales';
-import { ClabelRutas, Crutas } from '../../../data/contantes/cRutas';
-import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -28,21 +28,19 @@ export class StoreService {
         @Inject(PLATFORM_ID) private platformId: Object,
         private httpClient: HttpClient,
         private negocio: NegocioService,
-        private paginaService: PaginasService) {}
+        private paginaService: PaginasService) { }
 
     async cargarConfiguracionGeneral() {
-        if (isPlatformBrowser(this.platformId)) {
-            try {
-                this.UrlServicioCarroCompras = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
-    
-                const config = await this.httpClient.get(`${this.UrlServicioCarroCompras}/1`).toPromise();
-                this.SetiarInformacion(config);
-    
-            } catch (err) {
-                console.error('Error fetching configuration:', err);
-            }
+        try {
+            this.UrlServicioCarroCompras = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
+
+            const config = await this.httpClient.get(`${this.UrlServicioCarroCompras}/1`).toPromise();
+            this.SetiarInformacion(config);
+
+        } catch (err) {
+            console.error('Error fetching configuration:', err);
         }
-    
+
     }
 
     private SetiarInformacion(configuracion: any) {
@@ -217,7 +215,7 @@ export class StoreService {
                             items: []
                         }
                     },
-    
+
                 ];
             } else {
                 this.navigation = [
@@ -238,12 +236,12 @@ export class StoreService {
                             items: []
                         }
                     },
-    
+
                 ];
             }
-    
+
             if (CargarUsuario) {
-    
+
                 this.navigation.push(
                     {
                         label: 'Cuenta', url: '/account', menu: {
@@ -258,9 +256,9 @@ export class StoreService {
                             ]
                         }
                     });
-    
+
             }
-    
+
             this.IngresarMenuDinamico();
         }
 
