@@ -51,7 +51,7 @@
                         </td>
                         <td class="wishlist__column wishlist__column--price">{{ product.price | currency }}</td>
                         <td class="wishlist__column wishlist__column--tocart">
-                            <app-input-number formControlName="quantity" aria-label="Quantity" size="sm" [min]="1" [max]="maxCantidad(product)"></app-input-number>
+                            <app-input-number [formControl]="getQuantityControl(i)"  aria-label="Quantity" size="sm" [min]="1" [max]="maxCantidad(product)"></app-input-number>
                         </td>
                         <td class="wishlist__column wishlist__column--tocart">
                             <button  [disabled]=" product.availability === 'No Disponible'  &&  product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario" type="button" class="btn btn-primary btn-sm" (click)="addToCart(product, i)" [ngClass]="{'btn-loading': addedToCartProducts.includes(product)}">Agregar al Carro</button>

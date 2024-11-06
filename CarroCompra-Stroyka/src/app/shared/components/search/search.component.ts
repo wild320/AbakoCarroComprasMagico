@@ -133,11 +133,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
             if (query.length > 3) {
 
-                // this.articulossvc.RecuperarArticulosBusqueda(query)
+                this.articulossvc.RecuperarArticulosBusqueda(query)
 
-                // if (!this.articulossvc.SuscribirBusquedaArticulos) {
-                //     this.suscribirBusqueda();
-                // }
+                if (!this.articulossvc.SuscribirBusquedaArticulos) {
+                    this.suscribirBusqueda();
+                }
 
             }
 
@@ -235,11 +235,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     private cargarSugerencias() {
 
         if (this.suggestedProducts.length === 0) {
-            // this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-            //     //this.suggestedProducts = this.articulossvc.getArticulosMasVendidos();
-            //      this.updatePagination(this.suggestedProducts.length);
-            //      this.hasSuggestions = true;
-            // });
+            this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+                //this.suggestedProducts = this.articulossvc.getArticulosMasVendidos();
+                 this.updatePagination(this.suggestedProducts.length);
+                 this.hasSuggestions = true;
+            });
         }
 
     }
@@ -248,17 +248,17 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
 
     private suscribirBusqueda() {
 
-        // this.articulossvc.getArticulosBusqueda$().subscribe(data => {
+        this.articulossvc.getArticulosBusqueda$().subscribe(data => {
 
 
-        //     this.hasSuggestions = this.articulossvc.getArticulosBusqueda().length > 0;
+            this.hasSuggestions = this.articulossvc.getArticulosBusqueda().length > 0;
 
-        //     if (this.articulossvc.getArticulosBusqueda().length > 0) {
-        //         this.suggestedProducts = []
-        //         this.suggestedProducts = this.articulossvc.getArticulosBusqueda();
-        //         this.updatePagination(this.suggestedProducts.length);
-        //     }
-        // });
+            if (this.articulossvc.getArticulosBusqueda().length > 0) {
+                this.suggestedProducts = []
+                this.suggestedProducts = this.articulossvc.getArticulosBusqueda();
+                this.updatePagination(this.suggestedProducts.length);
+            }
+        });
 
     }
 

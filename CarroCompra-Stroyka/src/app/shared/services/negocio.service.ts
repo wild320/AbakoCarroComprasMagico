@@ -21,7 +21,7 @@ export class NegocioService {
   configuracion: any = {};
 
   constructor() {
-    this.UrlJsonConfguracion = "https://copiacarro--magico-mundo.us-central1.hosted.app/" + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
+    this.UrlJsonConfguracion = 'http://localhost:4300/' + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
 
   }
 

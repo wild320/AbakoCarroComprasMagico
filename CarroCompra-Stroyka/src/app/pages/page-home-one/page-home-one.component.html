@@ -2,7 +2,7 @@
 <!--
     <app-block-features></app-block-features>
 -->
-<!-- <app-block-products-carousel
+<app-block-products-carousel
     *ngIf="StoreSvc.configuracionSitio.VerBLoqueValoradosEspecialesVendidos"
     header="Ofertas especiales"
     layout="horizontal"
@@ -11,9 +11,9 @@
     [products]="productsOferta?.products"
     [groups]="productsOferta?.groups"
     (groupChange)="groupChangeOferta(productsOferta, $event)"
-></app-block-products-carousel> -->
+></app-block-products-carousel>
 
-<!-- <app-block-products-carousel
+<app-block-products-carousel
     *ngIf="StoreSvc.configuracionSitio.VerProductosDestacados"
     header="Productos Destacados"
     layout="grid-4"
@@ -21,7 +21,7 @@
     [products]="featuredProducts?.products"
     [groups]="featuredProducts?.groups"
     (groupChange)="groupChangeDestacados(featuredProducts, $event)"
-></app-block-products-carousel> -->
+></app-block-products-carousel>
 
 <app-block-banner *ngIf="StoreSvc.configuracionSitio.VerBannerIntermedio"></app-block-banner>
 
@@ -31,7 +31,7 @@ header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-
 
 <app-block-categories *ngIf="StoreSvc.configuracionSitio.VerCategoriasPopulares" header="Categorias más Populares" layout="classic" [categories]="popularCategories"></app-block-categories>
 
-<!-- <app-block-products-carousel
+<app-block-products-carousel
     *ngIf="StoreSvc.configuracionSitio.VerRecienllegados"
     header="Recién llegados"
     layout="horizontal"
@@ -40,7 +40,7 @@ header="Mas Vendidos" layout="large-first" [products]="bestsellers"></app-block-
     [products]="latestProducts?.products"
     [groups]="latestProducts?.groups"
     (groupChange)="groupChangeRecienLlegdos(latestProducts, $event)"
-></app-block-products-carousel> -->
+></app-block-products-carousel>
 
 <app-block-posts *ngIf="StoreSvc.configuracionSitio.VerUltimasNoticias" header="Últimas Noticias" layout="list-sm" [posts]="posts"></app-block-posts>
 

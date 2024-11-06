@@ -69,15 +69,15 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        // // recuperar todos los filtros
-        // this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().pipe(
-        //     map(filtros => this.showFilterMarcas ? filtros : filtros.filter(filtro => filtro.name !== 'Marca')),
-        //     tap(filtros => {
-        //         this.filters = filtros;
-        //         this.filtersForm = this.makeFiltersForm(filtros);
-        //         this.UpdateValuesSeleted();
-        //     })
-        // ).subscribe();       
+        // recuperar todos los filtros
+        this.ArticulosSuscribe$ = this.articulossvc.getFiltrosCarro$().pipe(
+            map(filtros => this.showFilterMarcas ? filtros : filtros.filter(filtro => filtro.name !== 'Marca')),
+            tap(filtros => {
+                this.filters = filtros;
+                this.filtersForm = this.makeFiltersForm(filtros);
+                this.UpdateValuesSeleted();
+            })
+        ).subscribe();       
 
     }
 
@@ -87,7 +87,8 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     ChangeForm() {
         this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
-        // this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
+        console.log("this.filtrosValoresW", this.filtrosValores)
+        this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
     }
 
     UpdateValuesSeleted() {
@@ -255,7 +256,7 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
     reset(): void {
 
         this.filtrosValores = {};
-       // this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
+       this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
 
         const formValues = {};
 

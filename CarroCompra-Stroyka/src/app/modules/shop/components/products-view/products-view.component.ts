@@ -47,29 +47,29 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         public articulossvc: ArticulosService,
         private cdr: ChangeDetectorRef
     ) {
-        // if (isPlatformBrowser(this.platformId)) {
-        //     console.log('Platform', this.platformId);
-        //     this.articulossvc.getArticulos$().subscribe(articulos => {
-        //         console.log("productos", articulos.products)
-        //        this.articulossvc.setAtributosFiltros(articulos.products);
-        //         console.log(articulos, 'articulos')
-        //     });
+        if (isPlatformBrowser(this.platformId)) {
+            console.log('Platform', this.platformId);
+            this.articulossvc.getArticulos$().subscribe(articulos => {
+                console.log("productos", articulos)
+               this.articulossvc.setAtributosFiltros(articulos);
+            });
     
-        //     this.articulossvc.getArticulosSeleccionados$().subscribe(articulos => {
+            this.articulossvc.getArticulosSeleccionados$().subscribe((articulos) => {
+    console.log("getArticulosSeleccionados$(", articulos)
+                this.Productos = this.articulossvc.getArticulos().products;
+                console.log("productos sus", this.Productos)
+                this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
     
-        //         this.Productos = this.articulossvc.getArticulos().products;
-        //         this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
-    
-        //         console.log("console 59", this.ProductosSeleccionados);
-        //         localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
-        //         localStorage.setItem('is_page_update', '0')
-        //         this.isPageAuto = false;
+                console.log("console 59", this.ProductosSeleccionados);
+                localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
+                localStorage.setItem('is_page_update', '0')
+                this.isPageAuto = false;
           
     
-        //     });
+            });
 
 
-        // }
+        }
 
 
 
@@ -78,105 +78,105 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     }
 
     OnCLickOnChange() {
-        // if (isPlatformBrowser(this.platformId)) {
-        //     this.isPageAuto = false
-        //     const value = this.listOptionsForm.value;
+        if (isPlatformBrowser(this.platformId)) {
+            this.isPageAuto = false
+            const value = this.listOptionsForm.value;
 
-        //     localStorage.setItem('page', JSON.stringify(value))
+            localStorage.setItem('page', JSON.stringify(value))
 
-        //     value.limit = parseFloat(value.limit);
+            value.limit = parseFloat(value.limit);
 
-        //     if (value.page == null || value.limit == null || value.sort == null) {
-        //         return;
-        //     }
+            if (value.page == null || value.limit == null || value.sort == null) {
+                return;
+            }
 
-        //     this.SetLIstaOpciones(value);
+            this.SetLIstaOpciones(value);
 
 
-        //     this.articulossvc.setAtributosFiltros(this.articulossvc.getAtributosFiltros());
-        //     // Agregar detección de cambios
-        //     this.cdr.detectChanges();
-        // }
+            this.articulossvc.setAtributosFiltros(this.articulossvc.getAtributosFiltros());
+            // Agregar detección de cambios
+            this.cdr.detectChanges();
+        }
 
 
     }
 
     ngOnInit(): void {
-        // if (isPlatformBrowser(this.platformId)) {
-        //     this.sub = this.articulossvc.getAtributos$().subscribe(atributos => {
-        //         this.SetAtributos();
-        //     });
+        if (isPlatformBrowser(this.platformId)) {
+            this.sub = this.articulossvc.getAtributos$().subscribe(atributos => {
+                this.SetAtributos();
+            });
 
-        //     this.PaginationLocalStorage = JSON.parse(localStorage.getItem('page'))
-        //     this.isPageAuto = localStorage.getItem('is_page_update') === '1' ? true : false
+            this.PaginationLocalStorage = JSON.parse(localStorage.getItem('page'))
+            this.isPageAuto = localStorage.getItem('is_page_update') === '1' ? true : false
 
-        //     if (this.isPageAuto) {
-        //         this.listOptionsForm = this.fb.group({
-        //             page: this.fb.control(this.PaginationLocalStorage?.page || 1),
-        //             limit: this.fb.control(this.PaginationLocalStorage?.limit || 12),
-        //             sort: this.fb.control('sku'),
-        //         });
-        //         this.SetLIstaOpciones(this.listOptionsForm.value)
-        //     } else {
+            if (this.isPageAuto) {
+                this.listOptionsForm = this.fb.group({
+                    page: this.fb.control(this.PaginationLocalStorage?.page || 1),
+                    limit: this.fb.control(this.PaginationLocalStorage?.limit || 12),
+                    sort: this.fb.control('sku'),
+                });
+                this.SetLIstaOpciones(this.listOptionsForm.value)
+            } else {
 
-        //         this.listOptionsForm = this.fb.group({
-        //             page: this.fb.control(this.articulossvc.getAtributosFiltros().page),
-        //             limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
-        //             sort: this.fb.control('sku'),
-        //         });
-        //     }
-        // }
+                this.listOptionsForm = this.fb.group({
+                    page: this.fb.control(this.articulossvc.getAtributosFiltros().page),
+                    limit: this.fb.control(this.articulossvc.getAtributosFiltros().limit),
+                    sort: this.fb.control('sku'),
+                });
+            }
+        }
 
 
 
     }
 
     SetAtributos() {
-        // if (this.isPageAuto) {
-        //     const total = this.articulossvc.getAtributosFiltros().total;
-        //     this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / this.limit.value);
-        //     this.articulossvc.getAtributosFiltros().from = ((this.page.value - 1) * this.limit.value) + 1;
-        //     this.articulossvc.getAtributosFiltros().to = this.page.value * this.limit.value;
-        // } else {
-        //     this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, { emitEvent: false });
-        //     this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, { emitEvent: false });
-        //     this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, { emitEvent: false });
-        // }
+        if (this.isPageAuto) {
+            const total = this.articulossvc.getAtributosFiltros().total;
+            this.articulossvc.getAtributosFiltros().pages = Math.ceil(total / this.limit.value);
+            this.articulossvc.getAtributosFiltros().from = ((this.page.value - 1) * this.limit.value) + 1;
+            this.articulossvc.getAtributosFiltros().to = this.page.value * this.limit.value;
+        } else {
+            this.page.setValue(this.articulossvc.getAtributosFiltros()?.page, { emitEvent: false });
+            this.limit.setValue(this.articulossvc.getAtributosFiltros()?.limit, { emitEvent: false });
+            this.sort.setValue(this.articulossvc.getAtributosFiltros()?.sort, { emitEvent: false });
+        }
     }
 
     SetLIstaOpciones(value: any): void {
-        // const products = this.articulossvc.getArticulos()?.products?.items;
+        const products = this.articulossvc.getArticulos()?.products?.items;
 
-        // if (!products) {
-        //     return;
-        // }
+        if (!products) {
+            return;
+        }
 
-        // const sortFunctions = {
-        //     'sku': (a: any, b: any) => a.sku.localeCompare(b.sku),
-        //     'name_asc': (a: any, b: any) => a.name.localeCompare(b.name),
-        //     'name_desc': (a: any, b: any) => b.name.localeCompare(a.name)
-        // };
+        const sortFunctions = {
+            'sku': (a: any, b: any) => a.sku.localeCompare(b.sku),
+            'name_asc': (a: any, b: any) => a.name.localeCompare(b.name),
+            'name_desc': (a: any, b: any) => b.name.localeCompare(a.name)
+        };
 
-        // const sortFunction = sortFunctions[value.sort];
-        // if (sortFunction) {
-        //     products.sort(sortFunction);
-        // }
+        const sortFunction = sortFunctions[value.sort];
+        if (sortFunction) {
+            products.sort(sortFunction);
+        }
 
-        // this.ProductosSeleccionados = products;
+        this.ProductosSeleccionados = products;
 
-        // const total = this.articulossvc.getAtributosFiltros().total;
-        // const limit = value.limit;
-        // const page = value.page;
+        const total = this.articulossvc.getAtributosFiltros().total;
+        const limit = value.limit;
+        const page = value.page;
 
-        // const atributosFiltros = this.articulossvc.getAtributosFiltros();
-        // atributosFiltros.page = page;
-        // atributosFiltros.limit = limit;
-        // atributosFiltros.sort = value.sort;
-        // atributosFiltros.pages = Math.ceil(total / limit);
-        // atributosFiltros.from = ((page - 1) * limit) + 1;
-        // atributosFiltros.to = page * limit;
+        const atributosFiltros = this.articulossvc.getAtributosFiltros();
+        atributosFiltros.page = page;
+        atributosFiltros.limit = limit;
+        atributosFiltros.sort = value.sort;
+        atributosFiltros.pages = Math.ceil(total / limit);
+        atributosFiltros.from = ((page - 1) * limit) + 1;
+        atributosFiltros.to = page * limit;
 
-        // this.page.setValue(page);
+        this.page.setValue(page);
     }
 
 

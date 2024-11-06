@@ -28,7 +28,7 @@ export class WishlistService implements OnDestroy {
     private onAddingSubject$: Subject<Item> = new Subject();
     private UrlServicioFavoritos: string;
     private UrlServicio: string;
-    usr
+    private dataUserLoged: any;
     private token = 'token';
     private itemsFavoritos: any = [];
 
@@ -57,25 +57,25 @@ export class WishlistService implements OnDestroy {
 
 
 
-    CargarUsuario() {
+    async CargarUsuario() {
         if (isPlatformBrowser(this.platformId)) {
-            this.usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+            const usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+            this.dataUserLoged = JSON.parse(usr) ?? null;
         }
     }
 
 
 
     async add(product: Item) {
-        this.CargarUsuario();
 
-        if (!this.usr) {
+        if (!this.dataUserLoged) {
             this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión');
             return;
         }
 
         const productRequest = {
             proceso: 'NEW',
-            IdPersona: parseInt(this.usr.IdEmp),
+            IdPersona: parseInt(this.dataUserLoged.IdEmp),
             dllFavorito: [{ idArticulo: product.id }]
         };
 
@@ -105,7 +105,7 @@ export class WishlistService implements OnDestroy {
         this.quantitySubject$.next(this.itemsFavoritos.length);
         const productrequest = {
             "proceso": "DEL",
-            "IdPersona": parseInt(this.usr.IdEmp),
+            "IdPersona": parseInt(this.dataUserLoged.IdEmp),
             "dllFavorito": [
                 {
                     "idArticulo": product.id
@@ -120,62 +120,59 @@ export class WishlistService implements OnDestroy {
 
 
 
-    private load() {
-        this.CargarUsuario();
-        
-        if (!this.usr) {
-            this.toastr.error(`Para agregar un producto a lista de deseos debe iniciar sesión `);
-
-        } else {
-            const productrequest = {
-                "proceso": "GET",
-                "IdPersona": parseInt(this.usr?.IdEmp ?? 0),
-                "dllFavorito": [
-                    {
-                        "idArticulo": 0
-                    }
-                ]
+    private async load() {
+        try {
+            // Cargar usuario y manejar si no está logueado
+            this.CargarUsuario();
+            if (!this.dataUserLoged) {
+                this.toastr.error('Para agregar un producto a lista de deseos debe iniciar sesión');
+                return; // Si no hay usuario logueado, salir de la función
             }
-            this.UrlServicioFavoritos = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioFavoritos;
-
-            return this.servicehelper
-                .PostData(this.UrlServicioFavoritos, productrequest)
-                .toPromise()
-                .then(result => {
-                    const items = result.favoritos.map(element => {
-                        this.UrlServicio =
-                            this.negocio.configuracion.UrlServicioCarroCompras +
-                            CServicios.ApiCarroCompras +
-                            CServicios.ServicioRecuperarArticulosDetalle;
-                        return this.httpClient.get(`${this.UrlServicio}/${this.usr.IdEmp}/${element.idArticulo}`)
-                            .toPromise()
-                            .then((config: any) => {
-                                if (this.itemsFavoritos.findIndex(item =>
-                                    item.id == config.articulo.id) == -1) {
-                                    this.itemsFavoritos.push(config.articulo)
-                                    this.quantitySubject$.next(this.itemsFavoritos.length);
-                                    localStorage.setItem("favoritos", JSON.stringify(this.itemsFavoritos))
-                                }
-                            });
-
-                    })
-                    this.itemsSubject$.next(this.itemsFavoritos);
-
-
-                })
-                .catch((err: any) => {
-                    console.error(err);
-                });
+    
+            // Preparar request para obtener los favoritos
+            const productRequest = {
+                proceso: 'GET',
+                IdPersona: parseInt(this.dataUserLoged?.IdEmp ?? '0'),
+                dllFavorito: [{ idArticulo: 0 }]
+            };
+    
+            // Construir URL del servicio de favoritos
+            this.UrlServicioFavoritos = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioFavoritos}`;
+            
+            // Realizar petición para obtener los productos favoritos
+            const result = await this.servicehelper.PostData(this.UrlServicioFavoritos, productRequest).toPromise();
+    
+            // Iterar sobre los productos favoritos y obtener detalles
+            const favoritosPromises = result.favoritos.map(async (element: any) => {
+                // URL para obtener detalles del artículo
+                const articuloUrl = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioRecuperarArticulosDetalle}/${this.dataUserLoged.IdEmp}/${element.idArticulo}`;
+                
+                try {
+                    const config: any = await this.httpClient.get(articuloUrl).toPromise();
+                    
+                    // Verificar si el artículo ya está en favoritos
+                    if (!this.itemsFavoritos.some(item => item.id === config.articulo.id)) {
+                        this.itemsFavoritos.push(config.articulo);
+                        this.quantitySubject$.next(this.itemsFavoritos.length);
+                        localStorage.setItem('favoritos', JSON.stringify(this.itemsFavoritos));
+                    }
+                } catch (error) {
+                    console.error('Error al obtener detalle del artículo:', error);
+                }
+            });
+    
+            // Esperar a que se resuelvan todas las promesas
+            await Promise.all(favoritosPromises);
+    
+            // Emitir los nuevos favoritos
+            this.itemsSubject$.next(this.itemsFavoritos);
+    
+        } catch (err) {
+            // Manejo de errores generales
+            console.error('Error al cargar favoritos:', err);
         }
-
-        // const items = localStorage.getItem('wishlistItems');
-        /*
-                if (items) {
-                    this.data.items = JSON.parse(items);
-                    this.itemsSubject$.next(this.data.items);
-                } */
-
     }
+    
 
 
 

@@ -29,23 +29,23 @@ export class WidgetProductsComponent {
         public articulossvc: ArticulosService,
         public storeSvc: StoreService
     ) {
-        // if (isPlatformBrowser(this.platformId)) {
+        if (isPlatformBrowser(this.platformId)) {
 
-        //     // Recuperar los artoculos mas vendidos
-        //     if (this.articulossvc.RecuperoMasVendidos) {
-        //         this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
-        //     } else {
+            // Recuperar los artoculos mas vendidos
+            if (this.articulossvc.RecuperoMasVendidos) {
+                this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
+            } else {
 
-        //         // tslint:disable-next-line: deprecation
-        //         this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-        //             console.log("data" , data)
-        //             this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
-        //         });
-        //     }
+                // tslint:disable-next-line: deprecation
+                this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
+                    console.log("data" , data)
+                    this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
+                });
+            }
 
-        //     this.islogged = localStorage.getItem("isLogue");
+            this.islogged = localStorage.getItem("isLogue");
 
-        // }
+        }
 
     }
 }

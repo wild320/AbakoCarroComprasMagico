@@ -4,7 +4,7 @@ import { RootService } from '../../../../shared/services/root.service';
 import { WishlistService } from '../../../../shared/services/wishlist.service';
 
 // modelos
-import { FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { StoreService } from 'src/app/shared/services/store.service';
@@ -39,14 +39,22 @@ export class PageWishlistComponent implements OnInit {
     ngOnInit() {
         this.items$ = this.wishlist.items$;
         this.items$.subscribe(items => {
+            // Initialize the form with controls based on items
             this.form = this.fb.group({
-                items: this.fb.array(items.map(() => this.fb.control(1)))
+                items: this.fb.array(items.map(item => this.createItemControl(item))) // Create controls for each item
             });
         });
     }
 
+    createItemControl(item: Item): UntypedFormGroup {
+        return this.fb.group({
+            quantity: [1, [Validators.required, Validators.min(1), Validators.max(item.inventario)]], // Set initial value and validations
+        });
+    }
+
+
     addToCart(product: Item, index: number): void {
-        const quantity = this.items.at(index).value;
+        const quantity = this.getQuantityControl(index).value;
 
         if (this.addedToCartProducts.includes(product)) {
             return;
@@ -73,11 +81,11 @@ export class PageWishlistComponent implements OnInit {
         }
 
         this.removedProducts.push(product);
-        // this.wishlist.remove(product).subscribe({
-        //     complete: () => {
-        //         this.removedProducts = this.removedProducts.filter(eachProduct => eachProduct !== product);
-        //     }
-        // });
+        this.wishlist.remove(product).subscribe({
+            complete: () => {
+                this.removedProducts = this.removedProducts.filter(eachProduct => eachProduct !== product);
+            }
+        });
     }
 
     get maxCantidad(): (product: Item) => number {
@@ -87,4 +95,9 @@ export class PageWishlistComponent implements OnInit {
     get items(): FormArray {
         return this.form.get('items') as FormArray;
     }
+
+    getQuantityControl(index: number): FormControl {
+        return this.items.at(index).get('quantity') as FormControl;
+    }
+
 }

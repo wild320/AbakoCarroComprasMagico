@@ -1,8 +1,8 @@
 import {Products} from './DetalleArticulos';
 
 export class ArticulosCarroComprasResponse {
-    seleccion: string;
-    categorias: Array<{
+    seleccion?: string;
+    categorias?: Array<{
         id: number;
         type: string;
         name: string;

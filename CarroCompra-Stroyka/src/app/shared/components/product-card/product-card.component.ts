@@ -24,6 +24,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     private destroy$: Subject<void> = new Subject();
+    @Input() lazyLoad: boolean = false;
 
     @Input() product: Item | Product;
     @Input() layout: 'grid-sm' | 'grid-nl' | 'grid-lg' | 'list' | 'horizontal' | null = null;

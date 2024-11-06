@@ -47,31 +47,31 @@ export class PageCategoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        // // Recuperar los artoculos mas vendidos
-        // if (!this.articulossvc.RecuperoMasVendidos){
-        //     this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
-        // }
+        // Recuperar los artoculos mas vendidos
+        if (!this.articulossvc.RecuperoMasVendidos){
+            this.articulossvc.RecuperarArticulosEspeciales(CArticulos.ArticulosEspecialesMasVendidos);
+        }
 
-        // // tslint:disable-next-line: deprecation
-        // this.route.paramMap.subscribe(data => {
-        //     if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
-        //         this.articulossvc.RecuperarArticulos('nn');
-        //     }else{
-        //         this.articulossvc.RecuperarArticulos(this.getCategorySlug());
-        //     }
+        // tslint:disable-next-line: deprecation
+        this.route.paramMap.subscribe(data => {
+            if (this.getCategorySlug() === undefined || !this.getCategorySlug() ){
+                this.articulossvc.RecuperarArticulos('nn');
+            }else{
+                this.articulossvc.RecuperarArticulos(this.getCategorySlug());
+            }
 
-        //     // tslint:disable-next-line: deprecation
-        //     this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
+            // tslint:disable-next-line: deprecation
+            this.ArticulosSuscribe$ = this.articulossvc.getArticulos$().subscribe(articulos => {
 
-        //         // inicializar SetBreadcrumbs
-        //         this.SetBreadcrumbs(this.articulossvc.getArticulos().breadcrumbs);
+                // inicializar SetBreadcrumbs
+                this.SetBreadcrumbs(this.articulossvc.getArticulos().breadcrumbs);
 
-        //         // titulo o marca seleccionado
-        //         this.pageHeader = this.articulossvc.getArticulos().seleccion;
+                // titulo o marca seleccionado
+                this.pageHeader = this.articulossvc.getArticulos().seleccion;
 
-        //     });
+            });
 
-        // });
+        });
 
         // tslint:disable-next-line: deprecation
         this.route.data.subscribe(data => {

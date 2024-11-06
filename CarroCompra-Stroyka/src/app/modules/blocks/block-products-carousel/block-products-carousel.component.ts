@@ -78,7 +78,7 @@ export class BlockProductsCarouselComponent implements OnChanges {
             dots: false,
             loop: true,
             stagePadding: 1,
-            rtl: this.direction.isRTL()
+            rtl: this.direction.isRTL(),
         };
     }
 

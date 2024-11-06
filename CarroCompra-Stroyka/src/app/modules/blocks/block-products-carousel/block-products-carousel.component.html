@@ -1,19 +1,28 @@
 <!-- .block-products-carousel -->
-<div
-    class="block block-products-carousel"
-    [ngClass]="{
+<div class="block block-products-carousel" [ngClass]="{
         'block-products-carousel--loading': loading,
         'block-products-carousel--has-items': !!columns?.length
-    }"
-    [attr.data-layout]="layout"
->
+    }" [attr.data-layout]="layout">
     <div [ngClass]="{'container': !withSidebar}">
-        <app-block-header [header]="header" [groups]="groups" [arrows]="true" (next)="carousel.next()" (prev)="carousel.prev()" (groupChange)="groupChange.emit($event)"></app-block-header>
+        <app-block-header [header]="header" [groups]="groups" [arrows]="true" (next)="carousel.next()"
+            (prev)="carousel.prev()" (groupChange)="groupChange.emit($event)"></app-block-header>
 
         <div class="block-products-carousel__slider">
             <div class="block-products-carousel__preloader"></div>
 
-            <owl-carousel-o [options]="carouselOptions" appOwlPreventClick #carousel>
+            <ngb-carousel #carousel [showNavigationArrows]="false" [showNavigationIndicators]="false"  [interval]="5000" [animation]="true" 
+            [wrap]="true" [pauseOnHover]="true" [pauseOnFocus]="true">
+                <ng-template ngbSlide *ngFor="let column of columns; let i = index">
+                    <div class="block-products-carousel__column">
+                        <div *ngFor="let product of column" class="block-products-carousel__cell">
+                            <app-product-card [product]="product" [lazyLoad]="true"></app-product-card>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-carousel>
+
+
+            <!-- <owl-carousel-o [options]="carouselOptions" appOwlPreventClick #carousel>
                 <ng-container  *ngFor="let column of columns;  let i = index" >
                     <ng-template carouselSlide [id]="i.toString()">
                         <div class="block-products-carousel__column">
@@ -23,7 +32,7 @@
                         </div>
                     </ng-template>
                 </ng-container>
-            </owl-carousel-o>
+            </owl-carousel-o> -->
         </div>
     </div>
 </div>

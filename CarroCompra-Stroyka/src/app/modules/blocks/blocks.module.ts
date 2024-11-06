@@ -25,6 +25,7 @@ import { BlockSlideshowComponent } from './block-slideshow/block-slideshow.compo
 
 // components
 import { BlockHeaderComponent } from './components/block-header/block-header.component';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -50,6 +51,7 @@ import { BlockHeaderComponent } from './components/block-header/block-header.com
         RouterModule,
         // modules (third-party)
         CarouselModule,
+        NgbCarouselModule,
         // modules
         SharedModule
     ],
