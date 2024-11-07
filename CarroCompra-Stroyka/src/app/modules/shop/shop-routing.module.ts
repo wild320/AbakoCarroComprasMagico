@@ -10,6 +10,8 @@ import { CheckoutGuard } from './guards/checkout.guard';
 import { PageProductComponent } from './pages/page-product/page-product.component';
 import { ProductsListResolverService } from './resolvers/products-list-resolver.service';
 import { PageOrderSuccessComponent } from './pages/page-order-success/page-order-success.component';
+import { appDataResolver } from 'src/app/providers/appData.resolver';
+import { productResolver } from './resolvers/product.resolver';
 
 const categoryPageData: Data = {
     // Number of products per row. Possible values: 3, 4, 5.
@@ -41,6 +43,10 @@ const routes: Routes = [
     {
         path: 'products/:productSlug/:urlAmigable',
         component: PageProductComponent,
+        resolve: {
+            appData: appDataResolver,
+            product: productResolver
+        },
         data: {
             // Product page layout. Possible values: 'standard', 'columnar', 'sidebar'.
             layout: 'standard',

@@ -241,21 +241,26 @@ export class ArticulosService {
     return this.ArticulosDetalle$.asObservable();
   }
 
-  SetSeleccionarArticuloDetalle(idArticulo: number, SiempreRecuperar: boolean) {
+ async SetSeleccionarArticuloDetalle(idArticulo: number, SiempreRecuperar: boolean) {
     // Si el articulo no existe aun debe consultarlo a la api
-    if (this.getArticulos()?.products === undefined || SiempreRecuperar) {
-      this.RecuperarArticuloDetalle(idArticulo);
-
-    } else if (this.getArticulos().products.items.findIndex(element => element.id === idArticulo) == -1) {
-      this.RecuperarArticuloDetalle(idArticulo);
-
-
-    } else {
-      const index = this.getArticulos().products.items.findIndex(element => element.id === idArticulo);
-      this.seleccionado.item = this.getArticulos().products.items[index];
-      this.seleccionado.breadcrumbs = this.getArticulos().breadcrumbs;
-      this.setArticuloDetalle$(this.seleccionado);
+    try {
+      if (this.getArticulos()?.products === undefined || SiempreRecuperar) {
+        await this.RecuperarArticuloDetalle(idArticulo);
+  
+      } else if (this.getArticulos().products.items.findIndex(element => element.id === idArticulo) == -1) {
+        await this.RecuperarArticuloDetalle(idArticulo);  
+  
+      } else {
+        const index = this.getArticulos().products.items.findIndex(element => element.id === idArticulo);
+        this.seleccionado.item = this.getArticulos().products.items[index];
+        this.seleccionado.breadcrumbs = this.getArticulos().breadcrumbs;
+        this.setArticuloDetalle$(this.seleccionado);
+      }
+      
+    } catch (error) {
+      console.log(error);
     }
+
 
   }
 
@@ -837,41 +842,37 @@ export class ArticulosService {
   }
 
 
-  public RecuperarArticuloDetalle(Id: number) {
-
+  public async RecuperarArticuloDetalle(Id: number) {
     this.UrlServicio =
       this.negocio.configuracion.UrlServicioCarroCompras +
       CServicios.ApiCarroCompras +
       CServicios.ServicioRecuperarArticulosDetalle;
-
+  
     if (!this.usuariosvc.Idempresa) {
       this.usuariosvc.Idempresa = 0;
     }
-
+  
     const IdEmpresa = this.usuariosvc.Idempresa.toString();
     const IdArticulo = Id.toString();
-
+  
     this.setIsLoading(true);
-
-    return this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${IdArticulo}`)
-      .toPromise()
-      .then((art: any) => {
-
-        const { articulo, breadcrumbs } = art
-
-        this.seleccionado.item = articulo;
-        this.seleccionado.breadcrumbs = breadcrumbs;
-
-        this.setArticuloDetalle$(this.seleccionado);
-
-      })
-      .catch((err: any) => {
-
-        this.setIsLoading(false);
-        console.log('RecuperarArticuloDetalle Error al consumir servicio:' + err.message);
-
-      });
-
+  
+    try {
+      const art: any = await this.httpClient.get(`${this.UrlServicio}/${IdEmpresa}/${IdArticulo}`).toPromise();
+  
+      const { articulo, breadcrumbs } = art;
+  
+      this.seleccionado.item = articulo;
+      this.seleccionado.breadcrumbs = breadcrumbs;
+  
+      this.setArticuloDetalle$(this.seleccionado);
+  
+    } catch (err: any) {
+      console.log('RecuperarArticuloDetalle Error al consumir servicio:' + err.message);
+    } finally {
+      this.setIsLoading(false);
+    }
   }
+  
 
 }
