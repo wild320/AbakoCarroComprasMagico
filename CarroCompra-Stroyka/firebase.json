@@ -8,22 +8,25 @@
     ],
     "rewrites": [
       {
+        "source": "/sitemap1.xml",
+        "destination": "/assets/sitemaps/sitemap1.xml"
+      },
+      {
+        "source": "/sitemap2.xml",
+        "destination": "/assets/sitemaps/sitemap2.xml"
+      },
+      {
+        "source": "/sitemap3.xml",
+        "destination": "/assets/sitemaps/sitemap3.xml"
+      },
+      {
+        "source": "/sitemapindex.xml",
+        "destination": "/assets/sitemaps/sitemapindex.xml"
+      },
+      {
         "source": "**",
-        "function": "ssrFunction"
+        "destination": "/index.html"
       }
     ]
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
-    }
-  ]
+  }
 }

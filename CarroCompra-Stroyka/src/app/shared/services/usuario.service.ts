@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 
 
 // Servicios
@@ -24,6 +24,8 @@ import { CServicios } from '../../../data/contantes/cServicios';
 
 
 // modelos
+import { isPlatformBrowser } from '@angular/common';
+import { cOperaciones } from 'src/data/contantes/cOperaciones';
 import { MaestroCiudad } from '../../../data/modelos/negocio/Ciudades';
 import { GuardarDireccion } from '../../../data/modelos/negocio/GuardarDireccion';
 import { MaestrosLocalizacionRequest } from '../../../data/modelos/negocio/MaestrosLocalizacionRequest';
@@ -34,8 +36,6 @@ import { EnviarUsuarioRequest } from '../../../data/modelos/seguridad/EnviarUsua
 import { LoginClienteResponse } from '../../../data/modelos/seguridad/LoginClienteResponse';
 import { LoguinRequest } from '../../../data/modelos/seguridad/LoguinRequest';
 import { RecuperarUsuarioResponse } from '../../../data/modelos/seguridad/RecuperarUsuarioResponse';
-import { isPlatformBrowser } from '@angular/common';
-import { cOperaciones } from 'src/data/contantes/cOperaciones';
 
 @Injectable({
   providedIn: 'root'
@@ -75,19 +75,18 @@ export class UsuarioService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private localService: LocalService,
-  )     {
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
       this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
       this.addresses = [];
-  
+
       // tslint:disable-next-line: deprecation
-      this.getEstadoLoguin$().subscribe(value => { });
+      this.getEstadoLoguin$().pipe(
+        tap(() => { })
+      ).subscribe();
 
     }
-
-
-
   }
 
 
@@ -114,9 +113,6 @@ export class UsuarioService {
   getEstadoLoguin$(): Observable<boolean> {
     if (isPlatformBrowser(this.platformId)) {
       return this.UsuarioLogueado$.asObservable();
-    } else {
-      return of(false);
-
     }
   }
 
@@ -335,7 +331,7 @@ export class UsuarioService {
   }
 
 
-  CrearClienteCarroCompras(request: CrearClienteCarroRequest) {
+  async CargarDatosClienteDirecto(request: CrearClienteCarroRequest) {
 
     this.UrlServicioLoguin =
       this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearCliente;
@@ -378,8 +374,7 @@ export class UsuarioService {
   }
 
 
-  CrearEditarClienteV1(request: CrearClienteCarroRequestv1) {
-
+  async CrearEditarClienteV1(request: CrearClienteCarroRequestv1) {
     this.UrlServicioLoguin =
       this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearEditarClienteV1;
 
@@ -389,7 +384,7 @@ export class UsuarioService {
       .toPromise()
       .then((config: any) => {
 
-        this.MsgRespuesta = config.mensaje;
+        this.MsgRespuesta = config?.mensaje ?? { msgId: config.msgId, msgStr: config.msgStr };
 
         return this.MsgRespuesta;
 
@@ -620,7 +615,8 @@ export class UsuarioService {
   async cargarUsuarioStorage() {
     if (isPlatformBrowser(this.platformId)) {
       try {
-        const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        const usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        const usrlogueado = JSON.parse(usr) ?? null;
 
         if (usrlogueado) {
           const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
@@ -631,10 +627,10 @@ export class UsuarioService {
           localStorage.setItem("isLogue", "false");
         }
       } catch (error) {
-        
+
       }
- 
-    } 
+
+    }
   }
 
   loguout() {

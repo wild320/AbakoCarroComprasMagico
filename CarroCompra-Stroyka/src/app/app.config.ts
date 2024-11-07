@@ -23,7 +23,7 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
 
       // Carga el resto de las configuraciones
       await usuario.cargarUsuarioStorage();
-    //  await banner.cargarBanner();
+      await banner.cargarBanner();
     } catch (error) {
       console.error('Error al cargar la configuración:', error);
     }

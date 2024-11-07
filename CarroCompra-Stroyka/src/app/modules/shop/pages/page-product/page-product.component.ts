@@ -8,8 +8,10 @@ import { ArticulosService } from '../../../../shared/services/articulos.service'
 
 // modelos
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Meta } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { Item } from '../../../../../data/modelos/articulos/Items';
+import { NegocioService } from 'src/app/shared/services/negocio.service';
+import { StoreService } from 'src/app/shared/services/store.service';
 
 @Component({
     selector: 'app-page-product',
@@ -25,67 +27,115 @@ export class PageProductComponent implements OnInit, OnDestroy {
     sidebarPosition: 'start' | 'end' = 'start'; // For LTR scripts "start" is "left" and "end" is "right"
     private cadenaString: string = "";
     private valorProductoUnit: any;
+    private productSlug: string | null;
+    negocioConfig: any;
+
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         @Inject(DOCUMENT) private document: Document,
         private shop: ShopService,
         private route: ActivatedRoute,
         public articulossvc: ArticulosService,
-        private meta: Meta
-    ) { }
+        private negocio: NegocioService,
+        private titleService: Title,
+        public StoreSvc: StoreService,
+        private metaTagService: Meta,
+    ) { 
+        this.productSlug = this.route.snapshot.params['productSlug'] || null;
+        this.route.data.subscribe(data => {
+
+            const resolvedProduct = data['product'];
+
+            this.layout = data['layout'] || this.layout;
+
+            this.sidebarPosition = data['sidebarPosition'] || this.sidebarPosition;
+
+            this.negocioConfig = this.negocio.configuracion;
+
+            if (resolvedProduct) {
+                this.product = resolvedProduct;
+                console.log(this.product);
+                this.setupProductDetails();
+               // this.setMetaTags();
+            }
+
+            this.articulossvc.RecuperarArticulosRelacionados(Number(this.productSlug));
+            this.articulossvc.getArticulosRelacionados$().subscribe(relatedProducts => {
+                this.relatedProducts = relatedProducts;
+            });
+        });
+    }
 
     ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
+        // if (isPlatformBrowser(this.platformId)) {
 
 
 
-            this.route.paramMap.subscribe(data => {
+        //     this.route.paramMap.subscribe(data => {
 
-                this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
-                    this.product = this.articulossvc.getArticuloDetalle().item;
-                    console.log("detll", this.product);
-                    if (this.product) {
-                        this.setMetaTags();
-                        this.cadenaString = this.product.name;
-                        this.valorProductoUnit = this.product.price;
+        //         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
+        //             this.product = this.articulossvc.getArticuloDetalle().item;
+        //             if (this.product) {
+        //                 this.setMetaTags();
+        //                 this.cadenaString = this.product.name;
+        //                 this.valorProductoUnit = this.product.price;
 
-                        const regExp = /\(([^)]+)\)/;
-                        const matches = regExp.exec(this.cadenaString);
+        //                 const regExp = /\(([^)]+)\)/;
+        //                 const matches = regExp.exec(this.cadenaString);
 
-                        if (matches) {
-                            const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
+        //                 if (matches) {
+        //                     const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
 
-                            // Calcular valor por unidad
-                            const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
-                            this.product["ValorUnidadV"] = `${valor}`;
-                            this.product["NombreUnidadV"] = nombreUnidadV;
-                        }
-                    } else {
-                        this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
-                    }
+        //                     // Calcular valor por unidad
+        //                     const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
+        //                     this.product["ValorUnidadV"] = `${valor}`;
+        //                     this.product["NombreUnidadV"] = nombreUnidadV;
+        //                 }
+        //             } else {
+        //                 this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
+        //             }
 
-                    this.SetBreadcrumbs(this.articulossvc.getArticuloDetalle().breadcrumbs);
-                });
+        //             this.SetBreadcrumbs(this.articulossvc.getArticuloDetalle().breadcrumbs);
+        //         });
 
-                this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
-                this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
+        //         this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
+        //         this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
 
-                // tslint:disable-next-line: deprecation
+        //         // tslint:disable-next-line: deprecation
 
-                this.articulossvc.getArticulosRelacionados$().subscribe(data => {
-                    this.relatedProducts = this.articulossvc.getArticulosRelacionados();
-                });
+        //         this.articulossvc.getArticulosRelacionados$().subscribe(data => {
+        //             this.relatedProducts = this.articulossvc.getArticulosRelacionados();
+        //         });
 
-            });
+        //     });
 
-            // tslint:disable-next-line: deprecation
-            this.route.data.subscribe(data => {
+        //     // tslint:disable-next-line: deprecation
+        //     this.route.data.subscribe(data => {
 
-                this.layout = data['layout'] || this.layout;
-                this.sidebarPosition = data['sidebarPosition'] || this.sidebarPosition;
+        //         this.layout = data['layout'] || this.layout;
+        //         this.sidebarPosition = data['sidebarPosition'] || this.sidebarPosition;
 
-            });
+        //     });
+        // }
+    }
+
+    private setupProductDetails(): void {
+        this.cadenaString = this.product.name;
+        this.valorProductoUnit = this.product.price;
+
+        const regExp = /\(([^)]+)\)/;
+        const matches = regExp.exec(this.cadenaString);
+
+        if (matches) {
+            const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
+
+            const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
+            this.product["ValorUnidadV"] = `${valor}`;
+            this.product["NombreUnidadV"] = nombreUnidadV;
         }
+
+        this.SetBreadcrumbs(this.articulossvc.getArticuloDetalle().breadcrumbs);
+
     }
 
     SetBreadcrumbs(breadcrumbs: any[]) {
@@ -107,37 +157,31 @@ export class PageProductComponent implements OnInit, OnDestroy {
     }
 
     setMetaTags(): void {
+
+        const negocio = this.negocioConfig;
+
         const { name, caracteristicas, brand, images, price, rating, inventario, urlAmigable, id } = this.product;
 
-        const baseHref = this.document.querySelector('base')?.getAttribute('href') || '';
-    
-        // Set meta description (use 'caracteristicas' or a default value)
+        this.titleService.setTitle(`${negocio.NombreCliente} | ${name}`);
+
+        const baseHref = this.negocio.configuracion.baseUrl;
         const description = caracteristicas || 'Compra este producto de alta calidad al mejor precio.';
-    
-        // Set meta title
         const title = `${name} - ${brand?.['name'] || 'Marca Desconocida'} - Disponible en nuestra tienda`;
-    
-        // Set meta keywords (e.g., name, brand, product details)
-        const keywords = `${name}, ${brand?.['name'] }, precio, comprar, ${rating} estrellas, ${inventario} en stock, ${price}`;
-    
-        // Set product image for Open Graph and Twitter Cards
-        const imageUrl = images?.length ? images[0] : `${baseHref}/assets/configuracion/LOGO2.png`;
-    
-        // Update the meta tags
-        this.meta.updateTag({ name: 'description', content: description });
-        this.meta.updateTag({ name: 'title', content: title });
-        this.meta.updateTag({ name: 'keywords', content: keywords });
-    
-        // Open Graph meta tags for social sharing
-        this.meta.updateTag({ property: 'og:title', content: title });
-        this.meta.updateTag({ property: 'og:description', content: description });
-        this.meta.updateTag({ property: 'og:image', content: imageUrl });
-        this.meta.updateTag({ property: 'og:url', content: `${baseHref}/shop/products/${id}/${urlAmigable}` });
-    
-        // Twitter Card meta tags
-        this.meta.updateTag({ name: 'twitter:title', content: title });
-        this.meta.updateTag({ name: 'twitter:description', content: description });
-        this.meta.updateTag({ name: 'twitter:image', content: imageUrl });
+        const keywords = `${name}, ${brand?.['name']}, precio, comprar, ${rating} estrellas, ${inventario} en stock, ${price}`;
+        const imageUrl = images?.length ? images[0] : `${baseHref}assets/configuracion/LOGO2.png`;
+
+        this.metaTagService.addTags([
+            { name: 'description', content: description },
+            { name: 'title', content: title },
+            { name: 'keywords', content: keywords },
+            { property: 'og:title', content: title },
+            { property: 'og:description', content: description },
+            { property: 'og:image', content: imageUrl },
+            { property: 'og:url', content: `${baseHref}/shop/products/${id}/${urlAmigable}` },
+            { name: 'twitter:title', content: title },
+            { name: 'twitter:description', content: description },
+            { name: 'twitter:image', content: imageUrl }
+        ]);
     }
     
 }
