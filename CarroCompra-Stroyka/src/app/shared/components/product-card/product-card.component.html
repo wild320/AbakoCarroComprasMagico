@@ -17,18 +17,16 @@
     </div>
 
     <div class="product-card__image product-image">
-        <a appClick 
-        [owlRouterLink]="root.product(product.id,product['urlAmigable'])"
-         *ngIf="product.images?.length" class="product-image__body">
-            <img class="product-image__img" [src]="product.images[0]" [alt]="product.name" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
+        <a appClick [routerLink]="root.product(product.id,product.urlAmigable)" *ngIf="product.images?.length" class="product-image__body">
+            <img class="product-image__img" [lazyLoad]="product.images[0]" [alt]="product.name" [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}">
         </a>
     </div>
     <div class="product-card__info">
-        <div *ngIf="product['discountPerc'] > 0" >
-            <div class="product-card__badge product-card__badge--sale tag-sale">- {{ product['discountPerc'] | percentPipe }}</div>
+        <div *ngIf="product.discountPerc > 0" >
+            <div class="product-card__badge product-card__badge--sale tag-sale">- {{ product.discountPerc | percentPipe }}</div>
         </div>
         <div class="product-card__name">
-            <a appClick [owlRouterLink]="root.product(product.id,product['urlAmigable'])">{{ product.name | titlecase  }}</a>
+            <a appClick [routerLink]="root.product(product.id,product.urlAmigable)">{{ product.name | titlecase  }}</a>
         </div>
         <div class="product-card__rating">
             <app-rating [value]="product.rating"></app-rating>
@@ -61,8 +59,8 @@
         <div class="product-card__buttons">
             <div class="product-card__addtocart btnquantyti">
                 
-                <!-- <app-input-number aria-label="Quantity" size="sm" [min]="1" [max]="maxCantidad(product)"
-                    [(ngModel)]="quantity"></app-input-number> -->
+                <app-input-number aria-label="Quantity" size="sm" [min]="1" [max]="maxCantidad(product)"
+                    [(ngModel)]="quantity"></app-input-number>
                 <button appClick
                     [disabled]="product.availability === 'No Disponible' && !storeSvc.configuracionSitio.SuperarInventario"
                     type="button" title="Add to cart" class="btn btn-primary btn-sm btn-svg-icon" [class.btn-loading]="addingToCart"
