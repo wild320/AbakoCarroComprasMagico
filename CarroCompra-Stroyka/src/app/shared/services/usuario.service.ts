@@ -75,21 +75,18 @@ export class UsuarioService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private localService: LocalService,
-  )     {
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.UsuarioLogueado$ = new BehaviorSubject<boolean>(false);
       this.DireccionesCargadas$ = new BehaviorSubject<boolean>(false);
       this.addresses = [];
-  
+
       // tslint:disable-next-line: deprecation
       this.getEstadoLoguin$().pipe(
         tap(() => { })
       ).subscribe();
 
     }
-
-
-
   }
 
 
@@ -116,7 +113,7 @@ export class UsuarioService {
   getEstadoLoguin$(): Observable<boolean> {
     if (isPlatformBrowser(this.platformId)) {
       return this.UsuarioLogueado$.asObservable();
-    } 
+    }
   }
 
   setUsrLoguin(usuario: LoginClienteResponse) {
@@ -334,7 +331,7 @@ export class UsuarioService {
   }
 
 
-  CrearClienteCarroCompras(request: CrearClienteCarroRequest) {
+  async CargarDatosClienteDirecto(request: CrearClienteCarroRequest) {
 
     this.UrlServicioLoguin =
       this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearCliente;
@@ -377,8 +374,7 @@ export class UsuarioService {
   }
 
 
-  CrearEditarClienteV1(request: CrearClienteCarroRequestv1) {
-
+  async CrearEditarClienteV1(request: CrearClienteCarroRequestv1) {
     this.UrlServicioLoguin =
       this.negocio.configuracion.UrlServicioAdministracion + CServicios.ApiAdministracion + CServicios.ServivioCrearEditarClienteV1;
 
@@ -388,7 +384,7 @@ export class UsuarioService {
       .toPromise()
       .then((config: any) => {
 
-        this.MsgRespuesta = config.mensaje;
+        this.MsgRespuesta = config?.mensaje ?? { msgId: config.msgId, msgStr: config.msgStr };
 
         return this.MsgRespuesta;
 
@@ -631,10 +627,10 @@ export class UsuarioService {
           localStorage.setItem("isLogue", "false");
         }
       } catch (error) {
-        
+
       }
- 
-    } 
+
+    }
   }
 
   loguout() {

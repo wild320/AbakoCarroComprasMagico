@@ -5,13 +5,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 // servicios
 import { NegocioService } from '../../../../shared/services/negocio.service';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
+
+// constantes
+import { Crutas } from 'src/data/contantes/cRutas';
+
+// utils
+import { UtilsTexto } from 'src/app/shared/utils/UtilsTexto';
+
+// modelos
+import { StoreService } from 'src/app/shared/services/store.service';
+import { EstadoRespuestaMensaje } from 'src/data/contantes/cMensajes';
 import { Mensaje } from '../../../../../data/modelos/negocio/Mensaje';
 import { CrearClienteCarroRequest } from '../../../../../data/modelos/seguridad/CrearClienteCarroRequest';
 import { CrearClienteCarroRequestv1 } from '../../../../../data/modelos/seguridad/CrearClienteV1CarroRequest';
-import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
-import { Crutas } from '../../../../../data/contantes/cRutas';
-import { StoreService } from '../../../../shared/services/store.service';
-import { UtilsTexto } from '../../../../shared/utils/UtilsTexto';
 
 @Component({
   selector: 'app-page-suscribirse',
@@ -74,14 +80,15 @@ export class PageSuscribirseComponent implements OnInit {
 
     this.titulo = this.negociosvc.configuracion.NombreCliente;
 
-    // cargar datos quw vienen de la pantalla anterior
-    const objectousr = JSON.parse(this.usuarioingresado);
-    this.tipo.setValue(objectousr.tipo)
-    this.Identificacion.setValue(objectousr.identificacion);
-    this.Nombres.setValue(objectousr.nombres);
-    this.Apellidos.setValue(objectousr.apellidos);
-    
     this.clienteDirecto = this.storeSvc.configuracionSitio.CreacionDirectaClientes;
+
+    // cargar datos quw vienen de la pantalla anterior
+    // const objectousr = JSON.parse(this.usuarioingresado);
+    // this.tipo.setValue(objectousr.tipo)
+    // this.Identificacion.setValue(objectousr.identificacion);
+    // this.Nombres.setValue(objectousr.nombres);
+    // this.Apellidos.setValue(objectousr.apellidos);
+    
 
   }
 
@@ -114,16 +121,19 @@ export class PageSuscribirseComponent implements OnInit {
 
   async manejarCreacionCliente() {
     try {
-      const config = !this.clienteDirecto
-        ? await this.usuariossvc.CrearEditarClienteV1(this.objCrearClientev1)
-        : await this.usuariossvc.CrearClienteCarroCompras(this.objCrearCliente);
+      const config = this.clienteDirecto
+        ? await this.usuariossvc.CargarDatosClienteDirecto(this.objCrearCliente)
+        : await this.usuariossvc.CrearEditarClienteV1(this.objCrearClientev1);
 
       this.MsgRespuesta = config;
       this.loading = false;
-      this.error = this.MsgRespuesta.msgId === EstadoRespuestaMensaje.Error;
-      this.mensajerespuestaerror = this.error ? this.MsgRespuesta.msgStr : '';
-      this.mensajerespuestaexito = this.error ? '' : 'Ingreso exitoso';
-      this.router.navigate(['/']);
+      if( this.MsgRespuesta.msgId === EstadoRespuestaMensaje.Error ) {        
+        this.error = this.MsgRespuesta.msgId === EstadoRespuestaMensaje.Error;
+        this.mensajerespuestaerror = this.error ? this.MsgRespuesta.msgStr : '';
+        this.mensajerespuestaexito = this.error ? '' : 'Ingreso exitoso';
+      } else {
+        this.router.navigate(['/']);
+      }
     } catch (error) {
       // Manejar el error en caso de que ocurra
       console.error(error);
