@@ -92,8 +92,8 @@ export class PageSuscribirseComponent implements OnInit {
 
     if (this.EsValidoFormularioRegistro()) {
 
-      if(!this.clienteDirecto) {
-        this.CargarDatos();
+      if(this.clienteDirecto) {
+        this.CargarDatosClienteDirecto();
 
       } else {
         this.CargarDatosv1();
@@ -188,7 +188,7 @@ export class PageSuscribirseComponent implements OnInit {
     this.mensajerespuestaerror = '';
   }
 
-  CargarDatos() {
+  CargarDatosClienteDirecto() {
     this.objCrearCliente.tipoIdentificacion = this.tipo.value;
     this.objCrearCliente.Nombres = this.tipo.value == 'CEDULA' ? this.Nombres.value : this.RazonSocial.value;
     this.objCrearCliente.Apellidos = this.tipo.value == 'CEDULA' ? this.Apellidos.value : '';
