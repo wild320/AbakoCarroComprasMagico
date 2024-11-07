@@ -15,7 +15,7 @@
                 <ng-template ngbSlide *ngFor="let column of columns; let i = index">
                     <div class="block-products-carousel__column">
                         <div *ngFor="let product of column" class="block-products-carousel__cell">
-                            <app-product-card [product]="product" [lazyLoad]="true"></app-product-card>
+                            <app-product-card [product]="product"></app-product-card>
                         </div>
                     </div>
                 </ng-template>

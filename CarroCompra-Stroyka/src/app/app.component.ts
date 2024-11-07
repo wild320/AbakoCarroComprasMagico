@@ -93,7 +93,6 @@ export class AppComponent implements OnInit {
         const siteDescription = StoreSvc.PosicionamientoEnGoogle;
         const siteImage = `${baseUrl}/${Cconfiguracion.urlAssetsConfiguracion}LOGO2.png`;
         const socialMedia = this.StoreSvc.redes;
-        console.log(socialMedia);
 
         this.metaTagService.addTags([
             // Meta tags para SEO
@@ -118,15 +117,31 @@ export class AppComponent implements OnInit {
             { name: 'twitter:title', content: siteTitle },
             { name: 'twitter:description', content: siteDescription },
             { name: 'twitter:image', content: siteImage },
-            { name: 'twitter:site', content: '@tuTwitterHandle' }, // Reemplaza con tu handle de Twitter si tienes
-            { name: 'twitter:creator', content: '@tuTwitterHandle' }, // Reemplaza con el handle del autor si lo tienes
 
             // Meta tags adicionales útiles
             { name: 'viewport', content: 'width=device-width, initial-scale=1' }, // Para diseño responsivo
-            { name: 'apple-mobile-web-app-capable', content: 'yes' }, // Habilita app en iOS
             { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }, // Estilo de la barra de estado en iOS
             { name: 'format-detection', content: 'telephone=no' }, // Para evitar el formateo automático de números de teléfono
         ]);
+
+        socialMedia.forEach(({ type, url }) => {
+            if (url) {
+                switch (type) {
+                    case 'facebook':
+                        this.metaTagService.addTag({ property: 'og:url', content: url });
+                        break;
+                    case 'twitter':
+                        this.metaTagService.addTag({ name: 'twitter:url', content: url });
+                        break;
+                    case 'instagram':
+                        this.metaTagService.addTag({ property: 'og:instagram', content: url });
+                        break;
+                    case 'youtube':
+                        this.metaTagService.addTag({ property: 'og:video', content: url });
+                        break;
+                }
+            }
+        });
     }
 
 

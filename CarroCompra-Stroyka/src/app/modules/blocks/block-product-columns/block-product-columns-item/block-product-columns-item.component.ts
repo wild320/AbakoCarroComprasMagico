@@ -10,7 +10,7 @@ export class BlockProductColumnsItemComponent {
     @HostBinding('class.col') classCol = true;
 
     @Input() header: string;
-    @Input() products: Product[] = [];
+    @Input() products: any = [];
 
     constructor() { }
 }

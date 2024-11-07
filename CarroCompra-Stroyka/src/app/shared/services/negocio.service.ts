@@ -4,6 +4,7 @@ import { Injectable, inject } from '@angular/core';
 // Contantes
 import { CServicios } from 'src/data/contantes/cServicios';
 import { Cconfiguracion } from '../../../data/contantes/cConfiguracion';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -21,24 +22,20 @@ export class NegocioService {
   configuracion: any = {};
 
   constructor() {
-    this.UrlJsonConfguracion = 'http://localhost:4300/' + Cconfiguracion.urlAssetsConfiguracion + Cconfiguracion.JsonConfiguracion;
+    this.UrlJsonConfguracion = `${environment.apiUrl}${Cconfiguracion.urlAssetsConfiguracion}${Cconfiguracion.JsonConfiguracion}`;
 
   }
 
-  async loadSettingsFromServer(): Promise<any> {
-    this.headers = this.headers.append('Access-Control-Allow-Origin', '*');
-    const options = {
-      headers: this.headers
-    };
+  async loadSettingsFromServer(): Promise<void> {
+    try {
+        const options = { headers: this.headers.set('Access-Control-Allow-Origin', '*') };
+        const config = await this.httpClient.get<any>(this.UrlJsonConfguracion, options).toPromise();
 
-    return this.httpClient.get(this.UrlJsonConfguracion, options)
-      .toPromise()
-      .then((config: any) => {
         this.configuracion = config;
         this.UrlServicioCarroCompras = `${this.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioConfiguracionCC}`;
-      })
-      .catch((err: any) => {
-        console.error('Error leyendo json de configuracion:' + err);
-      });
-  }
+    } catch (err) {
+        console.error('Error leyendo configuration JSON:', err);
+    }
+}
+
 }

@@ -179,8 +179,13 @@ export class StoreService {
     }
 
     private addSocialMedia(type: string, url: string, icon: string): void {
-        this.redes.push({ type, url, icon });
+        const exists = this.redes.some((social) => social.type === type);
+    
+        if (!exists) {
+            this.redes.push({ type, url, icon });
+        }
     }
+    
 
     private setPasarelaOption(id: string, valor: string): void {
         const pasarelaMap = {
