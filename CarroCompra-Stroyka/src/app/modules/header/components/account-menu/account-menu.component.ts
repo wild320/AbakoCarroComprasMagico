@@ -31,6 +31,8 @@ export class AccountMenuComponent implements OnInit {
   ) {
 
     this.InicializarValores();
+    
+    this.EstaLogueadoUsuario();
   }
 
   ngOnInit() {
@@ -41,9 +43,6 @@ export class AccountMenuComponent implements OnInit {
       recordar: new UntypedFormControl(false, [])
     });
 
-    this.InicializarValores();
-
-    this.EstaLogueadoUsuario();
 
   }
 
@@ -96,6 +95,7 @@ export class AccountMenuComponent implements OnInit {
   EstaLogueadoUsuario() {
     if (isPlatformBrowser(this.platformId)) {
       this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+        console.log(value);
 
         this.usuariologueado = value;
 

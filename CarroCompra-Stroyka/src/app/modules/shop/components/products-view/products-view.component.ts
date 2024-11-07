@@ -1,16 +1,16 @@
 import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { ShopSidebarService } from '../../services/shop-sidebar.service';
-import { PageCategoryService } from '../../services/page-category.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
+import { PageCategoryService } from '../../services/page-category.service';
+import { ShopSidebarService } from '../../services/shop-sidebar.service';
 
 // Servicios
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // modelos
-import { Products } from '../../../../../data/modelos/articulos/DetalleArticulos';
-import { Item } from 'src/data/modelos/articulos/Items';
 import { isPlatformBrowser } from '@angular/common';
+import { Item } from 'src/data/modelos/articulos/Items';
+import { Products } from '../../../../../data/modelos/articulos/DetalleArticulos';
 
 
 export type Layout = 'grid' | 'grid-with-features' | 'list';
@@ -33,11 +33,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     ProductosSeleccionados: Item[] | any;
     Productos: Products = new Products();
     PaginationLocalStorage: any;
-    isPageAuto: boolean = false
-
-    private sub: Subscription;
-    private sub2: Subscription;
-    private sub3: Subscription;
+    isPageAuto: boolean = false;
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
@@ -48,24 +44,18 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef
     ) {
         if (isPlatformBrowser(this.platformId)) {
-            console.log('Platform', this.platformId);
             this.articulossvc.getArticulos$().subscribe(articulos => {
-                console.log("productos", articulos)
-               this.articulossvc.setAtributosFiltros(articulos);
+                this.articulossvc.setAtributosFiltros(articulos.products);
             });
-    
+
             this.articulossvc.getArticulosSeleccionados$().subscribe((articulos) => {
-    console.log("getArticulosSeleccionados$(", articulos)
                 this.Productos = this.articulossvc.getArticulos().products;
-                console.log("productos sus", this.Productos)
                 this.ProductosSeleccionados = this.articulossvc.getArticulosSeleccionados();
-    
-                console.log("console 59", this.ProductosSeleccionados);
                 localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
                 localStorage.setItem('is_page_update', '0')
                 this.isPageAuto = false;
-          
-    
+
+
             });
 
 
@@ -103,7 +93,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId)) {
-            this.sub = this.articulossvc.getAtributos$().subscribe(atributos => {
+            this.articulossvc.getAtributos$().subscribe(atributos => {
                 this.SetAtributos();
             });
 

@@ -119,10 +119,8 @@ export class ArticulosService {
   }
 
   setAtributos$(newValue) {
-
     this.AtributosFiltros = newValue;
     this.AtributosFiltros$.next(newValue);
-
   }
 
   getAtributos$(): Observable<Products> {

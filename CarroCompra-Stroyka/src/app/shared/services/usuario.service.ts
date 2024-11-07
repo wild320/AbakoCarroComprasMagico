@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 
 
 // Servicios
@@ -24,6 +24,8 @@ import { CServicios } from '../../../data/contantes/cServicios';
 
 
 // modelos
+import { isPlatformBrowser } from '@angular/common';
+import { cOperaciones } from 'src/data/contantes/cOperaciones';
 import { MaestroCiudad } from '../../../data/modelos/negocio/Ciudades';
 import { GuardarDireccion } from '../../../data/modelos/negocio/GuardarDireccion';
 import { MaestrosLocalizacionRequest } from '../../../data/modelos/negocio/MaestrosLocalizacionRequest';
@@ -34,8 +36,6 @@ import { EnviarUsuarioRequest } from '../../../data/modelos/seguridad/EnviarUsua
 import { LoginClienteResponse } from '../../../data/modelos/seguridad/LoginClienteResponse';
 import { LoguinRequest } from '../../../data/modelos/seguridad/LoguinRequest';
 import { RecuperarUsuarioResponse } from '../../../data/modelos/seguridad/RecuperarUsuarioResponse';
-import { isPlatformBrowser } from '@angular/common';
-import { cOperaciones } from 'src/data/contantes/cOperaciones';
 
 @Injectable({
   providedIn: 'root'
@@ -82,7 +82,9 @@ export class UsuarioService {
       this.addresses = [];
   
       // tslint:disable-next-line: deprecation
-      this.getEstadoLoguin$().subscribe(value => { });
+      this.getEstadoLoguin$().pipe(
+        tap(() => { })
+      ).subscribe();
 
     }
 
@@ -114,10 +116,7 @@ export class UsuarioService {
   getEstadoLoguin$(): Observable<boolean> {
     if (isPlatformBrowser(this.platformId)) {
       return this.UsuarioLogueado$.asObservable();
-    } else {
-      return of(false);
-
-    }
+    } 
   }
 
   setUsrLoguin(usuario: LoginClienteResponse) {
@@ -620,7 +619,8 @@ export class UsuarioService {
   async cargarUsuarioStorage() {
     if (isPlatformBrowser(this.platformId)) {
       try {
-        const usrlogueado = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        const usr = this.localService.getJsonValue(this.token) ?? this.localService.getJsonValueSession(this.token);
+        const usrlogueado = JSON.parse(usr) ?? null;
 
         if (usrlogueado) {
           const RestaurarSesion: LoguinRequest = usrlogueado.loguin;
