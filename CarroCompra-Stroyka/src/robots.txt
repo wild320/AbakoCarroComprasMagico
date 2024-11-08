@@ -3,4 +3,4 @@ Disallow: /admin/
 Disallow: /private/
 Allow: /public/
 
-Sitemap: 
+Sitemap: https://magicomundo.co/assets/sitemaps/sitemapindex.xml
