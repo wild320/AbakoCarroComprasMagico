@@ -32,24 +32,24 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
 
 
 
-        // if (isPlatformBrowser(this.platformId)) {
-        //     this.sidebar.isOpen$.pipe(
-        //         takeUntil(this.destroy$)
-        //     ).subscribe(isOpen => {
-        //         console.log('isOpen', isOpen);
-        //         if (isOpen) {
-        //             this.open();
-        //         } else {
-        //             this.close();
-        //         }
-        //     });
+        if (isPlatformBrowser(this.platformId)) {
+            this.sidebar.isOpen$.pipe(
+                takeUntil(this.destroy$)
+            ).subscribe(isOpen => {
+                console.log('isOpen', isOpen);
+                if (isOpen) {
+                    this.open();
+                } else {
+                    this.close();
+                }
+            });
 
-        //     fromMatchMedia('(max-width: 991px)').pipe(takeUntil(this.destroy$)).subscribe(media => {
-        //         if (this.offcanvas === 'mobile' && this.isOpen && !media.matches) {
-        //             this.close();
-        //         }
-        //     });
-        // }
+            fromMatchMedia('(max-width: 991px)').pipe(takeUntil(this.destroy$)).subscribe(media => {
+                if (this.offcanvas === 'mobile' && this.isOpen && !media.matches) {
+                    this.close();
+                }
+            });
+        }
     }
 
     ngOnDestroy(): void {
