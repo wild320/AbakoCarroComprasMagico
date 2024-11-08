@@ -45,12 +45,13 @@
     opacity: 1;
     visibility: visible;
 }
-.block-products-carousel__column {
+.block-products-carousel__column {    
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 100%;
 }
 .block-products-carousel__cell {
+    width: 33% !important;
     & + & {
         margin-top: 14px;
     }
@@ -67,6 +68,7 @@
         width: 100%;
     }
 }
+
 .block-products-carousel--has-items {
     .block-products-carousel__preloader {
         bottom: 56px;

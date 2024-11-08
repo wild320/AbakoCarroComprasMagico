@@ -10,7 +10,7 @@
         <div class="block-products-carousel__slider">
             <div class="block-products-carousel__preloader"></div>
 
-            <ngb-carousel #carousel [showNavigationArrows]="false" [showNavigationIndicators]="false"  [interval]="5000" [animation]="true" 
+            <ngb-carousel #carousel [showNavigationArrows]="false" [showNavigationIndicators]="false"  [interval]="0" [animation]="true" 
             [wrap]="true" [pauseOnHover]="true" [pauseOnFocus]="true">
                 <ng-template ngbSlide *ngFor="let column of columns; let i = index">
                     <div class="block-products-carousel__column">
