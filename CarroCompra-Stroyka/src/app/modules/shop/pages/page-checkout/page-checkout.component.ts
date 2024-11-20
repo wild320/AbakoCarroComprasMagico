@@ -209,7 +209,6 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
                 }
                 this.loading = false;
             }).finally(() => {
-                console.log('finalizo')
                 this.formSubmitted = false;
                 this.loading = false;
             });

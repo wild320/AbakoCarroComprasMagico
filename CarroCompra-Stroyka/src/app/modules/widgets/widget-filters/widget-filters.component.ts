@@ -87,7 +87,6 @@ export class WidgetFiltersComponent implements OnInit, OnDestroy {
 
     ChangeForm() {
         this.filtrosValores = this.convertFormToFilterValues(this.filters, this.filtersForm.value);
-        console.log("this.filtrosValoresW", this.filtrosValores)
         this.articulossvc.SetFiltrarArticulos(this.filtrosValores);
     }
 

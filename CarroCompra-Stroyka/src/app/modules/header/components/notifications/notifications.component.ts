@@ -31,9 +31,6 @@ export class NotificationsComponent implements OnInit {
 
       this.notifications  = [];
       this.notifications = this.notificacionessvc.getNotificacion();
-
-      console.log(this.notifications);
-
       if (this.notifications.length > 0) {
         this.selectedNotification = this.notifications[0];
       }

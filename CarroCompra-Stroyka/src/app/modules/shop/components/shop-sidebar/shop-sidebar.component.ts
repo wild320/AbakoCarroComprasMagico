@@ -36,7 +36,6 @@ export class ShopSidebarComponent implements OnInit, OnDestroy {
             this.sidebar.isOpen$.pipe(
                 takeUntil(this.destroy$)
             ).subscribe(isOpen => {
-                console.log('isOpen', isOpen);
                 if (isOpen) {
                     this.open();
                 } else {

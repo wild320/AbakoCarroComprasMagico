@@ -178,32 +178,32 @@ export class MobileMenuComponent implements OnDestroy, OnInit {
 
     CargarCategorias() {
 
-        // this.articulossvc.getMegaMenu$().subscribe(menu => {
+        this.articulossvc.getMegaMenu$().subscribe(menu => {
 
-        //     const index = this.links.findIndex(x => x.label === 'Categorias');
+            const index = this.links.findIndex(x => x.label === 'Categorias');
 
-        //     this.links[index].children = []
+            this.links[index].children = []
 
-        //     this.articulossvc.getMegaMenu().forEach((element) => {
+            this.articulossvc.getMegaMenu().forEach((element) => {
 
-        //         // llenar detalles categorias
-        //         let childrens = this.articulossvc.getMegaMenu().filter(x => x.label === element.label).map(map => {
+                // llenar detalles categorias
+                let childrens = this.articulossvc.getMegaMenu().filter(x => x.label === element.label).map(map => {
 
-        //             return map.menu['columns'][0]['items']
+                    return map.menu['columns'][0]['items']
 
-        //         });
+                });
 
-        //         this.links[index].children.push({
-        //             type: 'link',
-        //             label: element.label,
-        //             url: this.root.shop() + '/' + element.slug,
-        //             children: childrens[0].map(child => { return ({ type: 'link', label: child.label, url: this.root.shop() + '/' + child.slug }) })
+                this.links[index].children.push({
+                    type: 'link',
+                    label: element.label,
+                    url: this.root.shop() + '/' + element.slug,
+                    children: childrens[0].map(child => { return ({ type: 'link', label: child.label, url: this.root.shop() + '/' + child.slug }) })
 
-        //         })
+                })
 
-        //     });
+            });
 
-        // });
+        });
 
     }
 

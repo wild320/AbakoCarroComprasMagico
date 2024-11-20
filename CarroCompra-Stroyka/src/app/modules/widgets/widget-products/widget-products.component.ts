@@ -38,7 +38,6 @@ export class WidgetProductsComponent {
 
                 // tslint:disable-next-line: deprecation
                 this.articulossvc.getArticulosMasVendidos$().subscribe(data => {
-                    console.log("data" , data)
                     this.products = this.articulossvc.getArticulosMasVendidos().slice(0, 6);
                 });
             }

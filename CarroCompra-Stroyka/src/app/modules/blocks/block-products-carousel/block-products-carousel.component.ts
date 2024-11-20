@@ -82,7 +82,6 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
                 this.columns.push(products.splice(0, itemsPerColumn));
             }
         }
-        console.log(this.columns);
     }
 
     getItemsPerColumn(): number {
