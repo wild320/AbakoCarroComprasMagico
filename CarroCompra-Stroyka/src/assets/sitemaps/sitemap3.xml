@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/1.0"
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <!-- Categoría específica del catálogo -->
@@ -7,7 +7,7 @@
     <loc>https://magicomundo.co/shop/catalog/ln%7C180</loc>
     <lastmod>2024-06-07</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <priority>1.0</priority>    
   </url>
 
   <!-- Categorías adicionales del catálogo -->

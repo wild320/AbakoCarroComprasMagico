@@ -16,13 +16,13 @@ import { Cstring } from '../../../data/contantes/cString';
 import { EstadoRespuestaMensaje } from '../../../data/contantes/cMensajes';
 
 // utils
-import {UtilsTexto} from '../../shared/utils/UtilsTexto';
+import { UtilsTexto } from '../../shared/utils/UtilsTexto';
 
 // Modelos
-import {PedidoRequest } from '../../../data/modelos/facturacion/PedidoRequest';
-import {PedidoSeguimientoRequest } from '../../../data/modelos/facturacion/PedidoSeguimientoRequest';
-import {PedidoSeguimientoResponse } from '../../../data/modelos/facturacion/PedidoSeguimientoResponse';
-import {Mensaje} from '../../../data/modelos/negocio/Mensaje';
+import { PedidoRequest } from '../../../data/modelos/facturacion/PedidoRequest';
+import { PedidoSeguimientoRequest } from '../../../data/modelos/facturacion/PedidoSeguimientoRequest';
+import { PedidoSeguimientoResponse } from '../../../data/modelos/facturacion/PedidoSeguimientoResponse';
+import { Mensaje } from '../../../data/modelos/negocio/Mensaje';
 
 // constantes
 import { Crutas } from '../../../data/contantes/cRutas';
@@ -47,61 +47,64 @@ export class PedidosService {
   private mensaje = new Mensaje();
   public NumeroPaginas: number = 0;
   public PaginaActual: number;
-  public orders: Partial <Order>[];
+  public orders: Partial<Order>[];
   public ordenactual: Order;
 
 
   constructor(private httpClient: HttpClient,
-              private servicehelper: ServiceHelper<any, any>,
-              private negocio: NegocioService,
-              private ServiciosnegocioSVC: ServiciosnegocioService,
-              private router: Router,
-              private utils: UtilsTexto,
-              ) {  }
-
-  public cargarPedidos(Idempresa: number, Pagina: number) {
-
-    this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-    CServicios.ServicioPedidosCliente;
+    private servicehelper: ServiceHelper<any, any>,
+    private negocio: NegocioService,
+    private ServiciosnegocioSVC: ServiciosnegocioService,
+    private router: Router,
+    private utils: UtilsTexto,
+  ) { }
 
 
-    return this.httpClient.get(this.UrlServicioPaginas
-    + '/' + Idempresa.toString() + '/' + Pagina.toString() + '/' + this.RecuperarRegistros, { responseType: 'text' })
-      .toPromise()
+  public cargarPedidos(Idempresa: number, Pagina: number): Promise<any> {
+    // Construir la URL del servicio
+    this.UrlServicioPaginas =
+      `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioPedidosCliente}`;
+
+    // Llamar al servicio HTTP
+    return firstValueFrom(
+      this.httpClient.get(`${this.UrlServicioPaginas}/${Idempresa}/${Pagina}/${this.RecuperarRegistros}`)
+    )
       .then((resp: any) => {
+        if (resp) {
+          // Capturar ordenes
+          this.orders = resp.resultado;
 
-        // Capturar ordenes
-        this.orders = (resp).resultado;
+          // Actualizar la página actual
+          this.PaginaActual = Pagina;
 
-        // Colocar la pagina en la cual se consulto la ultima vez
-        this.PaginaActual = Pagina;
+          // Capturar el número de órdenes y calcular las páginas si corresponde
+          if (this.RecuperarRegistros === Cstring.SI) {
+            this.CantidadPedidos = resp.registros;
+            this.NumeroPaginas = Math.ceil(this.CantidadPedidos / 5);
+          }
 
-        // Capturar numero de ordenes
-        if (this.RecuperarRegistros === Cstring.SI) {
-          this.CantidadPedidos =  (resp).registros;
-          this.NumeroPaginas = Math.ceil(this.CantidadPedidos / 5);
+          // Cambiar la configuración de registros a recuperar
+          this.RecuperarRegistros = Cstring.NO;
         }
 
-        // cambiar recuperar registros
-        this.RecuperarRegistros = Cstring.NO;
-
         return resp;
-
       })
       .catch((err: any) => {
-          console.error(err);
+        console.error('Error al cargar los pedidos:', err);
+        throw err; // Propagar el error para que pueda manejarse en el llamador
       });
   }
+
 
   public async CargarUltimoPedido(IdPedido: number): Promise<void> {
     if (IdPedido === undefined || IdPedido === null) {
       return;
     }
-  
+
     try {
-      
+
       const orden = await this.cargarDetallePedido(IdPedido, -1);
-      
+
       if (orden) {
         this.router.navigate([Crutas.succesorder]);
       }
@@ -109,34 +112,34 @@ export class PedidosService {
       console.error('Error al cargar el último pedido:', error);
     }
   }
-  
+
 
 
   public async cargarDetallePedido(IdPedido: number, index: number): Promise<any> {
     try {
       const url = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioDetallePedido}/${IdPedido}`;
-  
+
       const resp = await firstValueFrom(this.httpClient.get<any>(url));
-      
+
       if (index !== -1) {
         this.orders[index] = resp;
       }
       this.ordenactual = resp;
-      
+
       return resp;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   }
-  
-  
 
-  
+
+
+
   getpedidoseguimiento(): PedidoSeguimientoResponse[] {
     return this.pedidoseguimiento;
   }
 
-  setpedidoseguimiento$(newValue){
+  setpedidoseguimiento$(newValue) {
     this.pedidoseguimiento = newValue;
     this.pedidoseguimiento$.next(newValue);
   }
@@ -145,74 +148,74 @@ export class PedidosService {
     return this.pedidoseguimiento$.asObservable();
   }
 
-  public GetDetalleTracking(idPedido:number, pedido: number, mail: string) {
+  public GetDetalleTracking(idPedido: number, pedido: number, mail: string) {
 
-    const UrlServicioSeguimiento: string = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-    CServicios.SeguimientoPedido;
+    const UrlServicioSeguimiento: string = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras +
+      CServicios.SeguimientoPedido;
 
     //armar objecto 
-    this.pedidoseguimientorequest.idPedido =  Number(idPedido);
+    this.pedidoseguimientorequest.idPedido = Number(idPedido);
     this.pedidoseguimientorequest.pedido = Number(pedido);
     this.pedidoseguimientorequest.correo = mail;
 
     return this.servicehelper
-    .PostData(UrlServicioSeguimiento, this.pedidoseguimientorequest)
-    .toPromise()
-    .then((config: any) => {
+      .PostData(UrlServicioSeguimiento, this.pedidoseguimientorequest)
+      .toPromise()
+      .then((config: any) => {
 
-      this.setpedidoseguimiento$(config);
+        this.setpedidoseguimiento$(config);
 
-      if ( config == undefined || config.length == 0){
+        if (config == undefined || config.length == 0) {
+
+          this.mensaje.msgId = EstadoRespuestaMensaje.Error;
+          this.mensaje.msgStr = 'No existen registros para los datos seleccionados';
+
+        } else {
+
+          this.mensaje.msgId = EstadoRespuestaMensaje.exitoso;
+          this.mensaje.msgStr = "ok";
+
+        };
+
+        return this.mensaje;
+
+      })
+      .catch((err: any) => {
 
         this.mensaje.msgId = EstadoRespuestaMensaje.Error;
-        this.mensaje.msgStr = 'No existen registros para los datos seleccionados';
+        this.mensaje.msgStr = 'Error conectando el api: ' + err;
 
-      }else{
+        return this.mensaje;
 
-        this.mensaje.msgId = EstadoRespuestaMensaje.exitoso;
-        this.mensaje.msgStr = "ok";
-
-      };  
-
-      return this.mensaje;
-
-    })
-    .catch((err: any) => {
-
-      this.mensaje.msgId = EstadoRespuestaMensaje.Error;
-      this.mensaje.msgStr = 'Error conectando el api: ' + err;
-
-      return this.mensaje;
-
-    });
+      });
 
 
   }
 
-  public async CrearPedido(idempresa: number, idpersona: number, idAsesor: number, agencia: string, observacion: string, direccion: number, detalle: any){
+  public async CrearPedido(idempresa: number, idpersona: number, idAsesor: number, agencia: string, observacion: string, direccion: number, detalle: any) {
 
     // recuperar la hora y fecha la servidor
-    const fecha = await  this.ServiciosnegocioSVC.recuperarFechayHora()
+    const fecha = await this.ServiciosnegocioSVC.recuperarFechayHora()
 
-      // debe ser un pedido valido
-    if (fecha !== undefined ){
+    // debe ser un pedido valido
+    if (fecha !== undefined) {
 
-        // armar pedido
-        this.ArmarObjectoPedido(idempresa, idpersona, idAsesor, agencia, observacion, direccion, fecha, detalle);
+      // armar pedido
+      this.ArmarObjectoPedido(idempresa, idpersona, idAsesor, agencia, observacion, direccion, fecha, detalle);
 
-        return this.EnviarPedido(this.pedidorequest).then((ret: any) => {
-    
-          return ret;
-    
-        });
-    }  
-   
+      return this.EnviarPedido(this.pedidorequest).then((ret: any) => {
+
+        return ret;
+
+      });
+    }
+
   }
 
-  private ArmarObjectoPedido(idempresa: number, idpersona: number, idAsesor: number, 
-    agencia: string, observacion: string, direccion: number, fecha: string, detalle: any){
+  private ArmarObjectoPedido(idempresa: number, idpersona: number, idAsesor: number,
+    agencia: string, observacion: string, direccion: number, fecha: string, detalle: any) {
 
-    this.pedidorequest.IdEmp = idempresa ;
+    this.pedidorequest.IdEmp = idempresa;
     this.pedidorequest.Tp = this.TIPOPEDIDOCOMERCIAL;
     this.pedidorequest.OtDcto = 0;
     this.pedidorequest.Obs = observacion;
@@ -229,42 +232,42 @@ export class PedidosService {
     this.pedidorequest.Dll = detalle;
 
   }
-  
-  private EnviarPedido(request: PedidoRequest){
-  
-    this.UrlServicioPedido =
-          this.negocio.configuracion.UrlServicioCarroCompras +
-          CServicios.ApiCarroCompras +
-          CServicios.InsertarPedidoF000;
-  
-      return this.servicehelper
-        .PostData(this.UrlServicioPedido, request)
-        .toPromise()
-        .then((config: any) => {
 
-          return config;
-  
-        })
-        .catch((err: any) => {
-  
-          this.mensaje.msgId = EstadoRespuestaMensaje.Error;
-          this.mensaje.msgStr = 'Error conectando el api: ' + err;
-  
-          return this.mensaje;
-  
-        });
-    
+  private EnviarPedido(request: PedidoRequest) {
+
+    this.UrlServicioPedido =
+      this.negocio.configuracion.UrlServicioCarroCompras +
+      CServicios.ApiCarroCompras +
+      CServicios.InsertarPedidoF000;
+
+    return this.servicehelper
+      .PostData(this.UrlServicioPedido, request)
+      .toPromise()
+      .then((config: any) => {
+
+        return config;
+
+      })
+      .catch((err: any) => {
+
+        this.mensaje.msgId = EstadoRespuestaMensaje.Error;
+        this.mensaje.msgStr = 'Error conectando el api: ' + err;
+
+        return this.mensaje;
+
+      });
+
   }
 
-  public anularPedido(parameter ){
+  public anularPedido(parameter) {
 
-    this.UrlServicioAnular = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras +  CServicios.ServicioAnular;
+    this.UrlServicioAnular = this.negocio.configuracion.UrlServicioCarroCompras + CServicios.ApiCarroCompras + CServicios.ServicioAnular;
 
     return this.httpClient.post(this.UrlServicioAnular, parameter)
-        .toPromise()
-        .catch((err: any) => {
-            console.error(err);
-        });
+      .toPromise()
+      .catch((err: any) => {
+        console.error(err);
+      });
   }
 
 
