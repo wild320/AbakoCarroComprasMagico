@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, firstValueFrom } from 'rxjs';
 
 import { Order } from '../../shared/interfaces/order';
 import { Router } from '@angular/router';
@@ -93,42 +93,43 @@ export class PedidosService {
       });
   }
 
-  public async CargarUltimoPedido(IdPedido: number) {
-
-    if (IdPedido !== undefined){
-
-      const orden = await this.cargarDetallePedido(IdPedido, -1);
+  public async CargarUltimoPedido(IdPedido: number): Promise<void> {
+    if (IdPedido === undefined || IdPedido === null) {
+      return;
+    }
   
+    try {
+      
+      const orden = await this.cargarDetallePedido(IdPedido, -1);
+      
       if (orden) {
         this.router.navigate([Crutas.succesorder]);
       }
-
-    }  
-
+    } catch (error) {
+      console.error('Error al cargar el último pedido:', error);
+    }
   }
+  
 
-  public cargarDetallePedido(IdPedido: number, index: number) {
 
-    this.UrlServicioPaginas = this.negocio.configuracion.UrlServicioCarroCompras +  CServicios.ApiCarroCompras +
-    CServicios.ServicioDetallePedido;
-
-    return this.httpClient.get(this.UrlServicioPaginas + '/' + IdPedido.toString(), { responseType: 'text' })
-        .toPromise()
-        .then((resp: any) => {
-
-          if (index !== -1){
-            this.orders[index] = (resp);
-          }
-          
-          this.ordenactual = (resp);
-
-          return (resp);
-
-        })
-        .catch((err: any) => {
-            console.error(err);
-        });
+  public async cargarDetallePedido(IdPedido: number, index: number): Promise<any> {
+    try {
+      const url = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioDetallePedido}/${IdPedido}`;
+  
+      const resp = await firstValueFrom(this.httpClient.get<any>(url));
+      
+      if (index !== -1) {
+        this.orders[index] = resp;
+      }
+      this.ordenactual = resp;
+      
+      return resp;
+    } catch (error) {
+      throw error; 
+    }
   }
+  
+  
 
   
   getpedidoseguimiento(): PedidoSeguimientoResponse[] {
