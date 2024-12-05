@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { CartService } from '../../../../shared/services/cart.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,6 +17,7 @@ import {UtilsTexto} from '../../../../shared/utils/UtilsTexto';
 // Contantes
 import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -46,7 +47,9 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         public usuariosvc: UsuarioService,
         public Store: StoreService,
         private Pedidosvc: PedidosService ,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {
 
         this.loading = false;
@@ -54,7 +57,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
         this.inicializarFormulario();
 
         this.SetiarMensajes();
-
+        if (isPlatformBrowser(this.platformId)) {
         // tslint:disable-next-line: deprecation
         this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
@@ -66,6 +69,9 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
             }
 
         });
+        }
+
+
 
         // cargar maestro de direcciones
         this.usuariosvc.getDireccionesCargadas$().subscribe((value) => {

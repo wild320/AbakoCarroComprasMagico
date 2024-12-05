@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, NgZone, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID, QueryList, ViewChildren } from '@angular/core';
 import { NavigationLink } from '../../../../shared/interfaces/navigation-link';
 import { DirectionService } from '../../../../shared/services/direction.service';
 import { merge, Subject } from 'rxjs';
@@ -9,6 +9,7 @@ import { HeaderService } from '../../../../shared/services/header.service';
 import {StoreService } from '../../../../shared/services/store.service';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
 import { ClabelRutas } from '../../../../../data/contantes/cRutas';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-header-links',
@@ -31,7 +32,9 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
         private header: HeaderService,
         private zone: NgZone,
         public storaservice: StoreService,
-        private usuariosvc: UsuarioService
+        private usuariosvc: UsuarioService,        
+        @Inject(PLATFORM_ID)
+        private platformId: Object,
     ) {
 
         this.UsuarioLogueado();
@@ -49,14 +52,17 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
 
     private UsuarioLogueado() {
+        
+        if (isPlatformBrowser(this.platformId)) {
+            this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
-
-            this.storaservice.CargarMenu(value);
-
-            this.items = this.storaservice.navigation;
-
-        });
+                this.storaservice.CargarMenu(value);
+    
+                this.items = this.storaservice.navigation;
+    
+            });
+        }
+ 
 
     }
 

@@ -69,7 +69,12 @@ export class AppComponent implements OnInit {
 
 
         if (isPlatformBrowser(this.platformId)) {
-            eval(this.StoreSvc?.configuracionSitio?.scriptRastreo)
+            const script = this.StoreSvc?.configuracionSitio?.scriptRastreo;
+            if (script) {
+                const executeScript = new Function(script);
+                executeScript();
+            }
+
 
             this.zone.runOutsideAngular(() => {
                 this.router.events.pipe(filter(event => event instanceof NavigationEnd), first()).subscribe(() => {

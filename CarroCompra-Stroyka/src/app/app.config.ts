@@ -13,7 +13,7 @@ import { UsuarioService } from './shared/services/usuario.service';
 import { UtilsTexto } from './shared/utils/UtilsTexto';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService, banner: BannerService) {
+export function CargarConfiguracion(configLocal: NegocioService, configGeneral: StoreService, usuario: UsuarioService) {
   return async (): Promise<any> => {
     try {
       // Carga la configuración local
@@ -23,7 +23,7 @@ export function CargarConfiguracion(configLocal: NegocioService, configGeneral: 
 
       // Carga el resto de las configuraciones
       await usuario.cargarUsuarioStorage();
-      await banner.cargarBanner();
+      // await banner.cargarBanner();
     } catch (error) {
       console.error('Error al cargar la configuración:', error);
     }

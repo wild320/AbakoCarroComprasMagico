@@ -177,11 +177,14 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         });
         
         this.updateIsLogged();
-
+        if (isPlatformBrowser(this.platformId)) {
         // Suscribirse a los cambios en el estado de inicio de sesión
         this.usuarioLogueadoSubscription = this.usuarioService.getEstadoLoguin$().subscribe((value) => {
             this.islogged = value;
         });
+        }
+
+
 
     }
 
