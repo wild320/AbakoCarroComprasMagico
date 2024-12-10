@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'https://localhost:4000',
+    apiUrl: 'https://clouderp.abakoerp.com:9480/AbakoCarroCompras/',
 };
 
 /*

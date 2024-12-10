@@ -211,7 +211,7 @@ export class PageCheckoutComponent implements OnInit, OnDestroy {
                     this.mensajerespuestaexito =
                         'Se ha generado el pedido ' + ret.ped.toString() + ' exitosamente.';
                     this.cart.clearAll();
-                    this.Pedidosvc.CargarUltimoPedido(ret.idPed);
+                    this.Pedidosvc.CargarUltimoPedido(ret.idPed, this.Pasarela.value);
                 }
                 this.loading = false;
             }).finally(() => {

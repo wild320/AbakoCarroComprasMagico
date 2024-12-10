@@ -32,6 +32,7 @@ import { PageTrackOrderComponent } from './pages/page-track-order/page-track-ord
 import { PageWishlistComponent } from './pages/page-wishlist/page-wishlist.component';
 import { ProductSidebarComponent } from './components/product-sidebar/product-sidebar.component';
 import { PageOrderSuccessComponent } from './pages/page-order-success/page-order-success.component';
+import { WompiComponent } from './pages/wompi/wompi.component';
 
 
 
@@ -51,7 +52,8 @@ import { PageOrderSuccessComponent } from './pages/page-order-success/page-order
         PageTrackOrderComponent,
         PageWishlistComponent,
         ProductSidebarComponent,
-        PageOrderSuccessComponent
+        PageOrderSuccessComponent,
+        WompiComponent
     ],
     imports: [
         // modules (angular)

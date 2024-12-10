@@ -31,5 +31,8 @@ export const CServicios = {
     ServicioFechaServidor: 'FechaServidor',
     ServicioBanner: 'Banners/ModificarBanners',
     ServicioFavoritos: 'Favoritos/GetSet',
+    WompiInicioPago: "Wompi",
+    WompiAsentar: "Wompi/AsentarPago",
+    WompiVerificar: "Wompi/VerificarTransaccion",
 };
 

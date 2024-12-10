@@ -96,14 +96,14 @@ export class PedidosService {
   }
 
 
-  public async CargarUltimoPedido(IdPedido: number): Promise<void> {
+  public async CargarUltimoPedido(IdPedido: number, pasarela: string): Promise<void> {
     if (IdPedido === undefined || IdPedido === null) {
       return;
     }
 
     try {
 
-      const orden = await this.cargarDetallePedido(IdPedido, -1);
+      const orden = await this.cargarDetallePedido(IdPedido, -1, pasarela);
 
       if (orden) {
         this.router.navigate([Crutas.succesorder]);
@@ -115,7 +115,7 @@ export class PedidosService {
 
 
 
-  public async cargarDetallePedido(IdPedido: number, index: number): Promise<any> {
+  public async cargarDetallePedido(IdPedido: number, index: number, pasarela?: string): Promise<any> {
     try {
       const url = `${this.negocio.configuracion.UrlServicioCarroCompras}${CServicios.ApiCarroCompras}${CServicios.ServicioDetallePedido}/${IdPedido}`;
 
@@ -125,6 +125,7 @@ export class PedidosService {
         this.orders[index] = resp;
       }
       this.ordenactual = resp;
+      this.ordenactual.metodoPago = pasarela;
 
       return resp;
     } catch (error) {
