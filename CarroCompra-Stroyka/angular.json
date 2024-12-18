@@ -49,7 +49,9 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
-              "src/styles.scss"
+              "src/styles.scss",              
+              "src/assets/fonts/stroyka/stroyka.css",              
+              "src/assets/fonts/stroyka/stroyka.css"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
@@ -63,7 +65,7 @@
               "entry": "server.ts"
             },
             "extractLicenses": false,
-            "sourceMap": true,
+            "sourceMap": false,
             "optimization": false,
             "namedChunks": true
           },

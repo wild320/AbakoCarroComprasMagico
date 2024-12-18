@@ -558,7 +558,6 @@ export function getSuggestions(query: string, limit: number, categorySlug: strin
 
 export function getProduct(productSlug: string): Observable<Product> {
     const product = products.find(x => x.slug === productSlug);
-    console.log(product);
 
     if (!product) {
         return throwError(new HttpErrorResponse({status: 404, statusText: 'Page Not Found'}));

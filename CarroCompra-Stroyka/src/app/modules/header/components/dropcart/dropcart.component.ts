@@ -39,11 +39,14 @@ export class DropcartComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Obtener el estado inicial de inicio de sesión
         this.updateIsLogged();
+        if(isPlatformBrowser(this.platformId)){
+       // Suscribirse a los cambios en el estado de inicio de sesión
+       this.usuarioLogueadoSubscription = this.usuarioService.getEstadoLoguin$().subscribe((value) => {
+        this.islogged = value;
+    });
+        }
 
-        // Suscribirse a los cambios en el estado de inicio de sesión
-        this.usuarioLogueadoSubscription = this.usuarioService.getEstadoLoguin$().subscribe((value) => {
-            this.islogged = value;
-        });
+ 
     }
 
     ngOnDestroy() {

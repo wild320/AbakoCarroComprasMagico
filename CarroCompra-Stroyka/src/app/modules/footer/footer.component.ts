@@ -39,6 +39,7 @@ export class FooterComponent {
      }
 
      CargarMenuMicuenta() {
+        
 
         // tslint:disable-next-line: deprecation
         this.usuariosvc.getEstadoLoguin$().subscribe((value) => {

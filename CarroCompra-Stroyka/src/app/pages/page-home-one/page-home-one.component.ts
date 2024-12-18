@@ -17,6 +17,8 @@ import { StoreService } from '../../shared/services/store.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BlocksModule } from 'src/app/modules/blocks/blocks.module';
 import { CArticulos } from '../../../data/contantes/cArticulosList';
+import { Title } from '@angular/platform-browser';
+import { NegocioService } from 'src/app/shared/services/negocio.service';
 
 interface ProductsCarouselGroup extends BlockHeaderGroup {
     products: Item[];
@@ -57,7 +59,12 @@ export class PageHomeOneComponent implements OnInit, OnDestroy {
         private shop: ShopService,
         private articulossvc: ArticulosService,
         public StoreSvc: StoreService,
-    ) { }
+        private titleService: Title,
+        private negocio: NegocioService
+    ) {         
+        
+        this.titleService.setTitle(this.negocio.configuracion.NombreCliente);
+    }
 
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId)) {

@@ -95,7 +95,6 @@ export class AccountMenuComponent implements OnInit {
   EstaLogueadoUsuario() {
     if (isPlatformBrowser(this.platformId)) {
       this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
-        console.log(value);
 
         this.usuariologueado = value;
 

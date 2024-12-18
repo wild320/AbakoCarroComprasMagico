@@ -217,9 +217,9 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             const contentRect = content.getBoundingClientRect();
             const endHeight = Math.min(contentRect.height, documentHeight - paddingBottom - contentRect.top);
 
-            content.style.height = startHeight + 'px';
+            // content.style.height = startHeight + 'px';
             content.getBoundingClientRect(); // force reflow
-            content.style.maxHeight = endHeight + 'px';
+            // content.style.maxHeight = endHeight + 'px';
             content.style.height = endHeight + 'px';
         }
     }

@@ -7,7 +7,7 @@ import { WishlistService } from './shared/services/wishlist.service';
 
 
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { filter, first } from 'rxjs/operators';
 import { CurrencyService } from './shared/services/currency.service';
 
@@ -17,7 +17,6 @@ import { NegocioService } from './shared/services/negocio.service';
 import { Cconfiguracion } from 'src/data/contantes/cConfiguracion';
 import { ConfiguracionSitio } from 'src/data/modelos/negocio/ConfiguracionSitio';
 import { UtilsTexto } from '../app/shared/utils/UtilsTexto';
-import { RootComponent } from './components/root/root.component';
 import { BlocksModule } from './modules/blocks/blocks.module';
 import { HeaderModule } from './modules/header/header.module';
 import { MobileModule } from './modules/mobile/mobile.module';
@@ -37,7 +36,7 @@ import { SharedModule } from './shared/shared.module';
         ShopModule,
         SharedModule,
         WidgetsModule,
-        UtilsModule, RootComponent, RouterModule, RouterLink, RouterOutlet],
+        UtilsModule, RouterModule, RouterOutlet],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
@@ -70,7 +69,12 @@ export class AppComponent implements OnInit {
 
 
         if (isPlatformBrowser(this.platformId)) {
-            eval(this.StoreSvc?.configuracionSitio?.scriptRastreo)
+            const script = this.StoreSvc?.configuracionSitio?.scriptRastreo;
+            if (script) {
+                const executeScript = new Function(script);
+                executeScript();
+            }
+
 
             this.zone.runOutsideAngular(() => {
                 this.router.events.pipe(filter(event => event instanceof NavigationEnd), first()).subscribe(() => {
@@ -146,10 +150,6 @@ export class AppComponent implements OnInit {
 
 
     ngOnInit(): void {
-
-        // properties of the CurrencyFormatOptions interface fully complies
-        // with the arguments of the built-in pipe "currency"
-        // https://angular.io/api/common/CurrencyPipe
         this.currency.options = {
             code: 'COP',
             display: 'code',

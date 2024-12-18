@@ -7,11 +7,10 @@ import { Link } from '../../../../shared/interfaces/link';
 import { ArticulosService } from '../../../../shared/services/articulos.service';
 
 // modelos
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Meta, Title } from '@angular/platform-browser';
-import { Item } from '../../../../../data/modelos/articulos/Items';
+import { DOCUMENT } from '@angular/common';
 import { NegocioService } from 'src/app/shared/services/negocio.service';
 import { StoreService } from 'src/app/shared/services/store.service';
+import { Item } from '../../../../../data/modelos/articulos/Items';
 
 @Component({
     selector: 'app-page-product',
@@ -37,10 +36,9 @@ export class PageProductComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         public articulossvc: ArticulosService,
         private negocio: NegocioService,
-        private titleService: Title,
         public StoreSvc: StoreService,
-        private metaTagService: Meta,
-    ) { 
+
+    ) {
         this.productSlug = this.route.snapshot.params['productSlug'] || null;
         this.route.data.subscribe(data => {
 
@@ -54,9 +52,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
             if (resolvedProduct) {
                 this.product = resolvedProduct;
-                console.log(this.product);
                 this.setupProductDetails();
-               // this.setMetaTags();
             }
 
             this.articulossvc.RecuperarArticulosRelacionados(Number(this.productSlug));
@@ -67,56 +63,6 @@ export class PageProductComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        // if (isPlatformBrowser(this.platformId)) {
-
-
-
-        //     this.route.paramMap.subscribe(data => {
-
-        //         this.ArticulosSuscribe$ = this.articulossvc.getArticuloDetalle$().subscribe(Data => {
-        //             this.product = this.articulossvc.getArticuloDetalle().item;
-        //             if (this.product) {
-        //                 this.setMetaTags();
-        //                 this.cadenaString = this.product.name;
-        //                 this.valorProductoUnit = this.product.price;
-
-        //                 const regExp = /\(([^)]+)\)/;
-        //                 const matches = regExp.exec(this.cadenaString);
-
-        //                 if (matches) {
-        //                     const [valorUnitario, nombreUnidadV] = matches[1].split(' ');
-
-        //                     // Calcular valor por unidad
-        //                     const valor = parseInt(this.valorProductoUnit, 10) / parseInt(valorUnitario, 10);
-        //                     this.product["ValorUnidadV"] = `${valor}`;
-        //                     this.product["NombreUnidadV"] = nombreUnidadV;
-        //                 }
-        //             } else {
-        //                 this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), true);
-        //             }
-
-        //             this.SetBreadcrumbs(this.articulossvc.getArticuloDetalle().breadcrumbs);
-        //         });
-
-        //         this.articulossvc.SetSeleccionarArticuloDetalle(Number(this.getProductoSlug()), false);
-        //         this.articulossvc.RecuperarArticulosRelacionados(Number(this.getProductoSlug()));
-
-        //         // tslint:disable-next-line: deprecation
-
-        //         this.articulossvc.getArticulosRelacionados$().subscribe(data => {
-        //             this.relatedProducts = this.articulossvc.getArticulosRelacionados();
-        //         });
-
-        //     });
-
-        //     // tslint:disable-next-line: deprecation
-        //     this.route.data.subscribe(data => {
-
-        //         this.layout = data['layout'] || this.layout;
-        //         this.sidebarPosition = data['sidebarPosition'] || this.sidebarPosition;
-
-        //     });
-        // }
     }
 
     private setupProductDetails(): void {
@@ -142,9 +88,7 @@ export class PageProductComponent implements OnInit, OnDestroy {
 
         this.shop.SetBreadcrumbs(breadcrumbs);
         this.shop.SetBreadcrumb(this.product?.name, '');
-
         this.breadcrumbs = this.shop.breadcrumbs;
-
     }
 
     ngOnDestroy(): void {
@@ -155,33 +99,4 @@ export class PageProductComponent implements OnInit, OnDestroy {
         return this.route.snapshot.params['productSlug'] || this.route.snapshot.data['productSlug'] || null;
 
     }
-
-    setMetaTags(): void {
-
-        const negocio = this.negocioConfig;
-
-        const { name, caracteristicas, brand, images, price, rating, inventario, urlAmigable, id } = this.product;
-
-        this.titleService.setTitle(`${negocio.NombreCliente} | ${name}`);
-
-        const baseHref = this.negocio.configuracion.baseUrl;
-        const description = caracteristicas || 'Compra este producto de alta calidad al mejor precio.';
-        const title = `${name} - ${brand?.['name'] || 'Marca Desconocida'} - Disponible en nuestra tienda`;
-        const keywords = `${name}, ${brand?.['name']}, precio, comprar, ${rating} estrellas, ${inventario} en stock, ${price}`;
-        const imageUrl = images?.length ? images[0] : `${baseHref}assets/configuracion/LOGO2.png`;
-
-        this.metaTagService.addTags([
-            { name: 'description', content: description },
-            { name: 'title', content: title },
-            { name: 'keywords', content: keywords },
-            { property: 'og:title', content: title },
-            { property: 'og:description', content: description },
-            { property: 'og:image', content: imageUrl },
-            { property: 'og:url', content: `${baseHref}/shop/products/${id}/${urlAmigable}` },
-            { name: 'twitter:title', content: title },
-            { name: 'twitter:description', content: description },
-            { name: 'twitter:image', content: imageUrl }
-        ]);
-    }
-    
 }

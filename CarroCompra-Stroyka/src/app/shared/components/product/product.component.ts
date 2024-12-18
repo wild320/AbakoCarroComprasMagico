@@ -64,8 +64,6 @@ export class ProductComponent implements OnInit {
     }
 
     addToCart(): void {
-        
-        console.log(this.product)
         const availableStock = this.product.inventario - this.product.inventarioPedido;
         const requestedQuantity = this.quantity.value;
     

@@ -70,9 +70,12 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     ) {
 
         this.logo = Cconfiguracion.urlAssetsConfiguracion + this.negocio.configuracion.Logo ;
-        this.usuarioService.getEstadoLoguin$().subscribe((value) => {
-            this.islogged = value;
-        });
+        if (isPlatformBrowser(this.platformId)) {
+            this.usuarioService.getEstadoLoguin$().subscribe((value) => {
+                this.islogged = value;
+            });
+        }
+   
 
      }
 

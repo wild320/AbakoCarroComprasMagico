@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {  UntypedFormGroup , UntypedFormBuilder, Validators , UntypedFormControl} from '@angular/forms';
 
 // utils
 import {UtilsTexto} from '../../../../../app/shared/utils/UtilsTexto';
 import { EstadoRespuestaMensaje } from '../../../../../data/contantes/cMensajes';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-page-profile',
@@ -22,7 +23,8 @@ export class PageProfileComponent implements OnInit {
 
     constructor(public usuariosvc: UsuarioService,
                 private utils: UtilsTexto,
-                private fb: UntypedFormBuilder) {
+                private fb: UntypedFormBuilder,
+                @Inject(PLATFORM_ID) private platformId: Object) {
 
         this.loading = false;
 
@@ -46,11 +48,14 @@ export class PageProfileComponent implements OnInit {
     }
 
     EstaLogueadoUsuario(){
+        if (isPlatformBrowser(this.platformId)) {
+            this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
 
-        this.usuariosvc.getEstadoLoguin$().subscribe((value) => {
+                this.CargarUsuario();
+            });
+        }
 
-            this.CargarUsuario();
-        });
+
     }
 
     submitForm(){

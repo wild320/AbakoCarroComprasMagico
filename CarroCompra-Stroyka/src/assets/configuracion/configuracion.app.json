@@ -1,9 +1,9 @@
 {
   "NombreCliente": "[Abako ERP] - Carro Compras",
   "Logo": "LOGO.png",
-  "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9569/",
-  "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9569/",
-  "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9569/"
+  "UrlServicioCarroCompras":  "https://clouderp.abakoerp.com:9480/",
+  "UrlServicioNegocio":  "https://clouderp.abakoerp.com:9480/",
+  "UrlServicioAdministracion":  "https://clouderp.abakoerp.com:9480/"
 
 
 }

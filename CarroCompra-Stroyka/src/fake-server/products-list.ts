@@ -133,7 +133,6 @@ export function getProductsList(categorySlug: string|null, options: ListOptions)
         filterValues,
     };
 
-    console.log(response);
 
     return timer(350).pipe(map(() => response));
 }
