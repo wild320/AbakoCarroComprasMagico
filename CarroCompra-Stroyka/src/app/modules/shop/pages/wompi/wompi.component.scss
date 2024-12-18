@@ -1,0 +1,139 @@
+@import '../../../../../scss/_variables.scss';
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de la información */
+.info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Columnas de la información */
+.dialog-content-column {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.dialog-content-column:last-child {
+  margin-right: 0;
+}
+
+/* Estilo para las etiquetas de la información */
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Estilo para los valores de la información */
+.valor {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estilo para el contenedor del estado */
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: capitalize;
+  margin-top: 10px;
+}
+
+/* Estilos específicos para el estado */
+.tag.APROBADO {
+  background-color: #28a745; /* Verde para aprobado */
+}
+
+.tag.ANULADO {
+  background-color: #dc3545; /* Rojo para rechazado */
+}
+
+.tag.PENDIENTE {
+  background-color: #ffc107; /* Amarillo para pendiente */
+}
+
+/* Estilo para el formulario */
+form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilo para los botones */
+.waybox-button {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button[type="submit"] {
+  border: none;
+  padding: 10px 20px;
+  color: $header-font-color;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $header-bg;
+}
+
+button[type="submit"]:hover {
+  background-color: $header-font-muted-color;
+}
+
+button[type="submit"] .actionclass {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+/* Estilo para el ícono de seguridad */
+.iconosegurity {
+  margin-right: 10px;
+}
+
+/* Ajustes de estilo para móviles */
+@media (max-width: 768px) {
+  .info-container {
+    flex-direction: row; /* Mostrar en fila */
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan si no caben */
+    justify-content: space-between; /* Espaciado uniforme */
+    gap: 10px; /* Espacio entre columnas */
+  }
+  .dialog-content-column {
+    flex: 1; /* Tomar el mismo ancho para cada columna */
+    margin: 0; /* Elimina márgenes laterales */
+  }
+
+  .left{
+    text-align: end;
+  }
+
+  .label, .valor {
+    font-size: 12px; /* Reduce el tamaño del texto para móviles */
+    margin-bottom: 4px;
+  }
+  .tag {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  .waybox-button {
+    margin-top: 10px;
+  }
+}

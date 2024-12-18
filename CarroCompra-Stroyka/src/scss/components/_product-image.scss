@@ -5,7 +5,9 @@
 @import '../mixins/hacks';
 
 
-.product-image {}
+.product-image {
+    aspect-ratio: 4 / 4;
+}
 .product-image__body {
     display: block;
     position: relative;

@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { BlockHeaderGroup } from '../../../shared/interfaces/block-header-group';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-block-products-carousel',
@@ -58,18 +59,26 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
         }
     };
 
-    constructor() {
-        window.addEventListener('resize', this.updateColumns.bind(this));
+    constructor(
+        @Inject(PLATFORM_ID) private platformId: object,) {
+            if(isPlatformBrowser(this.platformId)){
+                window.addEventListener('resize', this.updateColumns.bind(this));
+            }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['products'] || changes['rows']) {
-            this.updateColumns();
+        if(isPlatformBrowser(this.platformId)){
+            if (changes['products'] || changes['rows']) {
+                this.updateColumns();
+            }
         }
+ 
     }
 
     ngOnDestroy(): void {
-        window.removeEventListener('resize', this.updateColumns.bind(this));
+        if(isPlatformBrowser(this.platformId)){
+            window.removeEventListener('resize', this.updateColumns.bind(this));
+        }
     }
 
     updateColumns(): void {

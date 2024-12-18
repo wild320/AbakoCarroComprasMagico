@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://magicomundo.co/' 
+    apiUrl: 'https://clouderp.abakoerp.com:9480/AbakoCarroCompras/' 
 };

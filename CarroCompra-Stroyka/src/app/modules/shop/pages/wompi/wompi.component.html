@@ -1,0 +1,44 @@
+<div class="dialog-content">
+  <div class="info-container">
+    <div class="dialog-content-column left">
+      <span class="label">Pedido</span>
+      <span class="label">Creación</span>
+      <span class="label">Total</span>
+      <span class="label">Método de Pago</span>
+      <span class="label">Estado</span>
+    </div>
+    <div class="dialog-content-column">
+      <span class="valor">{{ order?.pedido }}</span>
+      <span class="valor">{{ order?.fecha | date:'dd-MM-yyyy' }}</span>
+      <span class="valor">{{ order?.total | currencyFormat}}</span>
+      <span class="valor">{{ order?.metodoPago }}</span>
+      <div>
+        <div class="tag" [class]="order?.estado">
+          {{ order?.estado }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form ngNoForm action="https://checkout.wompi.co/p/" method="GET">
+    <!-- Campos obligatorios -->
+    <input type="hidden" name="public-key" [value]="LLAVE_PUBLICA_DEL_COMERCIO" />
+    <input type="hidden" name="currency" [value]="MONEDA" />
+    <input type="hidden" name="amount-in-cents" [value]="MONTO_EN_CENTAVOS" />
+    <input type="hidden" name="reference" [value]="REFERENCIA_DE_PAGO" />
+
+    <!-- Campos opcionales -->
+    <input type="hidden" name="signature:integrity" [value]="FIRMA_DE_INTEGRIDAD" />
+    <input type="hidden" name="redirect-url" [value]="URL_REDIRECCION" />
+
+    <div class="waybox-button">
+      <button type="submit" class="btn btn-xl btn-block">
+        <i class="fas fa-shield-alt iconosegurity"></i>
+        Continuar con pago
+
+      </button>
+    </div>
+  </form>
+
+
+</div>

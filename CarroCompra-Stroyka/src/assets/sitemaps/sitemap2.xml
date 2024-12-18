@@ -7,7 +7,7 @@
     <loc>https://magicomundo.co/shop/catalog</loc>
     <lastmod>2024-06-07</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.1</priority>
+    <priority>0.1</priority> 
   </url>
 
   <!-- Producto específico -->
@@ -15,13 +15,13 @@
     <loc>https://magicomundo.co/shop/products/100/DULCE-TIC-TAC-NARANJA-DISPLAY-X-12-UNIDADES</loc>
     <lastmod>2024-06-07</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.9</priority>   
   </url>
 
     <url>
     <loc>https://magicomundo.co/shop/products/52/CHOCOLATE-LINDT-LINDOR-MILK-CHOCOLATE-TABLETA-100G</loc>
     <lastmod>2024-06-07</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
+    <priority>0.9</priority>   
+ </url>
 </urlset>
