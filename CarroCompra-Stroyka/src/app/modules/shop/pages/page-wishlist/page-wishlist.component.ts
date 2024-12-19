@@ -99,5 +99,10 @@ export class PageWishlistComponent implements OnInit {
     getQuantityControl(index: number): FormControl {
         return this.items.at(index).get('quantity') as FormControl;
     }
-
+    available(product): boolean {       
+        const hasRemainingStock = product.inventario - product.inventarioPedido > 0;
+        const respectsInventoryLimits = !this.storeSvc.configuracionSitio.SuperarInventario;
+    
+        return product.availability === 'No Disponible' && hasRemainingStock && respectsInventoryLimits;
+    }
 }

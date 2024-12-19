@@ -96,4 +96,6 @@ export class PageCompareComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    
 }

@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, HostListener } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 
 @Directive({
     selector: '[appFakeSlides]',
@@ -13,13 +14,15 @@ export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
 
     private resizeHandler: () => void;
 
-    constructor(private el: ElementRef) { }
+    constructor(private el: ElementRef,  @Inject(PLATFORM_ID) private platformId: object,) { }
 
     ngOnInit(): void {
-        this.calc();
-        // Usamos el evento de resize directamente en el objeto window
-        this.resizeHandler = this.onResize.bind(this);
-        window.addEventListener('resize', this.resizeHandler);
+              if(isPlatformBrowser(this.platformId)){
+                        this.calc();
+                        // Usamos el evento de resize directamente en el objeto window
+                        this.resizeHandler = this.onResize.bind(this);
+                        window.addEventListener('resize', this.resizeHandler);
+                    }
     }
 
     private onResize(): void {
