@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, Subject, tap } from 'rxjs';
 import { CServicios } from 'src/data/contantes/cServicios';
 import { Mensaje } from 'src/data/modelos/negocio/Mensaje';
 import { NegocioService } from './negocio.service';
 import { ServiceHelper } from './ServiceHelper';
+import { WINDOW } from 'src/app/providers/window';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,8 @@ export class PasarelasPagoService {
 
     constructor(
         private servicehelper: ServiceHelper<any, any>,
-        private negocio: NegocioService,
+        private negocio: NegocioService,   
+        @Inject(WINDOW) private window: Window | null,
     ) { }
 
     /**
@@ -32,7 +34,7 @@ export class PasarelasPagoService {
             Referencia: reference.toString(),
             Monto: `${amountInCents}`,
             Moneda: 'COP',
-            redirectUrl: `${window.location.origin}/shop/cart/checkout/success`,
+            redirectUrl: `${this.window.location.origin}/shop/cart/checkout/success`,
         };
 
         this.servicehelper.PostData(UsrServicio, request)

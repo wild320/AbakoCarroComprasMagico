@@ -10,6 +10,7 @@ import {StoreService } from '../../../../shared/services/store.service';
 import { UsuarioService } from '../../../../shared/services/usuario.service';
 import { ClabelRutas } from '../../../../../data/contantes/cRutas';
 import { isPlatformBrowser } from '@angular/common';
+import { WINDOW } from 'src/app/providers/window';
 
 @Component({
     selector: 'app-header-links',
@@ -28,6 +29,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
     reCalcSubmenuPosition = false;
 
     constructor(
+         @Inject(WINDOW) private window: Window | null,
         private direction: DirectionService,
         private header: HeaderService,
         private zone: NgZone,
@@ -117,6 +119,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
 
     ngAfterViewChecked(): void {
+        if (isPlatformBrowser(this.platformId)) {
         if (!this.reCalcSubmenuPosition) {
             return;
         }
@@ -127,7 +130,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
         const submenuElement = this.getCurrentSubmenuElement();
 
         const submenuTop = submenuElement.getBoundingClientRect().top;
-        const viewportHeight = window.innerHeight;
+        const viewportHeight = this.window.innerHeight;
         const paddingBottom = 20;
 
         submenuElement.style.maxHeight = `${viewportHeight - submenuTop - paddingBottom}px`;
@@ -151,7 +154,7 @@ export class LinksComponent implements OnInit, OnDestroy, AfterViewChecked {
             const megamenuPosition = Math.round(Math.min(itemPosition, containerWidth - megamenuWidth));
 
             submenuElement.style.left = megamenuPosition + 'px';
-        }
+        }}
     }
 
     getCurrentItemElement(): HTMLDivElement {

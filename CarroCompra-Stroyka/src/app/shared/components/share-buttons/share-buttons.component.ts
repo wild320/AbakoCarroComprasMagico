@@ -8,6 +8,7 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { WINDOW } from 'src/app/providers/window';
 
 export interface ShareButtonDef {
     url: string;
@@ -102,7 +103,9 @@ export class ShareButtonsComponent implements OnChanges {
 
     @HostBinding('class.share-buttons') classShareLinks = true;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object,
+   
+            @Inject(WINDOW) private window: Window | null,) {
         
 
 
@@ -154,20 +157,20 @@ export class ShareButtonsComponent implements OnChanges {
     }
 
     private makeShareUrl(baseUrl: string): string {
+        if (isPlatformBrowser(this.platformId)) {
         let pageUrl = '';
         let pageTitle = '';
         let pageImage = '';
 
-        if (isPlatformBrowser(this.platformId)) {
-            pageUrl = window.location.href;
-        }
-
-        pageUrl = this.pageUrl || pageUrl;
-        pageTitle = this.pageTitle || pageTitle;
-        pageImage = this.pageImage || pageImage;
-        return baseUrl
+            pageUrl = this.window.location.href;
+            
+            pageUrl = this.pageUrl || pageUrl;
+            pageTitle = this.pageTitle || pageTitle;
+            pageImage = this.pageImage || pageImage;
+            return baseUrl
             .replace('%URL%', encodeURIComponent(pageUrl))
             .replace('%TITLE%', encodeURIComponent(pageTitle))
             .replace('%IMAGE%', encodeURIComponent(pageImage));
+        }
     }
 }
