@@ -336,6 +336,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         return mostrarPreciosSinLogueo || (this.islogged && !mostrarPreciosSinLogueo);
     }
     
+    available(product): boolean {                   
+        const isAvailable =  (product.availability !== 'No Disponible' && product.inventario - product.inventarioPedido < 1 && !this.StoreSvc.configuracionSitio.SuperarInventario) || (product.availability === 'No Disponible' && !this.StoreSvc.configuracionSitio.SuperarInventario);     
+        return isAvailable;
+    }
     
 }
 

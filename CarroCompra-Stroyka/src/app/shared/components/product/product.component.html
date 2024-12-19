@@ -9,7 +9,7 @@
                 <div *ngIf="product.badges.includes('Mas Vendidos')" class="product-card__badge product-card__badge--hot">Mas Vendidos</div>
                 <div *ngIf="product.badges.includes('Nuevo')" class="product-card__badge product-card__badge--new">Nuevo</div>
             </div>
-            <app-product-gallery  [ngClass]="{'imagen' : product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario}"
+            <app-product-gallery  [ngClass]="{'imagen' : available}"
             [productLayout]="layout" [images]="product.images"></app-product-gallery>
         </div>
         <!-- .product__gallery / end -->

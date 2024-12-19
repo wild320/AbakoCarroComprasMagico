@@ -162,4 +162,11 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
         return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
 
+    get available(): boolean {
+        const isAvailable =  (this.product.availability !== 'No Disponible' && this.product.inventario - this.product.inventarioPedido < 1 && !this.storeSvc.configuracionSitio.SuperarInventario) || (this.product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario);     
+    return isAvailable;
+}
+    
+    
+
 }
