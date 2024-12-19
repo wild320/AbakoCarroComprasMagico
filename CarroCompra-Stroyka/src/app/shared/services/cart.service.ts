@@ -183,14 +183,16 @@ export class CartService {
     }
 
     private save(): void {
-        localStorage.setItem('cartItems', JSON.stringify(this.data.items));
+        if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('cartItems', JSON.stringify(this.data.items));}
     }
 
     private load(): void {
+        if (isPlatformBrowser(this.platformId)) {
         const items = localStorage.getItem('cartItems');
 
         if (items) {
             this.data.items = JSON.parse(items);
-        }
+        }}
     }
 }

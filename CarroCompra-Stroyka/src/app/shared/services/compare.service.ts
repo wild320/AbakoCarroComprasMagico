@@ -68,12 +68,13 @@ export class CompareService implements OnDestroy {
     }
 
     private load(): void {
+        if (isPlatformBrowser(this.platformId)) {
         const items = localStorage.getItem('compareItems');
 
         if (items) {
             this.data.items = JSON.parse(items);
             this.itemsSubject$.next(this.data.items);
-        }
+        }}
     }
 
     ngOnDestroy(): void {

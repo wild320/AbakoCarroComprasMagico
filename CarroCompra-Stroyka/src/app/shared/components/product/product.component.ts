@@ -102,6 +102,7 @@ export class ProductComponent implements OnInit {
     }
 
     cargarFavoritos() {
+        if (isPlatformBrowser(this.platformId)) {
         // Obtiene los favoritos del localStorage o inicializa un arreglo vacío si no hay favoritos
         this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
@@ -117,7 +118,7 @@ export class ProductComponent implements OnInit {
         } else {
             // Si no hay productos favoritos, establece esFavorito como false
             this.esFavorito = false;
-        }
+        }}
     }
 
 

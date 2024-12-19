@@ -10,6 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DropcartType } from '../dropcart/dropcart.component';
 import { OffcanvasCartService } from '../../../../shared/services/offcanvas-cart.service';
+import { WINDOW } from 'src/app/providers/window';
 
 export type NavStickyMode = 'alwaysOnTop' | 'pullToShow';
 
@@ -42,7 +43,8 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(PLATFORM_ID) private platformId: Object,   
+                    @Inject(WINDOW) private window: Window | null,
         private route: ActivatedRoute,
         private offcanvasCart: OffcanvasCartService,
         public root: RootService,
@@ -77,7 +79,8 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onScroll(): void {
-        const scrollCurrentPosition = window.pageYOffset;
+        if (isPlatformBrowser(this.platformId)) {
+        const scrollCurrentPosition = this.window.pageYOffset;
         const scrollDelta = scrollCurrentPosition - this.scrollPosition;
 
         // Resets the distance if the scroll changes direction.
@@ -111,6 +114,7 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
     }
+    }
 
     onMediaChange(media: MediaQueryList): void {
         if (media.matches) {
@@ -136,17 +140,18 @@ export class NavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     calcBreakpoints(): void {
+        if (isPlatformBrowser(this.platformId)) {
         if (this.header.departmentsArea) {
             const rect = this.header.departmentsArea.getBoundingClientRect();
 
-            this.stuckFrom = rect.top + rect.height + window.screenTop + 50 + window.pageYOffset;
+            this.stuckFrom = rect.top + rect.height + this.window.screenTop + 50 + this.window.pageYOffset;
             this.staticFrom = this.stuckFrom;
         } else {
             const elementRect = this.element.getBoundingClientRect();
 
-            this.staticFrom = elementRect.top + window.pageYOffset;
-            this.stuckFrom = elementRect.top + elementRect.height + window.pageYOffset;
-        }
+            this.staticFrom = elementRect.top + this.window.pageYOffset;
+            this.stuckFrom = elementRect.top + elementRect.height + this.window.pageYOffset;
+        }}
     }
 
     private makeStatic(): void {

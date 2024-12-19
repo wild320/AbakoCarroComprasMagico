@@ -5,6 +5,7 @@ import { PhotoSwipeItem, PhotoSwipeService, PhotoSwipeThumbBounds } from '../../
 import { DirectionService } from '../../services/direction.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ProductLayout } from '../product/product.component';
+import { WINDOW } from 'src/app/providers/window';
 
 export interface ProductGalleryItem {
     id: string;
@@ -39,7 +40,8 @@ export class ProductGalleryComponent implements OnInit {
     @ViewChildren('imageElement', { read: ElementRef }) imageElements: QueryList<ElementRef>;
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(PLATFORM_ID) private platformId: Object,   
+        @Inject(WINDOW) private window: Window | null,
         private photoSwipe: PhotoSwipeService,
         private direction: DirectionService
     ) { 
@@ -134,6 +136,7 @@ export class ProductGalleryComponent implements OnInit {
     }
 
     getThumbBounds(index: number): PhotoSwipeThumbBounds | null {
+        if (isPlatformBrowser(this.platformId)) {
         const imageElements = this.imageElements.toArray();
         const dirDependentIndex = this.getDirDependentIndex(index);
 
@@ -146,9 +149,10 @@ export class ProductGalleryComponent implements OnInit {
         const fitHeight = tag.naturalHeight * ratio;
 
         return {
-            x: rect.left + (rect.width - fitWidth) / 2 + window.pageXOffset,
-            y: rect.top + (rect.height - fitHeight) / 2 + window.pageYOffset,
+            x: rect.left + (rect.width - fitWidth) / 2 + this.window.pageXOffset,
+            y: rect.top + (rect.height - fitHeight) / 2 + this.window.pageYOffset,
             w: fitWidth,
         };
+    }
     }
 }

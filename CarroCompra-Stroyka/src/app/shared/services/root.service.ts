@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Brand } from '../interfaces/brand';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -21,6 +22,14 @@ export class RootService {
         const basePath = '/shop/products';
 
         return `${basePath}/${id}/${urlAmigable}`;
+
+    }
+
+    productShare(id: number,urlAmigable:string): string {
+        const url = environment.apiUrl;
+        const basePath = 'shop/products';
+
+        return `${url}${basePath}/${id}/${urlAmigable}`;
 
     }
 
