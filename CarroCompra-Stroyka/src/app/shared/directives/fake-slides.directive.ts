@@ -1,5 +1,5 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, HostListener, Inject } from '@angular/core';
+import { WINDOW } from 'src/app/providers/window';
 
 @Directive({
     selector: '[appFakeSlides]',
@@ -14,15 +14,14 @@ export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
 
     private resizeHandler: () => void;
 
-    constructor(private el: ElementRef,  @Inject(PLATFORM_ID) private platformId: object,) { }
+    constructor(private el: ElementRef,    
+                @Inject(WINDOW) private window: Window | null,) { }
 
     ngOnInit(): void {
-              if(isPlatformBrowser(this.platformId)){
-                        this.calc();
-                        // Usamos el evento de resize directamente en el objeto window
-                        this.resizeHandler = this.onResize.bind(this);
-                        window.addEventListener('resize', this.resizeHandler);
-                    }
+        this.calc();
+        // Usamos el evento de resize directamente en el objeto window
+        this.resizeHandler = this.onResize.bind(this);
+        this.window.addEventListener('resize', this.resizeHandler);
     }
 
     private onResize(): void {
@@ -73,6 +72,6 @@ export class FakeSlidesDirective implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy(): void {
         // Eliminar el listener al destruir el componente
-        window.removeEventListener('resize', this.resizeHandler);
+        this.window.removeEventListener('resize', this.resizeHandler);
     }
 }

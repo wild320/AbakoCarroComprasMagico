@@ -15,6 +15,7 @@ import { StoreService } from '../../../../shared/services/store.service';
 import { Cconfiguracion } from '../../../../../data/contantes/cConfiguracion';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { ToastrService } from 'ngx-toastr';
+import { WINDOW } from 'src/app/providers/window';
 
 
 export type MobileHeaderMode = 'alwaysOnTop' | 'pullToShow';
@@ -59,6 +60,7 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(WINDOW) private window: Window | null,
         public menu: MobileMenuService,
         public wishlist: WishlistService,
         public cart: CartService,
@@ -92,7 +94,8 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     }
 
     onScroll(): void {
-        const scrollCurrentPosition = window.pageYOffset;
+        if (isPlatformBrowser(this.platformId)) {
+        const scrollCurrentPosition = this.window.pageYOffset;
         const scrollDelta = scrollCurrentPosition - this.scrollPosition;
 
         // Resets the distance if the scroll changes direction.
@@ -120,7 +123,7 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
             if (this.scrollDistance >= distanceToHide && this.visibility === 'shown') {
                 this.hide();
             }
-        }
+        }}
     }
 
     onMediaChange(media: MediaQueryList): void {
@@ -156,10 +159,12 @@ export class MobileHeaderComponent implements OnDestroy, AfterViewInit {
     }
 
     calcBreakpoints(): void {
+        if (isPlatformBrowser(this.platformId)) {
         const elementRect = this.element.getBoundingClientRect();
 
-        this.staticFrom = elementRect.top + window.pageYOffset;
-        this.stuckFrom = elementRect.top + elementRect.height + window.pageYOffset + 100;
+        this.staticFrom = elementRect.top + this.window.pageYOffset;
+        this.stuckFrom = elementRect.top + elementRect.height + this.window.pageYOffset + 100;
+        }
     }
 
     private makeStatic(): void {
