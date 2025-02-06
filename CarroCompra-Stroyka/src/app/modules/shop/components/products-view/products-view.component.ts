@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { PageCategoryService } from '../../services/page-category.service';
 import { ShopSidebarService } from '../../services/shop-sidebar.service';
 
@@ -54,41 +54,9 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
                 localStorage.setItem('ProductosSeleccionados', JSON.stringify(this.ProductosSeleccionados))
                 localStorage.setItem('is_page_update', '0')
                 this.isPageAuto = false;
-
-
             });
 
-
         }
-
-
-
-
-
-    }
-
-    OnCLickOnChange() {
-        if (isPlatformBrowser(this.platformId)) {
-            this.isPageAuto = false
-            const value = this.listOptionsForm.value;
-
-            localStorage.setItem('page', JSON.stringify(value))
-
-            value.limit = parseFloat(value.limit);
-
-            if (value.page == null || value.limit == null || value.sort == null) {
-                return;
-            }
-
-            this.SetLIstaOpciones(value);
-
-
-            this.articulossvc.setAtributosFiltros(this.articulossvc.getAtributosFiltros());
-            // Agregar detección de cambios
-            this.cdr.detectChanges();
-        }
-
-
     }
 
     ngOnInit(): void {
@@ -117,8 +85,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
             }
         }
 
+    }
 
-
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     SetAtributos() {
@@ -169,10 +140,29 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         this.page.setValue(page);
     }
 
+    OnCLickOnChange() {
+        if (isPlatformBrowser(this.platformId)) {
+            this.isPageAuto = false
+            const value = this.listOptionsForm.value;
 
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+            localStorage.setItem('page', JSON.stringify(value))
+
+            value.limit = parseFloat(value.limit);
+
+            if (value.page == null || value.limit == null || value.sort == null) {
+                return;
+            }
+
+            this.SetLIstaOpciones(value);
+
+
+            this.articulossvc.setAtributosFiltros(this.articulossvc.getAtributosFiltros());
+            // Agregar detección de cambios
+            window.scrollTo(0, 120);
+            this.cdr.detectChanges();
+        }
+
+
     }
 
     setLayout(value: Layout): void {
