@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, OnInit, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProductAttribute } from '../../interfaces/product';
@@ -14,6 +14,7 @@ import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { StoreService } from '../../services/store.service';
 import { UtilsTexto } from '../../utils/UtilsTexto';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-product-card',
@@ -46,6 +47,8 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     };
 
     constructor(
+        
+        @Inject(PLATFORM_ID) private platformId: Object,
         private cd: ChangeDetectorRef,
         public root: RootService,
         public cart: CartService,
@@ -62,7 +65,8 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit(): void {
-        this.islogged = localStorage.getItem("isLogue");
+          if (isPlatformBrowser(this.platformId)) {
+        this.islogged = localStorage.getItem("isLogue");}
         // tslint:disable-next-line: deprecation
         this.currency.changes$.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.cd.markForCheck();
@@ -147,9 +151,10 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
 
 
     cargarFavoritos() {
+        if (isPlatformBrowser(this.platformId)) {
         this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos"))
         const product = this.productosFavoritos?.findIndex(element => element.id === this.product.id)
-        this.esFavorito = product != -1
+        this.esFavorito = product != -1;}
     }
 
 
@@ -161,5 +166,12 @@ export class ProductCardComponent implements OnInit, OnDestroy, OnChanges {
     get maxCantidad(): (product: Item) => number {
         return (product: Item) => this.storeSvc.configuracionSitio.SuperarInventario ? Infinity : product?.inventario;
     }
+
+    get available(): boolean {
+        const isAvailable =  (this.product.availability !== 'No Disponible' && this.product.inventario - this.product.inventarioPedido < 1 && !this.storeSvc.configuracionSitio.SuperarInventario) || (this.product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario);     
+    return isAvailable;
+}
+    
+    
 
 }

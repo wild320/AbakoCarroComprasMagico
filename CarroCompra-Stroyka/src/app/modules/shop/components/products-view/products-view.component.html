@@ -1,4 +1,4 @@
-<div class="products-view" [ngClass]="{'products-view--loading': articulossvc.isLoading$|async}"
+<div class="products-view" *ngIf="listOptionsForm" [ngClass]="{'products-view--loading': articulossvc.isLoading$|async}"
     [formGroup]="listOptionsForm">
     <div class="products-view__loader"></div>
 

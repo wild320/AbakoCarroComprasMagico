@@ -24,6 +24,7 @@ import { NavigationLink } from '../../../../../app/shared/interfaces/navigation-
 // constantes
 import { Crutas } from '../../../../../data/contantes/cRutas';
 import { Router } from '@angular/router';
+import { WINDOW } from 'src/app/providers/window';
 
 @Component({
     selector: 'app-header-departments',
@@ -54,6 +55,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(WINDOW) private window: Window | null,
         private renderer: Renderer2,
         private el: ElementRef,
         private header: HeaderService,
@@ -91,12 +93,12 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
                 if (isPlatformBrowser(this.platformId)) {
                     setTimeout(() => {
                         const areaRect = areaElement.getBoundingClientRect();
-                        const areaBottom = areaRect.top + areaRect.height + window.scrollY;
+                        const areaBottom = areaRect.top + areaRect.height + this.window.scrollY;
 
                         root.classList.remove('departments--transition');
                         root.classList.add('departments--fixed', 'departments--open');
 
-                        const height = areaBottom - (content.getBoundingClientRect().top + window.scrollY);
+                        const height = areaBottom - (content.getBoundingClientRect().top + this.window.scrollY);
 
                         content.style.height = `${height}px`;
                         content.getBoundingClientRect(); // force reflow
@@ -144,12 +146,12 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
                 takeUntil(this.destroy$)
             ).subscribe(() => {
                 const areaRect = this.header.departmentsArea.getBoundingClientRect();
-                const areaBottom = areaRect.top + areaRect.height + window.scrollY;
+                const areaBottom = areaRect.top + areaRect.height + this.window.scrollY;
 
                 root.classList.remove('departments--transition');
                 root.classList.add('departments--fixed', 'departments--open');
 
-                const height = areaBottom - (content.getBoundingClientRect().top + window.scrollY);
+                const height = areaBottom - (content.getBoundingClientRect().top + this.window.scrollY);
 
                 content.style.height = `${height}px`;
                 content.getBoundingClientRect(); // force reflow
@@ -330,6 +332,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
 
     ngAfterViewChecked(): void {
+        if (isPlatformBrowser(this.platformId)) {
         if (!this.reCalcSubmenuPosition) {
             return;
         }
@@ -339,7 +342,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
         const itemElement = this.getCurrentItemElement();
         const submenuElement = this.getCurrentSubmenuElement();
 
-        const viewportHeight = window.innerHeight;
+        const viewportHeight = this.window.innerHeight;
         const paddingBottom = 20;
 
         if (this.hoveredItem.menu.type === 'megamenu') {
@@ -366,7 +369,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy, AfterViewInit, A
             const top = Math.min(itemRect.top, viewportHeight - paddingBottom - submenuRect.height) - containerRect.top;
 
             submenuElement.style.top = `${top}px`;
-        }
+        }}
     }
 
     getCurrentItemElement(): HTMLDivElement {

@@ -3,14 +3,18 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     Output,
+    PLATFORM_ID,
     QueryList,
     ViewChild,
     ViewChildren
 } from '@angular/core';
 import { NestedLink } from '../../../../shared/interfaces/nested-link';
 import { DirectionService } from '../../../../shared/services/direction.service';
+import { isPlatformBrowser } from '@angular/common';
+import { WINDOW } from 'src/app/providers/window';
 
 @Component({
     selector: 'app-header-menu',
@@ -34,7 +38,9 @@ export class MenuComponent implements AfterViewChecked {
         return this.elementRef.nativeElement;
     }
 
-    constructor(
+    constructor( 
+        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(WINDOW) private window: Window | null,
         private direction: DirectionService
     ) { }
 
@@ -73,6 +79,7 @@ export class MenuComponent implements AfterViewChecked {
     }
 
     ngAfterViewChecked(): void {
+        if (isPlatformBrowser(this.platformId)) {
         if (!this.reCalcSubmenuPosition) {
             return;
         }
@@ -86,7 +93,7 @@ export class MenuComponent implements AfterViewChecked {
         const itemRect = itemElement.getBoundingClientRect();
         const submenuRect = submenuElement.getBoundingClientRect();
 
-        const viewportHeight = window.innerHeight;
+        const viewportHeight = this.window.innerHeight;
         const paddingY = 20;
         const paddingBottom = Math.min(viewportHeight - itemRect.bottom, paddingY);
         const maxHeight = viewportHeight - paddingY - paddingBottom;
@@ -112,7 +119,7 @@ export class MenuComponent implements AfterViewChecked {
             const submenuRight = menuRect.left + menuRect.width + submenuRect.width;
 
             submenuElement.classList.toggle('menu__submenu--reverse', submenuRight > document.body.clientWidth);
-        }
+        }}
     }
 
     getCurrentItemElement(): HTMLDivElement {

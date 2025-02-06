@@ -2,6 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, Output, P
 import { Item } from '../../../../data/modelos/articulos/Items';
 import { BlockHeaderGroup } from '../../../shared/interfaces/block-header-group';
 import { isPlatformBrowser } from '@angular/common';
+import { WINDOW } from 'src/app/providers/window';
 
 @Component({
     selector: 'app-block-products-carousel',
@@ -60,9 +61,10 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
     };
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: object,) {
+        @Inject(PLATFORM_ID) private platformId: object,    
+            @Inject(WINDOW) private window: Window | null,) {
             if(isPlatformBrowser(this.platformId)){
-                window.addEventListener('resize', this.updateColumns.bind(this));
+                this.window.addEventListener('resize', this.updateColumns.bind(this));
             }
     }
 
@@ -77,7 +79,7 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
 
     ngOnDestroy(): void {
         if(isPlatformBrowser(this.platformId)){
-            window.removeEventListener('resize', this.updateColumns.bind(this));
+            this.window.removeEventListener('resize', this.updateColumns.bind(this));
         }
     }
 
@@ -94,12 +96,13 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
     }
 
     getItemsPerColumn(): number {
+        if(isPlatformBrowser(this.platformId)){
         // Obtener la configuración responsive para el layout actual
         const responsiveConfig = this.carouselOptionsByLayout[this.layout]?.responsive;
         if (!responsiveConfig) return 1;
 
         // Obtener el ancho actual de la ventana
-        const screenWidth = window.innerWidth;
+        const screenWidth = this.window.innerWidth;
 
         // Buscar la configuración adecuada para el tamaño de pantalla actual
         const breakpoints = Object.keys(responsiveConfig).map(Number).sort((a, b) => b - a);
@@ -112,5 +115,6 @@ export class BlockProductsCarouselComponent implements OnChanges, OnDestroy {
 
         // Valor por defecto en caso de no cumplirse ninguna condición
         return Math.min(1 * this.rows, 6);
+    }
     }
 }

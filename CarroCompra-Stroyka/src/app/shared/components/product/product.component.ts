@@ -56,7 +56,7 @@ export class ProductComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if(isPlatformBrowser(this.platformId)) {
+        if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('is_page_update', '1')
             this.islogged = localStorage.getItem("isLogue");
             this.cargarFavoritos();
@@ -66,12 +66,12 @@ export class ProductComponent implements OnInit {
     addToCart(): void {
         const availableStock = this.product.inventario - this.product.inventarioPedido;
         const requestedQuantity = this.quantity.value;
-    
+
         // If already adding to cart, prevent further actions
         if (this.addingToCart) {
             return;
         }
-    
+
         // Check if the product can be added based on stock policy
         if (this.storeSvc.configuracionSitio.SuperarInventario || (requestedQuantity > 0 && requestedQuantity <= availableStock)) {
             this.addingToCart = true;
@@ -87,7 +87,7 @@ export class ProductComponent implements OnInit {
             );
         }
     }
-    
+
 
     addToWishlist() {
 
@@ -102,6 +102,7 @@ export class ProductComponent implements OnInit {
     }
 
     cargarFavoritos() {
+        if (isPlatformBrowser(this.platformId)) {
         // Obtiene los favoritos del localStorage o inicializa un arreglo vacío si no hay favoritos
         this.productosFavoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
@@ -117,7 +118,7 @@ export class ProductComponent implements OnInit {
         } else {
             // Si no hay productos favoritos, establece esFavorito como false
             this.esFavorito = false;
-        }
+        }}
     }
 
 
@@ -129,5 +130,10 @@ export class ProductComponent implements OnInit {
 
             this.compare.add(this.product).subscribe({ complete: () => this.addingToCompare = false });
         }
+    }
+
+    get available(): boolean {
+        const isAvailable = (this.product.availability !== 'No Disponible' && this.product.inventario - this.product.inventarioPedido < 1 && !this.storeSvc.configuracionSitio.SuperarInventario) || (this.product.availability === 'No Disponible' && !this.storeSvc.configuracionSitio.SuperarInventario);
+        return isAvailable;
     }
 }

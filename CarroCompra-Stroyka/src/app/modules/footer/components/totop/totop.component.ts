@@ -1,7 +1,9 @@
 import { Component, HostBinding, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { isPlatformBrowser } from '@angular/common';
+import { WINDOW } from 'src/app/providers/window';
 
 @Component({
     selector: 'app-totop',
@@ -9,41 +11,45 @@ import { isPlatformBrowser } from '@angular/common';
     styleUrls: ['./totop.component.scss']
 })
 export class TotopComponent implements OnInit, OnDestroy {
-    private destroy$: Subject<void> = new Subject<void>();
+    private destroy$ = new Subject<void>();
 
     show = false;
 
     @HostBinding('class.totop') classTotop = true;
 
-    @HostBinding('class.totop--show') get classTotopShow(): boolean { return this.show; }
+    @HostBinding('class.totop--show') get classTotopShow(): boolean {
+        return this.show;
+    }
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
-        private zone: NgZone,
+        @Inject(WINDOW) private window: Window | null,
+        @Inject(DOCUMENT) private document: Document,
+        private zone: NgZone
     ) { }
 
     ngOnInit(): void {
-        if (!isPlatformBrowser(this.platformId)) {
-            return;
-        }
+        if (isPlatformBrowser(this.platformId) && this.window) {
+            const showFrom = 300;
 
-        const showFrom = 300;
+            this.zone.runOutsideAngular(() => {
+                fromEvent(this.window, 'scroll', { passive: true })
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe(() => {
+                        const scrollPosition = this.window!.pageYOffset || this.document.documentElement.scrollTop;
 
-        this.zone.runOutsideAngular(() => {
-            fromEvent(window, 'scroll', {passive: true}).pipe(
-                takeUntil(this.destroy$),
-            ).subscribe(() => {
-                if (window.pageYOffset >= showFrom) {
-                    if (!this.show) {
-                        this.zone.run(() => this.show = true);
-                    }
-                } else {
-                    if (this.show) {
-                        this.zone.run(() => this.show = false);
-                    }
-                }
+                        if (scrollPosition >= showFrom) {
+                            if (!this.show) {
+                                this.zone.run(() => this.show = true);
+                            }
+                        } else {
+                            if (this.show) {
+                                this.zone.run(() => this.show = false);
+                            }
+                        }
+                    });
             });
-        });
+        }
     }
 
     ngOnDestroy(): void {
@@ -52,10 +58,12 @@ export class TotopComponent implements OnInit, OnDestroy {
     }
 
     onClick(): void {
-        try {
-            window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-        } catch {
-            window.scrollTo(0, 0);
+        if (isPlatformBrowser(this.platformId) && this.window) {
+            try {
+                this.window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+            } catch {
+                this.window.scrollTo(0, 0);
+            }
         }
     }
 }

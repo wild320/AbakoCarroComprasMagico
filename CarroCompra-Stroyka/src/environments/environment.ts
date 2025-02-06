@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'https://clouderp.abakoerp.com:9480/AbakoCarroCompras/',
+    apiUrl: 'https://magicomundo.co/',
 };
 
 /*

@@ -17,6 +17,7 @@ import { fromEvent, merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HeaderService } from '../../../../shared/services/header.service';
 import { fromOutsideTouchClick } from '../../../../shared/functions/rxjs/fromOutsideTouchClick';
+import { WINDOW } from 'src/app/providers/window';
 
 export type IndicatorTrigger = 'hover' | 'click' | false;
 
@@ -63,6 +64,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(WINDOW) private window: Window | null,
         private elementRef: ElementRef,
         private zone: NgZone,
         private header: HeaderService,
@@ -121,6 +123,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     toggle(force?: boolean, immediately = false): void {
+        if (isPlatformBrowser(this.platformId)) {
         const newValue = force !== undefined ? force : !this.isOpen;
 
         if (this.isOpen !== newValue) {
@@ -132,7 +135,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.element.classList.add('indicator--open');
 
                 const dropdownTop = this.dropdownElement.getBoundingClientRect().top;
-                const viewportHeight = window.innerHeight;
+                const viewportHeight = this.window.innerHeight;
                 const paddingBottom = 20;
 
                 this.dropdownElement.style.maxHeight = `${viewportHeight - dropdownTop - paddingBottom}px`;
@@ -151,7 +154,7 @@ export class IndicatorComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             this.stateChanges.emit(this.isOpen);
-        }
+        }}
     }
 
     close(immediately = false): void {
