@@ -1,24 +1,22 @@
-::ng-deep .ngxImageZoomContainer > img{
+::ng-deep .ngxImageZoomContainer>img {
   max-height: 500px;
 }
 
-
-
-
-
-
-@media (max-width: 1200px){
-    ::ng-deep .ngxImageZoomContainer > img{
-        max-height: 415px;
-      }
-      
+@media (max-width: 1200px) {
+  ::ng-deep .ngxImageZoomContainer>img {
+    max-height: 415px;
+  }
 }
 
+@media (max-width: 992px) {
 
-@media (max-width: 992px){
-    ::ng-deep .ngxImageZoomContainer > img{
-        max-height: 270px;
-      }
-      
+  ::ng-deep .ngxImageZoomContainer {
+    width: 100% !important;
+  }
+
+  ::ng-deep .ngxImageZoomContainer>img {
+    height: auto !important;
+    width: 100% !important;
+  }
+
 }
-
